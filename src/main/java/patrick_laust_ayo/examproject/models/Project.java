@@ -10,6 +10,7 @@ public class Project {
     private ProjectRepository repo;
 
     private String password;
+    private String title;
 
     private ArrayList<Phase> phases;
 
@@ -18,11 +19,23 @@ public class Project {
 
     private int totalCost;
 
-
-    public Project(String password, ArrayList<Phase> phases, Map<String, Participant> participants, ProjectManager projectManager) {
+    public Project(String title, String password, ArrayList<Phase> phases, Map<String,
+                    Participant> participants, ProjectManager projectManager) {
+        this.title = title;
         this.password = password;
         this.phases = phases;
         this.participants = participants;
         this.projectManager = projectManager;
+        calculateTotalCost();
+    }
+
+    public void putInDatabase() {
+
+    }
+
+    public int calculateTotalCost() {
+        for (int i = 0; i < phases.size(); i++) {
+            phases.get(i).getAssignments().forEach();
+        }
     }
 }

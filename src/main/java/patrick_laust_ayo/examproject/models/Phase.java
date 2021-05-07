@@ -15,4 +15,8 @@ public class Phase {
     public Phase(String title) {
         this.title = title;
     }
+
+    public Map<String,Assignment> getAssignments() {
+        return assignments;
+    }
 }
