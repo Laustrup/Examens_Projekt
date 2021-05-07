@@ -7,4 +7,12 @@ public class UserCreator {
 
     private ProjectManager projectManager;
     private Participant participant;
+
+    public ProjectManager createManager(String username, String password) {
+       return projectManager = null;
+    }
+
+    public Participant createParticipant(int id, String name, String position) {
+        return participant = null;
+    }
 }
