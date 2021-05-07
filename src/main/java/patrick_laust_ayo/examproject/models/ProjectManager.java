@@ -14,4 +14,11 @@ public class ProjectManager extends Participant {
         this.username = username;
         this.password = password;
     }
+
+    public ProjectManager(String username, String password, int id,
+                          String participantName,String position,Department department) {
+        super(id,participantName,position,department);
+        this.username = username;
+        this.password = password;
+    }
 }

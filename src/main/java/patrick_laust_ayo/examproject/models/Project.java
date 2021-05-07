@@ -29,9 +29,6 @@ public class Project {
         calculateTotalCost();
     }
 
-    public void putInDatabase() {
-
-    }
 
     public int calculateTotalCost() {
         for (int i = 0; i < phases.size(); i++) {
