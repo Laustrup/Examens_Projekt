@@ -19,10 +19,14 @@ public class ParticipantController {
 
         HttpSession session = request.getSession();
 
-        int userID = (int) session.setAttribute()
+        userCreator.createParticipant(id, name, position, new Department("Null", "Null", 0) );
 
-        userCreator.createParticipant(id, name, position);
-
+        return "redirct:/projectPage";
     }
 
+    @PostMapping
+    public String updateParticipant(@RequestParam()int id, String name, String position, HttpServletRequest request){
+
+
+    }
 }

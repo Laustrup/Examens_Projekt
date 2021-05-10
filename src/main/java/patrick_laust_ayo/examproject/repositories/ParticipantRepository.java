@@ -10,6 +10,8 @@ public class ParticipantRepository {
 
     private Participant participant;
 
+    public
+
     private ResultSet executeQuery(Connection connection, String sql) {
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
