@@ -1,7 +1,11 @@
 package patrick_laust_ayo.examproject.services;
 
+import patrick_laust_ayo.examproject.models.Phase;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.ProjectmanagerRepository;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class ProjectCreator {
@@ -12,7 +16,7 @@ public class ProjectCreator {
 
         ProjectmanagerRepository repo = new ProjectmanagerRepository();
 
-        project = new Project(title, password, null, null, repo.findProjectManagerFromUsername(username));
+        project = new Project(title, password, new ArrayList<Phase>(), new HashMap<>(), repo.findProjectManagerFromUsername(username));
 
         return project;
     }

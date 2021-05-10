@@ -32,7 +32,8 @@ public class Project {
 
     public int calculateTotalCost() {
         for (int i = 0; i < phases.size(); i++) {
-            phases.get(i).getAssignments().forEach();
+            //phases.get(i).getAssignments().forEach();
         }
+        return 0;
     }
 }

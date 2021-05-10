@@ -23,14 +23,6 @@ public class ParticipantController {
 
         userCreator.createParticipant(id, name, position);
 
-
-
-
-
-
-
-
     }
-
 
 }

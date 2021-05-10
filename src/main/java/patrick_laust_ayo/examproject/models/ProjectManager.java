@@ -15,9 +15,9 @@ public class ProjectManager extends Participant {
         this.password = password;
     }
 
-    public ProjectManager(String username, String password, int id,
+    public ProjectManager(String username, String password, int participantId,
                           String participantName,String position,Department department) {
-        super(id,participantName,position,department);
+        super(participantId,participantName,position,department);
         this.username = username;
         this.password = password;
     }
