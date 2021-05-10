@@ -3,9 +3,12 @@ package patrick_laust_ayo.examproject.repositories;
 import patrick_laust_ayo.examproject.models.*;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ParticipantRepository extends Repository {
 
@@ -39,6 +42,32 @@ public class ParticipantRepository extends Repository {
         }
 
         return participant;
+    }
+
+    public Map<Integer, Participant> getParticipantMap() {
+        Map<Integer, Participant> participantMap = new HashMap<>();
+
+        try {
+            ResultSet resultSet = executeQuery("SELECT * FROM participant");
+
+            while (resultSet.next()) {
+                int participantID = resultSet.getInt(1);
+                String username = resultSet.getString(2);
+
+                Participant tempParticipant = new Participant(participantID, username);
+
+                participantMap.put(participantID, tempParticipant);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return participantMap;
+    }
+
+    public boolean doesParticipantIDExist(int id){
+        Map<Integer, Participant> userList = getParticipantMap();
+        return userList.containsKey(id);
+
     }
 
 }

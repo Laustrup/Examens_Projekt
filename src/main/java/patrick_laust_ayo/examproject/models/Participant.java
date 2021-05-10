@@ -35,4 +35,8 @@ public class Participant {
     public void setPosition(String position) {
         this.position = position;
     }
+    public Participant(int id, String name){
+        this.id = id;
+        this.name = name;
+    }
 }

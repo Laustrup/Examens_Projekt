@@ -10,7 +10,8 @@ public abstract class Repository {
     private int nextId;
 
     // Methods made to perform try and catch and as well to be used multiple times
-    protected ResultSet executeQuery(Connection connection, String sql) {
+    protected ResultSet executeQuery(String sql) {
+        Connection connection = databaseConnection.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             return statement.executeQuery();
@@ -21,7 +22,8 @@ public abstract class Repository {
         }
     }
 
-    protected void executeSQLStatement(Connection connection, String sql) {
+    protected void executeSQLStatement(String sql) {
+        Connection connection = databaseConnection.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.executeUpdate();
