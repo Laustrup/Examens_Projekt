@@ -32,4 +32,5 @@ public class Department {
     public void setDepartmentNo(int departmentNo) {
         this.departmentNo = departmentNo;
     }
+
 }
