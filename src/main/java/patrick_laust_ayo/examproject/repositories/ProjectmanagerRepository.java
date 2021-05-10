@@ -9,7 +9,9 @@ import java.sql.ResultSet;
 public class ProjectmanagerRepository extends Repository {
 
     private ProjectManager projectmanager;
-    private int currentId;
+
+    // -1 for if value is unchanged
+    private int currentId = -1;
 
     public ProjectManager findProjectManagerFromUsername(String username) {
         Connection connection = databaseConnection.getConnection();
@@ -39,13 +41,6 @@ public class ProjectmanagerRepository extends Repository {
     }
 
     public int getCurrentId() {
-        if (currentId != null) {
             return currentId;
-        }
-        else {
-            System.out.println("currentId is null...");
-            return -1;
-        }
-
     }
 }
