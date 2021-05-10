@@ -1,6 +1,5 @@
 package patrick_laust_ayo.examproject.repositories;
 
-import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.Phase;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.ProjectManager;
