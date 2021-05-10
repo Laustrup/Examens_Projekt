@@ -42,10 +42,10 @@ public class ProjectmanagerRepository extends Repository {
         ResultSet res = executeQuery("SELECT projectmanager_id, username, " +
                 "projectmanager_password, " + "participant.participant_id, " + "participant_name, " +
                 "position, project_id, department.department_no, location, department_name " +
-                "FROM projectmanager" +
-                "INNER JOIN participant ON participant.participant_id = projectmanager.projectmanager_id" +
-                "INNER JOIN department ON department.department_no = participant.participant_id" +
-                "WHERE projectmanager.username = '" + username + "';");
+                "FROM projectmanager " +
+                "INNER JOIN participant ON participant.participant_id = projectmanager.projectmanager_id " +
+                "INNER JOIN department ON department.department_no = participant.participant_id " +
+                " WHERE projectmanager.username = '" + username + "';");
 
         try {
             Department department = new Department(res.getString("location"),
