@@ -12,13 +12,11 @@ public class DepartmentRepository extends Repository {
     private Department department;
 
     public void putDepartmentInDatabase(Department departmentToInsert){
-        Connection connection = databaseConnection.getConnection();
         executeSQLStatement("INSERT INTO department VALUES(\"" +  departmentToInsert.getLocation()
                 + "\"," + departmentToInsert.getDepName() + ", default);");
     }
 
     public Department putDepartmentInDatabaseWithReturn(Department departmentToInsert, int department_No){
-        Connection connection = databaseConnection.getConnection();
         executeSQLStatement("INSERT INTO department VALUES(default, \"" +
                 departmentToInsert.getLocation() + "\"," + departmentToInsert.getDepName() + ");");
         ResultSet res = executeQuery("SELECT * FROM department");
