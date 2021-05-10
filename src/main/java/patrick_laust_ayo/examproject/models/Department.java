@@ -16,4 +16,12 @@ public class Department {
         this.depName = depName;
         this.departmentNo = departmentNo;
     }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getDepName() {
+        return depName;
+    }
 }
