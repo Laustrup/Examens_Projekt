@@ -14,8 +14,7 @@ public class ProjectmanagerRepository extends Repository {
     private int currentId = -1;
 
     public ProjectManager findProjectManagerFromUsername(String username) {
-        Connection connection = databaseConnection.getConnection();
-        ResultSet res = executeQuery(connection, "SELECT projectmanager_id, username, " +
+        ResultSet res = executeQuery("SELECT projectmanager_id, username, " +
                 "projectmanager_password, " + "participant.participant_id, " + "participant_name, " +
                 "position, project_id, department.department_no, location, department_name " +
                 "FROM projectmanager" +
