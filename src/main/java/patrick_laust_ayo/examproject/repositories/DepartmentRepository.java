@@ -21,7 +21,7 @@ public class DepartmentRepository extends Repository {
         Connection connection = databaseConnection.getConnection();
         executeSQLStatement("INSERT INTO department VALUES(default, \"" +
                 departmentToInsert.getLocation() + "\"," + departmentToInsert.getDepName() + ");");
-        ResultSet res = executeQuery(connection, "SELECT * FROM department");
+        ResultSet res = executeQuery("SELECT * FROM department");
 
         try{
             department = new Department(res.getString("location"),
