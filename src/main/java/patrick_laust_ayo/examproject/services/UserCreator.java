@@ -6,6 +6,7 @@ import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
+import patrick_laust_ayo.examproject.repositories.ProjectmanagerRepository;
 
 public class UserCreator {
 
@@ -14,6 +15,10 @@ public class UserCreator {
 
     public ProjectManager createManager(String username, String password) {
        projectManager = new ProjectManager(username, password);
+
+       ProjectmanagerRepository pmRepo = new ProjectmanagerRepository();
+       pmRepo.putProjectManagerInDatabase(projectManager);
+
        return projectManager;
     }
 
