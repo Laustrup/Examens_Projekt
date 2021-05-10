@@ -21,15 +21,14 @@ public class ParticipantRepository extends Repository {
                 "\", " + projectId + ", " + departmentNo + ";");
     }
 
-    public Participant putParticipantInDatabaseWithReturn(Participant participantToInsert, int projectId, int departmentNo) {
+    public Participant putParticipantInDatabaseWithReturn(Participant participantToInsert, int projectId, Department department) {
         executeSQLStatement("INSERT into participant \n" +
                 "VALUES (default, \" "+ participantToInsert.getName() + "\", \"" + participantToInsert.getPosition() +
-                "\", " + projectId + ", " + departmentNo + ";");
+                "\", " + projectId + ", " + department.getDepartmentNo() + ";");
         ResultSet res = executeQuery("SELECT * FROM project WHERE participant_name = \""
                 + participantToInsert.getName() + "\";");
 
         try {
-            Department department = new Department()
             participant = new Participant(res.getInt("participant_id"),res.getString("participant_name"),
                     res.getString("position"), department);
 
