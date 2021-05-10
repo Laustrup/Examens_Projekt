@@ -12,30 +12,33 @@ public class ParticipantRepository extends Repository {
     private Participant participant;
 
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
-    public void putProjectInDatabase(Participant participantToInsert, int projectId, int departmentNo) {
+    public void putParticipantInDatabase(Participant participantToInsert, int projectId, int departmentNo) {
         Connection connection = databaseConnection.getConnection();
         executeSQLStatement(connection,"INSERT into participant \n" +
                 "VALUES (default, \" "+ participantToInsert.getName() + "\", \"" +participantToInsert.getPosition() +
                 "\", " + projectId + ", " + departmentNo + ";");
     }
 
-    public Project putProjectInDatabaseWithReturn(Project projectToInsert, int projectId, int departmentNo) {
+    public Participant putParticipantInDatabaseWithReturn(Participant participantToInsert, int projectId, int departmentNo) {
         Connection connection = databaseConnection.getConnection();
         executeSQLStatement(connection,"INSERT into participant \n" +
                 "VALUES (default, \" "+ participantToInsert.getName() + "\", \"" + participantToInsert.getPosition() +
                 "\", " + projectId + ", " + departmentNo + ";");
-        ResultSet res = executeQuery(connection,"SELECT * FROM project WHERE title = \"" + projectToInsert.getTitle() + "\";");
+        ResultSet res = executeQuery(connection,"SELECT * FROM project WHERE participant_name = \""
+                + participantToInsert.getName() + "\";");
 
         try {
-            project = new Project(res.getString("title"), res.getString("project_password"),
-                    new ArrayList<Phase>(), new HashMap<>(), projectManager);
+            Department department = new Department()
+            participant = new Participant(res.getInt("participant_id"),res.getString("participant_name"),
+                    res.getString("position"), department);
+
         }
         catch (Exception e) {
             System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
-            project = null;
+            participant = null;
         }
 
-        return project;
+        return participant;
     }
 
 }

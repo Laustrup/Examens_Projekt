@@ -19,7 +19,6 @@ public class ProjectRepository extends Repository{
         Connection connection = databaseConnection.getConnection();
         executeSQLStatement(connection,"insert into project values (default, \""  + projectToInsert.getTitle() + "\", \"" +
                 projectToInsert.getPassword() + "\", " + projectmanagerId + "); ");
-
     }
 
     public Project putProjectInDatabaseWithReturn(Project projectToInsert, int projectmanagerId, ProjectManager projectManager) {

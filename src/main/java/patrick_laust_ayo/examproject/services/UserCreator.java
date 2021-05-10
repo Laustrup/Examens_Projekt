@@ -3,7 +3,9 @@ package patrick_laust_ayo.examproject.services;
 import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.ProjectManager;
+import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
+import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 
 public class UserCreator {
 
@@ -15,10 +17,14 @@ public class UserCreator {
        return projectManager;
     }
 
-    public Participant createParticipant(int id, String name, String position, Department department) {
-        ParticipantRepository repo = new ParticipantRepository();
+    public Participant createParticipant(Department department) {
+        ParticipantRepository parRepo = new ParticipantRepository();
+        ProjectRepository proRepo = new ProjectRepository();
+        DepartmentRepository depRepo = new DepartmentRepository();
 
-        participant = new Participant(id, new String(), new String(), null);
+        participant = new Participant(parRepo.calcNextId("participant"), new String(), new String(), null);
+
+        parRepo.putParticipantInDatabase(participant, proRepo.calcNextId("project"), depRepo.calcNextId("department"));
 
         return participant;
     }
