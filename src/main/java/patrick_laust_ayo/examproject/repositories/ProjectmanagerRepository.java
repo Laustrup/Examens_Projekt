@@ -14,9 +14,13 @@ public class ProjectmanagerRepository {
 
     public ProjectManager findProjectManagerFromUsername(String username) {
         Connection connection = databaseConnection.getConnection();
-        ResultSet res = executeQuery(connection, "SELECT * FROM projectmanager WHERE username = " + username +
-                                        " INNER JOIN projectmanager.projectmanager_id = participant.participant_id," +
-                                        " INNER JOIN department.department_no = participant.participant_id;");
+        ResultSet res = executeQuery(connection, "SELECT projectmanager_id, username, " +
+                "projectmanager_password, " + "participant.participant_id, " + "participant_name, " +
+                "position, project_id, department.department_no, location, department_name " +
+                "FROM projectmanager" +
+                "INNER JOIN participant ON participant.participant_id = projectmanager.projectmanager_id" +
+                "INNER JOIN department ON department.department_no = participant.participant_id" +
+                "WHERE projectmanager.username = '" + username + "';");
 
         try {
             Department department = new Department(res.getString("location"), res.getString("department_name"),
