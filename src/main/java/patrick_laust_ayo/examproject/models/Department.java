@@ -28,4 +28,8 @@ public class Department {
     public int getDepartmentNo() {
         return departmentNo;
     }
+
+    public void setDepartmentNo(int departmentNo) {
+        this.departmentNo = departmentNo;
+    }
 }

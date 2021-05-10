@@ -12,18 +12,19 @@ public class DepartmentRepository extends Repository {
     private Department department;
 
     public void putDepartmentInDatabase(Department departmentToInsert){
-        executeSQLStatement("INSERT INTO department VALUES(\"" +  departmentToInsert.getLocation()
-                + "\"," + departmentToInsert.getDepName() + ", default);");
+        executeSQLStatement("INSERT INTO department VALUES(\"" + departmentToInsert.getDepartmentNo() +
+                "\", \"" + departmentToInsert.getLocation()
+                + "\"," + departmentToInsert.getDepName() + ");");
     }
 
-    public Department putDepartmentInDatabaseWithReturn(Department departmentToInsert, int department_No){
-        executeSQLStatement("INSERT INTO department VALUES(default, \"" +
+    public Department putDepartmentInDatabaseWithReturn(Department departmentToInsert){
+        executeSQLStatement("INSERT INTO department VALUES(\"" + departmentToInsert.getDepartmentNo() + "\", \"" +
                 departmentToInsert.getLocation() + "\"," + departmentToInsert.getDepName() + ");");
         ResultSet res = executeQuery("SELECT * FROM department");
 
         try{
             department = new Department(res.getString("location"),
-                    res.getString("department_name"), department_No);
+                    res.getString("department_name"), res.getInt("department_no"));
         }
         catch(SQLException e){
             System.out.println("Couldn't create Department " + e.getMessage());
