@@ -4,13 +4,12 @@ import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.ProjectManager;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class ProjectmanagerRepository {
+public class ProjectmanagerRepository extends Repository {
 
     private ProjectManager projectmanager;
-    private DatabaseConnection databaseConnection;
+    private int currentId;
 
     public ProjectManager findProjectManagerFromUsername(String username) {
         Connection connection = databaseConnection.getConnection();
@@ -23,12 +22,13 @@ public class ProjectmanagerRepository {
                 "WHERE projectmanager.username = '" + username + "';");
 
         try {
-            Department department = new Department(res.getString("location"), res.getString("department_name"),
-                                                    res.getInt("department_no"));
+            Department department = new Department(res.getString("location"),
+                                    res.getString("department_name"), res.getInt("department_no"));
             projectmanager = new ProjectManager(res.getString("username"),res.getString("projectmanager_password"),
                                                 res.getInt("participant_id"),res.getString("participant_name"),
                                                 res.getString("position"),department);
 
+            currentId = res.getInt("projectmanager_id");
         }
         catch (Exception e) {
             System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
@@ -38,15 +38,14 @@ public class ProjectmanagerRepository {
         return projectmanager;
     }
 
-    private ResultSet executeQuery(Connection connection, String sql) {
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            return statement.executeQuery();
+    public int getCurrentId() {
+        if (currentId != null) {
+            return currentId;
         }
-        catch (Exception e) {
-            System.out.println("Couldn't execute query...\n" + e.getMessage());
-            return null;
+        else {
+            System.out.println("currentId is null...");
+            return -1;
         }
-    }
 
+    }
 }

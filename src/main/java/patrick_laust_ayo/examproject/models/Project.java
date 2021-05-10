@@ -36,4 +36,24 @@ public class Project {
         }
         return 0;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public ProjectManager getProjectManager() {
+        return projectManager;
+    }
 }
