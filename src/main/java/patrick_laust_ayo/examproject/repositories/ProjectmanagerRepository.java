@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 public class ProjectmanagerRepository extends Repository {
 
     private ProjectManager projectmanager;
-    private DatabaseConnection databaseConnection;
+    private int currentId;
 
     public ProjectManager findProjectManagerFromUsername(String username) {
         Connection connection = databaseConnection.getConnection();
@@ -22,12 +22,13 @@ public class ProjectmanagerRepository extends Repository {
                 "WHERE projectmanager.username = '" + username + "';");
 
         try {
-            Department department = new Department(res.getString("location"), res.getString("department_name"),
-                                                    res.getInt("department_no"));
+            Department department = new Department(res.getString("location"),
+                                    res.getString("department_name"), res.getInt("department_no"));
             projectmanager = new ProjectManager(res.getString("username"),res.getString("projectmanager_password"),
                                                 res.getInt("participant_id"),res.getString("participant_name"),
                                                 res.getString("position"),department);
 
+            currentId = res.getInt("projectmanager_id");
         }
         catch (Exception e) {
             System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
@@ -37,4 +38,14 @@ public class ProjectmanagerRepository extends Repository {
         return projectmanager;
     }
 
+    public int getCurrentId() {
+        if (currentId != null) {
+            return currentId;
+        }
+        else {
+            System.out.println("currentId is null...");
+            return -1;
+        }
+
+    }
 }
