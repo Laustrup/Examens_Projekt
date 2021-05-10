@@ -1,25 +1,35 @@
 package patrick_laust_ayo.examproject.repositories;
 
+import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.Phase;
 import patrick_laust_ayo.examproject.models.Project;
+import patrick_laust_ayo.examproject.models.ProjectManager;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
-public class ProjectRepository {
+public class ProjectRepository extends Repository{
 
     private Project project;
     private Phase phase;
+    private DatabaseConnection databaseConnection;
 
-    private ResultSet executeQuery(Connection connection, String sql) {
+    public Project putProjectInDatabase(Project projectToInsert) {
+        Connection connection = databaseConnection.getConnection();
+        executeSQLStatement(connection,"insert into project values (default, " +
+                                            projectToInsert.getPassword() + ", \"1\"); ");
+
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            return statement.executeQuery();
+            Department department = new Department(res.getString("location"), res.getString("department_name"),
+                    res.getInt("department_no"));
+            projectmanager = new ProjectManager(),
+                    res.getString("position"),department);
         }
         catch (Exception e) {
-            System.out.println("Couldn't execute query...\n" + e.getMessage());
-            return null;
+            System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
+            projectmanager = null;
         }
+
+        return project;
     }
+
 }

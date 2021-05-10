@@ -18,6 +18,8 @@ public class ProjectCreator {
 
         project = new Project(title, password, new ArrayList<Phase>(), new HashMap<>(), repo.findProjectManagerFromUsername(username));
 
+
+
         return project;
     }
 }
