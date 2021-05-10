@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 
 public abstract class Repository {
 
-    private DatabaseConnection databaseConnection;
+    private DatabaseConnection databaseConnection = new DatabaseConnection();
 
     // Methods made to perform try and catch and as well to be used multiple times
-    protected ResultSet executeQuery(String sql) {
+    public ResultSet executeQuery(String sql) {
         Connection connection = databaseConnection.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
