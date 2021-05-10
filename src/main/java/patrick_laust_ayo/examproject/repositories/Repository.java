@@ -34,8 +34,7 @@ public abstract class Repository {
     }
 
     public int calcNextId(String table) {
-        Connection connection = databaseConnection.getConnection();
-        ResultSet res = executeQuery(connection,"SELECT * FROM " + table + ";");
+        ResultSet res = executeQuery("SELECT * FROM " + table + ";");
 
         nextId = 0;
 
