@@ -21,14 +21,17 @@ public class UserCreator {
        return projectManager;
     }
 
-    public Participant createParticipant(Project project) {
+    public Participant createParticipant(String projectTitle) {
         ParticipantRepository parRepo = new ParticipantRepository();
         ProjectRepository proRepo = new ProjectRepository();
 
         participant = new Participant(parRepo.calcNextId("participant"), new String(), new String(), new String(), null);
 
-        parRepo.putParticipantInDatabase(participant, proRepo.findId("project","title",project.getTitle(),
-                            "project_id"), participant.getDepartment().getDepartmentNo());
+        if (proRepo.doesProjectExist(projectTitle)) {
+            parRepo.putParticipantInDatabase(participant, proRepo.findId("project","title",projectTitle,
+                    "project_id"), participant.getDepartment().getDepartmentNo());
+        }
+
 
         return participant;
     }
