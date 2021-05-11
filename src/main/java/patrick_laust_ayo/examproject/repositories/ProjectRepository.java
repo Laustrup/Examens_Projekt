@@ -40,9 +40,16 @@ public class ProjectRepository extends Repository{
     public boolean doesProjectExist(String title){
         ResultSet res = executeQuery("SELECT * FROM project WHERE title = " + title + ";");
 
-        if (res.)
+        try {
+            while (res.next()) {
+                return true;
+            }
+        }
+        catch (Exception e) {
+            System.out.println("");
+        }
 
-        return userList.containsKey(id);
+        return false;
 
     }
 
