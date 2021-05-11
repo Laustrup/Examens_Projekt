@@ -31,7 +31,7 @@ class UserCreatorTest {
 
 
         //Assert
-        assertEquals(repo.findId(),expectations[0]);
+        assertEquals(repo.findId("participant", "project_id",repo.calcNextId("project")-1,"projectmanager_id"),expectations[0]);
         assertEquals(project.getPassword(),expectations[1]);
         assertEquals(project.getProjectManager().getName(),expectations[2]);
 

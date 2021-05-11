@@ -1,14 +1,13 @@
 package patrick_laust_ayo.examproject.repositories;
 
-import patrick_laust_ayo.examproject.models.Department;
-import patrick_laust_ayo.examproject.models.Phase;
-import patrick_laust_ayo.examproject.models.Project;
-import patrick_laust_ayo.examproject.models.ProjectManager;
+import patrick_laust_ayo.examproject.models.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ProjectRepository extends Repository{
 
@@ -36,6 +35,15 @@ public class ProjectRepository extends Repository{
         }
 
         return project;
+    }
+
+    public boolean doesProjectExist(String title){
+        ResultSet res = executeQuery("SELECT * FROM project WHERE title = " + title + ";");
+
+        if (res.)
+
+        return userList.containsKey(id);
+
     }
 
 }
