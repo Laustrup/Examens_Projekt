@@ -1,14 +1,13 @@
 package patrick_laust_ayo.examproject.repositories;
 
-import patrick_laust_ayo.examproject.models.Department;
-import patrick_laust_ayo.examproject.models.Phase;
-import patrick_laust_ayo.examproject.models.Project;
-import patrick_laust_ayo.examproject.models.ProjectManager;
+import patrick_laust_ayo.examproject.models.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ProjectRepository extends Repository{
 
@@ -17,7 +16,7 @@ public class ProjectRepository extends Repository{
 
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
     public void putProjectInDatabase(Project projectToInsert, int projectmanagerId) {
-        executeSQLStatement("insert into project values (default, \""  + projectToInsert.getTitle() + "\", \"" +
+        executeSQLStatement("INSERT INTO project VALUES (DEFAULT, \""  + projectToInsert.getTitle() + "\", \"" +
                 projectToInsert.getPassword() + "\", " + projectmanagerId + "); ");
     }
 
@@ -36,6 +35,26 @@ public class ProjectRepository extends Repository{
         }
 
         return project;
+    }
+
+    public void putPhaseInDatabase(int projectmanagerId) {
+        executeSQLStatement("INSERT INTO phase VALUES (default, "  + null + ", " + projectmanagerId + "); ");
+    }
+
+    public boolean doesProjectExist(String title){
+        ResultSet res = executeQuery("SELECT * FROM project WHERE title = " + title + ";");
+
+        try {
+            while (res.next()) {
+                return true;
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't look through resultSet...\n" + e.getMessage());
+        }
+
+        return false;
+
     }
 
 }

@@ -14,7 +14,6 @@ public class ProjectmanagerRepository extends Repository {
     // -1 for if value is unchanged
     private int currentId = -1;
 
-
     public void putProjectManagerInDatabase(ProjectManager projectManager){
         executeSQLStatement("INSERT INTO projectmanager VALUES (default, \"" + projectManager.getUsername()
                             + "\", \"" + projectManager.getPassword() + "\", default");
@@ -67,4 +66,5 @@ public class ProjectmanagerRepository extends Repository {
     public int getCurrentId() {
             return currentId;
     }
+
 }

@@ -9,22 +9,25 @@ import java.sql.ResultSet;
 public abstract class Repository {
 
     private DatabaseConnection databaseConnection = new DatabaseConnection();
+    private Connection connection;
 
     // Methods made to perform try and catch and as well to be used multiple times
     public ResultSet executeQuery(String sql) {
-        Connection connection = databaseConnection.getConnection();
+        connection = databaseConnection.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
+            closeConnection();
             return statement.executeQuery();
         }
         catch (Exception e) {
             System.out.println("Couldn't execute query...\n" + e.getMessage());
+            closeConnection();
             return null;
         }
     }
 
     protected void executeSQLStatement(String sql) {
-        Connection connection = databaseConnection.getConnection();
+        connection = databaseConnection.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.executeUpdate();
@@ -32,13 +35,24 @@ public abstract class Repository {
         catch (Exception e) {
             System.out.println("Couldn't execute query...\n" + e.getMessage());
         }
+        closeConnection();
     }
 
-    public int findId(String table, String coloumnTitle, String title, String columnLabel) {
-        ResultSet res = executeQuery("SELECT * FROM " + table + " WHERE " + coloumnTitle + " = '" + title + "';");
+    private void closeConnection() {
+        try {
+            connection.close();
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't close connection...\n" + e.getMessage());
+        }
+    }
+
+    public int findId(String table, String column, String condition, String origin) {
+
+        ResultSet res = executeQuery("SELECT * FROM " + table + " WHERE " + column + " = '" + condition + "';");
 
         try {
-            return res.getInt(columnLabel);
+            return res.getInt(origin);
         }
         catch (Exception e) {
             System.out.println("Couldn't find project id...\n" + e.getMessage());
