@@ -26,11 +26,10 @@ public class UserCreator {
     public Participant createParticipant(Project project) {
         ParticipantRepository parRepo = new ParticipantRepository();
         ProjectRepository proRepo = new ProjectRepository();
-        DepartmentRepository depRepo = new DepartmentRepository();
 
         participant = new Participant(parRepo.calcNextId("participant"), new String(), new String(), null);
 
-        parRepo.putParticipantInDatabase(participant, proRepo.findProjectId(project), participant.getDepartment().getDepartmentNo());
+        parRepo.putParticipantInDatabase(participant, proRepo.findId(project.getTitle(),"project_id"), participant.getDepartment().getDepartmentNo());
 
         return participant;
     }

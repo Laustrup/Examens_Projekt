@@ -1,5 +1,7 @@
 package patrick_laust_ayo.examproject.repositories;
 
+import patrick_laust_ayo.examproject.models.Project;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,6 +31,18 @@ public abstract class Repository {
         }
         catch (Exception e) {
             System.out.println("Couldn't execute query...\n" + e.getMessage());
+        }
+    }
+
+    public int findId(String title, String columnLabel) {
+        ResultSet res = executeQuery("SELECT * FROM project WHERE title = '" + title + "';");
+
+        try {
+            return res.getInt(columnLabel);
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't find project id...\n" + e.getMessage());
+            return -1;
         }
     }
 

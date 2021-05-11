@@ -38,16 +38,4 @@ public class ProjectRepository extends Repository{
         return project;
     }
 
-    public int findProjectId(Project project) {
-        ResultSet res = executeQuery("SELECT * FROM project WHERE title = '" + project.getTitle() + "';");
-
-        try {
-            return res.getInt("project_id");
-        }
-        catch (Exception e) {
-            System.out.println("Couldn't find project id...\n" + e.getMessage());
-            return -1;
-        }
-    }
-
 }

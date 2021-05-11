@@ -45,7 +45,7 @@ public class ProjectmanagerRepository extends Repository {
                 "FROM projectmanager " +
                 "INNER JOIN participant ON participant.participant_id = projectmanager.projectmanager_id " +
                 "INNER JOIN department ON department.department_no = participant.participant_id " +
-                " WHERE projectmanager.username = '" + username + "';");
+                "WHERE projectmanager.username = '" + username + "';");
 
         try {
             Department department = new Department(res.getString("location"),

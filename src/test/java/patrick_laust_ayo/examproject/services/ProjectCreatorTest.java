@@ -16,7 +16,7 @@ class ProjectCreatorTest {
     private ProjectRepository repo = new ProjectRepository();
 
     @ParameterizedTest
-    @CsvSource(value = {"Save the homeless|dafsgf41*ø|Andy Boss|Save the homeless_dafsgf41*ø_Andy Boss"}, delimiter = '|')
+    @CsvSource(value = {"Save the homeless|admin1234|Andy Boss|Save the homeless_admin1234_Andy Boss"}, delimiter = '|')
     public void createProjectTest(String title, String password, String managerName, String expected) {
         //Arrange
         String[] expectations = expected.split("_");
