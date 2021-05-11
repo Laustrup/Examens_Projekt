@@ -4,6 +4,7 @@ import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.ProjectManager;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -43,11 +44,13 @@ public class ProjectmanagerRepository extends Repository {
                 "projectmanager_password, " + "participant.participant_id, " + "participant_name, " +
                 "position, project_id, department.department_no, location, department_name " +
                 "FROM projectmanager " +
-                "INNER JOIN participant ON participant.participant_id = projectmanager.projectmanager_id " +
-                "INNER JOIN department ON department.department_no = participant.participant_id " +
+                "INNER JOIN participant " +
+                "INNER JOIN department " +
                 "WHERE projectmanager.username = '" + username + "';");
 
         try {
+            res.next();
+
             Department department = new Department(res.getString("location"),
                                     res.getString("department_name"), res.getInt("department_no"));
             projectmanager = new ProjectManager(res.getString("username"),res.getString("projectmanager_password"),
