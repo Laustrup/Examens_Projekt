@@ -34,8 +34,8 @@ public abstract class Repository {
         }
     }
 
-    public int findId(String coloumnTitle, String title, String columnLabel) {
-        ResultSet res = executeQuery("SELECT * FROM project WHERE " + coloumnTitle + " = '" + title + "';");
+    public int findId(String table, String coloumnTitle, String title, String columnLabel) {
+        ResultSet res = executeQuery("SELECT * FROM " + table + " WHERE " + coloumnTitle + " = '" + title + "';");
 
         try {
             return res.getInt(columnLabel);

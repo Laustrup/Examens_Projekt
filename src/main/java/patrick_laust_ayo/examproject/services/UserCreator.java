@@ -27,7 +27,7 @@ public class UserCreator {
 
         participant = new Participant(parRepo.calcNextId("participant"), new String(), new String(), new String(), null);
 
-        parRepo.putParticipantInDatabase(participant, proRepo.findId("title",project.getTitle(),
+        parRepo.putParticipantInDatabase(participant, proRepo.findId("project","title",project.getTitle(),
                             "project_id"), participant.getDepartment().getDepartmentNo());
 
         return participant;
