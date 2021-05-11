@@ -16,7 +16,7 @@ public class ProjectRepository extends Repository{
 
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
     public void putProjectInDatabase(Project projectToInsert, int projectmanagerId) {
-        executeSQLStatement("insert into project values (default, \""  + projectToInsert.getTitle() + "\", \"" +
+        executeSQLStatement("INSERT INTO project VALUES (DEFAULT, \""  + projectToInsert.getTitle() + "\", \"" +
                 projectToInsert.getPassword() + "\", " + projectmanagerId + "); ");
     }
 
@@ -37,6 +37,10 @@ public class ProjectRepository extends Repository{
         return project;
     }
 
+    public void putPhaseInDatabase(int projectmanagerId) {
+        executeSQLStatement("INSERT INTO phase VALUES (default, "  + null + ", " + projectmanagerId + "); ");
+    }
+
     public boolean doesProjectExist(String title){
         ResultSet res = executeQuery("SELECT * FROM project WHERE title = " + title + ";");
 
@@ -46,7 +50,7 @@ public class ProjectRepository extends Repository{
             }
         }
         catch (Exception e) {
-            System.out.println("");
+            System.out.println("Couldn't look through resultSet...\n" + e.getMessage());
         }
 
         return false;
