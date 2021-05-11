@@ -4,8 +4,6 @@ import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 
 public class Participant {
 
-    private ParticipantRepository repo;
-
     private int id;
     private String password;
     private String name;

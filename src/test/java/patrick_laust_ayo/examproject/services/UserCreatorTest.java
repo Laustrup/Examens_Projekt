@@ -3,7 +3,6 @@ package patrick_laust_ayo.examproject.services;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import patrick_laust_ayo.examproject.models.Participant;
-import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 
 import java.sql.ResultSet;
