@@ -7,17 +7,24 @@ public class Participant {
     private ParticipantRepository repo;
 
     private int id;
-
+    private String password;
     private String name;
     private String position;
-
     private Department department;
 
-    public Participant(int id, String name, String position, Department department) {
+    public Participant(int id, String password, String name, String position, Department department) {
         this.id = id;
+        this.password = password;
         this.name = name;
         this.position = position;
         this.department = department;
+    }
+    public String getPassword(){
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {

@@ -28,7 +28,7 @@ public class UserCreator {
         ProjectRepository proRepo = new ProjectRepository();
         DepartmentRepository depRepo = new DepartmentRepository();
 
-        participant = new Participant(parRepo.calcNextId("participant"), new String(), new String(), null);
+        participant = new Participant(parRepo.calcNextId("participant"), new String(), new String(), new String(), null);
 
         parRepo.putParticipantInDatabase(participant, proRepo.findProjectId(project), participant.getDepartment().getDepartmentNo());
 
