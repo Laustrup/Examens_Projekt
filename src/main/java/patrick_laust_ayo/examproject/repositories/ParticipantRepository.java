@@ -16,22 +16,19 @@ public class ParticipantRepository extends Repository {
 
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
     public void putParticipantInDatabase(Participant participantToInsert, int projectId, int departmentNo) {
-        Connection connection = databaseConnection.getConnection();
-        executeSQLStatement(connection,"INSERT into participant \n" +
+        executeSQLStatement("INSERT into participant \n" +
                 "VALUES (default, \" "+ participantToInsert.getName() + "\", \"" +participantToInsert.getPosition() +
                 "\", " + projectId + ", " + departmentNo + ";");
     }
 
-    public Participant putParticipantInDatabaseWithReturn(Participant participantToInsert, int projectId, int departmentNo) {
-        Connection connection = databaseConnection.getConnection();
-        executeSQLStatement(connection,"INSERT into participant \n" +
+    public Participant putParticipantInDatabaseWithReturn(Participant participantToInsert, int projectId, Department department) {
+        executeSQLStatement("INSERT into participant \n" +
                 "VALUES (default, \" "+ participantToInsert.getName() + "\", \"" + participantToInsert.getPosition() +
-                "\", " + projectId + ", " + departmentNo + ";");
-        ResultSet res = executeQuery(connection,"SELECT * FROM project WHERE participant_name = \""
+                "\", " + projectId + ", " + department.getDepartmentNo() + ";");
+        ResultSet res = executeQuery("SELECT * FROM project WHERE participant_name = \""
                 + participantToInsert.getName() + "\";");
 
         try {
-            Department department = new Department()
             participant = new Participant(res.getInt("participant_id"),res.getString("participant_name"),
                     res.getString("position"), department);
 

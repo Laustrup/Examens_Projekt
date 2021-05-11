@@ -9,7 +9,10 @@ public class UserEditor {
     private ProjectManager projectManager;
     private Participant participant;
 
+    /*
     public Participant updateParticipant(int id, String name, String position, Department department){
-
+        return new Participant();
     }
+
+     */
 }

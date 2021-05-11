@@ -6,11 +6,10 @@ import java.sql.ResultSet;
 
 public abstract class Repository {
 
-    protected DatabaseConnection databaseConnection;
-    private int nextId;
+    private DatabaseConnection databaseConnection = new DatabaseConnection();
 
     // Methods made to perform try and catch and as well to be used multiple times
-    protected ResultSet executeQuery(String sql) {
+    public ResultSet executeQuery(String sql) {
         Connection connection = databaseConnection.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -34,10 +33,9 @@ public abstract class Repository {
     }
 
     public int calcNextId(String table) {
-        Connection connection = databaseConnection.getConnection();
-        ResultSet res = executeQuery(connection,"SELECT * FROM " + table + ";");
+        ResultSet res = executeQuery("SELECT * FROM " + table + ";");
 
-        nextId = 0;
+        int nextId = 0;
 
         try {
             while (res.next()) {

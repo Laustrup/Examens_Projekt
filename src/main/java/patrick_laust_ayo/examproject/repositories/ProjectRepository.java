@@ -1,5 +1,6 @@
 package patrick_laust_ayo.examproject.repositories;
 
+import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.Phase;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.ProjectManager;
@@ -16,16 +17,14 @@ public class ProjectRepository extends Repository{
 
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
     public void putProjectInDatabase(Project projectToInsert, int projectmanagerId) {
-        Connection connection = databaseConnection.getConnection();
-        executeSQLStatement(connection,"insert into project values (default, \""  + projectToInsert.getTitle() + "\", \"" +
+        executeSQLStatement("insert into project values (default, \""  + projectToInsert.getTitle() + "\", \"" +
                 projectToInsert.getPassword() + "\", " + projectmanagerId + "); ");
     }
 
     public Project putProjectInDatabaseWithReturn(Project projectToInsert, int projectmanagerId, ProjectManager projectManager) {
-        Connection connection = databaseConnection.getConnection();
-        executeSQLStatement(connection,"insert into project values (default, \""  + projectToInsert.getTitle() + "\", \"" +
+        executeSQLStatement("insert into project values (default, \""  + projectToInsert.getTitle() + "\", \"" +
                                             projectToInsert.getPassword() + "\", " + projectmanagerId + "); ");
-        ResultSet res = executeQuery(connection,"SELECT * FROM project WHERE title = \"" + projectToInsert.getTitle() + "\";");
+        ResultSet res = executeQuery("SELECT * FROM project WHERE title = \"" + projectToInsert.getTitle() + "\";");
 
         try {
             project = new Project(res.getString("title"), res.getString("project_password"),
@@ -37,6 +36,18 @@ public class ProjectRepository extends Repository{
         }
 
         return project;
+    }
+
+    public int findProjectId(Project project) {
+        ResultSet res = executeQuery("SELECT * FROM project WHERE title = '" + project.getTitle() + "';");
+
+        try {
+            return res.getInt("project_id");
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't find project id...\n" + e.getMessage());
+            return -1;
+        }
     }
 
 }

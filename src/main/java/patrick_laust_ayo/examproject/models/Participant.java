@@ -39,4 +39,12 @@ public class Participant {
         this.id = id;
         this.name = name;
     }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
 }
