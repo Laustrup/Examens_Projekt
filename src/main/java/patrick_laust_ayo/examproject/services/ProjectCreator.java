@@ -1,8 +1,6 @@
 package patrick_laust_ayo.examproject.services;
 
-import patrick_laust_ayo.examproject.models.Assignment;
-import patrick_laust_ayo.examproject.models.Phase;
-import patrick_laust_ayo.examproject.models.Project;
+import patrick_laust_ayo.examproject.models.*;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectmanagerRepository;
 
@@ -20,7 +18,7 @@ public class ProjectCreator {
 
     public Project createProject(String title, String password, String managerName) {
 
-        project = new Project(title, password, new ArrayList<>(), new HashMap<>(), pmRepo.findProjectManagerFromUsername(managerName));
+        project = new Project(title, password, new ArrayList<>(), new HashMap<>(), pmRepo.findProjectManager(managerName));
 
         pRepo.putProjectInDatabase(project, pmRepo.getCurrentId());
 
@@ -31,17 +29,22 @@ public class ProjectCreator {
 
         phase = new Phase(new String());
 
-        int id = pRepo.findId("project","title",projectTitle, "project_id");
+        int id = pRepo.findForeignId("project","title",projectTitle, "project_id");
         pRepo.putPhaseInDatabase(id);
 
         return phase;
     }
 
-    public Assignment createAssignment(String start, String end) {
+    public Assignment createAssignment(String projectTitle, String start, String end) {
 
+        assignment = new Assignment(start,end,new String,false, new ArrayList<Participant>(),new ArrayList<Task>());
 
+        Project project = pRepo.findProject(projectTitle);
+        pRepo.findForeignId()
 
-        //assignment = new Assignment();
+        pRepo.putAssignmentInDatabase(assignment,pRepo.findForeignId("phase_table","project_id",),pRepo.findForeignId(),pRepo.findForeignId());
+
+        "SELECT * FROM " + table + " WHERE " + column + " = '" + currentKey + "';"
 
         return assignment;
     }

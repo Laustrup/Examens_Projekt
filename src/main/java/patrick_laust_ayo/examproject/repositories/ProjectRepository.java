@@ -12,7 +12,6 @@ import java.util.Map;
 public class ProjectRepository extends Repository{
 
     private Project project;
-    private Phase phase;
 
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
     public void putProjectInDatabase(Project projectToInsert, int projectmanagerId) {
@@ -39,6 +38,19 @@ public class ProjectRepository extends Repository{
 
     public void putPhaseInDatabase(int projectmanagerId) {
         executeSQLStatement("INSERT INTO phase VALUES (default, "  + null + ", " + projectmanagerId + "); ");
+    }
+
+    public void putAssignmentInDatabase(Assignment assignment, int phaseId, int participantId, int taskId) {
+
+        executeSQLStatement("INSERT INTO assignment VALUES (default, "  + assignment.getStart() +
+                            ", " + assignment.getEnd() + ", " + assignment.isCompleted() + ", " +
+                             phaseId + ", " + participantId + ", " + taskId + "); ");
+    }
+
+
+    // TODO
+    public Project findProject(String title) {
+        return new Project(null,null,new ArrayList<>(),new HashMap<>(),new ProjectManager());
     }
 
     public boolean doesProjectExist(String title){
