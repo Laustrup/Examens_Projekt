@@ -47,12 +47,12 @@ public abstract class Repository {
         }
     }
 
-    public int findId(String table, String column, String condition, String origin) {
+    public int findForeignId(String table, String column, String currentKey, String foreignKey) {
 
-        ResultSet res = executeQuery("SELECT * FROM " + table + " WHERE " + column + " = '" + condition + "';");
+        ResultSet res = executeQuery("SELECT * FROM " + table + " WHERE " + column + " = '" + currentKey + "';");
 
         try {
-            return res.getInt(origin);
+            return res.getInt(foreignKey);
         }
         catch (Exception e) {
             System.out.println("Couldn't find project id...\n" + e.getMessage());

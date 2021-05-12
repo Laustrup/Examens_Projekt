@@ -38,7 +38,7 @@ public class ProjectmanagerRepository extends Repository {
     }
 
 
-    public ProjectManager findProjectManagerFromUsername(String username) {
+    public ProjectManager findProjectManager(String username) {
         ResultSet res = executeQuery("SELECT projectmanager_id, username, " +
                 "projectmanager_password, " + "participant.participant_id, " + "participant_name, " +
                 "position, project_id, department.department_no, location, department_name " +
