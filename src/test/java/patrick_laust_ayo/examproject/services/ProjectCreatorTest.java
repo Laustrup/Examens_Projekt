@@ -26,7 +26,7 @@ class ProjectCreatorTest {
         //Assert
         assertEquals(project.getTitle(),expectations[0]);
         assertEquals(project.getPassword(),expectations[1]);
-        assertEquals(project.getProjectManager().getName(),expectations[2]);
+        assertEquals(project.getProjectManager().getUsername(),expectations[2]);
 
     }
 

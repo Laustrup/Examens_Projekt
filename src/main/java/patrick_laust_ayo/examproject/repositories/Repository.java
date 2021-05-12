@@ -16,7 +16,7 @@ public abstract class Repository {
         connection = databaseConnection.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            closeConnection();
+            //closeConnection();
             return statement.executeQuery();
         }
         catch (Exception e) {
