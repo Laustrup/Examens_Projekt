@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.Department;
+import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.services.UserCreator;
 import patrick_laust_ayo.examproject.services.UserEditor;
@@ -16,14 +17,21 @@ public class ParticipantController {
     private UserCreator userCreator;
     private UserEditor userEditor;
 
-
     @PostMapping
-    public String createParticipant(@RequestParam(name="project_title") String projectTitle,  HttpServletRequest request){
+    public String loginParticipant(@RequestParam(name="password") String password, HttpServletRequest request){
 
-        userCreator.createParticipant(projectTitle);
+        HttpSession session = request.getSession();
 
-        return "redirct:/projectPage";
+        if (userCreator.doesParticipantExist(password) == false){
+
+        }
+
     }
+    @GetMapping("/projectpage/{pName}")
+    public String renderProjectpage ()
+
+
+
 
     @PostMapping
     public String updateParticipant(@RequestParam(name="participant_ID") int id, @RequestParam(name="participant_password") String password,
@@ -31,10 +39,13 @@ public class ParticipantController {
                                     @RequestParam(name="department") Department department, HttpServletRequest request){
 
         HttpSession session = request.getSession();
-        session.setAttribute("id", "id");
 
-        userEditor.updateParticipant(id, password, name, position, department);
+        Participant participant = userEditor.updateParticipant(id, password, name, position, department);
 
-        return "";
+        session.setAttribute("participant_updated", participant);
+
+        String pName = participant.getName();
+
+        return "redirect:/projectpage/" + pName;
     }
 }

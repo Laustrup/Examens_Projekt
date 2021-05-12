@@ -7,6 +7,11 @@ import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectmanagerRepository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserCreator {
 
     private ProjectManager projectManager;
@@ -35,4 +40,33 @@ public class UserCreator {
 
         return participant;
     }
+    public Map<String, Participant> getParticipantMap() {
+
+        ParticipantRepository participantRepository = new ParticipantRepository();
+        Map<String, Participant> participantMap = new HashMap<>();
+
+        try {
+            ResultSet resultSet = participantRepository.executeQuery("SELECT * FROM participant");
+
+            while (resultSet.next()) {
+                String username = resultSet.getString(2);
+                String password = resultSet.getString(3);
+
+                Participant tempParticipant = new Participant(password, username);
+
+                participantMap.put(password, tempParticipant);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return participantMap;
+    }
+
+    public boolean doesParticipantExist(String password){
+        Map<String, Participant> userList = getParticipantMap();
+        return userList.containsKey(password);
+
+    }
+
+}
 }

@@ -17,54 +17,27 @@ public class ParticipantRepository extends Repository {
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
     public void putParticipantInDatabase(Participant participantToInsert, int projectId, int departmentNo) {
         executeSQLStatement("INSERT into participant \n" +
-                "VALUES (default, \" "+ participantToInsert.getName() + "\", \"" +participantToInsert.getPosition() +
+                "VALUES (default, \" " + participantToInsert.getName() + "\", \"" + participantToInsert.getPosition() +
                 "\", " + projectId + ", " + departmentNo + ";");
     }
 
     public Participant putParticipantInDatabaseWithReturn(Participant participantToInsert, int projectId, Department department) {
         executeSQLStatement("INSERT into participant \n" +
-                "VALUES (default, \" "+ participantToInsert.getName() + "\", \"" + participantToInsert.getPosition() +
+                "VALUES (default, \" " + participantToInsert.getName() + "\", \"" + participantToInsert.getPosition() +
                 "\", " + projectId + ", " + department.getDepartmentNo() + ";");
         ResultSet res = executeQuery("SELECT * FROM project WHERE participant_name = \""
                 + participantToInsert.getName() + "\";");
 
         try {
-            participant = new Participant(res.getInt("participant_id"),res.getString("password"),res.getString("participant_name"),
+            participant = new Participant(res.getInt("participant_id"), res.getString("password"), res.getString("participant_name"),
                     res.getString("position"), department);
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
             participant = null;
         }
 
         return participant;
     }
-
-    public Map<Integer, Participant> getParticipantMap() {
-        Map<Integer, Participant> participantMap = new HashMap<>();
-
-        try {
-            ResultSet resultSet = executeQuery("SELECT * FROM participant");
-
-            while (resultSet.next()) {
-                int participantID = resultSet.getInt(1);
-                String username = resultSet.getString(2);
-
-                Participant tempParticipant = new Participant(participantID, username);
-
-                participantMap.put(participantID, tempParticipant);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return participantMap;
-    }
-
-    public boolean doesParticipantIDExist(int id){
-        Map<Integer, Participant> userList = getParticipantMap();
-        return userList.containsKey(id);
-
-    }
-
 }
+

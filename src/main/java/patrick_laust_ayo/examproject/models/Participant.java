@@ -40,8 +40,8 @@ public class Participant {
     public void setPosition(String position) {
         this.position = position;
     }
-    public Participant(int id, String name){
-        this.id = id;
+    public Participant(String password, String name){
+        this.password = password;
         this.name = name;
     }
 
