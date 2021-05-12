@@ -40,9 +40,10 @@ public class ProjectCreator {
         assignment = new Assignment(start,end,new String,false, new ArrayList<Participant>(),new ArrayList<Task>());
 
         Project project = pRepo.findProject(projectTitle);
-        pRepo.findForeignId()
 
-        pRepo.putAssignmentInDatabase(assignment,pRepo.findForeignId("phase_table","project_id",),pRepo.findForeignId(),pRepo.findForeignId());
+        int pRepo.findForeignId()
+
+        pRepo.putAssignmentInDatabase(assignment,,pRepo.findForeignId(),pRepo.findForeignId());
 
         "SELECT * FROM " + table + " WHERE " + column + " = '" + currentKey + "';"
 

@@ -49,8 +49,49 @@ public class ProjectRepository extends Repository{
 
 
     // TODO
-    public Project findProject(String title) {
-        return new Project(null,null,new ArrayList<>(),new HashMap<>(),new ProjectManager());
+    public Project findProject(String title, ProjectManager projectManager) {
+        ArrayList<Phase> phases = new ArrayList<>();
+        ResultSet res = executeQuery("USE projekt_kalkulering;" +
+                                        "SELECT * FROM project " +
+                                        "WHERE project.title = '" + title + "';");
+
+        Phase phase = new Phase(new String());
+        int previousId = 0;
+        Map<String, Participant> participants = new HashMap<>();
+
+        try {
+            while (res.next()) {
+                // TODO has same title as title in db
+                phase.setAssignments(participants.put());
+                if (res.isFirst()) {
+                    phase.setTitle("title");
+                    previousId = res.getInt("phase_table.phase_id");
+                }
+                if (res.getInt("assignment.phase_id") != previousId) {
+                    phases.add(phase);
+                }
+
+                phase.setTitle("title");
+                previousId = res.getInt("phase_table.phase_id");
+
+
+                if (res.isLast()) {
+                    Project project = new Project(res.getString("title"),res.getString("password"),
+                            phases,participants, projectManager);
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't create project...\n" + e.getMessage());
+        }
+
+        project_id, title, project_password, projectmanager_id,
+                phase_table.phase_id, phase_table.title,
+                assignment.assignment_id, assignment.assignment_start, assignment.assignment_end, assignment.is_completed,
+                task.estimated_work_hours
+
+
+        return project;
     }
 
     public boolean doesProjectExist(String title){
