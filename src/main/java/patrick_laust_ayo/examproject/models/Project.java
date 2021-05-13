@@ -7,8 +7,6 @@ import java.util.Map;
 
 public class Project {
 
-    private ProjectRepository repo;
-
     private String password;
     private String title;
 

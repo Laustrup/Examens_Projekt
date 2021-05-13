@@ -6,8 +6,6 @@ import java.util.Map;
 
 public class Phase {
 
-    private ProjectRepository repo;
-
     private Map<String, Assignment> assignments;
 
     private String title;
@@ -20,8 +18,8 @@ public class Phase {
         return assignments;
     }
 
-    public void setAssignments(Map<String, Assignment> assignments) {
-        this.assignments = assignments;
+    public void putInAssignments(String key, Assignment assignment) {
+        assignments.put(key, assignment);
     }
 
     public String getTitle() {
