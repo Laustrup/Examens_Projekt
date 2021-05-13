@@ -21,6 +21,7 @@ public abstract class Repository {
         }
         catch (Exception e) {
             System.out.println("Couldn't execute query...\n" + e.getMessage());
+            e.printStackTrace();
             closeConnection();
             return null;
         }
@@ -33,7 +34,8 @@ public abstract class Repository {
             statement.executeUpdate();
         }
         catch (Exception e) {
-            System.out.println("Couldn't execute query...\n" + e.getMessage());
+            System.out.println("Couldn't execute update...\n" + e.getMessage());
+            e.printStackTrace();
         }
         closeConnection();
     }
@@ -52,6 +54,7 @@ public abstract class Repository {
         ResultSet res = executeQuery("SELECT * FROM " + table + " WHERE " + column + " = '" + currentKey + "';");
 
         try {
+            res.next();
             return res.getInt(foreignKey);
         }
         catch (Exception e) {

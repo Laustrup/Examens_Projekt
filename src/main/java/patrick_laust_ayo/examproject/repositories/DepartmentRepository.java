@@ -23,8 +23,8 @@ public class DepartmentRepository extends Repository {
         ResultSet res = executeQuery("SELECT * FROM department");
 
         try{
-            department = new Department(res.getString("location"),
-                    res.getString("department_name"), res.getInt("department_no"));
+            department = new Department(res.getInt("department_no"),
+                    res.getString("location") ,res.getString("department_name"));
         }
         catch(SQLException e){
             System.out.println("Couldn't create Department " + e.getMessage());
@@ -32,6 +32,20 @@ public class DepartmentRepository extends Repository {
         }
 
         return department;
+    }
+
+    public Department findDepartmentByName(String depName){
+        ResultSet res = executeQuery("SELECT * FROM department WHERE department_name = '" + depName + "';");
+        Department departmentByName = null;
+
+        try{
+            res.next();
+            departmentByName = new Department(res.getInt(1), res.getString(2), res.getString(3));
+        }
+        catch(Exception e){
+            System.out.println("Couldn't find department by name " + e.getMessage());
+        }
+        return departmentByName;
     }
 
 }

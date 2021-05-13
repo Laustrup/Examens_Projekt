@@ -27,10 +27,12 @@ public class ParticipantController {
 
 
         }
-
+return "";
     }
     @GetMapping("/projectpage/{pName}")
-    public String renderProjectpage ()
+    public String renderProjectpage (){
+        return "";
+    }
 
 
 
@@ -48,6 +50,6 @@ public class ParticipantController {
 
         String pName = participant.getName();
 
-        return "redirect:/projectpage/" + pName;
+        return "redirect:/projectpage/"; //+ pName;
     }
 }

@@ -62,7 +62,7 @@ public class ProjectRepository extends Repository{
         try {
             while (res.next()) {
                 // TODO has same title as title in db
-                phase.setAssignments(participants.put());
+              //  phase.setAssignments(participants.put());
                 if (res.isFirst()) {
                     phase.setTitle("title");
                     previousId = res.getInt("phase_table.phase_id");
@@ -95,8 +95,8 @@ public class ProjectRepository extends Repository{
     }
 
     public boolean doesProjectExist(String title){
-        ResultSet res = executeQuery("SELECT * FROM project WHERE title = " + title + ";");
-
+        ResultSet res = executeQuery("SELECT * FROM project WHERE title = '" + title + "';");
+        System.out.println(title);
         try {
             while (res.next()) {
                 return true;
