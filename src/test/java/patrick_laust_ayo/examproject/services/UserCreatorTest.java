@@ -12,10 +12,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserCreatorTest {
 
     private UserCreator userCreator = new UserCreator();
-    private ProjectRepository repo;
+    private ProjectRepository repo = new ProjectRepository();
 
     @ParameterizedTest
-    @CsvSource(value = {"1|3|1_3"}, delimiter = '|')
+    @CsvSource(value = {"1|1|1_1"}, delimiter = '|')
     public void createParticipantTest(String projectId, String iterations, String expected) {
         //Arrange
         //ResultSet res = repo.executeQuery();
@@ -26,12 +26,12 @@ class UserCreatorTest {
 
         //Act
         for (int i = 0; i < amounts; i++) {
-            participant = userCreator.createParticipant("Appdev");
+            participant = userCreator.createParticipant("Appdev", "COPENHAGEN");
         }
 
 
         //Assert
-        assertEquals(repo.findForeignId("participant", "project_id", String.valueOf(repo.calcNextId("project")-1),"projectmanager_id"),expectations[0]);
+        assertEquals(repo.findForeignId("participant", "project_id", String.valueOf(repo.calcNextId("project")-1),"participant_id"),expectations[0]);
        // assertEquals(project.getPassword(),expectations[1]);
        // assertEquals(project.getProjectManager().getName(),expectations[2]);
 

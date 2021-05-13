@@ -16,17 +16,18 @@ public class ParticipantRepository extends Repository {
 
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
     public void putParticipantInDatabase(Participant participantToInsert, int projectId, int departmentNo) {
-        executeSQLStatement("INSERT into participant \n" +
-                "VALUES (default, \" " + participantToInsert.getName() + "\", \"" + participantToInsert.getPosition() +
-                "\", " + projectId + ", " + departmentNo + ";");
+        executeSQLStatement("INSERT into participant " +
+                "VALUES (default, \"'" + participantToInsert.getName() + "'\", \"'" + participantToInsert.getPassword() +
+                "'\", \"'" + participantToInsert.getPosition() +
+                "'\", " + projectId + ", " + departmentNo + ");");
     }
 
     public Participant putParticipantInDatabaseWithReturn(Participant participantToInsert, int projectId, Department department) {
-        executeSQLStatement("INSERT into participant \n" +
+        executeSQLStatement("INSERT into participant " +
                 "VALUES (default, \" " + participantToInsert.getName() + "\", \"" + participantToInsert.getPosition() +
                 "\", " + projectId + ", " + department.getDepartmentNo() + ";");
         ResultSet res = executeQuery("SELECT * FROM project WHERE participant_name = \""
-                + participantToInsert.getName() + "\";");
+                + participantToInsert.getName() + "\");");
 
         try {
             participant = new Participant(res.getInt("participant_id"), res.getString("password"), res.getString("participant_name"),
