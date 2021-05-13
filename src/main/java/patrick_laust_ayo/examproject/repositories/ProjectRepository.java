@@ -10,13 +10,12 @@ import java.util.Map;
 public class ProjectRepository extends Repository{
 
     private Project project;
-
-    Task task;
-    Assignment assignment;
-    Phase phase;
-    Participant participant;
-    ProjectManager projectManager;
-    Department department;
+    private Task task;
+    private Assignment assignment;
+    private Phase phase;
+    private Participant participant;
+    private ProjectManager projectManager;
+    private Department department;
 
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
     public void putProjectInDatabase(Project projectToInsert, int projectmanagerId) {
@@ -54,12 +53,12 @@ public class ProjectRepository extends Repository{
 
     public Project findProject(String projectTitle) {
 
-        ResultSet res = executeQuery("SELECT project.project_id, project.title, project_password, projectmanager_id, " +
-                "projectmanager.username " +
+        ResultSet res = executeQuery("SELECT project.project_id, project.title, project_password, project.projectmanager_id, " +
+                "projectmanager.username, " +
                 "phase_table.phase_id, phase_table.phase_title, " +
                 "assignment.assignment_id, assignment.assignment_title, assignment.phase_id, assignment.assignment_start, assignment.assignment_end, assignment.is_completed, " +
-                "task.estimated_work_hours, task.task_id " +
-                "participant.participant_id, participant.participant_name, participant.participant_password, participant.position " +
+                "task.estimated_work_hours, task.task_id, " +
+                "participant.participant_id, participant.participant_name, participant.participant_password, participant.position, " +
                 "department.department_no, department.location, department.department_name " +
                 "FROM project " +
                 "INNER JOIN phase_table " +
@@ -67,7 +66,8 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN task " +
                 "INNER JOIN participant " +
                 "INNER JOIN department " +
-                "WHERE project.title = " + projectTitle +  ";");
+                "INNER JOIN projectmanager " +
+                "WHERE project.title = '" + projectTitle +  "';");
 
         // Local variables to be edited from db's values
         ArrayList<Phase> listOfPhases = new ArrayList<>();
@@ -129,18 +129,12 @@ public class ProjectRepository extends Repository{
 
                 // Sets first values
                 if (res.isFirst()) {
-
+                    updateObjects(ids, strings, isCompleted, workHours, listOfParticipants, listOfTasks, res);
                 }
 
-                // Adds Tasks to listOfTasks
-                if (res.getInt("assignment.assignment_id") != previousId) {
-                    listOfPhases.add(phase);
-                }
+                //TODO should not be void, needs to return arrays and maps...
+                putInObjects();
 
-                phase.putInAssignments(String.valueOf(res.getInt("phase_id")),
-                                        new Assignment(res.getString("assignment_start"),res.getString("assignment_end"),
-                                                        res.getString("assignment.assignment_title"),res.getBoolean("assignment.is_completed"),
-                                                        listOfParticipants,listOfTasks));
                 // Updates everything
                 if (!(res.isFirst())) {
                     updateObjects(ids, strings, isCompleted, workHours, listOfParticipants, listOfTasks, res);
@@ -148,6 +142,7 @@ public class ProjectRepository extends Repository{
 
                 // Constructs project
                 if (res.isLast()) {
+                    putInObjects();
                     project = new Project(res.getString("title"),res.getString("password"),
                             listOfPhases,mapOfParticipant, projectManager);
                 }
@@ -175,7 +170,7 @@ public class ProjectRepository extends Repository{
             task = new Task(workHours);
             assignment = new Assignment(strings[7],strings[8],strings[1],isCompleted,listOfParticipants,listOfTasks);
             phase = new Phase(strings[2]);
-            department = new Department();
+            department = new Department(ids[6],strings[9],strings[10]);
 
             // Checks if participant is projectmanager
             Integer dbParticipantId = ids[3];
@@ -234,6 +229,24 @@ public class ProjectRepository extends Repository{
         }
 
         return strings;
+    }
+
+    private void putInObjects(int[] ids, String[] strings, ResultSet res, int previousId,ArrayList<Phase> listOfPhases,
+                              ArrayList<Participant> listOfParticipants,ArrayList<Task>) {
+        // Adds Tasks to listOfTasks
+        try {
+            phase.putInAssignments(String.valueOf(res.getInt("phase_id")),
+                    new Assignment(res.getString("assignment_start"),res.getString("assignment_end"),
+                            res.getString("assignment.assignment_title"),res.getBoolean("assignment.is_completed"),
+                            listOfParticipants,listOfTasks));
+            if (res.getInt("assignment.assignment_id") != previousId) {
+                listOfPhases.add(phase);
+            }
+        }
+        catch (Exception e) {
+            System.out.println();
+        }
+
     }
 
     public boolean doesProjectExist(String title){
