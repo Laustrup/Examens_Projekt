@@ -24,6 +24,8 @@ public class ParticipantController {
 
         if (userCreator.doesParticipantExist(id) == false){
 
+
+
         }
 
     }

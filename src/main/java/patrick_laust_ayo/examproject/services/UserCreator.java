@@ -53,7 +53,7 @@ public class UserCreator {
 
                 Participant tempParticipant = new Participant(participant_ID, username);
 
-                participantMap.put(password, tempParticipant);
+                participantMap.put(participant_ID, tempParticipant);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -62,10 +62,10 @@ public class UserCreator {
     }
 
     public boolean doesParticipantExist(int participant_ID){
-        Map<String, Participant> userList = getParticipantMap();
-        return userList.containsKey(password);
+        Map<Integer, Participant> userList = getParticipantMap();
+        return userList.containsKey(participant_ID);
 
     }
 
 }
-}
+
