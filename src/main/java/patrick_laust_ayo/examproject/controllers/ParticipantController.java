@@ -18,11 +18,11 @@ public class ParticipantController {
     private UserEditor userEditor;
 
     @PostMapping
-    public String loginParticipant(@RequestParam(name="password") String password, HttpServletRequest request){
+    public String loginParticipant(@RequestParam(name="id") int id, HttpServletRequest request){
 
         HttpSession session = request.getSession();
 
-        if (userCreator.doesParticipantExist(password) == false){
+        if (userCreator.doesParticipantExist(id) == false){
 
         }
 
@@ -33,7 +33,7 @@ public class ParticipantController {
 
 
 
-    @PostMapping
+    @PostMapping("/updateParticipant")
     public String updateParticipant(@RequestParam(name="participant_ID") int id, @RequestParam(name="participant_password") String password,
                                     @RequestParam(name="name") String name, @RequestParam(name="position") String position,
                                     @RequestParam(name="department") Department department, HttpServletRequest request){

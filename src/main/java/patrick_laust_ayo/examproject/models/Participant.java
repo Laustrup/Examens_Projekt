@@ -5,6 +5,7 @@ import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 public class Participant {
 
     private int id;
+    private String username;
     private String password;
     private String name;
     private String position;
@@ -17,6 +18,12 @@ public class Participant {
         this.position = position;
         this.department = department;
     }
+
+    public Participant(int id, String username) {
+        this.id = id;
+        this.username = username;
+    }
+
     public String getPassword(){
         return password;
     }
@@ -39,10 +46,6 @@ public class Participant {
 
     public void setPosition(String position) {
         this.position = position;
-    }
-    public Participant(String password, String name){
-        this.password = password;
-        this.name = name;
     }
 
     public Department getDepartment() {
