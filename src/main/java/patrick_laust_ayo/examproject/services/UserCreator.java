@@ -38,19 +38,20 @@ public class UserCreator {
 
         return participant;
     }
-    public Map<String, Participant> getParticipantMap() {
+    public Map<Integer, Participant> getParticipantMap() {
 
         ParticipantRepository participantRepository = new ParticipantRepository();
-        Map<String, Participant> participantMap = new HashMap<>();
+        Map<Integer, Participant> participantMap = new HashMap<>();
 
         try {
             ResultSet resultSet = participantRepository.executeQuery("SELECT * FROM participant");
 
             while (resultSet.next()) {
+                int participant_ID = resultSet.getInt(1);
                 String username = resultSet.getString(2);
-                String password = resultSet.getString(3);
 
-                Participant tempParticipant = new Participant(password, username);
+
+                Participant tempParticipant = new Participant(participant_ID, username);
 
                 participantMap.put(password, tempParticipant);
             }
@@ -60,7 +61,7 @@ public class UserCreator {
         return participantMap;
     }
 
-    public boolean doesParticipantExist(String password){
+    public boolean doesParticipantExist(int participant_ID){
         Map<String, Participant> userList = getParticipantMap();
         return userList.containsKey(password);
 
