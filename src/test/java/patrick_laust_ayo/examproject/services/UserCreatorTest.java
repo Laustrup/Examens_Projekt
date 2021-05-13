@@ -26,12 +26,12 @@ class UserCreatorTest {
 
         //Act
         for (int i = 0; i < amounts; i++) {
-            participant = userCreator.createParticipant("UserCreatorTest");
+            participant = userCreator.createParticipant("Appdev");
         }
 
 
         //Assert
-        assertEquals(repo.findId("participant", "project_id", String.valueOf(repo.calcNextId("project")-1),"projectmanager_id"),expectations[0]);
+        assertEquals(repo.findForeignId("participant", "project_id", String.valueOf(repo.calcNextId("project")-1),"projectmanager_id"),expectations[0]);
        // assertEquals(project.getPassword(),expectations[1]);
        // assertEquals(project.getProjectManager().getName(),expectations[2]);
 
