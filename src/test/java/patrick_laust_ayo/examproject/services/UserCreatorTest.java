@@ -26,7 +26,7 @@ class UserCreatorTest {
 
         //Act
         for (int i = 0; i < amounts; i++) {
-            participant = userCreator.createParticipant("UserCreatorTest");
+            participant = userCreator.createParticipant("Appdev");
         }
 
 
