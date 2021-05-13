@@ -65,6 +65,4 @@ public class UserCreator {
         return userList.containsKey(password);
 
     }
-
-}
 }
