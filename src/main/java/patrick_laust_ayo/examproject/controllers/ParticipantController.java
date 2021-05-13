@@ -31,16 +31,15 @@ public class ParticipantController {
 
         HttpSession session = request.getSession();
 
-        //Participant participant = userEditor.updateParticipant(id, password, name, position, department);
         Participant participant = (Participant)session.getAttribute("participant_updated");
 
         if (participant == null) {
             userEditor.updateParticipant(id, password, name, position, department);
         }
         session.setAttribute("participant_updated", userEditor.updateParticipant(id, password, name, position, department));
-        //String pName = participant.getName();
+        String pName = participant.getName();
 
-        return "update_participant"; //+ pName;
+        return "update_participant"+ pName;
     }
 
     //Login existing participant
