@@ -47,37 +47,85 @@ public class ProjectRepository extends Repository{
                              phaseId + ", " + participantId + ", " + taskId + "); ");
     }
 
+    public Project findProject(String projectTitle, ProjectManager projectManager) {
 
-    // TODO
-    public Project findProject(String title, ProjectManager projectManager) {
-        ArrayList<Phase> phases = new ArrayList<>();
-        ResultSet res = executeQuery("USE projekt_kalkulering;" +
-                                        "SELECT * FROM project " +
-                                        "WHERE project.title = '" + title + "';");
+        ResultSet res = executeQuery("SELECT project.project_id, project.title, project_password, projectmanager_id, " +
+                "phase_table.phase_id, phase_table.phase_title, " +
+                "assignment.assignment_id, assignment.assignment_title, assignment.phase_id, assignment.assignment_start, assignment.assignment_end, assignment.is_completed, " +
+                "task.estimated_work_hours, " +
+                "participant.participant_id, participant.participant_password " +
+                "FROM project " +
+                "INNER JOIN phase_table " +
+                "INNER JOIN assignment " +
+                "INNER JOIN task " +
+                "INNER JOIN participant " +
+                "WHERE project.title = " + projectTitle +  ";");
+
+        // Local variables to be edited from db's values
+        ArrayList<Phase> listOfPhases = new ArrayList<>();
+        ArrayList<Participant> listOfParticipants = new ArrayList<>();
+        ArrayList<Task> listOfTasks = new ArrayList<>();
 
         Phase phase = new Phase(new String());
-        int previousId = 0;
-        Map<String, Participant> participants = new HashMap<>();
+        Assignment assignment = new Assignment(new String(),new String(),new String(),false,new ArrayList<>(),new ArrayList<>());
+        Task task = new Task(0);
+        Participant participant = new Participant(0,new String());
+
+        Object[] objects = {phase,assignment,task,participant,projectManager};
+
+        int phaseId = 0;
+        int participantId = 0;
+        int assignmentId = 0;
+        int projectManagerId = 0;
+        int projectId = 0;
+
+        int[] ints = {phaseId,participantId,assignmentId,projectManagerId,projectId};
+
+        String dbProjectTitle = new String();
+        String phaseTitle = new String();
+        String assignmentTitle = new String();
+
+        String projectPasswprd = new String();
+        String participantPassword = new String();
+
+        String assignmentStart = new String();
+        String assignmentEnd = new String();
+
+        String[] strings = {dbProjectTitle,phaseTitle,assignmentTitle,projectPasswprd,participantPassword,assignmentStart,assignmentEnd};
+
+        boolean isCompleted = false;
+
+        double workHours = 0;
+
+        Map<String, Participant> mapOfParticipant = new HashMap<>();
+        Map<String, Assignment> mapOfAssignments = new HashMap<>();
 
         try {
             while (res.next()) {
-                // TODO has same title as title in db
-              //  phase.setAssignments(participants.put());
+
+                // Sets first values
                 if (res.isFirst()) {
-                    phase.setTitle("title");
+                    objects = setFirstValues(objects,ints,strings,isCompleted,workHours,mapOfParticipant,mapOfAssignments);
                     previousId = res.getInt("phase_table.phase_id");
                 }
+
+                //
                 if (res.getInt("assignment.phase_id") != previousId) {
-                    phases.add(phase);
+                    listOfPhases.add(phase);
                 }
 
+                phase.putInAssignments(String.valueOf(res.getInt("phase_id")),
+                                        new Assignment(res.getString("assignment_start"),res.getString("assignment_end"),
+                                                        res.getString("assignment.assignment_title"),res.getBoolean("assignment.is_completed"),
+                                                        listOfParticipants,listOfTasks));
                 phase.setTitle("title");
                 previousId = res.getInt("phase_table.phase_id");
-
+                previousProjectTitle = res.getString("title");
 
                 if (res.isLast()) {
+
                     Project project = new Project(res.getString("title"),res.getString("password"),
-                            phases,participants, projectManager);
+                            listOfPhases,mapOfParticipant, projectManager);
                 }
             }
         }
@@ -85,18 +133,18 @@ public class ProjectRepository extends Repository{
             System.out.println("Couldn't create project...\n" + e.getMessage());
         }
 
-        project_id, title, project_password, projectmanager_id,
-                phase_table.phase_id, phase_table.title,
-                assignment.assignment_id, assignment.assignment_start, assignment.assignment_end, assignment.is_completed,
-                task.estimated_work_hours
-
-
         return project;
     }
 
+    private Object[] setFirstValues(Object[] objects, int[] ints, String strings,
+                                    boolean isCompleted,double workHours,
+                                    Map<String, Participant> mapOfParticipant, Map<String, Assignment> assignments) {
+
+    }
+
     public boolean doesProjectExist(String title){
-        ResultSet res = executeQuery("SELECT * FROM project WHERE title = '" + title + "';");
-        System.out.println(title);
+        ResultSet res = executeQuery("SELECT * FROM project WHERE title = " + title + ";");
+
         try {
             while (res.next()) {
                 return true;
