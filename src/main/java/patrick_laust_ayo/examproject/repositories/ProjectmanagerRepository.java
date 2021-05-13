@@ -50,8 +50,8 @@ public class ProjectmanagerRepository extends Repository {
         try {
             res.next();
 
-            Department department = new Department(res.getString("location"),
-                                    res.getString("department_name"), res.getInt("department_no"));
+            Department department = new Department(res.getInt("department_no"),
+                                    res.getString("location"), res.getString("department_name"));
             projectmanager = new ProjectManager(res.getString("username"),res.getString("projectmanager_password"),
                                                 res.getInt("participant_id"),res.getString("participant_name"),
                                                 res.getString("position"),department);
