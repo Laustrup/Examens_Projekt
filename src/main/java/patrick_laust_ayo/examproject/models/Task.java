@@ -8,4 +8,12 @@ public class Task extends Assignment{
         super(null,null,null,false,null,null);
         this.estimatedWorkHours = estimatedWorkHours;
     }
+
+    public double getEstimatedWorkHours() {
+        return estimatedWorkHours;
+    }
+
+    public void setEstimatedWorkHours(double estimatedWorkHours) {
+        this.estimatedWorkHours = estimatedWorkHours;
+    }
 }
