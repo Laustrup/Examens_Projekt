@@ -48,11 +48,18 @@ public class ProjectRepository extends Repository{
         executeSQLStatement("INSERT INTO phase VALUES (default, "  + null + ", " + projectmanagerId + "); ");
     }
 
-    public void putAssignmentInDatabase(Assignment assignment, int phaseId, int participantId, int taskId) {
+    public void putAssignmentInDatabase(Assignment assignment, int phaseId) {
 
         executeSQLStatement("INSERT INTO assignment VALUES (default, "  + assignment.getStart() +
                             ", " + assignment.getEnd() + ", " + assignment.isCompleted() + ", " +
-                             phaseId + ", " + participantId + ", " + taskId + "); ");
+                             phaseId + ", " + null + "); ");
+    }
+
+    public void putTaskInDatabase(Assignment assignment, int phaseId, int taskId) {
+
+        executeSQLStatement("INSERT INTO task VALUES (default, "  + assignment.getStart() +
+                ", " + assignment.getEnd() + ", " + assignment.isCompleted() + ", " +
+                phaseId + ", " + taskId + "); ");
     }
 
     public Project findProject(String projectTitle) {

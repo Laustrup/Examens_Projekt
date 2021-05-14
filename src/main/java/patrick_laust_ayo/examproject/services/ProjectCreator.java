@@ -12,6 +12,7 @@ public class ProjectCreator {
     private Project project;
     private Phase phase;
     private Assignment assignment;
+    private Task task;
 
     private ProjectRepository pRepo = new ProjectRepository();
     private ProjectmanagerRepository pmRepo = new ProjectmanagerRepository();
@@ -35,19 +36,25 @@ public class ProjectCreator {
         return phase;
     }
 
-    public Assignment createAssignment(String projectTitle, String start, String end) {
+    public Assignment createAssignment(String phaseTitle, String start, String end) {
 
-        assignment = new Assignment(start,end,new String,false, new ArrayList<Participant>(),new ArrayList<Task>());
+        assignment = new Assignment(start,end,new String(),false, new ArrayList<Participant>(),new ArrayList<Task>());
 
-        Project project = pRepo.findProject(projectTitle);
+        int phaseId = pRepo.findForeignId("phase_table","phase_title",phaseTitle,"phase_id");
+        Integer taskId = null;
 
-        int pRepo.findForeignId()
-
-        pRepo.putAssignmentInDatabase(assignment,,pRepo.findForeignId(),pRepo.findForeignId());
-
-        "SELECT * FROM " + table + " WHERE " + column + " = '" + currentKey + "';"
+        pRepo.putAssignmentInDatabase(assignment,phaseId);
 
         return assignment;
+    }
+
+    public Task createTask(String assignmentTitle) {
+
+        Double workHours = null;
+        task = new Task(workHours);
+
+
+        return task;
     }
 
 }
