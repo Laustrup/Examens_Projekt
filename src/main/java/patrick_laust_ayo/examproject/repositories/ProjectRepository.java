@@ -137,9 +137,6 @@ public class ProjectRepository extends Repository{
 
                 // Sets first values
                 if (res.isFirst()) {
-                    listOfParticipants.add(participant);
-                    listOfTasks.add(task);
-
                     updateObjects(ids, strings, isCompleted, workHours, listOfParticipants, listOfTasks, res);
                 }
 
