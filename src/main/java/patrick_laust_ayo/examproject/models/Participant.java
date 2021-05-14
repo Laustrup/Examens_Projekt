@@ -24,6 +24,14 @@ public class Participant {
         this.username = username;
     }
 
+    // Constructor for updating
+    public Participant(int id, String name, String position) {
+        this.id = id;
+        this.name = name;
+        this.position = position;
+        this.department = department;
+    }
+
     public String getPassword(){
         return password;
     }
@@ -54,5 +62,13 @@ public class Participant {
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

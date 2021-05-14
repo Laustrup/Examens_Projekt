@@ -34,7 +34,7 @@ public class DepartmentRepository extends Repository {
         return department;
     }
 
-    public Department findDepartmentByName(String depName){
+    public Department findDepartment(String depName){
         ResultSet res = executeQuery("SELECT * FROM department WHERE department_name = '" + depName + "';");
         Department departmentByName = null;
 

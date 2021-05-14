@@ -3,8 +3,6 @@ package patrick_laust_ayo.examproject.repositories;
 import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.ProjectManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -37,6 +35,13 @@ public class ProjectmanagerRepository extends Repository {
         return projectmanager;
     }
 
+    public void updateProjectManager(ProjectManager projectmanager,String formerUsername) {
+
+        executeSQLStatement("UPDATE projectmanager " +
+                "SET projectmanager_username = '" + projectmanager.getUsername() + "', " +
+                "projectmanager_password = '" + projectmanager.getPassword() + "', " +
+                "WHERE projectmanager_username = '" + formerUsername + "';");
+    }
 
     public ProjectManager findProjectManager(String username) {
         ResultSet res = executeQuery("SELECT projectmanager_id, username, " +

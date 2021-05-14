@@ -2,13 +2,7 @@ package patrick_laust_ayo.examproject.repositories;
 
 import patrick_laust_ayo.examproject.models.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ParticipantRepository extends Repository {
 
@@ -41,6 +35,15 @@ public class ParticipantRepository extends Repository {
         return participant;
     }
 
+    public void updateParticipant(Participant participant) {
+
+        executeSQLStatement("UPDATE participant " +
+                 "SET participant_name = '" + participant.getName() + "', " +
+                 "position = '" + participant.getPosition() + "', " +
+                 "WHERE participant.participant_id = " + participant.getId() + ";");
+    }
+
+
     //TODO this method
     public Participant findParticipant(String name) {
         ResultSet res = executeQuery("SELECT * FROM participant" +
@@ -52,16 +55,15 @@ public class ParticipantRepository extends Repository {
 
             Department department = new Department(res.getInt("department_no"),
                     res.getString("location"), res.getString("department_name"));
-            participant = new Participant(res.getInt("participant_id"),res.getString("participant_name"),
-                    res.getString("participant_password"),res.getString("participant_position"),
-                    res.getInt("project_id"),res.getInt("department_no"));
+            participant = new Participant(res.getInt("participant_id"), res.getString("participant_name"),
+                    res.getString("participant_password"), res.getString("participant_position"),
+                    res.getInt("project_id"), res.getInt("department_no"));
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
             participant = null;
         }
 
         return participant;
+    }
 }
-
