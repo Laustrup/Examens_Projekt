@@ -52,14 +52,11 @@ public class ProjectRepository extends Repository{
 
         executeSQLStatement("INSERT INTO assignment VALUES (default, "  + assignment.getStart() +
                             ", " + assignment.getEnd() + ", " + assignment.isCompleted() + ", " +
-                             phaseId + ", " + null + "); ");
+                             phaseId + "); ");
     }
 
-    public void putTaskInDatabase(Assignment assignment, int phaseId, int taskId) {
-
-        executeSQLStatement("INSERT INTO task VALUES (default, "  + assignment.getStart() +
-                ", " + assignment.getEnd() + ", " + assignment.isCompleted() + ", " +
-                phaseId + ", " + taskId + "); ");
+    public void putTaskInDatabase(int assignmentId) {
+        executeSQLStatement("INSERT INTO task VALUES (" + assignmentId + ", " + null + "); ");
     }
 
     public Project findProject(String projectTitle) {
@@ -137,9 +134,6 @@ public class ProjectRepository extends Repository{
 
                 // Sets first values
                 if (res.isFirst()) {
-                    listOfParticipants.add(participant);
-                    listOfTasks.add(task);
-
                     updateObjects(ids, strings, isCompleted, workHours, listOfParticipants, listOfTasks, res);
                 }
 

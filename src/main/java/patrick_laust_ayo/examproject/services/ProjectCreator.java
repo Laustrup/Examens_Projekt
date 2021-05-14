@@ -53,6 +53,7 @@ public class ProjectCreator {
         Double workHours = null;
         task = new Task(workHours);
 
+        pRepo.putTaskInDatabase(pRepo.findForeignId("assignment","assignment_title",assignmentTitle,"assignment_id"));
 
         return task;
     }
