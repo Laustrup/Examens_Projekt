@@ -17,6 +17,10 @@ public class ProjectRepository extends Repository{
     private ProjectManager projectManager;
     private Department department;
 
+    // Maps
+    private Map<String, Participant> mapOfParticipants = new HashMap<>();
+    private Map<String, Assignment> mapOfAssignments = new HashMap<>();
+
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
     public void putProjectInDatabase(Project projectToInsert, int projectmanagerId) {
         executeSQLStatement("INSERT INTO project VALUES (DEFAULT, \""  + projectToInsert.getTitle() + "\", \"" +
@@ -44,11 +48,18 @@ public class ProjectRepository extends Repository{
         executeSQLStatement("INSERT INTO phase VALUES (default, "  + null + ", " + projectmanagerId + "); ");
     }
 
-    public void putAssignmentInDatabase(Assignment assignment, int phaseId, int participantId, int taskId) {
+    public void putAssignmentInDatabase(Assignment assignment, int phaseId) {
 
         executeSQLStatement("INSERT INTO assignment VALUES (default, "  + assignment.getStart() +
                             ", " + assignment.getEnd() + ", " + assignment.isCompleted() + ", " +
-                             phaseId + ", " + participantId + ", " + taskId + "); ");
+                             phaseId + ", " + null + "); ");
+    }
+
+    public void putTaskInDatabase(Assignment assignment, int phaseId, int taskId) {
+
+        executeSQLStatement("INSERT INTO task VALUES (default, "  + assignment.getStart() +
+                ", " + assignment.getEnd() + ", " + assignment.isCompleted() + ", " +
+                phaseId + ", " + taskId + "); ");
     }
 
     public Project findProject(String projectTitle) {
@@ -120,20 +131,19 @@ public class ProjectRepository extends Repository{
 
         double workHours = 0;
 
-        // Maps
-        Map<String, Participant> mapOfParticipant = new HashMap<>();
-        Map<String, Assignment> mapOfAssignments = new HashMap<>();
-
         try {
+
             while (res.next()) {
 
                 // Sets first values
                 if (res.isFirst()) {
+                    listOfParticipants.add(participant);
+                    listOfTasks.add(task);
+
                     updateObjects(ids, strings, isCompleted, workHours, listOfParticipants, listOfTasks, res);
                 }
 
-                //TODO should not be void, needs to return arrays and maps...
-            //    putInObjects();
+                listOfPhases = addTolistOfPhases(ids,strings,listOfPhases);
 
                 // Updates everything
                 if (!(res.isFirst())) {
@@ -142,9 +152,7 @@ public class ProjectRepository extends Repository{
 
                 // Constructs project
                 if (res.isLast()) {
-                  //  putInObjects();
-                    project = new Project(res.getString("title"),res.getString("password"),
-                            listOfPhases,mapOfParticipant, projectManager);
+                    project = new Project(strings[0],strings[5], listOfPhases,mapOfParticipants, projectManager);
                 }
             }
         }
@@ -155,6 +163,7 @@ public class ProjectRepository extends Repository{
         return project;
     }
 
+    // updates all objects to current values of the dbrow, except for phase
     private void updateObjects(int[] ids, String[] strings, boolean isCompleted, double workHours,
                                ArrayList<Participant> listOfParticipants, ArrayList<Task> listOfTasks, ResultSet res) {
         try {
@@ -169,16 +178,22 @@ public class ProjectRepository extends Repository{
             // Puts values into objects
             task = new Task(workHours);
             assignment = new Assignment(strings[7],strings[8],strings[1],isCompleted,listOfParticipants,listOfTasks);
-            phase = new Phase(strings[2]);
+            mapOfAssignments.put(String.valueOf(ids[1]),assignment);
             department = new Department(ids[6],strings[9],strings[10]);
 
             // Checks if participant is projectmanager
             Integer dbParticipantId = ids[3];
             if (dbParticipantId == null) {
                 projectManager = new ProjectManager(res.getString("username"),strings[6],ids[4],strings[3],strings[4],department);
+                if (!(mapOfParticipants.containsKey(ids[4]))) {
+                mapOfParticipants.put(String.valueOf(ids[4]),projectManager);
+                }
             }
             else {
                 participant = new Participant(ids[4],strings[6],strings[3],strings[4],department);
+                if (!(mapOfParticipants.containsKey(ids[3]))) {
+                    mapOfParticipants.put(String.valueOf(ids[3]),participant);
+                }
             }
         }
         catch (Exception e) {
@@ -231,26 +246,27 @@ public class ProjectRepository extends Repository{
         return strings;
     }
 
-    private void putInObjects(int[] ids, String[] strings, ResultSet res, int previousId,ArrayList<Phase> listOfPhases,
-                              ArrayList<Participant> listOfParticipants,ArrayList<Task> JOHN) {
-        // Adds Tasks to listOfTasks
-        try { /*
-            phase.putInAssignments(String.valueOf(res.getInt("phase_id")),
-                    new Assignment(res.getString("assignment_start"),res.getString("assignment_end"),
-                            res.getString("assignment.assignment_title"),res.getBoolean("assignment.is_completed"),
-                            listOfParticipants,listOfTasks)); */
-            if (res.getInt("assignment.assignment_id") != previousId) {
+    private ArrayList<Phase> addTolistOfPhases(int[] ids, String[] strings, ArrayList<Phase> listOfPhases) {
+
+        try {
+
+            // Phase
+            if (ids[2] > ids[5]) {
+                phase = new Phase(strings[2],mapOfAssignments);
                 listOfPhases.add(phase);
+                mapOfAssignments = new HashMap<>();
             }
+
         }
         catch (Exception e) {
             System.out.println();
         }
 
+        return listOfPhases;
     }
 
     public boolean doesProjectExist(String title){
-        ResultSet res = executeQuery("SELECT * FROM project WHERE title = '" + title + "';");
+        ResultSet res = executeQuery("SELECT * FROM project WHERE title = " + title + ";");
 
         try {
             while (res.next()) {
@@ -259,7 +275,6 @@ public class ProjectRepository extends Repository{
         }
         catch (Exception e) {
             System.out.println("Couldn't look through resultSet...\n" + e.getMessage());
-            e.printStackTrace();
         }
 
         return false;

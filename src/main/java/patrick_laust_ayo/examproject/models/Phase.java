@@ -14,6 +14,11 @@ public class Phase {
         this.title = title;
     }
 
+    public Phase(String title, Map<String, Assignment> assignments) {
+        this.title = title;
+        this.assignments = assignments;
+    }
+
     public Map<String,Assignment> getAssignments() {
         return assignments;
     }
@@ -28,5 +33,9 @@ public class Phase {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setAssignments(Map<String, Assignment> assignments) {
+        this.assignments = assignments;
     }
 }

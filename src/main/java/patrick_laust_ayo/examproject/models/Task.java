@@ -1,6 +1,6 @@
 package patrick_laust_ayo.examproject.models;
 
-public class Task extends Assignment{
+public class Task extends Assignment {
 
     private double estimatedWorkHours;
 

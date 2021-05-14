@@ -54,4 +54,12 @@ public class Project {
     public ProjectManager getProjectManager() {
         return projectManager;
     }
+
+    public Map<String, Participant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(Map<String, Participant> participants) {
+        this.participants = participants;
+    }
 }
