@@ -5,7 +5,7 @@ public class ProjectManager extends Participant {
     private String username;
 
     public ProjectManager(String username, String password) {
-        super(0,password,null,null,null);
+        super(0,password,username,null,null);
         this.username = username;
     }
 

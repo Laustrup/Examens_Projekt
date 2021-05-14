@@ -41,6 +41,7 @@ public class UserCreator {
 
         return participant;
     }
+
     public Map<Integer, Participant> getParticipantMap() {
 
         ParticipantRepository participantRepository = new ParticipantRepository();
