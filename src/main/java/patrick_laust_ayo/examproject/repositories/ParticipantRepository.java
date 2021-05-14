@@ -40,5 +40,28 @@ public class ParticipantRepository extends Repository {
 
         return participant;
     }
+
+    //TODO this method
+    public Participant findParticipant(String name) {
+        ResultSet res = executeQuery("SELECT * FROM participant" +
+                "INNER JOIN department " +
+                "WHERE participant_name = '" + name + "';");
+
+        try {
+            res.next();
+
+            Department department = new Department(res.getInt("department_no"),
+                    res.getString("location"), res.getString("department_name"));
+            participant = new Participant(res.getInt("participant_id"),res.getString("participant_name"),
+                    res.getString("participant_password"),res.getString("participant_position"),
+                    res.getInt("project_id"),res.getInt("department_no"));
+
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
+            participant = null;
+        }
+
+        return participant;
 }
 
