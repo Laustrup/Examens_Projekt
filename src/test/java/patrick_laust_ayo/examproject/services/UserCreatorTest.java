@@ -26,11 +26,6 @@ class UserCreatorTest {
         participant = userCreator.createParticipant("Appdev", "COPENHAGEN");
 
 
-        System.out.println(projectId);
-        System.out.println(expectations[0]);
-
-
-
         //Assert
         assertEquals(String.valueOf(repo.findForeignId("participant", "project_id", String.valueOf(repo.calcNextId("project")-1),"project_id")),expectations[0]);
 
