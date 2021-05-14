@@ -263,7 +263,7 @@ public class ProjectRepository extends Repository{
     }
 
     public boolean doesProjectExist(String title){
-        ResultSet res = executeQuery("SELECT * FROM project WHERE title = " + title + ";");
+        ResultSet res = executeQuery("SELECT * FROM project WHERE title = '" + title + "';");
 
         try {
             while (res.next()) {

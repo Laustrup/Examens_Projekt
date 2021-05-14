@@ -31,13 +31,14 @@ public class UserCreator {
         ProjectRepository proRepo = new ProjectRepository();
         DepartmentRepository depRepo = new DepartmentRepository();
 
-        participant = new Participant(parRepo.calcNextId("participant"), new String(), new String(), new String(),
+        participant = new Participant(parRepo.calcNextId("participant"), null, null, null,
                                                                               depRepo.findDepartmentByName(depName));
 
         if (proRepo.doesProjectExist(projectTitle)) {
-            parRepo.putParticipantInDatabase(participant, proRepo.findForeignId("project","title",projectTitle,
+            parRepo.putParticipantInDatabase(proRepo.findForeignId("project","title",projectTitle,
                     "project_id"), participant.getDepartment().getDepartmentNo());
         }
+
 
         return participant;
     }

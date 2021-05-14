@@ -15,25 +15,20 @@ class UserCreatorTest {
     private ProjectRepository repo = new ProjectRepository();
 
     @ParameterizedTest
-    @CsvSource(value = {"1|1|1_1"}, delimiter = '|')
-    public void createParticipantTest(String projectId, String iterations, String expected) {
+    @CsvSource(value = {"1|1"}, delimiter = '|')
+    public void createParticipantTest(String projectId, String expected) {
         //Arrange
-        //ResultSet res = repo.executeQuery();
-        String[] expectations = expected.split("_");
 
-        int amounts = Integer.parseInt(iterations);
+        String[] expectations = expected.split("_");
         Participant participant;
 
         //Act
-        for (int i = 0; i < amounts; i++) {
-            participant = userCreator.createParticipant("Appdev", "COPENHAGEN");
-        }
+        participant = userCreator.createParticipant("Appdev", "COPENHAGEN");
 
 
         //Assert
-        assertEquals(repo.findForeignId("participant", "project_id", String.valueOf(repo.calcNextId("project")-1),"participant_id"),expectations[0]);
-       // assertEquals(project.getPassword(),expectations[1]);
-       // assertEquals(project.getProjectManager().getName(),expectations[2]);
+        assertEquals(String.valueOf(repo.findForeignId("participant", "project_id", String.valueOf(repo.calcNextId("project")-1),"project_id")),expectations[0]);
+
 
 
 

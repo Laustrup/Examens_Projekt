@@ -34,9 +34,9 @@ public class ParticipantController {
         Participant participant = (Participant)session.getAttribute("participant_updated");
 
         if (participant == null) {
-            userEditor.updateParticipant(id, password, name, position, department);
+           // userEditor.updateParticipant(id, password, name, position, department);
         }
-        session.setAttribute("participant_updated", userEditor.updateParticipant(id, password, name, position, department));
+       // session.setAttribute("participant_updated", userEditor.updateParticipant(id, password, name, position, department));
         String pName = participant.getName();
 
         return "update_participant"+ pName;
@@ -51,7 +51,7 @@ public class ParticipantController {
 
 
 
-
+return "";
     }
 
     @GetMapping("/projectpage/{pName}")
@@ -59,6 +59,6 @@ public class ParticipantController {
 
         HttpSession session = request.getSession();
 
-
+return "";
 }
 }
