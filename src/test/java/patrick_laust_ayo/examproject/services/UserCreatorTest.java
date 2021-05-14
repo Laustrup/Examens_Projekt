@@ -15,24 +15,16 @@ class UserCreatorTest {
     private ProjectRepository repo = new ProjectRepository();
 
     @ParameterizedTest
-    @CsvSource(value = {"1|1"}, delimiter = '|')
-    public void createParticipantTest(String projectId, String expected) {
+    @CsvSource(value = {"1"}, delimiter = '|')
+    public void createParticipantTest(String expected) {
         //Arrange
-
         String[] expectations = expected.split("_");
         Participant participant;
 
         //Act
         participant = userCreator.createParticipant("Appdev", "COPENHAGEN");
 
-
         //Assert
         assertEquals(String.valueOf(repo.findForeignId("participant", "project_id", String.valueOf(repo.calcNextId("project")-1),"project_id")),expectations[0]);
-
-
-
-
-
     }
-
 }
