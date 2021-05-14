@@ -15,11 +15,11 @@ public class ParticipantRepository extends Repository {
     private Participant participant;
 
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
-    public void putParticipantInDatabase(Participant participantToInsert, int projectId, int departmentNo) {
+    public void putParticipantInDatabase(int projectId, int departmentNo) {
         executeSQLStatement("INSERT into participant " +
-                "VALUES (default, \"'" + participantToInsert.getName() + "'\", \"'" + participantToInsert.getPassword() +
-                "'\", \"'" + participantToInsert.getPosition() +
-                "'\", " + projectId + ", " + departmentNo + ");");
+                "VALUES (default, " + null + ", " + null +
+                ", " + null +
+                ", " + projectId + ", " + departmentNo + ");");
     }
 
     public Participant putParticipantInDatabaseWithReturn(Participant participantToInsert, int projectId, Department department) {

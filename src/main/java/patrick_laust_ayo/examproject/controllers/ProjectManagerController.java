@@ -39,13 +39,13 @@ public class  ProjectManagerController {
     }
 
     @PostMapping("/manager_login")
-      public String loginProjectManager(@RequestParam(name="password") String password, HttpServletRequest request){
+      public String loginProjectManager(@RequestParam(name="password") String password, HttpServletRequest request) {
 
-      HttpSession session = request.getSession();
-      
-      session.getAttribute("manager_password");
+        HttpSession session = request.getSession();
 
-      return ""
+        session.getAttribute("manager_password");
+
+        return "";
 
     /* @PostMapping  skal indgå som en del af create project
     public String createParticipant(@RequestParam(name="project_title") String projectTitle,  HttpServletRequest request){
@@ -55,4 +55,5 @@ public class  ProjectManagerController {
         return "redirct:/projectPage";
 
     */
+    }
 }

@@ -34,7 +34,7 @@ public class ProjectCreator {
 
         return phase;
     }
-
+/*
     public Assignment createAssignment(String projectTitle, String start, String end) {
 
         assignment = new Assignment(start,end,new String,false, new ArrayList<Participant>(),new ArrayList<Task>());
@@ -48,6 +48,6 @@ public class ProjectCreator {
         "SELECT * FROM " + table + " WHERE " + column + " = '" + currentKey + "';"
 
         return assignment;
-    }
+    }*/
 
 }

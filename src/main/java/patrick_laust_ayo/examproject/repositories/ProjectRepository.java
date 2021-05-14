@@ -133,7 +133,7 @@ public class ProjectRepository extends Repository{
                 }
 
                 //TODO should not be void, needs to return arrays and maps...
-                putInObjects();
+            //    putInObjects();
 
                 // Updates everything
                 if (!(res.isFirst())) {
@@ -142,7 +142,7 @@ public class ProjectRepository extends Repository{
 
                 // Constructs project
                 if (res.isLast()) {
-                    putInObjects();
+                  //  putInObjects();
                     project = new Project(res.getString("title"),res.getString("password"),
                             listOfPhases,mapOfParticipant, projectManager);
                 }
@@ -232,13 +232,13 @@ public class ProjectRepository extends Repository{
     }
 
     private void putInObjects(int[] ids, String[] strings, ResultSet res, int previousId,ArrayList<Phase> listOfPhases,
-                              ArrayList<Participant> listOfParticipants,ArrayList<Task>) {
+                              ArrayList<Participant> listOfParticipants,ArrayList<Task> JOHN) {
         // Adds Tasks to listOfTasks
-        try {
+        try { /*
             phase.putInAssignments(String.valueOf(res.getInt("phase_id")),
                     new Assignment(res.getString("assignment_start"),res.getString("assignment_end"),
                             res.getString("assignment.assignment_title"),res.getBoolean("assignment.is_completed"),
-                            listOfParticipants,listOfTasks));
+                            listOfParticipants,listOfTasks)); */
             if (res.getInt("assignment.assignment_id") != previousId) {
                 listOfPhases.add(phase);
             }
@@ -250,7 +250,7 @@ public class ProjectRepository extends Repository{
     }
 
     public boolean doesProjectExist(String title){
-        ResultSet res = executeQuery("SELECT * FROM project WHERE title = " + title + ";");
+        ResultSet res = executeQuery("SELECT * FROM project WHERE title = '" + title + "';");
 
         try {
             while (res.next()) {
@@ -259,6 +259,7 @@ public class ProjectRepository extends Repository{
         }
         catch (Exception e) {
             System.out.println("Couldn't look through resultSet...\n" + e.getMessage());
+            e.printStackTrace();
         }
 
         return false;
