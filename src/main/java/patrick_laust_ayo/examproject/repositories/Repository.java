@@ -49,9 +49,9 @@ public abstract class Repository {
         }
     }
 
-    public int findForeignId(String table, String column, String currentKey, String foreignKey) {
+    public int findForeignId(String table, String column, String value, String foreignKey) {
 
-        ResultSet res = executeQuery("SELECT * FROM " + table + " WHERE " + column + " = '" + currentKey + "';");
+        ResultSet res = executeQuery("SELECT * FROM " + table + " WHERE " + column + " = '" + value + "';");
 
         try {
             res.next();
