@@ -44,7 +44,7 @@ public class ParticipantRepository extends Repository {
 
         if (isByName) {
             ResultSet res = executeQuery("SELECT * FROM participant " +
-                    "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project " +
+                    "INNER JOIN department ON participant.department_no = department.department_no" + " INNER JOIN project " +
                     "WHERE participant_name = '" + searchValue + "';");
             updateFoundParticipant(res);
         }
@@ -57,7 +57,7 @@ public class ParticipantRepository extends Repository {
             }
 
             ResultSet res = executeQuery("SELECT * FROM participant " +
-                    "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project " +
+                    "INNER JOIN department ON participant.department_no = department.department_no" + " INNER JOIN project " +
                     "WHERE participant_id = " + id + ";");
             updateFoundParticipant(res);
         }
