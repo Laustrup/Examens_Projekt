@@ -267,20 +267,4 @@ public class ProjectRepository extends Repository{
                 "WHERE projectmanager_username = '" + formerTitle + "';");
     }
 
-    public boolean doesProjectExist(String title){
-        ResultSet res = executeQuery("SELECT * FROM project WHERE title = '" + title + "';");
-
-        try {
-            while (res.next()) {
-                return true;
-            }
-        }
-        catch (Exception e) {
-            System.out.println("Couldn't look through resultSet...\n" + e.getMessage());
-        }
-
-        return false;
-
-    }
-
 }
