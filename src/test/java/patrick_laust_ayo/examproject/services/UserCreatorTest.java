@@ -22,9 +22,11 @@ class UserCreatorTest {
         Participant participant;
 
         //Act
+        int expectedId = repo.calcNextId("participant");
         participant = userCreator.createParticipant("Appdev", "COPENHAGEN");
 
         //Assert
-        assertEquals(String.valueOf(repo.findForeignId("participant", "project_id", String.valueOf(repo.calcNextId("project")-1),"project_id")),expectations[0]);
+        // assertEquals(String.valueOf(repo.findForeignId("participant", "project_id", String.valueOf(repo.calcNextId("project")-1),"project_id")),expectations);
+        assertEquals(participant.getId(),expectedId);
     }
 }
