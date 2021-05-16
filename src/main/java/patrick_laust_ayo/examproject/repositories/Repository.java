@@ -16,7 +16,6 @@ public abstract class Repository {
         connection = databaseConnection.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            //closeConnection();
             return statement.executeQuery();
         }
         catch (Exception e) {
@@ -78,5 +77,21 @@ public abstract class Repository {
         }
 
         return nextId + 1;
+    }
+
+    public ResultSet SelectAll(String table) {
+        connection = databaseConnection.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement("Select * FROM " + table + ";");
+            return statement.executeQuery();
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't select all...\n" + e.getMessage());
+            return null;
+        }
+    }
+
+    protected void closeCurrentConnection() {
+        closeConnection();
     }
 }
