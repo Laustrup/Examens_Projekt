@@ -1,6 +1,7 @@
 package patrick_laust_ayo.examproject.repositories;
 
 import patrick_laust_ayo.examproject.models.*;
+import patrick_laust_ayo.examproject.services.ExceptionHandler;
 
 import java.sql.ResultSet;
 
@@ -36,12 +37,35 @@ public class ParticipantRepository extends Repository {
     }
 
     //TODO create a new Project constructor if less parameters is needed
-    public Participant findParticipant(String name) {
 
-        ResultSet res = executeQuery("SELECT * FROM participant " +
-                "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project " +
-                "WHERE participant_name = '" + name + "';");
+    // purpose is to find a participant, both from id and name,
+    // therefore parameters are required an searchvalue and whether it's by name or not, if not it will check by id
+    public Participant findParticipant(String searchValue, boolean isByName) {
 
+        if (isByName) {
+            ResultSet res = executeQuery("SELECT * FROM participant " +
+                    "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project " +
+                    "WHERE participant_name = '" + searchValue + "';");
+            updateFoundParticipant(res);
+        }
+        else {
+            ExceptionHandler exceptionHandler = new ExceptionHandler();
+            int id = exceptionHandler.returnIdInt(searchValue);
+
+            if (id == -1) {
+                return null;
+            }
+
+            ResultSet res = executeQuery("SELECT * FROM participant " +
+                    "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project " +
+                    "WHERE participant_id = " + id + ";");
+            updateFoundParticipant(res);
+        }
+
+        return participant;
+    }
+
+    private void updateFoundParticipant(ResultSet res) {
         try {
             res.next();
 
@@ -54,8 +78,6 @@ public class ParticipantRepository extends Repository {
             System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
             participant = null;
         }
-
-        return participant;
     }
 
     public void updateParticipant(Participant participant,String formerName) {
@@ -64,5 +86,9 @@ public class ParticipantRepository extends Repository {
                 "SET participant_name = '" + participant.getName() + "', " +
                 "participant_password = '" + participant.getPassword() + "', " +
                 "WHERE participant_name = '" + formerName + "';");
+    }
+
+    public void removeParticipant(int id) {
+        executeSQLStatement("DELETE ROW FROM participant WHERE participant_id = " + id + ";");
     }
 }

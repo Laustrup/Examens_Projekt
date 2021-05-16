@@ -20,7 +20,7 @@ public class UserEditor {
 
         pRepo.updateParticipant(participant,formerName);
         // Makes sure that it's the real participant from db that is being returned
-        participant = pRepo.findParticipant(name);
+        participant = pRepo.findParticipant(name, true);
 
         return participant;
     }
@@ -38,7 +38,10 @@ public class UserEditor {
     }
 
     public Participant removeParticipant(String id) {
+        participant = pRepo.findParticipant(id,false);
+        pRepo.removeParticipant(participant.getId());
 
+        return participant;
     }
 
     public boolean isInputInteger(String input) {
