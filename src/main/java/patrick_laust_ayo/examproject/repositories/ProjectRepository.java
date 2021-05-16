@@ -259,20 +259,12 @@ public class ProjectRepository extends Repository{
         return listOfPhases;
     }
 
-    public boolean doesProjectExist(String title){
-        ResultSet res = executeQuery("SELECT * FROM project WHERE title = '" + title + "';");
+    public void updateProject(Project project,String formerTitle) {
 
-        try {
-            while (res.next()) {
-                return true;
-            }
-        }
-        catch (Exception e) {
-            System.out.println("Couldn't look through resultSet...\n" + e.getMessage());
-        }
-
-        return false;
-
+        executeSQLStatement("UPDATE project " +
+                "SET title = '" + project.getTitle() + "', " +
+                "project_password = '" + project.getPassword() + "', " +
+                "WHERE projectmanager_username = '" + formerTitle + "';");
     }
 
 }

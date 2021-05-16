@@ -15,18 +15,17 @@ class ProjectCreatorTest {
     private ProjectCreator projectCreator = new ProjectCreator();
 
     @ParameterizedTest
-    @CsvSource(value = {"Save the homeless|admin1234|Andy Boss|Save the homeless_admin1234_Andy Boss"}, delimiter = '|')
-    public void createProjectTest(String title, String password, String managerName, String expected) {
+    @CsvSource(value = {"Save the homeless|admin1234|Andy Boss"}, delimiter = '|')
+    public void createProjectTest(String title, String password, String managerName) {
         //Arrange
-        String[] expectations = expected.split("_");
 
         //Act
         Project project = projectCreator.createProject(title,password,managerName);
 
         //Assert
-        assertEquals(project.getTitle(),expectations[0]);
-        assertEquals(project.getPassword(),expectations[1]);
-        assertEquals(project.getProjectManager().getUsername(),expectations[2]);
+        assertEquals(project.getTitle(),title);
+        assertEquals(project.getPassword(),password);
+        assertEquals(project.getProjectManager().getUsername(),managerName);
 
     }
 
