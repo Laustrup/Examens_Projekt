@@ -37,6 +37,10 @@ public class UserEditor {
 
     }
 
+    public Participant removeParticipant(String id) {
+
+    }
+
     public boolean isInputInteger(String input) {
         try {
             int parsedInput = Integer.parseInt(input);

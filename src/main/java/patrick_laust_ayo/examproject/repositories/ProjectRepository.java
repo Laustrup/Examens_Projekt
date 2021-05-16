@@ -259,6 +259,14 @@ public class ProjectRepository extends Repository{
         return listOfPhases;
     }
 
+    public void updateProject(Project project,String formerTitle) {
+
+        executeSQLStatement("UPDATE project " +
+                "SET title = '" + project.getTitle() + "', " +
+                "project_password = '" + project.getPassword() + "', " +
+                "WHERE projectmanager_username = '" + formerTitle + "';");
+    }
+
     public boolean doesProjectExist(String title){
         ResultSet res = executeQuery("SELECT * FROM project WHERE title = '" + title + "';");
 

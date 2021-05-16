@@ -27,6 +27,11 @@ public class Project {
         calculateTotalCost();
     }
 
+    // For updating title or password
+    public Project(String title, String password) {
+        this.title = title;
+        this.password = password;
+    }
 
     public int calculateTotalCost() {
         for (int i = 0; i < phases.size(); i++) {
