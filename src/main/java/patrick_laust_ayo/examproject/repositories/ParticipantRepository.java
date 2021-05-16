@@ -2,13 +2,7 @@ package patrick_laust_ayo.examproject.repositories;
 
 import patrick_laust_ayo.examproject.models.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ParticipantRepository extends Repository {
 
@@ -42,12 +36,11 @@ public class ParticipantRepository extends Repository {
     }
 
     //TODO create a new Project constructor if less parameters is needed
-    /*public Participant findParticipant(String name) {
+    public Participant findParticipant(String name) {
 
-        ResultSet res = executeQuery("SELECT * FROM participant" +
-                "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project" +
+        ResultSet res = executeQuery("SELECT * FROM participant " +
+                "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project " +
                 "WHERE participant_name = '" + name + "';");
-
 
         try {
             res.next();
@@ -57,12 +50,19 @@ public class ParticipantRepository extends Repository {
             participant = new Participant(res.getInt("participant_id"), res.getString("participant_name"),
                     res.getString("participant_password"), res.getString("participant_position"),
                     department);
-            Project project = new Project(res.getString("title"), res.getString("project_password"), res.getInt("projectmanager_id"));
         } catch (Exception e) {
             System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
             participant = null;
         }
 
         return participant;
-    }*/
+    }
+
+    public void updateParticipant(Participant participant,String formerName) {
+
+        executeSQLStatement("UPDATE participant " +
+                "SET participant_name = '" + participant.getName() + "', " +
+                "participant_password = '" + participant.getPassword() + "', " +
+                "WHERE participant_name = '" + formerName + "';");
+    }
 }

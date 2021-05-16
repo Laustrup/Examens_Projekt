@@ -13,12 +13,14 @@ public class UserEditor {
     private ProjectManager projectManager;
     private Participant participant;
 
-    public Participant updateParticipant(int id, String name, String position) {
+    public Participant updateParticipant(int id, String name, String position, String formerName) {
 
         // This object doesn't have a password nor a department
         participant = new Participant(id,name,position);
 
-        pRepo.updateParticipant(participant);
+        pRepo.updateParticipant(participant,formerName);
+        // Makes sure that it's the real participant from db that is being returned
+        participant = pRepo.findParticipant(name);
 
         return participant;
     }
@@ -28,6 +30,8 @@ public class UserEditor {
         projectManager = new ProjectManager(username, password);
 
         pmRepo.updateProjectManager(projectManager, formerUsername);
+        // Makes sure that it's the real projectmanager from db that is being returned
+        projectManager = pmRepo.findProjectManager(username);
 
         return projectManager;
 
