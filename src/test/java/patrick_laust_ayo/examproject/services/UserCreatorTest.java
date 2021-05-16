@@ -1,5 +1,6 @@
 package patrick_laust_ayo.examproject.services;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import patrick_laust_ayo.examproject.models.Participant;
@@ -14,11 +15,16 @@ class UserCreatorTest {
     private UserCreator userCreator = new UserCreator();
     private ProjectRepository repo = new ProjectRepository();
 
+    /*
     @ParameterizedTest
     @CsvSource(value = {"1"}, delimiter = '|')
-    public void createParticipantTest(String expected) {
+
+     */
+
+    @Test
+    public void createParticipantTest() {
         //Arrange
-        String[] expectations = expected.split("_");
+        //String[] expectations = expected.split("_");
         Participant participant;
 
         //Act
