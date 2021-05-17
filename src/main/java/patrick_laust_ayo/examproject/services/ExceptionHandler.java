@@ -51,6 +51,18 @@ public class ExceptionHandler {
         return false;
     }
 
+    public boolean doesProjectExist(String title){
+
+        ProjectRepository repo = new ProjectRepository();
+
+        if (repo.findProject(title) == null) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
     // Checks if input is too long and writes a message as return, if input is allowed, it returns "Input is allowed"
     public String isLengthAllowedInDatabase(String input, String table, String column)  {
 
@@ -76,8 +88,7 @@ public class ExceptionHandler {
                     input.equals("username") ||
                     input.equals("participant_name") ||
                     input.equals("participant_password") ||
-                    input.equals("position") ||
-                    input.equals("location")) {
+                    input.equals("position")) {
                 if (input.length()>25) {
                     return 25;
                 }
@@ -88,10 +99,11 @@ public class ExceptionHandler {
                     return 30;
                 }
             }
-            if (input.equals("assignment_title")) {
-                if (input.length()>50) {
-                    return 50;
-                }
+            if (input.equals("assignment_title") && input.length()>50) {
+                return 50;
+            }
+            if (input.equals("location") && input.length()>100) {
+                return 100;
             }
         }
         catch (Exception e) {
@@ -100,15 +112,41 @@ public class ExceptionHandler {
         return -1;
     }
 
-    public boolean doesProjectExist(String title){
-
-        ProjectRepository repo = new ProjectRepository();
-
-        if (repo.findProject(title) == null) {
-            return false;
+    // Two methods for insure ', " and \ doesn't create an error
+    public String stringInputToDbInsure(String input) {
+        if (input.endsWith("\"") || input.endsWith("'") || input.endsWith("\\")) {
+            input += "!<>!";
         }
-        else {
-            return true;
+        if (input.startsWith("\"") || input.startsWith("'") || input.startsWith("\\")) {
+            String newInput = "!<>!" + input;
+            input = newInput;
         }
+        return input;
     }
+    public String stringInputFromDbInsure(String input) {
+
+        if (input.startsWith("!<>!") && input.endsWith("!<>!")) {
+            input = createNewInput(4,input.length()-4,input);
+        }
+        else if (input.startsWith("!<>!") && !(input.endsWith("!<>!"))) {
+            input = createNewInput(4,input.length(),input);
+        }
+        else if (input.endsWith("!<>!") && !(input.startsWith("!<>!"))) {
+            input = createNewInput(0,input.length()-4,input);
+        }
+
+        return input;
+    }
+    private String createNewInput(int startOfString, int endOfString, String input) {
+        char currentLetter = '.';
+        String newInput = new String();
+
+        for (int i = startOfString; i < endOfString; i++) {
+            currentLetter = input.charAt(i);
+            newInput += currentLetter;
+        }
+
+        return newInput;
+    }
+
 }
