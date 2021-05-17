@@ -23,6 +23,7 @@ public class ProjectmanagerRepository extends Repository {
         executeSQLStatement("INSERT INTO projectmanager VALUES (default, \"" + projectManager.getUsername()
                 + "\", \"" + projectManager.getPassword() + "\", default");
         ResultSet res = executeQuery("SELECT * FROM projectmanager");
+        closeCurrentConnection();
 
         try{
             projectmanager = new ProjectManager(res.getString("username"),
@@ -54,6 +55,7 @@ public class ProjectmanagerRepository extends Repository {
                 "INNER JOIN department " +
                 "WHERE projectmanager.username = '" + username + "' " +
                 "and participant.department_no = department.department_no;");
+        closeCurrentConnection();
 
         try {
             res.next();

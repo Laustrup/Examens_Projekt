@@ -1,5 +1,7 @@
 package patrick_laust_ayo.examproject.services;
 
+import patrick_laust_ayo.examproject.models.Participant;
+import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectmanagerRepository;
@@ -99,6 +101,35 @@ public class ExceptionHandler {
         }
         return false;
     }
+
+    // Allows logins
+    public boolean allowLogin(String password) {
+        ParticipantRepository repo = new ParticipantRepository();
+
+        ResultSet res = repo.selectAll("participant");
+
+        try {
+            while (res.next()) {
+                if (res.getString("participant_password").equals(password)) {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Trouble identifying ResultSet when searching user_id...\n" + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean isParticipantPartOfProject(Participant participant, Project project) {
+
+        ProjectRepository repo = new ProjectRepository();
+
+
+
+        return false;
+    }
+
 
     // Checks if input is too long and writes a message as return, if input is allowed, it returns "Input is allowed"
     public String isLengthAllowedInDatabase(String input, String table, String column)  {
