@@ -220,7 +220,7 @@ public class ProjectRepository extends Repository{
             strings[0] = res.getString("title");
             strings[1] = res.getString("assignment_title");
             strings[2] = res.getString("phase_title");
-            strings[3] = res.getString("participant_title");
+            strings[3] = res.getString("participant_name");
             strings[4] = res.getString("position");
 
             strings[5] = res.getString("project_password");
