@@ -115,24 +115,26 @@ public class ExceptionHandler {
     // Two methods for insure ', " and \ doesn't create an error
     public String stringInputToDbInsure(String input) {
         if (input.endsWith("\"") || input.endsWith("'") || input.endsWith("\\")) {
-            input += "!<>!";
+            input += "Д";
         }
         if (input.startsWith("\"") || input.startsWith("'") || input.startsWith("\\")) {
-            String newInput = "!<>!" + input;
+            String newInput = "Д" + input;
             input = newInput;
         }
         return input;
     }
     public String stringInputFromDbInsure(String input) {
 
-        if (input.startsWith("!<>!") && input.endsWith("!<>!")) {
-            input = createNewInput(4,input.length()-4,input);
+        String Д = "Д";
+
+        if (input.startsWith(Д) && input.endsWith(Д)) {
+            input = createNewInput(1,input.length()-1,input);
         }
-        else if (input.startsWith("!<>!") && !(input.endsWith("!<>!"))) {
-            input = createNewInput(4,input.length(),input);
+        else if (input.startsWith(Д) && !(input.endsWith(Д))) {
+            input = createNewInput(1,input.length(),input);
         }
-        else if (input.endsWith("!<>!") && !(input.startsWith("!<>!"))) {
-            input = createNewInput(0,input.length()-4,input);
+        else if (input.endsWith(Д) && !(input.startsWith(Д))) {
+            input = createNewInput(0,input.length()-1,input);
         }
 
         return input;
