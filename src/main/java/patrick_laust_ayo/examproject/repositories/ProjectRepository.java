@@ -266,4 +266,8 @@ public class ProjectRepository extends Repository{
                 "WHERE projectmanager_username = '" + formerTitle + "';");
     }
 
+    public void removeProject(String title) {
+        executeSQLStatement("DELETE ROW FROM project WHERE title = '" + title + "';");
+    }
+
 }

@@ -74,7 +74,7 @@ public class ParticipantRepository extends Repository {
                 "WHERE participant.user_id = '" + formerUserId + "';");
     }
 
-    public void removeParticipant(String id) {
-        executeSQLStatement("DELETE ROW FROM participant WHERE user_id = '" + id + "';");
+    public void removeParticipant(String userId) {
+        executeSQLStatement("DELETE ROW FROM participant WHERE user_id = '" + userId + "';");
     }
 }
