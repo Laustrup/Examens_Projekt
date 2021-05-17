@@ -1,10 +1,9 @@
 package patrick_laust_ayo.examproject.services;
 
-import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
-import patrick_laust_ayo.examproject.repositories.ProjectmanagerRepository;
+import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
 import patrick_laust_ayo.examproject.repositories.Repository;
 
 import java.sql.ResultSet;
@@ -85,7 +84,7 @@ public class ExceptionHandler {
         return false;
     }
     public boolean doesProjectManagerUsernameExist(String username) {
-        ProjectmanagerRepository repo = new ProjectmanagerRepository();
+        ProjectManagerRepository repo = new ProjectManagerRepository();
 
         ResultSet res = repo.selectAll("projectmanager");
 
@@ -121,11 +120,11 @@ public class ExceptionHandler {
         return false;
     }
 
-    public boolean isParticipantPartOfProject(Participant participant, Project project) {
+    public boolean isParticipantPartOfProject(String user, Project project) {
 
-        ProjectRepository repo = new ProjectRepository();
+        ParticipantRepository repo = new ParticipantRepository();
 
-
+        repo.findParticipant()
 
         return false;
     }

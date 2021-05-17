@@ -2,7 +2,7 @@ package patrick_laust_ayo.examproject.services;
 
 import patrick_laust_ayo.examproject.models.*;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
-import patrick_laust_ayo.examproject.repositories.ProjectmanagerRepository;
+import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,14 +14,14 @@ public class ProjectCreator {
     private Assignment assignment;
     private Task task;
 
-    private ProjectRepository pRepo = new ProjectRepository();
-    private ProjectmanagerRepository pmRepo = new ProjectmanagerRepository();
+    private ProjectRepository projectRepo = new ProjectRepository();
+    private ProjectManagerRepository projectManagerRepo = new ProjectManagerRepository();
 
     public Project createProject(String title, String managerName) {
 
-        project = new Project(title, new ArrayList<>(), new HashMap<>(), pmRepo.findProjectManager(managerName));
+        project = new Project(title, new ArrayList<>(), new HashMap<>(), projectManagerRepo.findProjectManager(managerName));
 
-        pRepo.putProjectInDatabase(project, pmRepo.getCurrentId());
+        projectRepo.putProjectInDatabase(project, projectManagerRepo.getCurrentId());
 
         return project;
     }
@@ -30,8 +30,8 @@ public class ProjectCreator {
 
         phase = new Phase(new String());
 
-        int id = pRepo.findForeignId("project","title",projectTitle, "project_id");
-        pRepo.putPhaseInDatabase(id);
+        int id = projectRepo.findForeignId("project","title",projectTitle, "project_id");
+        projectRepo.putPhaseInDatabase(id);
 
         return phase;
     }
@@ -40,10 +40,10 @@ public class ProjectCreator {
 
         assignment = new Assignment(start,end,new String(),false, new ArrayList<Participant>(),new ArrayList<Task>());
 
-        int phaseId = pRepo.findForeignId("phase_table","phase_title",phaseTitle,"phase_id");
+        int phaseId = projectRepo.findForeignId("phase_table","phase_title",phaseTitle,"phase_id");
         Integer taskId = null;
 
-        pRepo.putAssignmentInDatabase(assignment,phaseId);
+        projectRepo.putAssignmentInDatabase(assignment,phaseId);
 
         return assignment;
     }
@@ -53,7 +53,7 @@ public class ProjectCreator {
         Double workHours = null;
         task = new Task(workHours);
 
-        pRepo.putTaskInDatabase(pRepo.findForeignId("assignment","assignment_title",assignmentTitle,"assignment_id"));
+        projectRepo.putTaskInDatabase(projectRepo.findForeignId("assignment","assignment_title",assignmentTitle,"assignment_id"));
 
         return task;
     }

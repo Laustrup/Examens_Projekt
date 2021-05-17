@@ -37,37 +37,15 @@ public class ParticipantRepository extends Repository {
         return participant;
     }
 
-    //TODO create a new Project constructor if less parameters is needed
+    public Participant findParticipant(String userId) {
 
-    // purpose is to find a participant, both from id and name,
-    // therefore parameters are required an searchvalue and whether it's by name or not, if not it will check by id
-    public Participant findParticipant(String searchValue, boolean isByName) {
-
-        if (isByName) {
-            ResultSet res = executeQuery("SELECT * FROM participant " +
-                    "INNER JOIN department ON participant.department_no = department.department_no " + "INNER JOIN project " +
-                    "WHERE participant_name = '" + searchValue + "';");
+            updateFoundParticipant(executeQuery("SELECT * FROM participant " +
+                        "INNER JOIN department ON participant.department_no = department.department_no " + "INNER JOIN project " +
+                        "WHERE user_id = '" + userId + "';"));
             closeCurrentConnection();
-            updateFoundParticipant(res);
-        }
-        else {
-            int id = -1;
-            try {
-                id = Integer.parseInt(searchValue);
-            }
-            catch (Exception e) {
-                System.out.println("Couldn't parse searchValue to id...\n" + e.getMessage());
-                return null;
-            }
-
-            ResultSet res = executeQuery("SELECT * FROM participant " +
-                    "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project " +
-                    "WHERE participant_id = " + id + ";");
-            updateFoundParticipant(res);
-            closeCurrentConnection();
-        }
 
         return participant;
+
     }
 
     private void updateFoundParticipant(ResultSet res) {
@@ -85,12 +63,14 @@ public class ParticipantRepository extends Repository {
         }
     }
 
-    public void updateParticipant(Participant participant,String name, String password, String formerName) {
+    public void updateParticipant(String userId, String name, String password, String position, String formerUserId) {
 
         executeSQLStatement("UPDATE participant " +
-                "SET participant.participant_name = '" + name + "', " +
+                "SET participant.user_id = '" + userId + "', " +
+                "participant.participant_name = '" + name + "', " +
                 "participant.participant_password = '" + password + "' " +
-                "WHERE participant.participant_name = '" + formerName + "';");
+                "participant.position = '" + position + "' " +
+                "WHERE participant.user_id = '" + formerUserId + "';");
     }
 
     public void removeParticipant(String id) {

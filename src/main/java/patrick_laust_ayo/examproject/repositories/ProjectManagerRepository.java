@@ -6,7 +6,7 @@ import patrick_laust_ayo.examproject.models.ProjectManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ProjectmanagerRepository extends Repository {
+public class ProjectManagerRepository extends Repository {
 
     private ProjectManager projectmanager;
 

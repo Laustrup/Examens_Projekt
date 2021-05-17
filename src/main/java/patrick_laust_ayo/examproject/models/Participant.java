@@ -27,6 +27,7 @@ public class Participant {
     // Constructor for updating
     public Participant(String id, String password, String name, String position) {
         this.id = id;
+        this.password = password;
         this.name = name;
         this.position = position;
     }

@@ -5,7 +5,7 @@ import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
-import patrick_laust_ayo.examproject.repositories.ProjectmanagerRepository;
+import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +20,7 @@ public class UserCreator {
     public ProjectManager createManager(String username, String password) {
        projectManager = new ProjectManager(username, password);
 
-       ProjectmanagerRepository pmRepo = new ProjectmanagerRepository();
+       ProjectManagerRepository pmRepo = new ProjectManagerRepository();
        pmRepo.putProjectManagerInDatabase(projectManager);
 
        return projectManager;
