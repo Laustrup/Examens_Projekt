@@ -1,5 +1,6 @@
 package patrick_laust_ayo.examproject.services;
 
+import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
@@ -120,12 +121,26 @@ public class ExceptionHandler {
         return false;
     }
 
-    public boolean isParticipantPartOfProject(String user, Project project) {
+    // TODO Perhaps unmake repository as abstract?
+    // Accepts if the participant is part of the project
+    public boolean isParticipantPartOfProject(String userId, String projectTitle) {
 
-        ParticipantRepository repo = new ParticipantRepository();
+        Repository repo = new ParticipantRepository();
 
-        repo.findParticipant()
+        int participantId = repo.findId("participant", "user_id", userId,"partipant_id");
+        int projectId = repo.findId("project", "title", projectTitle,"project_id");
 
+        ResultSet res = repo.executeQuery("SELECT * FROM participant_project WHERE participant_id = " + participantId + ";");
+        repo.closeCurrentConnection();
+
+        try {
+            if (res.getInt("project_id") == projectId) {
+                return true;
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Trouble comparing ids when checking if participant part of project...\n" + e.getMessage());
+        }
         return false;
     }
 

@@ -30,7 +30,7 @@ public class ProjectCreator {
 
         phase = new Phase(new String());
 
-        int id = projectRepo.findForeignId("project","title",projectTitle, "project_id");
+        int id = projectRepo.findId("project","title",projectTitle, "project_id");
         projectRepo.putPhaseInDatabase(id);
 
         return phase;
@@ -40,7 +40,7 @@ public class ProjectCreator {
 
         assignment = new Assignment(start,end,new String(),false, new ArrayList<Participant>(),new ArrayList<Task>());
 
-        int phaseId = projectRepo.findForeignId("phase_table","phase_title",phaseTitle,"phase_id");
+        int phaseId = projectRepo.findId("phase_table","phase_title",phaseTitle,"phase_id");
         Integer taskId = null;
 
         projectRepo.putAssignmentInDatabase(assignment,phaseId);
@@ -53,7 +53,7 @@ public class ProjectCreator {
         Double workHours = null;
         task = new Task(workHours);
 
-        projectRepo.putTaskInDatabase(projectRepo.findForeignId("assignment","assignment_title",assignmentTitle,"assignment_id"));
+        projectRepo.putTaskInDatabase(projectRepo.findId("assignment","assignment_title",assignmentTitle,"assignment_id"));
 
         return task;
     }

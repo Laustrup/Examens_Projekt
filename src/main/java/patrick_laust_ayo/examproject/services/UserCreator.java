@@ -35,7 +35,7 @@ public class UserCreator {
                                                                               depRepo.findDepartment(depName));
         ExceptionHandler exceptionHandler = new ExceptionHandler();
         if (exceptionHandler.doesProjectExist(projectTitle)) {
-            parRepo.putParticipantInDatabase(proRepo.findForeignId("project","title",projectTitle,
+            parRepo.putParticipantInDatabase(proRepo.findId("project","title",projectTitle,
                     "project_id"), participant.getDepartment().getDepartmentNo());
         }
 
