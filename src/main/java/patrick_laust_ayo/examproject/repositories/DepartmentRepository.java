@@ -21,6 +21,7 @@ public class DepartmentRepository extends Repository {
         executeSQLStatement("INSERT INTO department VALUES(\"" + departmentToInsert.getDepartmentNo() + "\", \"" +
                 departmentToInsert.getLocation() + "\"," + departmentToInsert.getDepName() + ");");
         ResultSet res = executeQuery("SELECT * FROM department");
+        closeCurrentConnection();
 
         try{
             department = new Department(res.getInt("department_no"),
@@ -36,6 +37,7 @@ public class DepartmentRepository extends Repository {
 
     public Department findDepartment(String depName){
         ResultSet res = executeQuery("SELECT * FROM department WHERE department_name = '" + depName + "';");
+        closeCurrentConnection();
         Department departmentByName = null;
 
         try{

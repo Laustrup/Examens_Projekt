@@ -23,6 +23,7 @@ public class ParticipantRepository extends Repository {
                 "\", " + projectId + ", " + department.getDepartmentNo() + ";");
         ResultSet res = executeQuery("SELECT * FROM project WHERE participant_name = \""
                 + participantToInsert.getName() + "\");");
+        closeCurrentConnection();
 
         try {
             participant = new Participant(res.getString("user_id"), res.getString("password"), res.getString("participant_name"),
@@ -46,13 +47,16 @@ public class ParticipantRepository extends Repository {
             ResultSet res = executeQuery("SELECT * FROM participant " +
                     "INNER JOIN department ON participant.department_no = department.department_no " + "INNER JOIN project " +
                     "WHERE participant_name = '" + searchValue + "';");
+            closeCurrentConnection();
             updateFoundParticipant(res);
         }
         else {
-            ExceptionHandler exceptionHandler = new ExceptionHandler();
-            int id = exceptionHandler.returnIdInt(searchValue);
-
-            if (id == -1) {
+            int id = -1;
+            try {
+                id = Integer.parseInt(searchValue);
+            }
+            catch (Exception e) {
+                System.out.println("Couldn't parse searchValue to id...\n" + e.getMessage());
                 return null;
             }
 
@@ -60,6 +64,7 @@ public class ParticipantRepository extends Repository {
                     "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project " +
                     "WHERE participant_id = " + id + ";");
             updateFoundParticipant(res);
+            closeCurrentConnection();
         }
 
         return participant;

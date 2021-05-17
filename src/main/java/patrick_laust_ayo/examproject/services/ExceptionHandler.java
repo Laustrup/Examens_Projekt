@@ -1,15 +1,18 @@
 package patrick_laust_ayo.examproject.services;
 
+import patrick_laust_ayo.examproject.models.Participant;
+import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
+import patrick_laust_ayo.examproject.repositories.ProjectmanagerRepository;
 import patrick_laust_ayo.examproject.repositories.Repository;
 
 import java.sql.ResultSet;
-import java.util.InputMismatchException;
 
 public class ExceptionHandler {
 
     // Was meant to take numbervalues from id for the purpose of db id, but that purpose changed
+    /*
     public int returnIdInt(String id) {
         char[] chars = id.toCharArray();
         StringBuilder sb = new StringBuilder();
@@ -26,7 +29,6 @@ public class ExceptionHandler {
             return -1;
         }
     }
-
     public boolean idAlreadyExistInDb(String id,String table, String column) {
 
         if (table.equals("task")) {
@@ -36,7 +38,7 @@ public class ExceptionHandler {
         int idInput = returnIdInt(id);
 
         Repository repo = new ParticipantRepository();
-        ResultSet res = repo.SelectAll(table);
+        ResultSet res = repo.selectAll(table);
         try {
             while (res.next()) {
                 if (res.getInt(column) == idInput) {
@@ -51,6 +53,9 @@ public class ExceptionHandler {
         return false;
     }
 
+     */
+
+    // Methods checks if objects or attributes exists
     public boolean doesProjectExist(String title){
 
         ProjectRepository repo = new ProjectRepository();
@@ -62,6 +67,69 @@ public class ExceptionHandler {
             return true;
         }
     }
+    public boolean doesUserIdExist(String userId) {
+        ParticipantRepository repo = new ParticipantRepository();
+
+        ResultSet res = repo.selectAll("participant");
+
+        try {
+            while (res.next()) {
+                if (res.getString("user_id").equals(userId)) {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Trouble identifying ResultSet when searching user_id...\n" + e.getMessage());
+        }
+        return false;
+    }
+    public boolean doesProjectManagerUsernameExist(String username) {
+        ProjectmanagerRepository repo = new ProjectmanagerRepository();
+
+        ResultSet res = repo.selectAll("projectmanager");
+
+        try {
+            while (res.next()) {
+                if (res.getString("username").equals(username)) {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Trouble identifying ResultSet when searching username...\n" + e.getMessage());
+        }
+        return false;
+    }
+
+    // Allows logins
+    public boolean allowLogin(String password) {
+        ParticipantRepository repo = new ParticipantRepository();
+
+        ResultSet res = repo.selectAll("participant");
+
+        try {
+            while (res.next()) {
+                if (res.getString("participant_password").equals(password)) {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Trouble identifying ResultSet when searching user_id...\n" + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean isParticipantPartOfProject(Participant participant, Project project) {
+
+        ProjectRepository repo = new ProjectRepository();
+
+
+
+        return false;
+    }
+
 
     // Checks if input is too long and writes a message as return, if input is allowed, it returns "Input is allowed"
     public String isLengthAllowedInDatabase(String input, String table, String column)  {
@@ -79,7 +147,6 @@ public class ExceptionHandler {
         return "Input is allowed";
 
     }
-
     private int inputAsTitleIsTooLongByAmount(String input, String table, String column) {
         Repository repo = new ParticipantRepository();
 

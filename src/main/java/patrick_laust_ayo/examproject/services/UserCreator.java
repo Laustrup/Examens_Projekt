@@ -67,7 +67,6 @@ public class UserCreator {
     public boolean doesParticipantExist(String participant_ID){
         Map<String, Participant> userList = getParticipantMap();
         return userList.containsKey(participant_ID);
-
     }
 
 }
