@@ -44,7 +44,7 @@ public class ParticipantRepository extends Repository {
 
         if (isByName) {
             ResultSet res = executeQuery("SELECT * FROM participant " +
-                    "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project " +
+                    "INNER JOIN department ON participant.department_no = department.department_no " + "INNER JOIN project " +
                     "WHERE participant_name = '" + searchValue + "';");
             updateFoundParticipant(res);
         }
@@ -71,8 +71,8 @@ public class ParticipantRepository extends Repository {
 
             Department department = new Department(res.getInt("department_no"),
                     res.getString("location"), res.getString("department_name"));
-            participant = new Participant(res.getString("user_id"), res.getString("participant_name"),
-                    res.getString("participant_password"), res.getString("participant_position"),
+            participant = new Participant(res.getString("user_id"), res.getString("participant_password"),
+                    res.getString("participant_name"), res.getString("position"),
                     department);
         } catch (Exception e) {
             System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
@@ -80,12 +80,12 @@ public class ParticipantRepository extends Repository {
         }
     }
 
-    public void updateParticipant(Participant participant,String formerName) {
+    public void updateParticipant(Participant participant,String name, String password, String formerName) {
 
         executeSQLStatement("UPDATE participant " +
-                "SET participant_name = '" + participant.getName() + "', " +
-                "participant_password = '" + participant.getPassword() + "', " +
-                "WHERE participant_name = '" + formerName + "';");
+                "SET participant.participant_name = '" + name + "', " +
+                "participant.participant_password = '" + password + "' " +
+                "WHERE participant.participant_name = '" + formerName + "';");
     }
 
     public void removeParticipant(String id) {

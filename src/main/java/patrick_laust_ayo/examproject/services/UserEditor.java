@@ -13,12 +13,13 @@ public class UserEditor {
     private ProjectManager projectManager;
     private Participant participant;
 
-    public Participant updateParticipant(String id, String name, String position, String formerName) {
+    public Participant updateParticipant(String id, String password, String name, String position, String formerName) {
 
         // This object doesn't have a password nor a department
-        participant = new Participant(id,name,position);
+        participant = new Participant(id,password, name,position);
 
-        pRepo.updateParticipant(participant,formerName);
+        pRepo.updateParticipant(participant, name, password, formerName);
+
         // Makes sure that it's the real participant from db that is being returned
         participant = pRepo.findParticipant(name, true);
 
