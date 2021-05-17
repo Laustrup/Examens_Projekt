@@ -19,4 +19,7 @@ public class ProjectManager extends Participant {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

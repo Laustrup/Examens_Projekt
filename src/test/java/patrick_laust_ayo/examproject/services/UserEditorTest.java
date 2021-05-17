@@ -5,6 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
 import patrick_laust_ayo.examproject.models.Participant;
+import patrick_laust_ayo.examproject.models.ProjectManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,7 +29,17 @@ class UserEditorTest {
 
     }
 
-    @Test
-    void updateProjectmanager() {
+    @ParameterizedTest
+    @CsvSource(value = {"Andy bozz|erAsD14-d|Andy Boss"}, delimiter = '|')
+    void updateProjectmanager(String username, String password, String formerUsername) {
+
+        UserEditor userEditor = new UserEditor();
+
+        //act
+        ProjectManager projectManager = userEditor.updateProjectmanager(username,password,formerUsername);
+
+        //assert
+        assertEquals(projectManager.getUsername(), username);
+        assertEquals(projectManager.getPassword(), password);
     }
 }

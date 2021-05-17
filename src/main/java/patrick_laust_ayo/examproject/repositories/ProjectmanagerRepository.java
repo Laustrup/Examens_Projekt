@@ -35,12 +35,14 @@ public class ProjectmanagerRepository extends Repository {
         return projectmanager;
     }
 
-    public void updateProjectManager(ProjectManager projectmanager,String formerUsername) {
+    public void updateProjectManager(ProjectManager projectmanager, String newUsername, String newPassword, String formerUsername) {
 
         executeSQLStatement("UPDATE projectmanager " +
-                "SET projectmanager_username = '" + projectmanager.getUsername() + "', " +
-                "projectmanager_password = '" + projectmanager.getPassword() + "', " +
-                "WHERE projectmanager_username = '" + formerUsername + "';");
+                "SET projectmanager.username = '" + newUsername + "' " +
+                "WHERE projectmanager.username = '" + formerUsername + "';");
+        executeSQLStatement("UPDATE participant " +
+                "SET participant_password = '" + newPassword + "' " +
+                "WHERE participant.position = 'Manager';");
     }
 
     public ProjectManager findProjectManager(String username) {
@@ -50,7 +52,8 @@ public class ProjectmanagerRepository extends Repository {
                 "FROM projectmanager " +
                 "INNER JOIN participant " +
                 "INNER JOIN department " +
-                "WHERE projectmanager.username = '" + username + "';");
+                "WHERE projectmanager.username = '" + username + "' " +
+                "and participant.department_no = department.department_no;");
 
         try {
             res.next();

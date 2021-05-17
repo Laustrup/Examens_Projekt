@@ -29,7 +29,7 @@ public class UserEditor {
 
         projectManager = new ProjectManager(username, password);
 
-        pmRepo.updateProjectManager(projectManager, formerUsername);
+        pmRepo.updateProjectManager(projectManager, username, password, formerUsername);
         // Makes sure that it's the real projectmanager from db that is being returned
         projectManager = pmRepo.findProjectManager(username);
 
