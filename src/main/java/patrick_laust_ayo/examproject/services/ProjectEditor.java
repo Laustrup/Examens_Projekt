@@ -9,10 +9,10 @@ public class ProjectEditor {
 
     private Project project;
 
-    public Project updateProject(String title, String password, String formerTitle) {
+    public Project updateProject(String title, String formerTitle) {
 
         // This object doesn't have a password nor a department
-        project = new Project(title,password);
+        project = new Project(title);
 
         repo.updateProject(project,formerTitle);
         // Makes sure that it's the real participant from db that is being returned

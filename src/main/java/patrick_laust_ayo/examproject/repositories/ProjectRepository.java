@@ -1,6 +1,7 @@
 package patrick_laust_ayo.examproject.repositories;
 
 import patrick_laust_ayo.examproject.models.*;
+import patrick_laust_ayo.examproject.services.ExceptionHandler;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -23,18 +24,15 @@ public class ProjectRepository extends Repository{
 
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
     public void putProjectInDatabase(Project projectToInsert, int projectmanagerId) {
-        executeSQLStatement("INSERT INTO project VALUES (DEFAULT, \""  + projectToInsert.getTitle() + "\", \"" +
-                projectToInsert.getPassword() + "\", " + projectmanagerId + "); ");
+        executeSQLStatement("INSERT INTO project VALUES (DEFAULT, \""  + projectToInsert.getTitle() + "\", " + projectmanagerId + "); ");
     }
 
     public Project putProjectInDatabaseWithReturn(Project projectToInsert, int projectmanagerId, ProjectManager projectManager) {
-        executeSQLStatement("insert into project values (default, \""  + projectToInsert.getTitle() + "\", \"" +
-                                            projectToInsert.getPassword() + "\", " + projectmanagerId + "); ");
+        executeSQLStatement("insert into project values (default, \""  + projectToInsert.getTitle() + "\", " + projectmanagerId + "); ");
         ResultSet res = executeQuery("SELECT * FROM project WHERE title = \"" + projectToInsert.getTitle() + "\";");
 
         try {
-            project = new Project(res.getString("title"), res.getString("project_password"),
-                      new ArrayList<Phase>(), new HashMap<>(), projectManager);
+            project = new Project(res.getString("title"), new ArrayList<Phase>(), new HashMap<>(), projectManager);
         }
         catch (Exception e) {
             System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
@@ -61,12 +59,12 @@ public class ProjectRepository extends Repository{
 
     public Project findProject(String projectTitle) {
 
-        ResultSet res = executeQuery("SELECT project.project_id, project.title, project_password, project.projectmanager_id, " +
-                "projectmanager.username, " +
+        ResultSet res = executeQuery("SELECT project.project_id, project.title, project.projectmanager_id, " +
+                "projectmanager.username, projectmanager.participant_id, " +
                 "phase_table.phase_id, phase_table.phase_title, " +
                 "assignment.assignment_id, assignment.assignment_title, assignment.phase_id, assignment.assignment_start, assignment.assignment_end, assignment.is_completed, " +
                 "task.estimated_work_hours, task.task_id, " +
-                "participant.participant_id, participant.participant_name, participant.participant_password, participant.position, " +
+                "participant.participant_id, participant.user_id, participant.participant_name, participant.participant_password, participant.position, " +
                 "department.department_no, department.location, department.department_name " +
                 "FROM project " +
                 "INNER JOIN phase_table " +
@@ -97,21 +95,20 @@ public class ProjectRepository extends Repository{
         int taskId = 0;
         int assignmentId = 0;
         int phaseId = 0;
-        int participantId = 0;
         int projectManagerId = 0;
         int projectId = 0;
         int departmentNo = 0;
 
-        int[] ids = {taskId,assignmentId,phaseId,participantId,projectManagerId,projectId, departmentNo};
+        int[] ids = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo};
 
         // Strings
         String dbProjectTitle = new String();
         String assignmentTitle = new String();
         String phaseTitle = new String();
         String participantName = new String();
+        String participantId = new String();
         String participantPosition = new String();
 
-        String projectPassword = new String();
         String participantPassword = new String();
 
         String assignmentStart = new String();
@@ -120,8 +117,8 @@ public class ProjectRepository extends Repository{
         String departmentLocation = new String();
         String departmentName = new String();
 
-        String[] strings = {dbProjectTitle,assignmentTitle,phaseTitle,participantName,participantPosition,
-                            projectPassword,participantPassword,assignmentStart,assignmentEnd,departmentLocation,departmentName};
+        String[] strings = {dbProjectTitle,assignmentTitle,phaseTitle,participantName,participantId,participantPosition,
+                            participantPassword,assignmentStart,assignmentEnd,departmentLocation,departmentName};
 
         // Boolean and double
         boolean isCompleted = false;
@@ -146,7 +143,7 @@ public class ProjectRepository extends Repository{
 
                 // Constructs project
                 if (res.isLast()) {
-                    project = new Project(strings[0],strings[5], listOfPhases,mapOfParticipants, projectManager);
+                    project = new Project(strings[0],listOfPhases,mapOfParticipants, projectManager);
                 }
             }
         }
@@ -173,20 +170,23 @@ public class ProjectRepository extends Repository{
             task = new Task(workHours);
             assignment = new Assignment(strings[7],strings[8],strings[1],isCompleted,listOfParticipants,listOfTasks);
             mapOfAssignments.put(String.valueOf(ids[1]),assignment);
-            department = new Department(ids[6],strings[9],strings[10]);
+            department = new Department(ids[5],strings[9],strings[10]);
 
             // Checks if participant is projectmanager
-            Integer dbParticipantId = ids[3];
-            if (dbParticipantId == null) {
-                projectManager = new ProjectManager(res.getString("username"),strings[6],ids[4],strings[3],strings[4],department);
-                if (!(mapOfParticipants.containsKey(ids[4]))) {
-                mapOfParticipants.put(String.valueOf(ids[4]),projectManager);
+            int projectmanagersParticipantId = res.getInt(5);
+            int participantId = res.getInt(17);
+
+            if (projectmanagersParticipantId == participantId) {
+                projectManager = new ProjectManager(res.getString("username"),strings[6],
+                                                    strings[5],strings[3],strings[4],department);
+                if (!(mapOfParticipants.containsKey(ids[3]))) {
+                mapOfParticipants.put(String.valueOf(ids[3]),projectManager);
                 }
             }
             else {
-                participant = new Participant(ids[4],strings[6],strings[3],strings[4],department);
-                if (!(mapOfParticipants.containsKey(ids[3]))) {
-                    mapOfParticipants.put(String.valueOf(ids[3]),participant);
+                participant = new Participant(strings[5],strings[6],strings[3],strings[4],department);
+                if (!(mapOfParticipants.containsKey(strings[5]))) {
+                    mapOfParticipants.put(strings[5],participant);
                 }
             }
         }
@@ -199,13 +199,12 @@ public class ProjectRepository extends Repository{
     private int[] updateIds(int[] ids, ResultSet res) {
 
         try {
-            ids[0] = res.getInt("task.task_id");
+            ids[0] = res.getInt("task_id");
             ids[1] = res.getInt("assignment_id");
             ids[2] = res.getInt("phase_id");
-            ids[3] = res.getInt("participant_id");
-            ids[4] = res.getInt("projectmanager_id");
-            ids[5] = res.getInt("project_id");
-            ids[6] = res.getInt("department_no");
+            ids[3] = res.getInt("projectmanager_id");
+            ids[4] = res.getInt("project_id");
+            ids[5] = res.getInt("department_no");
         }
         catch (Exception e) {
             System.out.println("Couldn't update Ids...\n" + e.getMessage());
@@ -222,8 +221,8 @@ public class ProjectRepository extends Repository{
             strings[2] = res.getString("phase_title");
             strings[3] = res.getString("participant_title");
             strings[4] = res.getString("position");
+            strings[5] = res.getString("user_id");
 
-            strings[5] = res.getString("project_password");
             strings[6] = res.getString("participant_password");
 
             strings[7] = res.getString("assignment_start");
@@ -263,7 +262,6 @@ public class ProjectRepository extends Repository{
 
         executeSQLStatement("UPDATE project " +
                 "SET title = '" + project.getTitle() + "', " +
-                "project_password = '" + project.getPassword() + "', " +
                 "WHERE projectmanager_username = '" + formerTitle + "';");
     }
 

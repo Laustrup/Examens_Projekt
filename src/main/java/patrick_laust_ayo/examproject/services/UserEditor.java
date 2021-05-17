@@ -13,7 +13,7 @@ public class UserEditor {
     private ProjectManager projectManager;
     private Participant participant;
 
-    public Participant updateParticipant(int id, String name, String position, String formerName) {
+    public Participant updateParticipant(String id, String name, String position, String formerName) {
 
         // This object doesn't have a password nor a department
         participant = new Participant(id,name,position);
@@ -34,7 +34,6 @@ public class UserEditor {
         projectManager = pmRepo.findProjectManager(username);
 
         return projectManager;
-
     }
 
     public Participant removeParticipant(String id) {

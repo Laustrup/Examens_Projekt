@@ -91,7 +91,7 @@ public class ExceptionHandler {
         try {
             titleOfColumn = column.split("_");
             if (titleOfColumn[1].equals("title") || titleOfColumn[1].equals("name") && !titleOfColumn[1].equals("department") ||
-                    titleOfColumn[1].equals("password") || ) {
+                    titleOfColumn[1].equals("password")) {
                 if (input.length()>25) {
                     return true;
                 }

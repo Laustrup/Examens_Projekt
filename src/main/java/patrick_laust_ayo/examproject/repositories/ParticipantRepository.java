@@ -25,7 +25,7 @@ public class ParticipantRepository extends Repository {
                 + participantToInsert.getName() + "\");");
 
         try {
-            participant = new Participant(res.getInt("participant_id"), res.getString("password"), res.getString("participant_name"),
+            participant = new Participant(res.getString("user_id"), res.getString("password"), res.getString("participant_name"),
                     res.getString("position"), department);
 
         } catch (Exception e) {
@@ -71,7 +71,7 @@ public class ParticipantRepository extends Repository {
 
             Department department = new Department(res.getInt("department_no"),
                     res.getString("location"), res.getString("department_name"));
-            participant = new Participant(res.getInt("participant_id"), res.getString("participant_name"),
+            participant = new Participant(res.getString("user_id"), res.getString("participant_name"),
                     res.getString("participant_password"), res.getString("participant_position"),
                     department);
         } catch (Exception e) {
@@ -88,7 +88,7 @@ public class ParticipantRepository extends Repository {
                 "WHERE participant_name = '" + formerName + "';");
     }
 
-    public void removeParticipant(int id) {
-        executeSQLStatement("DELETE ROW FROM participant WHERE participant_id = " + id + ";");
+    public void removeParticipant(String id) {
+        executeSQLStatement("DELETE ROW FROM participant WHERE user_id = '" + id + "';");
     }
 }
