@@ -24,7 +24,7 @@ public class ProjectRepository extends Repository{
 
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
     public void putProjectInDatabase(Project projectToInsert, int projectmanagerId) {
-        executeSQLStatement("INSERT INTO project VALUES (DEFAULT, \""  + projectToInsert.getTitle() + "\", " + projectmanagerId + "); ");
+        executeSQLStatement("INSERT INTO project(title, projectmanager_id) VALUES (\""  + projectToInsert.getTitle() + "\", " + projectmanagerId + "); ");
     }
 
     public Project putProjectInDatabaseWithReturn(Project projectToInsert, int projectmanagerId, ProjectManager projectManager) {
