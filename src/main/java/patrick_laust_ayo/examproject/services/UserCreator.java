@@ -31,7 +31,7 @@ public class UserCreator {
         ProjectRepository proRepo = new ProjectRepository();
         DepartmentRepository depRepo = new DepartmentRepository();
 
-        participant = new Participant(parRepo.calcNextId("participant"), null, null, null,
+        participant = new Participant(new String(), null, null, null,
                                                                               depRepo.findDepartment(depName));
         ExceptionHandler exceptionHandler = new ExceptionHandler();
         if (exceptionHandler.doesProjectExist(projectTitle)) {
@@ -43,18 +43,17 @@ public class UserCreator {
         return participant;
     }
 
-    public Map<Integer, Participant> getParticipantMap() {
+    public Map<String, Participant> getParticipantMap() {
 
         ParticipantRepository participantRepository = new ParticipantRepository();
-        Map<Integer, Participant> participantMap = new HashMap<>();
+        Map<String, Participant> participantMap = new HashMap<>();
 
         try {
             ResultSet resultSet = participantRepository.executeQuery("SELECT * FROM participant");
 
             while (resultSet.next()) {
-                int participant_ID = resultSet.getInt(1);
-                String username = resultSet.getString(2);
-
+                String participant_ID = resultSet.getString("user_id");
+                String username = resultSet.getString("participant_name");
 
                 Participant tempParticipant = new Participant(participant_ID, username);
 
@@ -66,8 +65,8 @@ public class UserCreator {
         return participantMap;
     }
 
-    public boolean doesParticipantExist(int participant_ID){
-        Map<Integer, Participant> userList = getParticipantMap();
+    public boolean doesParticipantExist(String participant_ID){
+        Map<String, Participant> userList = getParticipantMap();
         return userList.containsKey(participant_ID);
 
     }
