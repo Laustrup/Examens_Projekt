@@ -35,12 +35,18 @@ public class ProjectmanagerRepository extends Repository {
         return projectmanager;
     }
 
-    public void updateProjectManager(ProjectManager projectmanager,String formerUsername) {
+    public void updateProjectManager(ProjectManager projectmanager, String newUsername, String newPassword, String formerUsername) {
 
         executeSQLStatement("UPDATE projectmanager " +
-                "SET projectmanager_username = '" + projectmanager.getUsername() + "', " +
-                "projectmanager_password = '" + projectmanager.getPassword() + "', " +
-                "WHERE projectmanager_username = '" + formerUsername + "';");
+                "SET projectmanager.username = '" + newUsername + "' " +
+                "WHERE projectmanager.username = '" + formerUsername + "'; " +
+                "UPDATE participant " +
+                "SET participant_password = '" + newPassword + "' " +
+                "WHERE participant.position = 'Manager';");
+
+        projectmanager.setUsername(newUsername);
+
+
     }
 
     public ProjectManager findProjectManager(String username) {
