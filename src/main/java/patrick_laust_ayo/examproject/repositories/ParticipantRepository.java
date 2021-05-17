@@ -60,6 +60,7 @@ public class ParticipantRepository extends Repository {
         } catch (Exception e) {
             System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
             participant = null;
+            e.printStackTrace();
         }
     }
 

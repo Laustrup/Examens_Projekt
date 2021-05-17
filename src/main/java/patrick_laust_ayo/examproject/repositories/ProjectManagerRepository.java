@@ -42,7 +42,7 @@ public class ProjectManagerRepository extends Repository {
                 "SET projectmanager.username = '" + newUsername + "' " +
                 "WHERE projectmanager.username = '" + formerUsername + "';");
         executeSQLStatement("UPDATE participant " +
-                "SET participant_password = '" + newPassword + "' " +
+                "SET participant.participant_password = '" + newPassword + "' " +
                 "WHERE participant.position = 'Manager';");
     }
 
