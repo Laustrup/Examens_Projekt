@@ -173,8 +173,8 @@ public class ProjectRepository extends Repository{
             department = new Department(ids[5],strings[9],strings[10]);
 
             // Checks if participant is projectmanager
-            int projectmanagersParticipantId = res.getInt(5);
-            int participantId = res.getInt(17);
+            int projectmanagersParticipantId = res.getInt("projectmanager.participant_id");
+            int participantId = res.getInt("participant.participant_id");
 
             if (projectmanagersParticipantId == participantId) {
                 projectManager = new ProjectManager(res.getString("username"),strings[6],
