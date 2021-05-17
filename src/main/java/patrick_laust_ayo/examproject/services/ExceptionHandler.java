@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 public class ExceptionHandler {
 
     // Was meant to take numbervalues from id for the purpose of db id, but that purpose changed
+    /*
     public int returnIdInt(String id) {
         char[] chars = id.toCharArray();
         StringBuilder sb = new StringBuilder();
@@ -26,8 +27,6 @@ public class ExceptionHandler {
             return -1;
         }
     }
-
-    // Methods checks if objects or attributes exists
     public boolean idAlreadyExistInDb(String id,String table, String column) {
 
         if (table.equals("task")) {
@@ -51,6 +50,10 @@ public class ExceptionHandler {
 
         return false;
     }
+
+     */
+
+    // Methods checks if objects or attributes exists
     public boolean doesProjectExist(String title){
 
         ProjectRepository repo = new ProjectRepository();
