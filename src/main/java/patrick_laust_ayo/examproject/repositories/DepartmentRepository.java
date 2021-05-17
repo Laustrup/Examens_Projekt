@@ -47,5 +47,4 @@ public class DepartmentRepository extends Repository {
         }
         return departmentByName;
     }
-
 }
