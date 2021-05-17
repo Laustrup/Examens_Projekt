@@ -5,9 +5,11 @@ import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.repositories.Repository;
 
 import java.sql.ResultSet;
+import java.util.InputMismatchException;
 
 public class ExceptionHandler {
 
+    // Was meant to take numbervalues from id for the purpose of db id, but that purpose changed
     public int returnIdInt(String id) {
         char[] chars = id.toCharArray();
         StringBuilder sb = new StringBuilder();
@@ -49,58 +51,53 @@ public class ExceptionHandler {
         return false;
     }
 
-    // TODO Needs to finnish typing in limit values
-    public boolean inputMatchesDbLength(String input, String table, String column) {
+    // Checks if input is too long and writes a message as return, if input is allowed, it returns "Input is allowed"
+    public String isLengthAllowedInDatabase(String input, String table, String column)  {
 
-        try {
-            if (noRoomForNewId(table, column) || columnsPermittingTwentyFive(input, table, column)) {
-                return false;
-            }
+        if (inputAsTitleIsTooLongByAmount(input, table, column) != -1) {
+            return "Title is too long... Write less than " + inputAsTitleIsTooLongByAmount(input, table, column) + " words!";
         }
-        catch (Exception e) {
-            System.out.println("Column title doesn't include '_'...\n" + e.getMessage());
+        if (input.equals("participant_password") && input.length()>25) {
+            return "Password is too long... Write less than 25 words!";
+        }
+        if (input.equals("user_id") && input.length()>15) {
+            return "ID is too long... Write less than 15 words!";
         }
 
-        return true;
+        return "Input is allowed";
 
     }
 
-    private boolean noRoomForNewId(String table, String column) throws Exception {
+    private int inputAsTitleIsTooLongByAmount(String input, String table, String column) {
         Repository repo = new ParticipantRepository();
-        String[] titleOfColumn;
 
         try {
-            titleOfColumn = column.split("_");
-
-            if (titleOfColumn[1].equals("id") || column.equals("id")) {
-                if (repo.calcNextId(table)>255) {
-                    return true;
-                }
-            }
-        }
-        catch (Exception e) {
-            throw new Exception();
-        }
-        return false;
-    }
-
-    private boolean columnsPermittingTwentyFive(String input, String table, String column) throws Exception {
-        Repository repo = new ParticipantRepository();
-        String[] titleOfColumn;
-
-        try {
-            titleOfColumn = column.split("_");
-            if (titleOfColumn[1].equals("title") || titleOfColumn[1].equals("name") && !titleOfColumn[1].equals("department") ||
-                    titleOfColumn[1].equals("password")) {
+            if (input.equals("phase_title") ||
+                    input.equals("username") ||
+                    input.equals("participant_name") ||
+                    input.equals("participant_password") ||
+                    input.equals("position") ||
+                    input.equals("location")) {
                 if (input.length()>25) {
-                    return true;
+                    return 25;
+                }
+            }
+            if (input.equals("title") ||
+                input.equals("department_name")) {
+                if (input.length()>30) {
+                    return 30;
+                }
+            }
+            if (input.equals("assignment_title")) {
+                if (input.length()>50) {
+                    return 50;
                 }
             }
         }
         catch (Exception e) {
-            throw new Exception();
+            System.out.println("Input is too long...");
         }
-        return false;
+        return -1;
     }
 
     public boolean doesProjectExist(String title){
