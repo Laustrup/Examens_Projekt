@@ -30,7 +30,7 @@ class UserEditorTest {
     }
 
     @ParameterizedTest
-    @CsvSource(value = {"Andy bozz|erAsD14'd|Andy Boss"}, delimiter = '|')
+    @CsvSource(value = {"Andy bozz|erAsD14-d|Andy Boss"}, delimiter = '|')
     void updateProjectmanager(String username, String password, String formerUsername) {
 
         UserEditor userEditor = new UserEditor();

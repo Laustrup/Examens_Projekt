@@ -39,14 +39,10 @@ public class ProjectmanagerRepository extends Repository {
 
         executeSQLStatement("UPDATE projectmanager " +
                 "SET projectmanager.username = '" + newUsername + "' " +
-                "WHERE projectmanager.username = '" + formerUsername + "'; " +
-                "UPDATE participant " +
+                "WHERE projectmanager.username = '" + formerUsername + "';");
+        executeSQLStatement("UPDATE participant " +
                 "SET participant_password = '" + newPassword + "' " +
                 "WHERE participant.position = 'Manager';");
-
-        projectmanager.setUsername(newUsername);
-
-
     }
 
     public ProjectManager findProjectManager(String username) {
@@ -56,7 +52,8 @@ public class ProjectmanagerRepository extends Repository {
                 "FROM projectmanager " +
                 "INNER JOIN participant " +
                 "INNER JOIN department " +
-                "WHERE projectmanager.username = '" + username + "';");
+                "WHERE projectmanager.username = '" + username + "' " +
+                "and participant.department_no = department.department_no;");
 
         try {
             res.next();
