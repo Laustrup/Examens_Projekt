@@ -25,7 +25,7 @@ public class ParticipantRepository extends Repository {
                 + participantToInsert.getName() + "\");");
 
         try {
-            participant = new Participant(res.getInt("participant_id"), res.getString("password"), res.getString("participant_name"),
+            participant = new Participant(res.getString("user_id"), res.getString("password"), res.getString("participant_name"),
                     res.getString("position"), department);
 
         } catch (Exception e) {
@@ -44,7 +44,7 @@ public class ParticipantRepository extends Repository {
 
         if (isByName) {
             ResultSet res = executeQuery("SELECT * FROM participant " +
-                    "INNER JOIN department ON participant.department_no = department.department_no" + " INNER JOIN project " +
+                    "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project " +
                     "WHERE participant_name = '" + searchValue + "';");
             updateFoundParticipant(res);
         }
@@ -57,7 +57,7 @@ public class ParticipantRepository extends Repository {
             }
 
             ResultSet res = executeQuery("SELECT * FROM participant " +
-                    "INNER JOIN department ON participant.department_no = department.department_no" + " INNER JOIN project " +
+                    "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project " +
                     "WHERE participant_id = " + id + ";");
             updateFoundParticipant(res);
         }
@@ -71,9 +71,8 @@ public class ParticipantRepository extends Repository {
 
             Department department = new Department(res.getInt("department_no"),
                     res.getString("location"), res.getString("department_name"));
-            participant = new Participant(res.getInt("participant_id"), res.getString("participant_password"),
-                    res.getString("participant_name"),
-                    res.getString("position"),
+            participant = new Participant(res.getString("user_id"), res.getString("participant_name"),
+                    res.getString("participant_password"), res.getString("participant_position"),
                     department);
         } catch (Exception e) {
             System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
@@ -85,11 +84,11 @@ public class ParticipantRepository extends Repository {
 
         executeSQLStatement("UPDATE participant " +
                 "SET participant_name = '" + participant.getName() + "', " +
-                "participant_password = '" + participant.getPassword() + "' " +
+                "participant_password = '" + participant.getPassword() + "', " +
                 "WHERE participant_name = '" + formerName + "';");
     }
 
-    public void removeParticipant(int id) {
-        executeSQLStatement("DELETE ROW FROM participant WHERE participant_id = " + id + ";");
+    public void removeParticipant(String id) {
+        executeSQLStatement("DELETE ROW FROM participant WHERE user_id = '" + id + "';");
     }
 }

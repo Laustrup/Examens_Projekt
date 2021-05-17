@@ -45,7 +45,7 @@ public class ProjectmanagerRepository extends Repository {
 
     public ProjectManager findProjectManager(String username) {
         ResultSet res = executeQuery("SELECT projectmanager_id, username, " +
-                "participant_password, " + "participant.participant_id, " + "participant_name, " +
+                "participant_password, " + "participant.user_id, " + "participant_name, " +
                 "position, project_id, department.department_no, location, department_name " +
                 "FROM projectmanager " +
                 "INNER JOIN participant " +
@@ -58,7 +58,7 @@ public class ProjectmanagerRepository extends Repository {
             Department department = new Department(res.getInt("department_no"),
                                     res.getString("location"), res.getString("department_name"));
             projectmanager = new ProjectManager(res.getString("username"),res.getString("projectmanager_password"),
-                                                res.getInt("participant_id"),res.getString("participant_name"),
+                                                res.getString("user_id"),res.getString("participant_name"),
                                                 res.getString("position"),department);
 
             currentId = res.getInt("projectmanager_id");

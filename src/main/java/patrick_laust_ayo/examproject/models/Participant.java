@@ -4,14 +4,14 @@ import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 
 public class Participant {
 
-    private int id;
+    private String id;
     private String username;
     private String password;
     private String name;
     private String position;
     private Department department;
 
-    public Participant(int id, String password, String name, String position, Department department) {
+    public Participant(String id, String password, String name, String position, Department department) {
         this.id = id;
         this.password = password;
         this.name = name;
@@ -19,18 +19,16 @@ public class Participant {
         this.department = department;
     }
 
-    public Participant(int id, String username) {
+    public Participant(String id, String username) {
         this.id = id;
         this.username = username;
     }
 
     // Constructor for updating
-    public Participant(int id, String password, String name, String position) {
+    public Participant(String id, String name, String position) {
         this.id = id;
-        this.password = password;
         this.name = name;
         this.position = position;
-
     }
 
     public String getPassword(){
@@ -65,11 +63,11 @@ public class Participant {
         this.department = department;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

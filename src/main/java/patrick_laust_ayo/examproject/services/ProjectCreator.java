@@ -17,9 +17,9 @@ public class ProjectCreator {
     private ProjectRepository pRepo = new ProjectRepository();
     private ProjectmanagerRepository pmRepo = new ProjectmanagerRepository();
 
-    public Project createProject(String title, String password, String managerName) {
+    public Project createProject(String title, String managerName) {
 
-        project = new Project(title, password, new ArrayList<>(), new HashMap<>(), pmRepo.findProjectManager(managerName));
+        project = new Project(title, new ArrayList<>(), new HashMap<>(), pmRepo.findProjectManager(managerName));
 
         pRepo.putProjectInDatabase(project, pmRepo.getCurrentId());
 
