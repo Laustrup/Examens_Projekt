@@ -2,10 +2,10 @@ package patrick_laust_ayo.examproject.services;
 
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
+import patrick_laust_ayo.examproject.repositories.ProjectmanagerRepository;
 import patrick_laust_ayo.examproject.repositories.Repository;
 
 import java.sql.ResultSet;
-import java.util.InputMismatchException;
 
 public class ExceptionHandler {
 
@@ -27,6 +27,7 @@ public class ExceptionHandler {
         }
     }
 
+    // Methods checks if objects or attributes exists
     public boolean idAlreadyExistInDb(String id,String table, String column) {
 
         if (table.equals("task")) {
@@ -36,7 +37,7 @@ public class ExceptionHandler {
         int idInput = returnIdInt(id);
 
         Repository repo = new ParticipantRepository();
-        ResultSet res = repo.SelectAll(table);
+        ResultSet res = repo.selectAll(table);
         try {
             while (res.next()) {
                 if (res.getInt(column) == idInput) {
@@ -50,7 +51,6 @@ public class ExceptionHandler {
 
         return false;
     }
-
     public boolean doesProjectExist(String title){
 
         ProjectRepository repo = new ProjectRepository();
@@ -61,6 +61,40 @@ public class ExceptionHandler {
         else {
             return true;
         }
+    }
+    public boolean doesUserIdExist(String userId) {
+        ParticipantRepository repo = new ParticipantRepository();
+
+        ResultSet res = repo.selectAll("participant");
+
+        try {
+            while (res.next()) {
+                if (res.getString("user_id").equals(userId)) {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Trouble identifying ResultSet when searching user_id...\n" + e.getMessage());
+        }
+        return false;
+    }
+    public boolean doesProjectManagerUsernameExist(String username) {
+        ProjectmanagerRepository repo = new ProjectmanagerRepository();
+
+        ResultSet res = repo.selectAll("projectmanager");
+
+        try {
+            while (res.next()) {
+                if (res.getString("username").equals(username)) {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Trouble identifying ResultSet when searching username...\n" + e.getMessage());
+        }
+        return false;
     }
 
     // Checks if input is too long and writes a message as return, if input is allowed, it returns "Input is allowed"
@@ -79,7 +113,6 @@ public class ExceptionHandler {
         return "Input is allowed";
 
     }
-
     private int inputAsTitleIsTooLongByAmount(String input, String table, String column) {
         Repository repo = new ParticipantRepository();
 

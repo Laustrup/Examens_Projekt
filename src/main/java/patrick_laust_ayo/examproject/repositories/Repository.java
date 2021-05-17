@@ -79,7 +79,7 @@ public abstract class Repository {
         return nextId + 1;
     }
 
-    public ResultSet SelectAll(String table) {
+    public ResultSet selectAll(String table) {
         connection = databaseConnection.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement("Select * FROM " + table + ";");
