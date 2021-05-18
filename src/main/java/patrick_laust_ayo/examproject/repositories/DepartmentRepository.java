@@ -37,7 +37,7 @@ public class DepartmentRepository extends Repository {
 
     public Department findDepartment(String depName){
         ResultSet res = executeQuery("SELECT * FROM department WHERE department_name = '" + depName + "';");
-        closeCurrentConnection();
+
         Department departmentByName = null;
 
         try{
@@ -47,6 +47,7 @@ public class DepartmentRepository extends Repository {
         catch(Exception e){
             System.out.println("Couldn't find department by name " + e.getMessage());
         }
+        closeCurrentConnection();
         return departmentByName;
     }
 }

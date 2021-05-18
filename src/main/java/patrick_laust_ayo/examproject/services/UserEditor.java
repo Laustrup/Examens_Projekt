@@ -13,11 +13,11 @@ public class UserEditor {
     private ProjectManager projectManager;
     private Participant participant;
 
-    public Participant updateParticipant(String id, String password, String name, String position, String userId) {
-        participantRepo.updateParticipant(id, name, password, position, userId);
+    public Participant updateParticipant(String id, String password, String name, String position, String formerUserId) {
+        participantRepo.updateParticipant(id, name, password, position, formerUserId);
 
         // Makes sure that it's the real participant from db that is being returned
-        participant = participantRepo.findParticipant(userId);
+        participant = participantRepo.findParticipant(formerUserId);
 
         return participant;
     }
