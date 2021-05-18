@@ -34,12 +34,12 @@ public class ParticipantController {
         Participant participant = (Participant)session.getAttribute("participant_updated");
 
         if (participant == null) {
-        //   userEditor.updateParticipant(id, name, position, formerName);
+           //userEditor.updateParticipant(id, name, position, formerName);
         }
-      // session.setAttribute("participant_updated", userEditor.updateParticipant(id, password, name, position, department));
+       //session.setAttribute("participant_updated", userEditor.updateParticipant(id, password, name, position, department));
         String pName = participant.getName();
 
-        return "update_participant" + pName;
+        return "redirect:/update_participant/" + pName;
     }
 
     //Login existing participant
