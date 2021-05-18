@@ -23,6 +23,7 @@ public class ParticipantRepository extends Repository {
                 "\", " + projectId + ", " + department.getDepartmentNo() + ";");
         ResultSet res = executeQuery("SELECT * FROM project WHERE participant_name = \""
                 + participantToInsert.getName() + "\");");
+        closeCurrentConnection();
 
         try {
             participant = new Participant(res.getString("user_id"), res.getString("password"), res.getString("participant_name"),
@@ -36,33 +37,15 @@ public class ParticipantRepository extends Repository {
         return participant;
     }
 
-    //TODO create a new Project constructor if less parameters is needed
+    public Participant findParticipant(String userId) {
 
-    // purpose is to find a participant, both from id and name,
-    // therefore parameters are required an searchvalue and whether it's by name or not, if not it will check by id
-    public Participant findParticipant(String searchValue, boolean isByName) {
-
-        if (isByName) {
-            ResultSet res = executeQuery("SELECT * FROM participant " +
-                    "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project " +
-                    "WHERE participant_name = '" + searchValue + "';");
-            updateFoundParticipant(res);
-        }
-        else {
-            ExceptionHandler exceptionHandler = new ExceptionHandler();
-            int id = exceptionHandler.returnIdInt(searchValue);
-
-            if (id == -1) {
-                return null;
-            }
-
-            ResultSet res = executeQuery("SELECT * FROM participant " +
-                    "INNER JOIN department ON participant.department_no = department.department_no" + "INNER JOIN project " +
-                    "WHERE participant_id = " + id + ";");
-            updateFoundParticipant(res);
-        }
+            updateFoundParticipant(executeQuery("SELECT * FROM participant " +
+                        "INNER JOIN department ON participant.department_no = department.department_no " + "INNER JOIN project " +
+                        "WHERE user_id = '" + userId + "';"));
+            closeCurrentConnection();
 
         return participant;
+
     }
 
     private void updateFoundParticipant(ResultSet res) {
@@ -71,24 +54,27 @@ public class ParticipantRepository extends Repository {
 
             Department department = new Department(res.getInt("department_no"),
                     res.getString("location"), res.getString("department_name"));
-            participant = new Participant(res.getString("user_id"), res.getString("participant_name"),
-                    res.getString("participant_password"), res.getString("participant_position"),
+            participant = new Participant(res.getString("user_id"), res.getString("participant_password"),
+                    res.getString("participant_name"), res.getString("position"),
                     department);
         } catch (Exception e) {
             System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
             participant = null;
+            e.printStackTrace();
         }
     }
 
-    public void updateParticipant(Participant participant,String formerName) {
+    public void updateParticipant(String userId, String name, String password, String position, String formerUserId) {
 
         executeSQLStatement("UPDATE participant " +
-                "SET participant_name = '" + participant.getName() + "', " +
-                "participant_password = '" + participant.getPassword() + "', " +
-                "WHERE participant_name = '" + formerName + "';");
+                "SET participant.user_id = '" + userId + "', " +
+                "participant.participant_name = '" + name + "', " +
+                "participant.participant_password = '" + password + "' " +
+                "participant.position = '" + position + "' " +
+                "WHERE participant.user_id = '" + formerUserId + "';");
     }
 
-    public void removeParticipant(String id) {
-        executeSQLStatement("DELETE ROW FROM participant WHERE user_id = '" + id + "';");
+    public void removeParticipant(String userId) {
+        executeSQLStatement("DELETE ROW FROM participant WHERE user_id = '" + userId + "';");
     }
 }

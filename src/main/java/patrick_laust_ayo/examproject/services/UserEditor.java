@@ -3,24 +3,21 @@ package patrick_laust_ayo.examproject.services;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
-import patrick_laust_ayo.examproject.repositories.ProjectmanagerRepository;
+import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
 
 public class UserEditor {
 
-    private ParticipantRepository pRepo = new ParticipantRepository();
-    private ProjectmanagerRepository pmRepo = new ProjectmanagerRepository();
+    private ParticipantRepository participantRepo = new ParticipantRepository();
+    private ProjectManagerRepository projectManagerRepo = new ProjectManagerRepository();
 
     private ProjectManager projectManager;
     private Participant participant;
 
-    public Participant updateParticipant(String id, String name, String position, String formerName) {
+    public Participant updateParticipant(String id, String password, String name, String position, String userId) {
+        participantRepo.updateParticipant(id, name, password, position, userId);
 
-        // This object doesn't have a password nor a department
-        participant = new Participant(id,name,position);
-
-        pRepo.updateParticipant(participant,formerName);
         // Makes sure that it's the real participant from db that is being returned
-        participant = pRepo.findParticipant(name, true);
+        participant = participantRepo.findParticipant(userId);
 
         return participant;
     }
@@ -29,16 +26,16 @@ public class UserEditor {
 
         projectManager = new ProjectManager(username, password);
 
-        pmRepo.updateProjectManager(projectManager, formerUsername);
+        projectManagerRepo.updateProjectManager(projectManager, username, password, formerUsername);
         // Makes sure that it's the real projectmanager from db that is being returned
-        projectManager = pmRepo.findProjectManager(username);
+        projectManager = projectManagerRepo.findProjectManager(username);
 
         return projectManager;
     }
 
-    public Participant removeParticipant(String id) {
-        participant = pRepo.findParticipant(id,false);
-        pRepo.removeParticipant(participant.getId());
+    public Participant removeParticipant(String userId) {
+        participant = participantRepo.findParticipant(userId);
+        participantRepo.removeParticipant(participant.getId());
 
         return participant;
     }

@@ -6,7 +6,7 @@ import patrick_laust_ayo.examproject.models.ProjectManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ProjectmanagerRepository extends Repository {
+public class ProjectManagerRepository extends Repository {
 
     private ProjectManager projectmanager;
 
@@ -23,6 +23,7 @@ public class ProjectmanagerRepository extends Repository {
         executeSQLStatement("INSERT INTO projectmanager VALUES (default, \"" + projectManager.getUsername()
                 + "\", \"" + projectManager.getPassword() + "\", default");
         ResultSet res = executeQuery("SELECT * FROM projectmanager");
+        closeCurrentConnection();
 
         try{
             projectmanager = new ProjectManager(res.getString("username"),
@@ -39,14 +40,10 @@ public class ProjectmanagerRepository extends Repository {
 
         executeSQLStatement("UPDATE projectmanager " +
                 "SET projectmanager.username = '" + newUsername + "' " +
-                "WHERE projectmanager.username = '" + formerUsername + "'; " +
-                "UPDATE participant " +
-                "SET participant_password = '" + newPassword + "' " +
+                "WHERE projectmanager.username = '" + formerUsername + "';");
+        executeSQLStatement("UPDATE participant " +
+                "SET participant.participant_password = '" + newPassword + "' " +
                 "WHERE participant.position = 'Manager';");
-
-        projectmanager.setUsername(newUsername);
-
-
     }
 
     public ProjectManager findProjectManager(String username) {
@@ -56,7 +53,9 @@ public class ProjectmanagerRepository extends Repository {
                 "FROM projectmanager " +
                 "INNER JOIN participant " +
                 "INNER JOIN department " +
-                "WHERE projectmanager.username = '" + username + "';");
+                "WHERE projectmanager.username = '" + username + "' " +
+                "and participant.department_no = department.department_no;");
+        closeCurrentConnection();
 
         try {
             res.next();

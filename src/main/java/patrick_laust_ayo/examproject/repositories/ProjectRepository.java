@@ -30,6 +30,7 @@ public class ProjectRepository extends Repository{
     public Project putProjectInDatabaseWithReturn(Project projectToInsert, int projectmanagerId, ProjectManager projectManager) {
         executeSQLStatement("insert into project values (default, \""  + projectToInsert.getTitle() + "\", " + projectmanagerId + "); ");
         ResultSet res = executeQuery("SELECT * FROM project WHERE title = \"" + projectToInsert.getTitle() + "\";");
+        closeCurrentConnection();
 
         try {
             project = new Project(res.getString("title"), new ArrayList<Phase>(), new HashMap<>(), projectManager);
@@ -47,7 +48,6 @@ public class ProjectRepository extends Repository{
     }
 
     public void putAssignmentInDatabase(Assignment assignment, int phaseId) {
-
         executeSQLStatement("INSERT INTO assignment VALUES (default, "  + assignment.getStart() +
                             ", " + assignment.getEnd() + ", " + assignment.isCompleted() + ", " +
                              phaseId + "); ");
@@ -74,6 +74,7 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN department " +
                 "INNER JOIN projectmanager " +
                 "WHERE project.title = '" + projectTitle +  "';");
+        closeCurrentConnection();
 
         // Local variables to be edited from db's values
         ArrayList<Phase> listOfPhases = new ArrayList<>();
@@ -263,6 +264,10 @@ public class ProjectRepository extends Repository{
         executeSQLStatement("UPDATE project " +
                 "SET title = '" + project.getTitle() + "', " +
                 "WHERE projectmanager_username = '" + formerTitle + "';");
+    }
+
+    public void removeProject(String title) {
+        executeSQLStatement("DELETE ROW FROM project WHERE title = '" + title + "';");
     }
 
 }

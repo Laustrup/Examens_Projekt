@@ -48,13 +48,13 @@ public abstract class Repository {
         }
     }
 
-    public int findForeignId(String table, String column, String value, String foreignKey) {
+    public int findId(String table, String where, String value, String ColumnOfId) {
 
-        ResultSet res = executeQuery("SELECT * FROM " + table + " WHERE " + column + " = '" + value + "';");
+        ResultSet res = executeQuery("SELECT * FROM " + table + " WHERE " + where + " = '" + value + "';");
 
         try {
             res.next();
-            return res.getInt(foreignKey);
+            return res.getInt(ColumnOfId);
         }
         catch (Exception e) {
             System.out.println("Couldn't find project id...\n" + e.getMessage());
@@ -79,7 +79,7 @@ public abstract class Repository {
         return nextId + 1;
     }
 
-    public ResultSet SelectAll(String table) {
+    public ResultSet selectAll(String table) {
         connection = databaseConnection.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement("Select * FROM " + table + ";");
@@ -91,7 +91,7 @@ public abstract class Repository {
         }
     }
 
-    protected void closeCurrentConnection() {
+    public void closeCurrentConnection() {
         closeConnection();
     }
 }
