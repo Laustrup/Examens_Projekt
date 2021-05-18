@@ -13,13 +13,13 @@ class UserEditorTest {
 
 
     @ParameterizedTest
-    @CsvSource(value={"lone9242|qscqsc*21|Gitte|Developer|Lone"}, delimiter = '|')
-    void updateParticipant(String id, String password, String name, String position, String formerName) {
+    @CsvSource(value={"lone9242|qscqsc*21|Gitte|Developer|lone9242"}, delimiter = '|')
+    void updateParticipant(String id, String password, String name, String position, String formerUserId) {
         //Arrange
         UserEditor userEditor = new UserEditor();
 
         //Act
-        Participant participant = userEditor.updateParticipant(id, password, name, position, formerName);
+        Participant participant = userEditor.updateParticipant(id, password, name, position, formerUserId);
         //Assert
         assertEquals(participant.getId(), id);
         assertEquals(participant.getPassword(), password);
@@ -30,7 +30,7 @@ class UserEditorTest {
     }
 
     @ParameterizedTest
-    @CsvSource(value = {"Andy bozz|erAsD14-d|Andy Boss"}, delimiter = '|')
+    @CsvSource(value = {"Andy Boss|erAsD14-d|Andy boss", "Andy boss|projManPass|Andy Boss"}, delimiter = '|')
     void updateProjectmanager(String username, String password, String formerUsername) {
 
         UserEditor userEditor = new UserEditor();

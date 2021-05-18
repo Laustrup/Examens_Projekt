@@ -3,6 +3,7 @@ package patrick_laust_ayo.examproject.repositories;
 import patrick_laust_ayo.examproject.models.*;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 
+import javax.xml.transform.Result;
 import java.sql.ResultSet;
 
 public class ParticipantRepository extends Repository {
@@ -23,7 +24,7 @@ public class ParticipantRepository extends Repository {
                 "\", " + projectId + ", " + department.getDepartmentNo() + ";");
         ResultSet res = executeQuery("SELECT * FROM project WHERE participant_name = \""
                 + participantToInsert.getName() + "\");");
-        closeCurrentConnection();
+
 
         try {
             participant = new Participant(res.getString("user_id"), res.getString("password"), res.getString("participant_name"),
@@ -33,15 +34,16 @@ public class ParticipantRepository extends Repository {
             System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
             participant = null;
         }
-
+        closeCurrentConnection();
         return participant;
     }
 
     public Participant findParticipant(String userId) {
-
-            updateFoundParticipant(executeQuery("SELECT * FROM participant " +
+        ResultSet res = executeQuery("SELECT * FROM participant " +
                         "INNER JOIN department ON participant.department_no = department.department_no " + "INNER JOIN project " +
-                        "WHERE user_id = '" + userId + "';"));
+                        "WHERE user_id = '" + userId + "';");
+
+            updateFoundParticipant(res);
             closeCurrentConnection();
 
         return participant;
@@ -69,7 +71,7 @@ public class ParticipantRepository extends Repository {
         executeSQLStatement("UPDATE participant " +
                 "SET participant.user_id = '" + userId + "', " +
                 "participant.participant_name = '" + name + "', " +
-                "participant.participant_password = '" + password + "' " +
+                "participant.participant_password = '" + password + "', " +
                 "participant.position = '" + position + "' " +
                 "WHERE participant.user_id = '" + formerUserId + "';");
     }

@@ -15,7 +15,7 @@ class ProjectCreatorTest {
     private ProjectCreator projectCreator = new ProjectCreator();
 
     @ParameterizedTest
-    @CsvSource(value = {"Save the homeless|Andy Boss"}, delimiter = '|')
+    @CsvSource(value = {"Save the homeless|Andy boss"}, delimiter = '|')
     public void createProjectTest(String title, String managerName) {
         //Arrange
 

@@ -20,7 +20,7 @@ public class ProjectCreator {
     public Project createProject(String title, String managerName) {
 
         project = new Project(title, new ArrayList<>(), new HashMap<>(), projectManagerRepo.findProjectManager(managerName));
-
+        System.out.println(projectManagerRepo.getCurrentId());
         projectRepo.putProjectInDatabase(project, projectManagerRepo.getCurrentId());
 
         return project;

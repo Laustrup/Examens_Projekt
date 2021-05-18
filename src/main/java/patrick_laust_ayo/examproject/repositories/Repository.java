@@ -21,9 +21,9 @@ public abstract class Repository {
         catch (Exception e) {
             System.out.println("Couldn't execute query...\n" + e.getMessage());
             e.printStackTrace();
-            closeConnection();
             return null;
         }
+
     }
 
     protected void executeSQLStatement(String sql) {

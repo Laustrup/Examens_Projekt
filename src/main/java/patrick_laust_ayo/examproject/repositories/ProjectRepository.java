@@ -30,7 +30,7 @@ public class ProjectRepository extends Repository{
     public Project putProjectInDatabaseWithReturn(Project projectToInsert, int projectmanagerId, ProjectManager projectManager) {
         executeSQLStatement("insert into project values (default, \""  + projectToInsert.getTitle() + "\", " + projectmanagerId + "); ");
         ResultSet res = executeQuery("SELECT * FROM project WHERE title = \"" + projectToInsert.getTitle() + "\";");
-        closeCurrentConnection();
+
 
         try {
             project = new Project(res.getString("title"), new ArrayList<Phase>(), new HashMap<>(), projectManager);
@@ -39,7 +39,7 @@ public class ProjectRepository extends Repository{
             System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
             project = null;
         }
-
+        closeCurrentConnection();
         return project;
     }
 
@@ -74,7 +74,7 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN department " +
                 "INNER JOIN projectmanager " +
                 "WHERE project.title = '" + projectTitle +  "';");
-        closeCurrentConnection();
+
 
         // Local variables to be edited from db's values
         ArrayList<Phase> listOfPhases = new ArrayList<>();
@@ -151,7 +151,7 @@ public class ProjectRepository extends Repository{
         catch (Exception e) {
             System.out.println("Couldn't create project...\n" + e.getMessage());
         }
-
+        closeCurrentConnection();
         return project;
     }
 

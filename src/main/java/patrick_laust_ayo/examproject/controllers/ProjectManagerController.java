@@ -30,8 +30,8 @@ public class  ProjectManagerController {
 
         username = exceptionHandler.stringInputToDbInsure(username);
         password = exceptionHandler.stringInputToDbInsure(password);
-        username = exceptionHandler.isLengthAllowedInDatabase();
-        password = exceptionHandler.isLengthAllowedInDatabase()
+      //  username = exceptionHandler.isLengthAllowedInDatabase();
+       // password = exceptionHandler.isLengthAllowedInDatabase()
         ProjectManager projectManager = userCreator.createManager(username, password);
 
         session.setAttribute("manager_password", password);

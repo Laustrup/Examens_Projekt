@@ -23,7 +23,7 @@ public class ProjectManagerRepository extends Repository {
         executeSQLStatement("INSERT INTO projectmanager VALUES (default, \"" + projectManager.getUsername()
                 + "\", \"" + projectManager.getPassword() + "\", default");
         ResultSet res = executeQuery("SELECT * FROM projectmanager");
-        closeCurrentConnection();
+
 
         try{
             projectmanager = new ProjectManager(res.getString("username"),
@@ -32,7 +32,7 @@ public class ProjectManagerRepository extends Repository {
         catch(SQLException e){
             System.out.println("Couldn't put projectmanager in database " + e.getMessage());
         }
-
+        closeCurrentConnection();
         return projectmanager;
     }
 
@@ -55,7 +55,7 @@ public class ProjectManagerRepository extends Repository {
                 "INNER JOIN department " +
                 "WHERE projectmanager.username = '" + username + "' " +
                 "and participant.department_no = department.department_no;");
-        closeCurrentConnection();
+
 
         try {
             res.next();
@@ -72,7 +72,7 @@ public class ProjectManagerRepository extends Repository {
             System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
             projectmanager = null;
         }
-
+        closeCurrentConnection();
         return projectmanager;
     }
 
