@@ -146,10 +146,10 @@ public class ExceptionHandler {
 
 
     // Checks if input is too long and writes a message as return, if input is allowed, it returns "Input is allowed"
-    public String isLengthAllowedInDatabase(String input, String table, String column)  {
+    public String isLengthAllowedInDatabase(String input)  {
 
-        if (inputAsTitleIsTooLongByAmount(input, table, column) != -1) {
-            return "Title is too long... Write less than " + inputAsTitleIsTooLongByAmount(input, table, column) + " words!";
+        if (inputAsTitleIsTooLongByAmount(input) != -1) {
+            return "Title is too long... Write less than " + inputAsTitleIsTooLongByAmount(input) + " words!";
         }
         if (input.equals("participant_password") && input.length()>25) {
             return "Password is too long... Write less than 25 words!";
@@ -161,7 +161,7 @@ public class ExceptionHandler {
         return "Input is allowed";
 
     }
-    private int inputAsTitleIsTooLongByAmount(String input, String table, String column) {
+    private int inputAsTitleIsTooLongByAmount(String input) {
         Repository repo = new ParticipantRepository();
 
         try {
