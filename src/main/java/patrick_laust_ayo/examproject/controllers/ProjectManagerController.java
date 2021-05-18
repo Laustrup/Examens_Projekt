@@ -17,8 +17,8 @@ import java.util.ArrayList;
 @Controller
 public class  ProjectManagerController {
 
-    UserCreator userCreator = new UserCreator();
-    ExceptionHandler exceptionHandler = new ExceptionHandler();
+    private UserCreator userCreator = new UserCreator();
+    private ExceptionHandler exceptionHandler = new ExceptionHandler();
 
     @GetMapping("/create_projectmanager")
     public String renderCreateProjectManager(){
@@ -31,20 +31,34 @@ public class  ProjectManagerController {
 
 
         if (exceptionHandler.doesProjectManagerUsernameExist(username)) {
-            HttpSession session = request.getSession();
-            username = exceptionHandler.stringInputToDbInsure(username);
-            password = exceptionHandler.stringInputToDbInsure(password);
-            username = exceptionHandler.isLengthAllowedInDatabase(username);
-            password = exceptionHandler.isLengthAllowedInDatabase(password);
-            ProjectManager projectManager = userCreator.createManager(username, password);
-            session.setAttribute("manager_password", password);
-        }
-        else {
             model.addAttribute("userAlreadyExist", "This username already exist. Please choose another.");
             return "create_projectmanager.html";
         }
 
-        return "redirect:/create_project";
+        HttpSession session = request.getSession();
+
+        username = exceptionHandler.stringInputToDbInsure(username);
+        String inputException = exceptionHandler.isLengthAllowedInDatabase(username);
+
+        if (!(inputException.equals("Input is allowed"))) {
+            model.addAttribute("Exception",inputException);
+            return "create_projectmanager.html";
+        }
+
+        password = exceptionHandler.stringInputToDbInsure(password);
+        inputException = exceptionHandler.isLengthAllowedInDatabase(password);
+        if (!(inputException.equals("Input is allowed"))) {
+            model.addAttribute("Exception",inputException);
+            return "create_projectmanager.html";
+        }
+
+        ProjectManager projectManager = userCreator.createManager(username, password);
+        session.setAttribute("username", username);
+        session.setAttribute("password", password);
+        model.addAttribute("projectManager",projectManager);
+
+        return "redirect:/create_project/" + projectManager.getUsername();
+
     }
 
     @GetMapping("/manager_login")
@@ -70,4 +84,5 @@ public class  ProjectManagerController {
 
     */
     }
+
 }

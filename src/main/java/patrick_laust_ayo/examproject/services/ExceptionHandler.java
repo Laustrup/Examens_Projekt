@@ -196,14 +196,14 @@ public class ExceptionHandler {
     // Two methods for insure ', " and \ doesn't create an error
     public String stringInputToDbInsure(String input) {
         if (input.endsWith("\"") || input.endsWith("'") || input.endsWith("\\")) {
-            input += "Д";
+            input = createNewInput(0,input.length()-1,input) + "\\" + input.charAt(input.length());
         }
-        if (input.startsWith("\"") || input.startsWith("'") || input.startsWith("\\")) {
-            String newInput = "Д" + input;
-            input = newInput;
+        if (input.startsWith("\"") || input.startsWith("'") || input.startsWith("\\\\")) {
+            input = "\\" + input;
         }
         return input;
     }
+    //TODO not updated with \s
     public String stringInputFromDbInsure(String input) {
 
         String Д = "Д";

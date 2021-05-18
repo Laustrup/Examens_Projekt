@@ -3,6 +3,7 @@ package patrick_laust_ayo.examproject.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -18,13 +19,11 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class ProjectController {
 
-    ProjectCreator projectCreator = new ProjectCreator();
-    ProjectEditor projectEditor = new ProjectEditor();
-    ExceptionHandler exceptionHandler = new ExceptionHandler();
-    Project project;
+    private ProjectCreator projectCreator = new ProjectCreator();
+    private ProjectEditor projectEditor = new ProjectEditor();
+    private ExceptionHandler exceptionHandler = new ExceptionHandler();
 
-    //TODO hvad gives med når man opretter projekt udover titel?
-    @GetMapping("/create_project")
+    @GetMapping("/create_project/{projectManager.getUsername}")
     public String renderCreateProject(Model model, HttpServletRequest request) {
 
            HttpSession session = request.getSession();
@@ -32,39 +31,50 @@ public class ProjectController {
 
            model.addAttribute("username",username);
 
-           return "create_project";
+           return "create_project.html";
 
     }
 
     @PostMapping("/create-project")
-    public String createProject(@RequestParam(name = "title") String title, String username, HttpServletRequest request) {
+    public String createProject(@RequestParam(name = "title") String title, HttpServletRequest request,Model model) {
 
         HttpSession session = request.getSession();
 
-        title = exceptionHandler.isLengthAllowedInDatabase(title);
+        String inputException = exceptionHandler.isLengthAllowedInDatabase(title);
+
         title = exceptionHandler.stringInputToDbInsure(title);
 
-        username = (String) session.getAttribute("username");
-        Project newProject = projectCreator.createProject(title, username);
+        if (!(inputException.equals("Input is allowed"))) {
+            model.addAttribute("Exception",inputException);
+            return "project_page.html";
+        }
+        String username = (String) session.getAttribute("username");
 
-        session.setAttribute("projectTitle", title);
+        session.setAttribute("project", projectCreator.createProject(title, username));
 
         return "project_page.html";
+
+
     }
 
 
-        @PostMapping("/direct_project_page")
-        public String directToProjectPage(@RequestParam(name = "title") String title) {
+    @PostMapping("/direct_project_page")
+    public String directToProjectPage(@RequestParam(name = "title") String title, Model model) {
         ProjectRepository projectRepository = new ProjectRepository();
-        project = projectRepository.findProject(title);
+
+        model.addAttribute("project",projectRepository.findProject(title));
+
         return "redirect:/project_page/" + title;
+    }
 
+    @GetMapping("/project_page/{project.getTitle}")
+    public String renderProjectPage(Model model, HttpServletRequest request) {
 
-        }
+        HttpSession session = request.getSession();
 
-        @GetMapping("/project_page/{project.getTitle}")
-                public String renderProjectPage(Model model, HttpServletRequest request) {
-        
+        model.addAttribute("project",session.getAttribute("project"));
+
+        return "project.html";
 
     }
 
