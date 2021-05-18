@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.ProjectManager;
+import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.UserCreator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 public class  ProjectManagerController {
 
     UserCreator userCreator = new UserCreator();
+    ExceptionHandler exceptionHandler = new ExceptionHandler();
 
     @GetMapping("/create_projectmanager")
     public String renderCreateProjectManager(){
@@ -26,6 +28,10 @@ public class  ProjectManagerController {
                                           @RequestParam(name="password") String password, HttpServletRequest request){
         HttpSession session = request.getSession();
 
+        username = exceptionHandler.stringInputToDbInsure(username);
+        password = exceptionHandler.stringInputToDbInsure(password);
+        username = exceptionHandler.isLengthAllowedInDatabase();
+        password = exceptionHandler.isLengthAllowedInDatabase()
         ProjectManager projectManager = userCreator.createManager(username, password);
 
         session.setAttribute("manager_password", password);
