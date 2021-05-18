@@ -1,9 +1,11 @@
 package patrick_laust_ayo.examproject.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.UserCreator;
@@ -25,16 +27,22 @@ public class  ProjectManagerController {
 
     @PostMapping("/create_projectmanager")
     public String createProjectManagerLogin(@RequestParam(name="username") String username,
-                                          @RequestParam(name="password") String password, HttpServletRequest request){
-        HttpSession session = request.getSession();
+                                            @RequestParam(name="password") String password, HttpServletRequest request, Model model){
 
-        username = exceptionHandler.stringInputToDbInsure(username);
-        password = exceptionHandler.stringInputToDbInsure(password);
-        username = exceptionHandler.isLengthAllowedInDatabase();
-        password = exceptionHandler.isLengthAllowedInDatabase()
-        ProjectManager projectManager = userCreator.createManager(username, password);
 
-        session.setAttribute("manager_password", password);
+        if (exceptionHandler.doesProjectManagerUsernameExist(username)) {
+            HttpSession session = request.getSession();
+            username = exceptionHandler.stringInputToDbInsure(username);
+            password = exceptionHandler.stringInputToDbInsure(password);
+            username = exceptionHandler.isLengthAllowedInDatabase(username);
+            password = exceptionHandler.isLengthAllowedInDatabase(password);
+            ProjectManager projectManager = userCreator.createManager(username, password);
+            session.setAttribute("manager_password", password);
+        }
+        else {
+            model.addAttribute("userAlreadyExist", "This username already exist. Please choose another.");
+            return "create_projectmanager.html";
+        }
 
         return "redirect:/create_project";
     }
