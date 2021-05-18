@@ -34,17 +34,18 @@ public class ParticipantController {
         Participant participant = (Participant)session.getAttribute("participant_updated");
 
         if (participant == null) {
-           // userEditor.updateParticipant(id, password, name, position, department);
+           userEditor.updateParticipant(id, name, position, formerName);
         }
-       // session.setAttribute("participant_updated", userEditor.updateParticipant(id, password, name, position, department));
+       session.setAttribute("participant_updated", userEditor.updateParticipant(id, password, name, position, department));
         String pName = participant.getName();
 
-        return "update_participant"+ pName;
+        return "update_participant" + pName;
     }
 
     //Login existing participant
     @PostMapping ("/participant_login")
-    public String loginParticipant(@RequestParam(name="participant_ID") int id, @RequestParam(name="particiant_password")  String password, HttpServletRequest request) {
+    public String loginParticipant(@RequestParam(name="participant_ID") int id, @RequestParam(name="particiant_password")
+            String password, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
