@@ -3,10 +3,12 @@ package patrick_laust_ayo.examproject.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import patrick_laust_ayo.examproject.models.ProjectManager;
+import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.UserCreator;
 
@@ -27,7 +29,8 @@ public class  ProjectManagerController {
 
     @PostMapping("/create_projectmanager")
     public String createProjectManagerLogin(@RequestParam(name="username") String username,
-                                            @RequestParam(name="password") String password, HttpServletRequest request, Model model){
+                                            @RequestParam(name="password") String password,
+                                            HttpServletRequest request, Model model){
 
 
         if (exceptionHandler.doesProjectManagerUsernameExist(username)) {
@@ -66,23 +69,35 @@ public class  ProjectManagerController {
     return "projectmanager_login";
     }
 
-    @PostMapping("/manager_login")
-      public String loginProjectManager(@RequestParam(name="password") String password, HttpServletRequest request) {
+    @PostMapping("/allow_password")
+    public String loginProjectManager(@RequestParam(name="password") String password,
+                                        @RequestParam(name="username") String username,
+                                      Model model) {
+
+        ExceptionHandler handler = new ExceptionHandler();
+
+        if (handler.allowLogin(password)) {
+            return "/" + username;
+        }
+        else {
+            model.addAttribute("Exception","Wrong password!");
+            return "projectmanager_login";
+        }
+    }
+
+    @GetMapping("/{projectManager.getUsername}")
+    public String renderDashboard(@PathVariable("projectManager.getUsername") String username,
+                                  Model model, HttpServletRequest request) {
+
+        ProjectManagerRepository repo = new ProjectManagerRepository();
+        ProjectManager projectManager = repo.findProjectManager(username);
+        model.addAttribute("projectManager",projectManager);
 
         HttpSession session = request.getSession();
+        session.setAttribute("projectManager",projectManager);
+        session.setAttribute("current_participant",projectManager);
 
-        session.getAttribute("manager_password");
-
-        return "";
-
-    /* @PostMapping  skal indgå som en del af create project
-    public String createParticipant(@RequestParam(name="project_title") String projectTitle,  HttpServletRequest request){
-
-        userCreator.createParticipant(projectTitle);
-
-        return "redirct:/projectPage";
-
-    */
+        return "project_manager_dashboard";
     }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
@@ -54,28 +55,26 @@ public class ProjectController {
 
         return "project_page.html";
 
-
     }
-
 
     @PostMapping("/direct_project_page")
-    public String directToProjectPage(@RequestParam(name = "title") String title, Model model) {
+    public String goToChoosenProjectPage(@RequestParam(name = "title") String title, Model model, HttpServletRequest request) {
         ProjectRepository projectRepository = new ProjectRepository();
+        HttpSession session = request.getSession();
 
         model.addAttribute("project",projectRepository.findProject(title));
+        model.addAttribute("participant",session.getAttribute("current_participant"));
 
-        return "redirect:/project_page/" + title;
+        return "redirect:/project_page/" + title + "/" + ((Participant) session.getAttribute("current_participant")).getName();
     }
 
-    @GetMapping("/project_page/{project.getTitle}")
-    public String renderProjectPage(Model model, HttpServletRequest request) {
-
+    @GetMapping("/project_page/{project.getTitle()}/{participant.getName()}")
+    public String renderProjectPageWithParticipantName(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
 
         model.addAttribute("project",session.getAttribute("project"));
 
         return "project.html";
-
     }
 
 }

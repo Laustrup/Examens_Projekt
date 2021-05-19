@@ -2,32 +2,77 @@ package patrick_laust_ayo.examproject.controllers;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
+import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.UserCreator;
 import patrick_laust_ayo.examproject.services.UserEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 public class ParticipantController {
 
     private UserCreator userCreator;
     private UserEditor userEditor;
 
-    @GetMapping("/login")
+    @GetMapping("/participant_login_page")
     public String renderLoginParticipant(){
         return "participant_login.html";
     }
 
-    @PostMapping("/update_participant")
+    @GetMapping("/participant_join_project")
+    public String renderParticipantJoinProject(){
+        return "participant_join_projcet.html";
+    }
+
+    @PostMapping("/login_through_{project.getTitle}")
+    public String joinProject(@RequestParam(name="participant_ID") String id,
+                              @RequestParam(name="password") String password,Model model) {
+
+        ExceptionHandler handler = new ExceptionHandler();
+
+        if (handler.allowLogin(password)) {
+
+            return "/" ;
+        }
+        else {
+            model.addAttribute("Exception","Wrong password!");
+            return "/participant_join_project";
+        }
+    }
+
+    @PostMapping("/{project.getTitle()}/create_participant")
+    public String addParticipantsToProject(@PathVariable("{project.getTitle()}") String projectTitle,
+                                                @RequestParam(name = "department_name") String departmentName,
+                                                @RequestParam(name = "amount") int amount, HttpServletRequest request) {
+
+        DepartmentRepository repo = new DepartmentRepository();
+        Department department = repo.findDepartment(departmentName);
+
+        for (int i = 0; i < amount; i++) {
+            userCreator.createParticipant(projectTitle,departmentName);
+        }
+
+        HttpSession session = request.getSession();
+
+        // TODO Perhaps key is for wrong participant...
+        Participant participant = (Participant) session.getAttribute("participant");
+
+        return "redirect://project_page/" + projectTitle + "/" + participant.getName();
+    }
+
+    // TODO participant in endpoint is not set yet
+    @PostMapping("/update_participant/{participant.getUserId}")
     public String updateParticipant(@RequestParam(name="participant_ID") String id, @RequestParam(name="participant_password") String password,
                                     @RequestParam(name="name") String name, @RequestParam(name="position") String position,
-                                    HttpServletRequest request, Model model){
+                                    @PathVariable("participant.getUserId") String formerUserId, HttpServletRequest request, Model model){
 
         ExceptionHandler handler = new ExceptionHandler();
 
@@ -72,16 +117,9 @@ public class ParticipantController {
             return "redirect:/project/" + project.getTitle() + "/" + inputException;
         }
 
-        // TODO Hvor er denne updated participant?
-        Participant participant = (Participant) session.getAttribute("participant_updated");
+        session.setAttribute("current_participant", userEditor.updateParticipant(id, password, name, position, formerUserId));
 
-        if (participant == null) {
-            //userEditor.updateParticipant(id, name, position, formerName);
-        }
-        //session.setAttribute("participant_updated", userEditor.updateParticipant(id, password, name, position, department));
-        String pName = participant.getName();
-
-        return "redirect:/update_participant/" + pName;
+        return "redirect://project_page/" + project.getTitle() + "/" + ((Participant)session.getAttribute("current_participant")).getName();
 
     }
 
