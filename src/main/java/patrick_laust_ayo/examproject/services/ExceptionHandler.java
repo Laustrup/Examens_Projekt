@@ -144,7 +144,6 @@ public class ExceptionHandler {
         return false;
     }
 
-
     // Checks if input is too long and writes a message as return, if input is allowed, it returns "Input is allowed"
     public String isLengthAllowedInDatabase(String input)  {
 
@@ -195,27 +194,37 @@ public class ExceptionHandler {
 
     // Two methods for insure ', " and \ doesn't create an error
     public String stringInputToDbInsure(String input) {
-        if (input.endsWith("\"") || input.endsWith("'") || input.endsWith("\\")) {
-            input = createNewInput(0,input.length()-1,input) + "\\" + input.charAt(input.length());
-        }
-        if (input.startsWith("\"") || input.startsWith("'") || input.startsWith("\\\\")) {
-            input = "\\" + input;
+        if (input.contains("\"") || input.contains("'") || input.contains("\\")) {
+            String stringToEscape = new String();
+            if (input.contains("\"")) {
+                stringToEscape = "\"";
+            }
+            else if (input.contains("'")) {
+                stringToEscape = "'";
+            }
+            else if (input.contains("\\")) {
+                stringToEscape = "\\";
+            }
+            input = createNewInput(0,input.indexOf(stringToEscape)-1,input)
+                    + "\\" + createNewInput(input.indexOf(stringToEscape),input.length(),input);
         }
         return input;
     }
-    //TODO not updated with \s
     public String stringInputFromDbInsure(String input) {
 
-        String Д = "Д";
-
-        if (input.startsWith(Д) && input.endsWith(Д)) {
-            input = createNewInput(1,input.length()-1,input);
-        }
-        else if (input.startsWith(Д) && !(input.endsWith(Д))) {
-            input = createNewInput(1,input.length(),input);
-        }
-        else if (input.endsWith(Д) && !(input.startsWith(Д))) {
-            input = createNewInput(0,input.length()-1,input);
+        if (input.contains("\\\"") || input.contains("\\'") || input.contains("\\\\")) {
+            String stringToEscape = new String();
+            if (input.contains("\\\"")) {
+                stringToEscape = "\\\"";
+            }
+            else if (input.contains("\\'")) {
+                stringToEscape = "\\'";
+            }
+            else if (input.contains("\\\\")) {
+                stringToEscape = "\\\\";
+            }
+            input = createNewInput(0,input.indexOf(stringToEscape)-1,input)
+                    + createNewInput(input.indexOf(stringToEscape),input.length(),input);
         }
 
         return input;
