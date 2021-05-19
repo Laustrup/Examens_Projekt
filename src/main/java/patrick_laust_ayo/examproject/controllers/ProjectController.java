@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
+import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
@@ -23,6 +24,7 @@ public class ProjectController {
     private ProjectCreator projectCreator = new ProjectCreator();
     private ProjectEditor projectEditor = new ProjectEditor();
     private ExceptionHandler exceptionHandler = new ExceptionHandler();
+
 
     @GetMapping("/create_project/{projectManager.getUsername}")
     public String renderCreateProject(Model model, HttpServletRequest request) {
@@ -52,6 +54,7 @@ public class ProjectController {
         String username = (String) session.getAttribute("username");
 
         session.setAttribute("project", projectCreator.createProject(title, username));
+        session.setAttribute("projectTitle", title);
 
         return "project_page.html";
 
@@ -64,6 +67,7 @@ public class ProjectController {
 
         model.addAttribute("project",projectRepository.findProject(title));
         model.addAttribute("participant",session.getAttribute("current_participant"));
+
 
         return "redirect:/project_page/" + title + "/" + ((Participant) session.getAttribute("current_participant")).getName();
     }

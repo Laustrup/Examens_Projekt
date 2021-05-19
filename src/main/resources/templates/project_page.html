@@ -1,10 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{static.styles/project_page.css}">
+    <title th:text="${session.projectTitle}">Project</title>
 </head>
 <body>
+<div class="left">
+    <div class="participant" th:replace="fragments/participant.html">
+    </div>
+
+    <div class="options">
+
+    </div>
+</div>
+
+
+    <div class="gannt">
+
+    </div>
 
 </body>
 </html>
