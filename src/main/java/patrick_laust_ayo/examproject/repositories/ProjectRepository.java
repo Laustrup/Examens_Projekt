@@ -259,6 +259,30 @@ public class ProjectRepository extends Repository{
         return listOfPhases;
     }
 
+    public ArrayList<Project> getProjets(String userId) {
+        ArrayList<Project> projects = new ArrayList<>();
+        ResultSet res = executeQuery("SELECT * project" +
+                                        "INNER JOIN participant_project ON participant_project.project_id = project.project_id " +
+                                        "INNER JOIN participant ON participant.participant_id = participant_project.participant_id " +
+                                        "WHERE participant.user_id = " + userId + ";");
+        int currentProjectId;
+        int formerProjectId = 1;
+
+        try {
+            while (res.next()) {
+                currentProjectId = res.getInt("project_id");
+                if (currentProjectId > formerProjectId) {
+                    projects.add(findProject(res.getString("title")));
+                }
+                formerProjectId = res.getInt("project_id");
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't gather projects...\n" + e.getMessage());
+        }
+        return projects;
+    }
+
     public void updateProject(Project project,String formerTitle) {
         executeSQLStatement("UPDATE project " +
                 "SET title = '" + project.getTitle() + "', " +
