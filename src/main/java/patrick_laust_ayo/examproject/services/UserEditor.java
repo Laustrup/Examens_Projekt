@@ -8,6 +8,8 @@ import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 
+import java.sql.ResultSet;
+
 public class UserEditor {
 
     private ParticipantRepository participantRepo = new ParticipantRepository();
@@ -20,24 +22,47 @@ public class UserEditor {
         participantRepo.updateParticipant(id, name, password, position, formerUserId);
 
         // Makes sure that it's the real participant from db that is being returned
-        participant = participantRepo.findParticipant(formerUserId);
+        ResultSet res = participantRepo.findParticipant(formerUserId);
+        try {
+            res.next();
 
+            Department department = new Department(res.getInt("department_no"),
+                    res.getString("location"), res.getString("department_name"));
+            participant = new Participant(res.getString("user_id"), res.getString("participant_password"),
+                    res.getString("participant_name"), res.getString("position"),
+                    department);
+        } catch (Exception e) {
+            System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
+            participant = null;
+            e.printStackTrace();
+        }
         return participant;
     }
 
     public ProjectManager updateProjectmanager(String username, String password, String formerUsername) {
 
-        projectManager = new ProjectManager(username, password);
-
-        projectManagerRepo.updateProjectManager(projectManager, username, password, formerUsername);
-        // Makes sure that it's the real projectmanager from db that is being returned
-        projectManager = projectManagerRepo.findProjectManager(username);
-
-        return projectManager;
+        projectManagerRepo.updateProjectManager(username, password, formerUsername);
+        UserCreator userCreator = new UserCreator();
+        return userCreator.getProjectManager(username);
     }
 
     public Participant removeParticipant(String userId) {
-        participant = participantRepo.findParticipant(userId);
+        ResultSet res = participantRepo.findParticipant(userId);
+
+        try {
+            res.next();
+
+            Department department = new Department(res.getInt("department_no"),
+                    res.getString("location"), res.getString("department_name"));
+            participant = new Participant(res.getString("user_id"), res.getString("participant_password"),
+                    res.getString("participant_name"), res.getString("position"),
+                    department);
+        } catch (Exception e) {
+            System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
+            participant = null;
+            e.printStackTrace();
+        }
+
         participantRepo.removeParticipant(participant.getId());
 
         return participant;

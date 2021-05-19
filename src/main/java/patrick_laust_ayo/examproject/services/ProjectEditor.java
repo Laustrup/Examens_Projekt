@@ -16,9 +16,9 @@ public class ProjectEditor {
 
         repo.updateProject(project,formerTitle);
         // Makes sure that it's the real participant from db that is being returned
-        project = repo.findProject(title);
+        ProjectCreator projectCreator = new ProjectCreator();
 
-        return project;
+        return projectCreator.getProject(title);
     }
 
 }

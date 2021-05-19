@@ -1,22 +1,19 @@
 package patrick_laust_ayo.examproject.repositories;
 
-import patrick_laust_ayo.examproject.models.Department;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class DepartmentRepository extends Repository {
 
-    private Department department;
-
+    /*
     public void putDepartmentInDatabase(Department departmentToInsert){
         executeSQLStatement("INSERT INTO department VALUES(\"" + departmentToInsert.getDepartmentNo() +
                 "\", \"" + departmentToInsert.getLocation()
                 + "\"," + departmentToInsert.getDepName() + ");");
     }
 
+     */
+
+    /*
     public Department putDepartmentInDatabaseWithReturn(Department departmentToInsert){
         executeSQLStatement("INSERT INTO department VALUES(\"" + departmentToInsert.getDepartmentNo() + "\", \"" +
                 departmentToInsert.getLocation() + "\"," + departmentToInsert.getDepName() + ");");
@@ -35,19 +32,9 @@ public class DepartmentRepository extends Repository {
         return department;
     }
 
-    public Department findDepartment(String depName){
-        ResultSet res = executeQuery("SELECT * FROM department WHERE department_name = '" + depName + "';");
+     */
 
-        Department departmentByName = null;
-
-        try{
-            res.next();
-            departmentByName = new Department(res.getInt(1), res.getString(2), res.getString(3));
-        }
-        catch(Exception e){
-            System.out.println("Couldn't find department by name " + e.getMessage());
-        }
-        closeCurrentConnection();
-        return departmentByName;
+    public ResultSet findDepartment(String depName){
+        return executeQuery("SELECT * FROM department WHERE department_name = '" + depName + "';");
     }
 }

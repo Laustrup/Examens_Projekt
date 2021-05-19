@@ -9,8 +9,10 @@ import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
+import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
+import patrick_laust_ayo.examproject.services.ProjectCreator;
 import patrick_laust_ayo.examproject.services.UserCreator;
 import patrick_laust_ayo.examproject.services.UserEditor;
 
@@ -33,19 +35,18 @@ public class ParticipantController {
         return "participant_join_projcet.html";
     }
 
-    @PostMapping("/login_through_{project.getTitle}")
-    public String joinProject(@RequestParam(name="participant_ID") String id,
-                              @RequestParam(name="password") String password,
-                              @RequestParam(name="project_title") String projectTitle, Model model) {
+    @PostMapping("/join_{project.getTitle}")
+    public String joinProject(@PathVariable(name="project.getTitle") String projectTitle,
+                              @RequestParam(name="participant_ID") String id,
+                              @RequestParam(name="password") String password, Model model) {
 
         ExceptionHandler handler = new ExceptionHandler();
-        ProjectRepository repo = new ProjectRepository();
+        ProjectRepository projectRepo = new ProjectRepository();
+        ProjectCreator projectCreator = new ProjectCreator();
 
         if (handler.allowLogin(password)) {
-            Project project = repo.findProject(projectTitle);
-
-            // TODO
-            return "/" ;
+            projectRepo.addParticipantToProject(userCreator.getParticipant(id),projectCreator.getProject(projectTitle));
+            return "/" + projectTitle + "/" + userCreator.getParticipant(id);
         }
         else {
             model.addAttribute("Exception","Wrong password!");
@@ -53,19 +54,16 @@ public class ParticipantController {
         }
     }
 
-    @PostMapping("/{project.getTitle()}/create_participant")
+    @PostMapping("/{project.getTitle()}/add_participant")
     public String addParticipantsToProject(@PathVariable("{project.getTitle()}") String projectTitle,
                                                 @RequestParam(name = "department_name") String departmentName,
                                                 @RequestParam(name = "amount") int amount, HttpServletRequest request) {
 
-        DepartmentRepository repo = new DepartmentRepository();
-        Department department = repo.findDepartment(departmentName);
+        HttpSession session = request.getSession();
 
         for (int i = 0; i < amount; i++) {
             userCreator.createParticipant(projectTitle,departmentName);
         }
-
-        HttpSession session = request.getSession();
 
         // TODO Perhaps key is for wrong participant...
         Participant participant = (Participant) session.getAttribute("participant");

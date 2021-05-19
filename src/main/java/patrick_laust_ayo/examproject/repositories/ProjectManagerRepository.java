@@ -1,29 +1,20 @@
 package patrick_laust_ayo.examproject.repositories;
 
-import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.ProjectManager;
-
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class ProjectManagerRepository extends Repository {
-
-    private ProjectManager projectmanager;
-
-    // -1 for if value is unchanged
-    private int currentId = -1;
 
     public void putProjectManagerInDatabase(ProjectManager projectManager){
         executeSQLStatement("INSERT INTO projectmanager VALUES (default, \"" + projectManager.getUsername()
                             + "\", \"" + projectManager.getPassword() + "\", default");
     }
 
-
+/*
     public ProjectManager putProjectManagerInDatabaseWithReturn(ProjectManager projectManager){
         executeSQLStatement("INSERT INTO projectmanager VALUES (default, \"" + projectManager.getUsername()
                 + "\", \"" + projectManager.getPassword() + "\", default");
         ResultSet res = executeQuery("SELECT * FROM projectmanager");
-
 
         try{
             projectmanager = new ProjectManager(res.getString("username"),
@@ -36,8 +27,9 @@ public class ProjectManagerRepository extends Repository {
         return projectmanager;
     }
 
-    public void updateProjectManager(ProjectManager projectmanager, String newUsername, String newPassword, String formerUsername) {
+ */
 
+    public void updateProjectManager(String newUsername, String newPassword, String formerUsername) {
         executeSQLStatement("UPDATE projectmanager " +
                 "SET projectmanager.username = '" + newUsername + "' " +
                 "WHERE projectmanager.username = '" + formerUsername + "';");
@@ -46,8 +38,8 @@ public class ProjectManagerRepository extends Repository {
                 "WHERE participant.position = 'Manager';");
     }
 
-    public ProjectManager findProjectManager(String username) {
-        ResultSet res = executeQuery("SELECT projectmanager_id, username, " +
+    public ResultSet findProjectManager(String username) {
+        return executeQuery("SELECT projectmanager_id, username, " +
                 "participant_password, " + "participant.user_id, " + "participant_name, " +
                 "position, project_id, department.department_no, location, department_name " +
                 "FROM projectmanager " +
@@ -55,29 +47,5 @@ public class ProjectManagerRepository extends Repository {
                 "INNER JOIN department " +
                 "WHERE projectmanager.username = '" + username + "' " +
                 "and participant.department_no = department.department_no;");
-
-
-        try {
-            res.next();
-
-            Department department = new Department(res.getInt("department_no"),
-                                    res.getString("location"), res.getString("department_name"));
-            projectmanager = new ProjectManager(res.getString("username"),res.getString("participant_password"),
-                                                res.getString("user_id"),res.getString("participant_name"),
-                                                res.getString("position"),department);
-
-            currentId = res.getInt("projectmanager_id");
-        }
-        catch (Exception e) {
-            System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
-            projectmanager = null;
-        }
-        closeCurrentConnection();
-        return projectmanager;
     }
-
-    public int getCurrentId() {
-            return currentId;
-    }
-
 }
