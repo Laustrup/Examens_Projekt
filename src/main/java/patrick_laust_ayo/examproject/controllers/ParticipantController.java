@@ -9,6 +9,7 @@ import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
+import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.UserCreator;
 import patrick_laust_ayo.examproject.services.UserEditor;
@@ -34,11 +35,14 @@ public class ParticipantController {
 
     @PostMapping("/login_through_{project.getTitle}")
     public String joinProject(@RequestParam(name="participant_ID") String id,
-                              @RequestParam(name="password") String password,Model model) {
+                              @RequestParam(name="password") String password,
+                              @RequestParam(name="project_title") String projectTitle, Model model) {
 
         ExceptionHandler handler = new ExceptionHandler();
+        ProjectRepository repo = new ProjectRepository();
 
         if (handler.allowLogin(password)) {
+            Project project = repo.findProject(projectTitle);
 
             return "/" ;
         }

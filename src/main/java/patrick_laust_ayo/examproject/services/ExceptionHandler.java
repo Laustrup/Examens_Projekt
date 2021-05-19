@@ -8,6 +8,9 @@ import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
 import patrick_laust_ayo.examproject.repositories.Repository;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExceptionHandler {
 
@@ -101,6 +104,31 @@ public class ExceptionHandler {
         }
         return false;
     }
+    public boolean doesParticipantExist(String participant_ID){
+        Map<String, Participant> userList = getParticipantMap();
+        return userList.containsKey(participant_ID);
+    }
+    public Map<String, Participant> getParticipantMap() {
+
+        ParticipantRepository participantRepository = new ParticipantRepository();
+        Map<String, Participant> participantMap = new HashMap<>();
+
+        try {
+            ResultSet resultSet = participantRepository.executeQuery("SELECT * FROM participant");
+
+            while (resultSet.next()) {
+                String participant_ID = resultSet.getString("user_id");
+                String username = resultSet.getString("participant_name");
+
+                Participant tempParticipant = new Participant(participant_ID, username);
+
+                participantMap.put(participant_ID, tempParticipant);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return participantMap;
+    }
 
     // Allows logins
     public boolean allowLogin(String password) {
@@ -119,6 +147,15 @@ public class ExceptionHandler {
             System.out.println("Trouble identifying ResultSet when searching user_id...\n" + e.getMessage());
         }
         return false;
+    }
+    public boolean isProjectFullybooked(Project project) {
+        for (int i = 0; i < project.getParticipants().size(); i++) {
+            Participant participant = project.getParticipants().get("Projectmember number " + i);
+            if (participant.getId() == null || participant.getPassword() == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // TODO Perhaps unmake repository as abstract?
