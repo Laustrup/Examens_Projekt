@@ -44,6 +44,7 @@ public class ParticipantController {
         if (handler.allowLogin(password)) {
             Project project = repo.findProject(projectTitle);
 
+            // TODO
             return "/" ;
         }
         else {
