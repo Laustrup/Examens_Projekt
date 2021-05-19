@@ -42,32 +42,5 @@ public class UserCreator {
         return participant;
     }
 
-    public Map<String, Participant> getParticipantMap() {
-
-        ParticipantRepository participantRepository = new ParticipantRepository();
-        Map<String, Participant> participantMap = new HashMap<>();
-
-        try {
-            ResultSet resultSet = participantRepository.executeQuery("SELECT * FROM participant");
-
-            while (resultSet.next()) {
-                String participant_ID = resultSet.getString("user_id");
-                String username = resultSet.getString("participant_name");
-
-                Participant tempParticipant = new Participant(participant_ID, username);
-
-                participantMap.put(participant_ID, tempParticipant);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return participantMap;
-    }
-
-    public boolean doesParticipantExist(String participant_ID){
-        Map<String, Participant> userList = getParticipantMap();
-        return userList.containsKey(participant_ID);
-    }
-
 }
 

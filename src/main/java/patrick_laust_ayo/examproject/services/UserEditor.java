@@ -1,9 +1,12 @@
 package patrick_laust_ayo.examproject.services;
 
+import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.Participant;
+import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
+import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 
 public class UserEditor {
 
@@ -40,13 +43,17 @@ public class UserEditor {
         return participant;
     }
 
-    public boolean isInputInteger(String input) {
-        try {
-            int parsedInput = Integer.parseInt(input);
-            return true;
+    // Returns an exception as a string, if project is booked
+    public String joinParticipantToProject(Participant participant, Project project) {
+        ProjectRepository repo = new ProjectRepository();
+        ExceptionHandler handler = new ExceptionHandler();
+
+        if (!(handler.isProjectFullybooked(project))) {
+            repo.addParticipantToProject(participant,project);
+            return (participant.getId() + " is added!");
         }
-        catch (Exception e) {
-            return false;
+        else {
+            return "Project is fully booked, projectmanager needs to add more participants of your department...";
         }
     }
 }

@@ -17,6 +17,7 @@ public class ProjectRepository extends Repository{
     private Participant participant;
     private ProjectManager projectManager;
     private Department department;
+    private int currentProjectMember = 0;
 
     // Maps
     private Map<String, Participant> mapOfParticipants = new HashMap<>();
@@ -99,6 +100,7 @@ public class ProjectRepository extends Repository{
         int projectManagerId = 0;
         int projectId = 0;
         int departmentNo = 0;
+        currentProjectMember = 0;
 
         int[] ids = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo};
 
@@ -180,15 +182,13 @@ public class ProjectRepository extends Repository{
             if (projectmanagersParticipantId == participantId) {
                 projectManager = new ProjectManager(res.getString("username"),strings[6],
                                                     strings[5],strings[3],strings[4],department);
-                if (!(mapOfParticipants.containsKey(ids[3]))) {
-                mapOfParticipants.put(String.valueOf(ids[3]),projectManager);
-                }
+                mapOfParticipants.put("Projectmember number " + currentProjectMember,projectManager);
+                currentProjectMember++;
             }
             else {
                 participant = new Participant(strings[5],strings[6],strings[3],strings[4],department);
-                if (!(mapOfParticipants.containsKey(strings[5]))) {
-                    mapOfParticipants.put(strings[5],participant);
-                }
+                mapOfParticipants.put("Projectmember number " + currentProjectMember,participant);
+                currentProjectMember++;
             }
         }
         catch (Exception e) {
@@ -259,11 +259,47 @@ public class ProjectRepository extends Repository{
         return listOfPhases;
     }
 
-    public void updateProject(Project project,String formerTitle) {
+    public ArrayList<Project> getProjets(String userId) {
+        ArrayList<Project> projects = new ArrayList<>();
+        ResultSet res = executeQuery("SELECT * project" +
+                                        "INNER JOIN participant_project ON participant_project.project_id = project.project_id " +
+                                        "INNER JOIN participant ON participant.participant_id = participant_project.participant_id " +
+                                        "WHERE participant.user_id = " + userId + ";");
+        int currentProjectId;
+        int formerProjectId = 1;
 
+        try {
+            while (res.next()) {
+                currentProjectId = res.getInt("project_id");
+                if (currentProjectId > formerProjectId) {
+                    projects.add(findProject(res.getString("title")));
+                }
+                formerProjectId = res.getInt("project_id");
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't gather projects...\n" + e.getMessage());
+        }
+        return projects;
+    }
+
+    public void updateProject(Project project,String formerTitle) {
         executeSQLStatement("UPDATE project " +
                 "SET title = '" + project.getTitle() + "', " +
                 "WHERE projectmanager_username = '" + formerTitle + "';");
+    }
+
+    // TODO Figure the sql statement to fit the project and participant
+    public void addParticipantToProject(Participant participant, Project project) {
+
+        // TODO Should projecttitle be uniq? To insure not to be added to wrong project?
+        executeSQLStatement("UPDATE participant_project " +
+                "INNER JOIN project ON participant_project.project_id = project.project_id " +
+                "INNER JOIN participant ON participant_project.participant_id = participant.participant_id " +
+                "ADD participant_id = " + findId("participant","user_id", participant.getId(), "participant_id") + ", " +
+                "ADD project_id = " + findId("project","title", project.getTitle(), "project_id") + ", " +
+                "WHERE participant.user_id = '" + participant.getId() + "'; " +
+                "DELETE ROW FROM participant WHERE project.user_id = " + null + ", WHERE participant_project.project_id = participant_project.participant_id;");
     }
 
     public void removeProject(String title) {
