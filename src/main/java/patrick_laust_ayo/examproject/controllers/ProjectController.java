@@ -42,7 +42,6 @@ public class ProjectController {
         String inputException = exceptionHandler.isLengthAllowedInDatabase(title,"title");
 
 
-
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);
             return "project_page.html";
