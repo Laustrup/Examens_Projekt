@@ -6,13 +6,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
+import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.UserCreator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 @Controller
 public class  ProjectManagerController {
@@ -87,13 +90,19 @@ public class  ProjectManagerController {
     public String renderDashboard(@PathVariable("projectManager.getUsername") String username,
                                   Model model, HttpServletRequest request) {
 
-        ProjectManagerRepository repo = new ProjectManagerRepository();
+        ProjectManagerRepository repo = new ProjectManagerRepository(); //Bruges denne ??
+        ProjectRepository pRepo = new ProjectRepository();
         ProjectManager projectManager = userCreator.getProjectManager(username);
-        model.addAttribute("projectManager",projectManager);
+
+        ArrayList<Project> projectsToRender = pRepo.getProjets(username); //vi kalder det id i metoden
+
+        model.addAttribute("projectsToRender",projectsToRender);
 
         HttpSession session = request.getSession();
         session.setAttribute("projectManager",projectManager);
         session.setAttribute("current_participant",projectManager);
+
+        //få fat i projekter tilknyttet den enkelte projektmanager
 
         return "project_manager_dashboard";
     }
