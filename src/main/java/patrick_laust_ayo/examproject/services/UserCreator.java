@@ -57,6 +57,7 @@ public class UserCreator {
         }
         catch (Exception e) {
             System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
+            e.printStackTrace();
             projectManager = null;
         }
         projectManagerRepo.closeCurrentConnection();
