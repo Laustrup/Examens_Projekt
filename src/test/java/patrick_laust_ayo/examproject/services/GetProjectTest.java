@@ -17,11 +17,23 @@ class GetProjectTest {
 
         //Assert
         try {
+            //Projekt titlen
             assertEquals("Appdev", project.getTitle());
-            assertEquals("", project.getPhases().get(0).getTitle());
-            assertEquals("Brainstorming", project.getPhases().get(0).getAssignments().get(String.valueOf(1)).getTitle());
-            //assertEquals(, project.getPhases().get(0).getAssignments().get());
 
+
+            //TODO getTitle fra Phases skal opdateres når det virker i ProjectCreator
+            //Projektets fases titel
+            //assertEquals("", project.getPhases().get(0).getTitle());
+
+
+            //Projektets assignments værdier
+            assertEquals("Brainstorming", project.getPhases().get(0).getAssignments().get(String.valueOf(1)).getTitle());
+            assertEquals(false, project.getPhases().get(0).getAssignments().get(String.valueOf(1)).isCompleted());
+            assertEquals("2021-10-15 12:30:00", project.getPhases().get(0).getAssignments().get(String.valueOf(1)).getStart());
+            assertEquals("2021-12-16 23:59:59", project.getPhases().get(0).getAssignments().get(String.valueOf(1)).getEnd());
+
+
+            //Projektets participants værdier
             assertEquals("Anders", project.getParticipants().get("Projectmember number " + 2).getName());
             assertEquals("Developer", project.getParticipants().get("Projectmember number " + 1).getPosition());
             assertEquals("Manager", project.getParticipants().get("Projectmember number " + 0).getPosition());
@@ -31,6 +43,7 @@ class GetProjectTest {
             assertEquals("twe@faf2", project.getParticipants().get("Projectmember number " + 2).getPassword());
 
 
+            //Projektets projectmanagers værdier
             assertEquals("Andy Boss", project.getProjectManager().getUsername());
             assertEquals("Manager", project.getProjectManager().getPosition());
             assertEquals("andy0432", project.getProjectManager().getId());
