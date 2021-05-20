@@ -41,16 +41,16 @@ public class  ProjectManagerController {
 
         HttpSession session = request.getSession();
 
-        username = exceptionHandler.stringInputToDbInsure(username);
-        String inputException = exceptionHandler.isLengthAllowedInDatabase(username);
+        username = exceptionHandler.secureInputToDb(username);
+        String inputException = exceptionHandler.isLengthAllowedInDatabase(username,"username");
 
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);
             return "create_projectmanager.html";
         }
 
-        password = exceptionHandler.stringInputToDbInsure(password);
-        inputException = exceptionHandler.isLengthAllowedInDatabase(password);
+        password = exceptionHandler.secureInputToDb(password);
+        inputException = exceptionHandler.isLengthAllowedInDatabase(password,"participant_password");
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);
             return "create_projectmanager.html";

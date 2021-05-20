@@ -16,15 +16,13 @@ public class Assignment {
 
     private boolean isCompleted;
 
-    private ArrayList<Participant> participants;
     private ArrayList<Task> tasks;
 
-    public Assignment(String start, String end, String title, boolean isCompleted, ArrayList<Participant> participants, ArrayList<Task> tasks) {
+    public Assignment(String start, String end, String title, boolean isCompleted, ArrayList<Task> tasks) {
         this.start = start;
         this.end = end;
         this.title = title;
         this.isCompleted = isCompleted;
-        this.participants = participants;
         this.tasks = tasks;
     }
 

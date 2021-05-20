@@ -5,11 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
-import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
-import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
@@ -18,7 +15,6 @@ import patrick_laust_ayo.examproject.services.UserEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 
 public class ParticipantController {
 
@@ -88,32 +84,32 @@ public class ParticipantController {
             return "redirect:/project/" + project.getTitle() + "/User id already exists, please write another.";
         }
 
-        id = handler.stringInputToDbInsure(id);
-        String inputException = handler.isLengthAllowedInDatabase(id);
+        id = handler.secureInputToDb(id);
+        String inputException = handler.isLengthAllowedInDatabase(id,"user_id");
 
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);
             return "redirect:/project/" + project.getTitle() + "/" + inputException;
         }
 
-        password = handler.stringInputToDbInsure(password);
-        inputException = handler.isLengthAllowedInDatabase(password);
+        password = handler.secureInputToDb(password);
+        inputException = handler.isLengthAllowedInDatabase(password,"participant_password");
 
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);
             return "redirect:/project/" + project.getTitle() + "/" + inputException;
         }
 
-        name = handler.stringInputToDbInsure(name);
-        inputException = handler.isLengthAllowedInDatabase(name);
+        name = handler.secureInputToDb(name);
+        inputException = handler.isLengthAllowedInDatabase(name,"pariticipant_name");
 
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);
             return "redirect:/project/" + project.getTitle() + "/" + inputException;
         }
 
-        position = handler.stringInputToDbInsure(position);
-        inputException = handler.isLengthAllowedInDatabase(position);
+        position = handler.secureInputToDb(position);
+        inputException = handler.isLengthAllowedInDatabase(position,"position");
 
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);

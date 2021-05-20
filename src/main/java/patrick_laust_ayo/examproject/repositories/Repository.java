@@ -23,7 +23,6 @@ public abstract class Repository {
             e.printStackTrace();
             return null;
         }
-
     }
 
     protected void executeSQLStatement(String sql) {
