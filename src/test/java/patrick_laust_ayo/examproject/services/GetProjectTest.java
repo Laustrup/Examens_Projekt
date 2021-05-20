@@ -34,13 +34,13 @@ class GetProjectTest {
 
 
             //Projektets participants værdier
-            assertEquals("Anders", project.getParticipants().get("Projectmember number " + 2).getName());
-            assertEquals("Developer", project.getParticipants().get("Projectmember number " + 1).getPosition());
-            assertEquals("Manager", project.getParticipants().get("Projectmember number " + 0).getPosition());
-            assertEquals("ande0137", project.getParticipants().get("Projectmember number " + 2).getId());
-            assertEquals("NEW YORK", project.getParticipants().get("Projectmember number " + 2).getDepartment().getDepName());
-            assertEquals(3, project.getParticipants().get("Projectmember number " + 2).getDepartment().getDepartmentNo());
-            assertEquals("twe@faf2", project.getParticipants().get("Projectmember number " + 2).getPassword());
+            assertEquals("Anders", project.getParticipants().get("ande0137").getName());
+            assertEquals("Developer", project.getParticipants().get("lone9242").getPosition());
+            assertEquals("Manager", project.getParticipants().get("andy0432").getPosition());
+            assertEquals("ande0137", project.getParticipants().get("ande0137").getId());
+            assertEquals("NEW YORK", project.getParticipants().get("ande0137").getDepartment().getDepName());
+            assertEquals(3, project.getParticipants().get("ande0137").getDepartment().getDepartmentNo());
+            assertEquals("twe@faf2", project.getParticipants().get("ande0137").getPassword());
 
 
             //Projektets projectmanagers værdier

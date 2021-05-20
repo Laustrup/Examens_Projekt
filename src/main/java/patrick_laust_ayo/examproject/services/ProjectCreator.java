@@ -112,9 +112,12 @@ public class ProjectCreator {
         int departmentNo = 0;
         int currentProjectMember = 0;
         int participantId = 0;
+        int foreignParticipantId = 0;
 
-        int[] currentIds = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo,currentProjectMember,participantId};
-        int[] formerIds = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo,currentProjectMember,participantId};
+        int[] currentIds = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo,
+                            currentProjectMember,participantId,foreignParticipantId};
+        int[] formerIds = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo,
+                            currentProjectMember,participantId,foreignParticipantId};
 
         // Strings
         String dbProjectTitle = new String();
@@ -167,6 +170,7 @@ public class ProjectCreator {
 
 
                 if (res.isLast()) {
+                    objects =  updateObjects(objects,currentIds, formerIds, strings, res,workHours,isCompleted);
                     project = new Project(strings[0],(ArrayList<Phase>) objects[8],
                                         (HashMap<String, Participant>)objects[6],(ProjectManager) objects[4]);
                 }
@@ -184,9 +188,8 @@ public class ProjectCreator {
     private Object[] updateObjects(Object[] objects, int[] currentIds, int[] formerIds, String[] strings,
                                    ResultSet res, double workHours,boolean isCompleted) {
         try {
-
             // Phase
-            if (currentIds[2] > formerIds[2]) {
+            if (currentIds[2] > formerIds[2] || res.isLast()) {
                 ((Phase)objects[2]).setAssignments((Map<String,Assignment>)objects[7]);
                 objects[7] = new HashMap<String, Assignment>();
                 ((ArrayList<Phase>)objects[8]).add((Phase)objects[2]);
@@ -195,36 +198,29 @@ public class ProjectCreator {
             // Checks if participant is projectmanager
             if (currentIds[3]>formerIds[3] || currentIds[6]>formerIds[6] || res.isLast()) {
                 objects[5] = new Department(formerIds[5],strings[9],strings[10]);
-                int projectmanagersParticipantId = res.getInt("projectmanager.participant_id");
-                int participantId = res.getInt("participant.participant_id");
-
-                if (projectmanagersParticipantId == participantId) {
+                if (formerIds[6] == formerIds[7]) {
                     objects[4] = new ProjectManager(res.getString("username"),strings[6],
                             strings[5],strings[3],strings[4],(Department) objects[5]);
-                    ((Map<String, Participant>)objects[6]).put("Projectmember number " + formerIds[6],(ProjectManager) objects[4]);
+                    ((Map<String, Participant>)objects[6]).put(((ProjectManager)objects[4]).getId(),(ProjectManager) objects[4]);
                     ((ArrayList<Participant>) objects[9]).add((ProjectManager) objects[4]);
-                    formerIds[6]++;
                 }
                 else {
                     objects[3] = new Participant(strings[5],strings[6],strings[3],strings[4],(Department) objects[5]);
-                    ((Map<String, Participant>)objects[6]).put("Projectmember number " + formerIds[6],(Participant) objects[3]);
+                    ((Map<String, Participant>)objects[6]).put(((Participant) objects[3]).getId(),(Participant) objects[3]);
                     ((ArrayList<Participant>) objects[9]).add((Participant) objects[3]);
-                    formerIds[6]++;
                 }
 
                 // Assignment
-                if (currentIds[1]>formerIds[1]) {
+                if (currentIds[1]>formerIds[1] || res.isLast()) {
                     objects[1] = new Assignment(strings[7],strings[8],strings[1],isCompleted,(ArrayList<Task>) objects[10]);
                     ((HashMap<String, Assignment>)objects[7]).put(String.valueOf(formerIds[1]),(Assignment) objects[1]);
                 }
 
                 // Task
-                if (currentIds[0]>formerIds[0]){
+                if (currentIds[0]>formerIds[0] || res.isLast()){
                     objects[0] = new Task(workHours,(ArrayList<Participant>) objects[9]);
                 }
-
             }
-
         }
         catch (Exception e) {
             System.out.println("Couldn't update objects...\n" + e.getMessage());
@@ -239,7 +235,8 @@ public class ProjectCreator {
             ids[3] = res.getInt("projectmanager_id");
             ids[4] = res.getInt("project_id");
             ids[5] = res.getInt("department_no");
-            ids[6] = res.getInt("participant_id");
+            ids[6] = res.getInt("participant.participant_id");
+            ids[7] = res.getInt("projectmanager.participant_id");
         }
         catch (Exception e) {
             System.out.println("Couldn't update Ids...\n" + e.getMessage());
