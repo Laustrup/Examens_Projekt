@@ -9,13 +9,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class ExceptionHandlerTest {
 
     private ExceptionHandler handler = new ExceptionHandler();
-/*
+
+    /*
     @ParameterizedTest
     @CsvSource(value = {"ge\"rt0394|ge\\\"rt0394","\"iver423|\\\"iver423", "frn934\"|frn934\\\"", "\"sf\"4235\"|\\\"sf\\\"4235\\\"",
                         "ge'rt0394|ge\\'rt0394","'iver423|\\'iver423", "frn934'|frn934\\'", "'sf'4235'|\\'sf\\'4235\\'",
                         "ge\\rt0394|ge\\\\rt0394","\\iver423|\\\\iver423", "frn934\\|frn934\\\\", "\\sf\\4235\\|\\\\sf\\\\4235\\\\"}
                         ,delimiter = '|')
-
     public void secureInputToDbTest(String input,String expected) {
         // Arrange
         // Act
@@ -23,7 +23,9 @@ class ExceptionHandlerTest {
         // Assert
         assertEquals(expected,input);
     }
-*/
+
+     */
+
     // TODO seems to work, perhaps further parameter for titles
     @ParameterizedTest
     @CsvSource(value = {"afdasg12421456ds|user_id|ID is too long... Write less than 15 words!", "afd12421456ds|user_id|Input is allowed",
@@ -37,6 +39,7 @@ class ExceptionHandlerTest {
         assertEquals(expected,actual);
     }
 
+    // TODO Perhaps make a project that isn't full?
     @ParameterizedTest
     @CsvSource(value = {"Appdev|true"},delimiter = '|')
     public void isProjectFullybookedTest(String projectTitle, boolean expected) {
@@ -49,5 +52,9 @@ class ExceptionHandlerTest {
         // Assert
         assertEquals(expected,actual);
     }
+
+    @ParameterizedTest
+    @CsvSource(value = {"Appdev|true"},delimiter = '|')
+    public void doesProjectExistTest()
 
 }
