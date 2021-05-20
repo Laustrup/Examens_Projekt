@@ -63,7 +63,8 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN participant " +
                 "INNER JOIN department " +
                 "INNER JOIN projectmanager " +
-                "WHERE project.title = '" + projectTitle +  "';");
+                "WHERE project.title = '" + projectTitle +  "'" +
+                "and participant.department_no = department.department_no;");
 
     }
 

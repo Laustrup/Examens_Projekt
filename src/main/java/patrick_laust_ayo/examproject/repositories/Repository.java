@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 public abstract class Repository {
 
     private DatabaseConnection databaseConnection = new DatabaseConnection();
-    private Connection connection;
+    private Connection connection = databaseConnection.getConnection();
 
     // Methods made to perform try and catch and as well to be used multiple times
     public ResultSet executeQuery(String sql) {
@@ -45,6 +45,7 @@ public abstract class Repository {
         }
         catch (Exception e) {
             System.out.println("Couldn't close connection...\n" + e.getMessage());
+            e.printStackTrace();
         }
     }
 

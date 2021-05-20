@@ -26,11 +26,15 @@ public class ProjectCreator {
         project = new Project(title, new ArrayList<>(), new HashMap<>(), userCreator.getProjectManager(managerName));
         projectManagerRepo.closeCurrentConnection();
         try {
-            projectRepo.putProjectInDatabase(project,
-                    projectManagerRepo.findProjectManager(managerName).getInt("projectmanager_id"));
+            ResultSet res = projectManagerRepo.findProjectManager(managerName);
+            res.next();
+
+            projectRepo.putProjectInDatabase(project, res.getInt("projectmanager_id"));
+                //    projectManagerRepo.findProjectManager(managerName).getInt("projectmanager_id"));
         }
         catch (Exception e) {
             System.out.println("Couldn't put project in database...\n" + e.getMessage());
+            e.printStackTrace();
         }
         projectManagerRepo.closeCurrentConnection();
         return project;
@@ -139,6 +143,7 @@ public class ProjectCreator {
         }
         catch (Exception e) {
             System.out.println("Couldn't create project...\n" + e.getMessage());
+            e.printStackTrace();
             project = null;
         }
         projectRepo.closeCurrentConnection();
