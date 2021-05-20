@@ -105,8 +105,10 @@ public class ProjectCreator {
         int projectId = 0;
         int departmentNo = 0;
         int currentProjectMember = 0;
+        int formerAssignmentId = 0;
+        int formerPhaseId = 0;
 
-        int[] ids = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo,currentProjectMember};
+        int[] ids = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo,currentProjectMember,formerAssignmentId,formerPhaseId};
 
         // Strings
         String dbProjectTitle = new String();
@@ -131,12 +133,27 @@ public class ProjectCreator {
         boolean isCompleted = false;
         double workHours = 0;
 
+        String formerPhaseTitle = new String();
+
         try {
             while (res.next()) {
-                objects = updateObjects(objects, ids, strings, isCompleted, workHours,
-                                        listOfParticipants, listOfTasks, res,
-                                        (Map<String,Assignment>) objects[7],(Map<String, Participant>) objects[6]);
-                listOfPhases = addTolistOfPhases(ids,strings,listOfPhases,(Map<String,Assignment>) objects[7], objects);
+                    objects = updateObjects(objects, ids, strings, isCompleted, workHours,
+                            listOfParticipants, listOfTasks, res,
+                            (Map<String, Assignment>) objects[7], (Map<String, Participant>) objects[6]);
+                    listOfPhases = addTolistOfPhases(ids, formerPhaseTitle, listOfPhases, (Map<String, Assignment>) objects[7], objects);
+
+                ids[7] = ids[1];
+                ids[8] = ids[2];
+                formerPhaseTitle = res.getString("phase_title");
+                /*
+                if (res.isLast() && res.isFirst()) {
+                    mapOfAssignments.put(String.valueOf(ids[1]),(Assignment) objects[1]);
+                    objects[7] = mapOfAssignments;
+                    System.out.println(String.valueOf(ids[1]));
+                }
+
+                 */
+
                 // Constructs project
                 if (res.isLast()) {
                     project = new Project(strings[0],listOfPhases,mapOfParticipants, (ProjectManager) objects[4]);
@@ -167,10 +184,14 @@ public class ProjectCreator {
             // Puts values into objects
             objects[0] = new Task(workHours,listOfParticipants);
             objects[1] = new Assignment(strings[7],strings[8],strings[1],isCompleted,listOfTasks);
-            // TODO Should maps put every time?
-            mapOfAssignments.put(String.valueOf(ids[1]),(Assignment) objects[1]);
-            objects[7] = mapOfAssignments;
-            System.out.println(mapOfAssignments.get(String.valueOf(ids[1])));
+
+
+            if (ids[1]>ids[7]) {
+                mapOfAssignments.put(String.valueOf(ids[1]),(Assignment) objects[1]);
+                objects[7] = mapOfAssignments;
+                System.out.println("Current assignmentId(Ids[1]) is greater than previous assignmentId (ids[7])");
+                System.out.println(mapOfAssignments.get("1").getTitle());
+            }
 
             objects[5] = new Department(ids[5],strings[9],strings[10]);
 
@@ -237,12 +258,14 @@ public class ProjectCreator {
         }
         return strings;
     }
-    private ArrayList<Phase> addTolistOfPhases(int[] ids, String[] strings, ArrayList<Phase> listOfPhases,Map<String,Assignment> mapOfAssignments, Object[] objects) {
+    private ArrayList<Phase> addTolistOfPhases(int[] ids, String formerPhaseTitle, ArrayList<Phase> listOfPhases,Map<String,Assignment> mapOfAssignments, Object[] objects) {
         try {
             // Phase
-            if (ids[2] > ids[5]) {
-                listOfPhases.add(new Phase(strings[2],mapOfAssignments));
-                objects[7] = new HashMap<>();
+            if (ids[2] > ids[8]) {
+                ((Phase)objects[2]).setAssignments((Map<String,Assignment>)objects[7]);
+                objects[7] = new HashMap<String, Assignment>();
+                listOfPhases.add((Phase)objects[2]);
+                System.out.println("Current phaseId is greater than previous phaseId " + listOfPhases.get(0).getTitle());
             }
         }
         catch (Exception e) {
