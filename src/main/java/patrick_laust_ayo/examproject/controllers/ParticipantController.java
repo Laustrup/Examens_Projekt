@@ -84,7 +84,6 @@ public class ParticipantController {
             return "redirect:/project/" + project.getTitle() + "/User id already exists, please write another.";
         }
 
-        id = handler.secureInputToDb(id);
         String inputException = handler.isLengthAllowedInDatabase(id,"user_id");
 
         if (!(inputException.equals("Input is allowed"))) {
@@ -92,7 +91,6 @@ public class ParticipantController {
             return "redirect:/project/" + project.getTitle() + "/" + inputException;
         }
 
-        password = handler.secureInputToDb(password);
         inputException = handler.isLengthAllowedInDatabase(password,"participant_password");
 
         if (!(inputException.equals("Input is allowed"))) {
@@ -100,7 +98,6 @@ public class ParticipantController {
             return "redirect:/project/" + project.getTitle() + "/" + inputException;
         }
 
-        name = handler.secureInputToDb(name);
         inputException = handler.isLengthAllowedInDatabase(name,"pariticipant_name");
 
         if (!(inputException.equals("Input is allowed"))) {
@@ -108,7 +105,6 @@ public class ParticipantController {
             return "redirect:/project/" + project.getTitle() + "/" + inputException;
         }
 
-        position = handler.secureInputToDb(position);
         inputException = handler.isLengthAllowedInDatabase(position,"position");
 
         if (!(inputException.equals("Input is allowed"))) {

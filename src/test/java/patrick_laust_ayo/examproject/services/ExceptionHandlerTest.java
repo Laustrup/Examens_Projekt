@@ -54,7 +54,49 @@ class ExceptionHandlerTest {
     }
 
     @ParameterizedTest
-    @CsvSource(value = {"Appdev|true"},delimiter = '|')
-    public void doesProjectExistTest()
+    @CsvSource(value = {"Appdev|true","Saledev|false"},delimiter = '|')
+    public void doesProjectExistTest(String title,boolean expected) {
+        // Arrange
+
+        // Act
+        boolean actual = handler.doesProjectExist(title);
+        // Assert
+        assertEquals(expected,actual);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"lone9242|true","dafs1241as|false"},delimiter = '|')
+    public void doesUserIdExistTest(String userId,boolean expected) {
+        // Arrange
+
+        // Act
+        boolean actual = handler.doesUserIdExist(userId);
+        // Assert
+        assertEquals(expected,actual);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"Andy Boss|true","Gert Jensen|false"},delimiter = '|')
+    public void doesProjectManagerUsernameExistTest(String userName,boolean expected) {
+        // Arrange
+
+        // Act
+        boolean actual = handler.doesProjectManagerUsernameExist(userName);
+        // Assert
+        assertEquals(expected,actual);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"qscqsc*21|true","sfdafv31½23|false"},delimiter = '|')
+    public void allowLoginTest(String password,boolean expected) {
+        // Arrange
+
+        // Act
+        boolean actual = handler.allowLogin(password);
+        // Assert
+        assertEquals(expected,actual);
+    }
+
+
 
 }
