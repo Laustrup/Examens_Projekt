@@ -69,7 +69,7 @@ public class ProjectRepository extends Repository{
     }
 
     // TODO Not done, when used logic should be moved to service
-    public ArrayList<Project> getProjets(String userId) {
+    public ArrayList<Project> getProjects(String userId) {
         ArrayList<Project> projects = new ArrayList<>();
         ResultSet res = executeQuery("SELECT * project" +
                                         "INNER JOIN participant_project ON participant_project.project_id = project.project_id " +

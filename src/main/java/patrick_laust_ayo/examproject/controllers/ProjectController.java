@@ -41,7 +41,7 @@ public class ProjectController {
 
         String inputException = exceptionHandler.isLengthAllowedInDatabase(title,"title");
 
-        title = exceptionHandler.secureInputToDb(title);
+
 
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);

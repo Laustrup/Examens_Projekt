@@ -49,4 +49,12 @@ public class Assignment {
     public void setCompleted(boolean completed) {
         isCompleted = completed;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

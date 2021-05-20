@@ -54,6 +54,10 @@ public class Project {
         return participants;
     }
 
+    public ArrayList<Phase> getPhases (){
+        return phases;
+    }
+
     public void setParticipants(Map<String, Participant> participants) {
         this.participants = participants;
     }
