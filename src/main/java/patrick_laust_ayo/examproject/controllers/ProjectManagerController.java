@@ -23,9 +23,9 @@ public class  ProjectManagerController {
     private UserCreator userCreator = new UserCreator();
     private ExceptionHandler exceptionHandler = new ExceptionHandler();
 
-    @GetMapping("/create_projectmanager")
+    @GetMapping("/create_new_projectmanager")
     public String renderCreateProjectManager(){
-        return "create_projectmanager";
+        return "create_projectmanager.html";
     }
 
     @PostMapping("/create_projectmanager")

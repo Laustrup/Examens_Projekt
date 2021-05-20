@@ -97,6 +97,4 @@ class ExceptionHandlerTest {
         assertEquals(expected,actual);
     }
 
-
-
 }
