@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" th:href="@{static.styles/project_page.css}">
 </head>
 <body>
 <section class="current_projects">
 
-
         <div class="select_cur_project">
-
             <div class="department_section">
             <label for="department">Department</label>
             <input type="text" id="department" name="department" placeholder="Department" required>
