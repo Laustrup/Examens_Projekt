@@ -41,7 +41,6 @@ public class  ProjectManagerController {
 
         HttpSession session = request.getSession();
 
-        username = exceptionHandler.secureInputToDb(username);
         String inputException = exceptionHandler.isLengthAllowedInDatabase(username,"username");
 
         if (!(inputException.equals("Input is allowed"))) {
@@ -49,7 +48,6 @@ public class  ProjectManagerController {
             return "create_projectmanager.html";
         }
 
-        password = exceptionHandler.secureInputToDb(password);
         inputException = exceptionHandler.isLengthAllowedInDatabase(password,"participant_password");
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);
@@ -94,7 +92,7 @@ public class  ProjectManagerController {
         ProjectRepository pRepo = new ProjectRepository();
         ProjectManager projectManager = userCreator.getProjectManager(username);
 
-        ArrayList<Project> projectsToRender = pRepo.getProjets(username); //vi kalder det id i metoden
+        ArrayList<Project> projectsToRender = pRepo.getProjects(username); //vi kalder det id i metoden
 
         model.addAttribute("projectsToRender",projectsToRender);
 

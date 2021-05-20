@@ -3,7 +3,6 @@ package patrick_laust_ayo.examproject.services;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
-import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
 import patrick_laust_ayo.examproject.repositories.Repository;
 import java.sql.ResultSet;
@@ -59,10 +58,7 @@ public class ExceptionHandler {
 
     // Methods checks if objects or attributes exists
     public boolean doesProjectExist(String title){
-
-        ProjectRepository repo = new ProjectRepository();
-
-        if (repo.findProject(title) == null) {
+        if (new ProjectCreator().getProject(title) == null) {
             return false;
         }
         else {

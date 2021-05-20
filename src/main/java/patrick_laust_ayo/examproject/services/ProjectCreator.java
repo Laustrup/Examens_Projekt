@@ -136,7 +136,7 @@ public class ProjectCreator {
                 objects = updateObjects(objects, ids, strings, isCompleted, workHours,
                                         listOfParticipants, listOfTasks, res,
                                         (Map<String,Assignment>) objects[7],(Map<String, Participant>) objects[6]);
-                listOfPhases = addTolistOfPhases(ids,strings,listOfPhases,(Map<String,Assignment>) objects[7]);
+                listOfPhases = addTolistOfPhases(ids,strings,listOfPhases,(Map<String,Assignment>) objects[7], objects);
                 // Constructs project
                 if (res.isLast()) {
                     project = new Project(strings[0],listOfPhases,mapOfParticipants, (ProjectManager) objects[4]);
@@ -170,6 +170,7 @@ public class ProjectCreator {
             // TODO Should maps put every time?
             mapOfAssignments.put(String.valueOf(ids[1]),(Assignment) objects[1]);
             objects[7] = mapOfAssignments;
+            System.out.println(mapOfAssignments.get(String.valueOf(ids[1])));
 
             objects[5] = new Department(ids[5],strings[9],strings[10]);
 
@@ -236,12 +237,12 @@ public class ProjectCreator {
         }
         return strings;
     }
-    private ArrayList<Phase> addTolistOfPhases(int[] ids, String[] strings, ArrayList<Phase> listOfPhases,Map<String,Assignment> mapOfAssignments) {
+    private ArrayList<Phase> addTolistOfPhases(int[] ids, String[] strings, ArrayList<Phase> listOfPhases,Map<String,Assignment> mapOfAssignments, Object[] objects) {
         try {
             // Phase
             if (ids[2] > ids[5]) {
                 listOfPhases.add(new Phase(strings[2],mapOfAssignments));
-                mapOfAssignments = new HashMap<>();
+                objects[7] = new HashMap<>();
             }
         }
         catch (Exception e) {
