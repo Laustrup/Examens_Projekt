@@ -104,7 +104,6 @@ public class ProjectRepository extends Repository{
 
     // TODO Figure the sql statement to fit the project and participant
     public void addParticipantToProject(Participant participant, Project project) {
-
         // TODO Should projecttitle be uniq? To insure not to be added to wrong project?
         executeSQLStatement("UPDATE participant_project " +
                 "INNER JOIN project ON participant_project.project_id = project.project_id " +

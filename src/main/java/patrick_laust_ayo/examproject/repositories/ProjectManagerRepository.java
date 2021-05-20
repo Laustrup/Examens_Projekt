@@ -1,13 +1,22 @@
 package patrick_laust_ayo.examproject.repositories;
 
+import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.ProjectManager;
+import patrick_laust_ayo.examproject.services.UserCreator;
+
 import java.sql.ResultSet;
 
 public class ProjectManagerRepository extends Repository {
 
     public void putProjectManagerInDatabase(ProjectManager projectManager){
-        executeSQLStatement("INSERT INTO projectmanager VALUES (default, \"" + projectManager.getUsername()
-                            + "\", \"" + projectManager.getPassword() + "\", default");
+        try {
+            executeSQLStatement("INSERT INTO projectmanager(username,participant_id) VALUES ('" + projectManager.getUsername()
+                    + "', " + new ParticipantRepository().findParticipant(projectManager.getId()).getInt("participant_id") + ");");
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't put projectmanager in database..\n" + e.getMessage());
+        }
+
     }
 
 /*
