@@ -22,8 +22,11 @@ class GetProjectTest {
 
 
             //TODO getTitle fra Phases skal opdateres når det virker i ProjectCreator
+            //Projektets fases titel
+            //assertEquals("", project.getPhases().get(0).getTitle());
+
+
             //Projektets assignments værdier
-          //  assertEquals("", project.getPhases().get(0).getTitle());
             assertEquals("Brainstorming", project.getPhases().get(0).getAssignments().get(String.valueOf(1)).getTitle());
             assertEquals(false, project.getPhases().get(0).getAssignments().get(String.valueOf(1)).isCompleted());
             assertEquals("2021-10-15 12:30:00", project.getPhases().get(0).getAssignments().get(String.valueOf(1)).getStart());
