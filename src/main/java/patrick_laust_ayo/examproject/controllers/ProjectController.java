@@ -3,13 +3,16 @@ package patrick_laust_ayo.examproject.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.Participant;
+import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
 import patrick_laust_ayo.examproject.services.ProjectEditor;
+import patrick_laust_ayo.examproject.services.UserCreator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,7 +22,7 @@ public class ProjectController {
 
     private ProjectCreator projectCreator = new ProjectCreator();
     private ProjectEditor projectEditor = new ProjectEditor();
-    private ExceptionHandler exceptionHandler = new ExceptionHandler();
+    private ExceptionHandler handler = new ExceptionHandler();
 
 
     @GetMapping("/create_project/{projectManager.getUsername}")
@@ -35,15 +38,19 @@ public class ProjectController {
     }
 
     @PostMapping("/create-project")
-    public String createProject(@RequestParam(name = "title") String title, HttpServletRequest request,Model model) {
+    public String createProject(@RequestParam(name = "title") String title, @RequestParam(name = "username") String userName,
+                                HttpServletRequest request,Model model) {
 
         HttpSession session = request.getSession();
 
-        String inputException = exceptionHandler.isLengthAllowedInDatabase(title,"title");
-
+        String inputException = handler.isLengthAllowedInDatabase(title,"title");
 
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);
+            return "project_page.html";
+        }
+        if (handler.doesProjectExist(title)) {
+            model.addAttribute("Exception","Project already exists...");
             return "project_page.html";
         }
         String username = (String) session.getAttribute("username");
@@ -51,7 +58,9 @@ public class ProjectController {
         session.setAttribute("project", projectCreator.createProject(title, username));
         session.setAttribute("projectTitle", title);
 
-        return "project_page.html";
+        return "redirect:/project_page/" + title + "/" +
+                ((ProjectManager) session.getAttribute("projectManager")).getName() + "/" +
+                ((ProjectManager) session.getAttribute("projectManager")).getPassword();
 
     }
 
@@ -63,15 +72,16 @@ public class ProjectController {
         model.addAttribute("project",projectRepository.findProject(title));
         model.addAttribute("participant",session.getAttribute("current_participant"));
 
-
         return "redirect:/project_page/" + title + "/" + ((Participant) session.getAttribute("current_participant")).getName();
     }
 
-    @GetMapping("/project_page/{project.getTitle()}/{participant.getName()}")
+    @GetMapping("/project_page/{project.getTitle()}/{participant.getName()/participant.getPassword}")
     public String renderProjectPageWithParticipantName(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
 
         model.addAttribute("project",session.getAttribute("project"));
+
+        if (handler.isParticipantPartOfProject())
 
         return "project.html";
     }
