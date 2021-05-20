@@ -92,7 +92,7 @@ public class  ProjectManagerController {
         ProjectRepository pRepo = new ProjectRepository();
         ProjectManager projectManager = userCreator.getProjectManager(username);
 
-        ArrayList<Project> projectsToRender = pRepo.getProjets(username); //vi kalder det id i metoden
+        ArrayList<Project> projectsToRender = pRepo.getProjects(username); //vi kalder det id i metoden
 
         model.addAttribute("projectsToRender",projectsToRender);
 
