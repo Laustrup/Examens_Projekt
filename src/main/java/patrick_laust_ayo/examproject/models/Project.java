@@ -50,15 +50,20 @@ public class Project {
         return projectManager;
     }
 
-    public Map<String, Participant> getParticipants() {
-        return participants;
+    public void setProjectManager(ProjectManager projectManager) {
+        this.projectManager = projectManager;
     }
 
     public ArrayList<Phase> getPhases (){
         return phases;
     }
 
+    public Map<String, Participant> getParticipants() {
+        return participants;
+    }
+
     public void setParticipants(Map<String, Participant> participants) {
         this.participants = participants;
     }
+
 }

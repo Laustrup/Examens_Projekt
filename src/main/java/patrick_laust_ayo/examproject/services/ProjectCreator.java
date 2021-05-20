@@ -79,9 +79,8 @@ public class ProjectCreator {
         ResultSet res = projectRepo.findProject(projectTitle);
 
         // Local variables to be edited from db's values
-        ArrayList<Phase> listOfPhases = new ArrayList<>();
-        ArrayList<Participant> listOfParticipants = new ArrayList<>();
-        ArrayList<Task> listOfTasks = new ArrayList<>();
+
+
 
         // Objects
         Task task = new Task(0,new ArrayList<>());
@@ -91,11 +90,18 @@ public class ProjectCreator {
         ProjectManager projectManager = new ProjectManager(new String(),new String());
         Department department = new Department(0,new String(),new String());
 
+        // ArrayLists
+        ArrayList<Phase> listOfPhases = new ArrayList<>();
+        ArrayList<Participant> listOfParticipants = new ArrayList<>();
+        ArrayList<Task> listOfTasks = new ArrayList<>();
+
         // Maps for project
         Map<String, Participant> mapOfParticipants = new HashMap<>();
         Map<String, Assignment> mapOfAssignments = new HashMap<>();
 
-        Object[] objects = {task,assignment,phase,participant,projectManager,department,mapOfParticipants,mapOfAssignments};
+        Object[] objects = {task,assignment,phase,participant,projectManager,
+                            department,mapOfParticipants,mapOfAssignments,
+                            listOfPhases, listOfParticipants, listOfTasks};
 
         // Ints
         int taskId = 0;
@@ -105,17 +111,17 @@ public class ProjectCreator {
         int projectId = 0;
         int departmentNo = 0;
         int currentProjectMember = 0;
-        int formerAssignmentId = 0;
-        int formerPhaseId = 0;
+        int participantId = 0;
 
-        int[] ids = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo,currentProjectMember,formerAssignmentId,formerPhaseId};
+        int[] currentIds = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo,currentProjectMember,participantId};
+        int[] formerIds = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo,currentProjectMember,participantId};
 
         // Strings
         String dbProjectTitle = new String();
         String assignmentTitle = new String();
         String phaseTitle = new String();
         String participantName = new String();
-        String participantId = new String();
+        String userId = new String();
         String participantPosition = new String();
 
         String participantPassword = new String();
@@ -126,37 +132,43 @@ public class ProjectCreator {
         String departmentLocation = new String();
         String departmentName = new String();
 
-        String[] strings = {dbProjectTitle,assignmentTitle,phaseTitle,participantName,participantId,participantPosition,
+        String[] strings = {dbProjectTitle,assignmentTitle,phaseTitle,participantName,userId,participantPosition,
                 participantPassword,assignmentStart,assignmentEnd,departmentLocation,departmentName};
 
         // Boolean and double
         boolean isCompleted = false;
         double workHours = 0;
 
-        String formerPhaseTitle = new String();
-
         try {
             while (res.next()) {
-                    objects = updateObjects(objects, ids, strings, isCompleted, workHours,
-                            listOfParticipants, listOfTasks, res,
-                            (Map<String, Assignment>) objects[7], (Map<String, Participant>) objects[6]);
-                    listOfPhases = addTolistOfPhases(ids, formerPhaseTitle, listOfPhases, (Map<String, Assignment>) objects[7], objects);
-
-                ids[7] = ids[1];
-                ids[8] = ids[2];
-                formerPhaseTitle = res.getString("phase_title");
-                /*
+                // In case there is only one row
+                // TODO Will there ever be only one row?
                 if (res.isLast() && res.isFirst()) {
-                    mapOfAssignments.put(String.valueOf(ids[1]),(Assignment) objects[1]);
-                    objects[7] = mapOfAssignments;
-                    System.out.println(String.valueOf(ids[1]));
+                    project = new Project(res.getString("title"));
+                    projectManager = new UserCreator().getProjectManager(res.getString("username"));
+                    project.setProjectManager(projectManager);
+                    mapOfParticipants.put("Projectmember number " + 0,projectManager);
+                    project.setParticipants(mapOfParticipants);
+                    break;
                 }
 
-                 */
+                // Updates values
+                currentIds = updateIds(currentIds,res);
+                // TODO If anything is wrong, it should the order of ifs in updateObjects
+                if (!res.isFirst()) {
+                    objects =  updateObjects(objects,currentIds, formerIds, strings, res,workHours,isCompleted);
+                }
 
-                // Constructs project
+                // Updates values of former row
+                formerIds = updateIds(formerIds,res);
+                strings = updateStrings(strings,res);
+                isCompleted = res.getBoolean("is_completed");
+                workHours = res.getDouble("estimated_work_hours");
+
+
                 if (res.isLast()) {
-                    project = new Project(strings[0],listOfPhases,mapOfParticipants, (ProjectManager) objects[4]);
+                    project = new Project(strings[0],(ArrayList<Phase>) objects[8],
+                                        (HashMap<String, Participant>)objects[6],(ProjectManager) objects[4]);
                 }
             }
         }
@@ -169,52 +181,50 @@ public class ProjectCreator {
         return project;
     }
     // updates all objects to current values of the dbrow, except for phase
-    private Object[] updateObjects(Object[] objects, int[] ids, String[] strings, boolean isCompleted, double workHours,
-                                   ArrayList<Participant> listOfParticipants, ArrayList<Task> listOfTasks, ResultSet res,
-                                   Map<String,Assignment> mapOfAssignments, Map<String, Participant> mapOfParticipants) {
+    private Object[] updateObjects(Object[] objects, int[] currentIds, int[] formerIds, String[] strings,
+                                   ResultSet res, double workHours,boolean isCompleted) {
         try {
-            // Updates values
-            strings = updateStrings(strings,res);
-            ids = updateIds(ids,res);
 
-            isCompleted = res.getBoolean("is_completed");
-
-            workHours = res.getDouble("estimated_work_hours");
-
-            // Puts values into objects
-            objects[0] = new Task(workHours,listOfParticipants);
-            objects[1] = new Assignment(strings[7],strings[8],strings[1],isCompleted,listOfTasks);
-
-
-            if (ids[1]>ids[7]) {
-                mapOfAssignments.put(String.valueOf(ids[1]),(Assignment) objects[1]);
-                objects[7] = mapOfAssignments;
-                System.out.println("Current assignmentId(Ids[1]) is greater than previous assignmentId (ids[7])");
-                System.out.println(mapOfAssignments.get("1").getTitle());
+            // Phase
+            if (currentIds[2] > formerIds[2]) {
+                ((Phase)objects[2]).setAssignments((Map<String,Assignment>)objects[7]);
+                objects[7] = new HashMap<String, Assignment>();
+                ((ArrayList<Phase>)objects[8]).add((Phase)objects[2]);
             }
-
-            objects[5] = new Department(ids[5],strings[9],strings[10]);
 
             // Checks if participant is projectmanager
-            // TODO See if participant_ids logic is correct
-            int projectmanagersParticipantId = res.getInt("projectmanager.participant_id");
-            int participantId = res.getInt("participant.participant_id");
+            if (currentIds[3]>formerIds[3] || currentIds[6]>formerIds[6] || res.isLast()) {
+                objects[5] = new Department(formerIds[5],strings[9],strings[10]);
+                int projectmanagersParticipantId = res.getInt("projectmanager.participant_id");
+                int participantId = res.getInt("participant.participant_id");
 
-            if (projectmanagersParticipantId == participantId) {
-                objects[4] = new ProjectManager(res.getString("username"),strings[6],
-                        strings[5],strings[3],strings[4],(Department) objects[5]);
-                // TODO Should maps put every time?
-                mapOfParticipants.put("Projectmember number " + ids[6],(ProjectManager) objects[4]);
-                objects[6] = mapOfParticipants;
-                ids[6]++;
+                if (projectmanagersParticipantId == participantId) {
+                    objects[4] = new ProjectManager(res.getString("username"),strings[6],
+                            strings[5],strings[3],strings[4],(Department) objects[5]);
+                    ((Map<String, Participant>)objects[6]).put("Projectmember number " + formerIds[6],(ProjectManager) objects[4]);
+                    ((ArrayList<Participant>) objects[9]).add((ProjectManager) objects[4]);
+                    formerIds[6]++;
+                }
+                else {
+                    objects[3] = new Participant(strings[5],strings[6],strings[3],strings[4],(Department) objects[5]);
+                    ((Map<String, Participant>)objects[6]).put("Projectmember number " + formerIds[6],(Participant) objects[3]);
+                    ((ArrayList<Participant>) objects[9]).add((Participant) objects[3]);
+                    formerIds[6]++;
+                }
+
+                // Assignment
+                if (currentIds[1]>formerIds[1]) {
+                    objects[1] = new Assignment(strings[7],strings[8],strings[1],isCompleted,(ArrayList<Task>) objects[10]);
+                    ((HashMap<String, Assignment>)objects[7]).put(String.valueOf(formerIds[1]),(Assignment) objects[1]);
+                }
+
+                // Task
+                if (currentIds[0]>formerIds[0]){
+                    objects[0] = new Task(workHours,(ArrayList<Participant>) objects[9]);
+                }
+
             }
-            else {
-                objects[3] = new Participant(strings[5],strings[6],strings[3],strings[4],(Department) objects[5]);
-                // TODO Should maps put every time?
-                mapOfParticipants.put("Projectmember number " + ids[6],(Participant) objects[3]);
-                objects[6] = mapOfParticipants;
-                ids[6]++;
-            }
+
         }
         catch (Exception e) {
             System.out.println("Couldn't update objects...\n" + e.getMessage());
@@ -229,6 +239,7 @@ public class ProjectCreator {
             ids[3] = res.getInt("projectmanager_id");
             ids[4] = res.getInt("project_id");
             ids[5] = res.getInt("department_no");
+            ids[6] = res.getInt("participant_id");
         }
         catch (Exception e) {
             System.out.println("Couldn't update Ids...\n" + e.getMessage());
@@ -257,20 +268,5 @@ public class ProjectCreator {
             System.out.println("Couldn't update strings...\n" + e.getMessage());
         }
         return strings;
-    }
-    private ArrayList<Phase> addTolistOfPhases(int[] ids, String formerPhaseTitle, ArrayList<Phase> listOfPhases,Map<String,Assignment> mapOfAssignments, Object[] objects) {
-        try {
-            // Phase
-            if (ids[2] > ids[8]) {
-                ((Phase)objects[2]).setAssignments((Map<String,Assignment>)objects[7]);
-                objects[7] = new HashMap<String, Assignment>();
-                listOfPhases.add((Phase)objects[2]);
-                System.out.println("Current phaseId is greater than previous phaseId " + listOfPhases.get(0).getTitle());
-            }
-        }
-        catch (Exception e) {
-            System.out.println();
-        }
-        return listOfPhases;
     }
 }

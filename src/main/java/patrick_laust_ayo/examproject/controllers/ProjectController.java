@@ -59,7 +59,7 @@ public class ProjectController {
         session.setAttribute("projectTitle", title);
 
         return "redirect:/project_page/" + title + "/" +
-                ((ProjectManager) session.getAttribute("projectManager")).getName() + "/" +
+                ((ProjectManager) session.getAttribute("projectManager")).getId() + "/" +
                 ((ProjectManager) session.getAttribute("projectManager")).getPassword();
 
     }
@@ -72,16 +72,20 @@ public class ProjectController {
         model.addAttribute("project",projectRepository.findProject(title));
         model.addAttribute("participant",session.getAttribute("current_participant"));
 
-        return "redirect:/project_page/" + title + "/" + ((Participant) session.getAttribute("current_participant")).getName();
+        return "redirect:/project_page/" + title + "/" + ((Participant) session.getAttribute("current_participant")).getId();
     }
 
-    @GetMapping("/project_page/{project.getTitle()}/{participant.getName()/participant.getPassword}")
-    public String renderProjectPageWithParticipantName(Model model, HttpServletRequest request) {
+    @GetMapping("/project_page/{project.getTitle()}/{participant.getId()}/{participant.getPassword}")
+    public String renderProjectPageWithParticipantName(@PathVariable(name = "project.getTitle()") String projectTitle,
+                                                        @PathVariable(name = "participant.getId()") String userId,
+                                                        Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
 
         model.addAttribute("project",session.getAttribute("project"));
 
-        if (handler.isParticipantPartOfProject())
+        if (handler.isParticipantPartOfProject(userId,projectTitle)) {
+            //TODO
+        }
 
         return "project.html";
     }
