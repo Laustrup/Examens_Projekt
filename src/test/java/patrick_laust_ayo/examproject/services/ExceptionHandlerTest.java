@@ -10,6 +10,7 @@ class ExceptionHandlerTest {
 
     private ExceptionHandler handler = new ExceptionHandler();
 
+    /*
     @ParameterizedTest
     @CsvSource(value = {"ge\"rt0394|ge\\\"rt0394","\"iver423|\\\"iver423", "frn934\"|frn934\\\"", "\"sf\"4235\"|\\\"sf\\\"4235\\\"",
                         "ge'rt0394|ge\\'rt0394","'iver423|\\'iver423", "frn934'|frn934\\'", "'sf'4235'|\\'sf\\'4235\\'",
@@ -22,6 +23,8 @@ class ExceptionHandlerTest {
         // Assert
         assertEquals(expected,input);
     }
+
+     */
 
     // TODO seems to work, perhaps further parameter for titles
     @ParameterizedTest
@@ -36,6 +39,7 @@ class ExceptionHandlerTest {
         assertEquals(expected,actual);
     }
 
+    // TODO Perhaps make a project that isn't full?
     @ParameterizedTest
     @CsvSource(value = {"Appdev|true"},delimiter = '|')
     public void isProjectFullybookedTest(String projectTitle, boolean expected) {
@@ -48,5 +52,9 @@ class ExceptionHandlerTest {
         // Assert
         assertEquals(expected,actual);
     }
+
+    @ParameterizedTest
+    @CsvSource(value = {"Appdev|true"},delimiter = '|')
+    public void doesProjectExistTest()
 
 }
