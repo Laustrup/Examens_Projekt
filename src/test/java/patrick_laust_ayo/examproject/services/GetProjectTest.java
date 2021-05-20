@@ -18,8 +18,8 @@ class GetProjectTest {
         //Assert
         try {
             assertEquals("Appdev", project.getTitle());
-            assertEquals("Planning", project.getPhases().get(0).getTitle());
-            assertEquals("Brainstorming", project.getPhases().get(0).getAssignments().get("1").getTitle());
+            assertEquals("", project.getPhases().get(0).getTitle());
+            assertEquals("Brainstorming", project.getPhases().get(0).getAssignments().get(String.valueOf(1)).getTitle());
             //assertEquals(, project.getPhases().get(0).getAssignments().get());
 
             assertEquals("Anders", project.getParticipants().get("Projectmember number " + 2).getName());
