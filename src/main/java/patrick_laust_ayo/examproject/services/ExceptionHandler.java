@@ -6,7 +6,6 @@ import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
 import patrick_laust_ayo.examproject.repositories.Repository;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -108,7 +107,7 @@ public class ExceptionHandler {
         Map<String, Participant> userList = getParticipantMap();
         return userList.containsKey(participant_ID);
     }
-    public Map<String, Participant> getParticipantMap() {
+    private Map<String, Participant> getParticipantMap() {
 
         ParticipantRepository participantRepository = new ParticipantRepository();
         Map<String, Participant> participantMap = new HashMap<>();
@@ -182,44 +181,43 @@ public class ExceptionHandler {
     }
 
     // Checks if input is too long and writes a message as return, if input is allowed, it returns "Input is allowed"
-    public String isLengthAllowedInDatabase(String input)  {
+    public String isLengthAllowedInDatabase(String input,String column)  {
 
-        if (inputAsTitleIsTooLongByAmount(input) != -1) {
-            return "Title is too long... Write less than " + inputAsTitleIsTooLongByAmount(input) + " words!";
+        if (inputAsTitleIsTooLongByAmount(input,column) != -1) {
+            return "Title is too long... Write less than " + inputAsTitleIsTooLongByAmount(input,column) + " words!";
         }
-        if (input.equals("participant_password") && input.length()>25) {
+        if (column.equals("participant_password") && input.length()>25) {
             return "Password is too long... Write less than 25 words!";
         }
-        if (input.equals("user_id") && input.length()>15) {
+        if (column.equals("user_id") && input.length()>15) {
             return "ID is too long... Write less than 15 words!";
         }
 
         return "Input is allowed";
 
     }
-    private int inputAsTitleIsTooLongByAmount(String input) {
+    private int inputAsTitleIsTooLongByAmount(String input,String column) {
         Repository repo = new ParticipantRepository();
 
         try {
-            if (input.equals("phase_title") ||
-                    input.equals("username") ||
-                    input.equals("participant_name") ||
-                    input.equals("participant_password") ||
-                    input.equals("position")) {
+            if (column.equals("phase_title") ||
+                    column.equals("username") ||
+                    column.equals("participant_name") ||
+                    column.equals("position")) {
                 if (input.length()>25) {
                     return 25;
                 }
             }
-            if (input.equals("title") ||
-                input.equals("department_name")) {
+            if (column.equals("title") ||
+                column.equals("department_name")) {
                 if (input.length()>30) {
                     return 30;
                 }
             }
-            if (input.equals("assignment_title") && input.length()>50) {
+            if (column.equals("assignment_title") && input.length()>50) {
                 return 50;
             }
-            if (input.equals("location") && input.length()>100) {
+            if (column.equals("location") && input.length()>100) {
                 return 100;
             }
         }
@@ -229,25 +227,44 @@ public class ExceptionHandler {
         return -1;
     }
 
+    /*
     // Two methods for insure ', " and \ doesn't create an error
-    public String stringInputToDbInsure(String input) {
-        if (input.contains("\"") || input.contains("'") || input.contains("\\")) {
-            String stringToEscape = new String();
-            if (input.contains("\"")) {
-                stringToEscape = "\"";
+    public String secureInputToDb(String input) {
+
+        boolean stillAnIssue = input.contains("\"") && !input.contains("\\\"") ||
+                                input.contains("'") && !input.contains("\\'") ||
+                                input.contains("\\") && !input.contains("\\\\");
+
+        System.out.println(input);
+
+        while (stillAnIssue) {
+            if (input.contains("\"") && !input.contains("\\\"")) {
+                String[] partsOfInput = input.split("\"");
+                input = createNewInput(0,partsOfInput.length,input) + "\\" +
+                        createNewInput(partsOfInput.length,input.length(),input);
+
+                System.out.println(input);
             }
-            else if (input.contains("'")) {
-                stringToEscape = "'";
+            else if (input.contains("'") && !input.contains("\\'")) {
+                String[] partsOfInput = input.split("'");
+                input = createNewInput(0,partsOfInput.length,input) + "\\" +
+                        createNewInput(partsOfInput.length,input.length(),input);
+
+                System.out.println(input);
             }
-            else if (input.contains("\\")) {
-                stringToEscape = "\\";
+            else if (input.contains("\\") && !input.contains("\\\\")) {
+                input = createNewInput(0,input.indexOf("\\"),input) + "\\" +
+                        createNewInput(input.indexOf("\\"),input.length(),input);
+                System.out.println(input);
             }
-            input = createNewInput(0,input.indexOf(stringToEscape)-1,input)
-                    + "\\" + createNewInput(input.indexOf(stringToEscape),input.length(),input);
+            else {
+                stillAnIssue = false;
+            }
+            System.out.println(input);
         }
         return input;
     }
-    public String stringInputFromDbInsure(String input) {
+    public String insureInputFromDb(String input) {
 
         if (input.contains("\\\"") || input.contains("\\'") || input.contains("\\\\")) {
             String stringToEscape = new String();
@@ -278,5 +295,6 @@ public class ExceptionHandler {
         return newInput;
     }
 
+     */
 
 }

@@ -1,6 +1,7 @@
 package patrick_laust_ayo.examproject.services;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
@@ -26,4 +27,5 @@ class UserCreatorTest {
         //Assert
         assertEquals(expectedId,actualId);
     }
+
 }

@@ -48,7 +48,7 @@ public class ProjectCreator {
 
     public Assignment createAssignment(String phaseTitle, String start, String end) {
 
-        assignment = new Assignment(start,end,new String(),false, new ArrayList<Participant>(),new ArrayList<Task>());
+        assignment = new Assignment(start,end,new String(),false, new ArrayList<Task>());
 
         int phaseId = projectRepo.findId("phase_table","phase_title",phaseTitle,"phase_id");
         Integer taskId = null;
@@ -58,10 +58,12 @@ public class ProjectCreator {
         return assignment;
     }
 
-    public Task createTask(String assignmentTitle) {
+    public Task createTask(String assignmentTitle, Participant participant) {
 
         Double workHours = null;
-        task = new Task(workHours);
+
+        task = new Task(workHours,new ArrayList<>());
+        task.addParticipant(participant);
 
         projectRepo.putTaskInDatabase(projectRepo.findId("assignment","assignment_title",assignmentTitle,"assignment_id"));
 
@@ -78,8 +80,8 @@ public class ProjectCreator {
         ArrayList<Task> listOfTasks = new ArrayList<>();
 
         // Objects
-        Task task = new Task(0);
-        Assignment assignment = new Assignment(new String(),new String(),new String(),false,new ArrayList<>(),new ArrayList<>());
+        Task task = new Task(0,new ArrayList<>());
+        Assignment assignment = new Assignment(new String(),new String(),new String(),false,new ArrayList<>());
         Phase phase = new Phase(new String());
         Participant participant = new Participant(new String(),new String());
         ProjectManager projectManager = new ProjectManager(new String(),new String());
@@ -144,7 +146,6 @@ public class ProjectCreator {
         projectRepo.closeCurrentConnection();
         return project;
     }
-
     // updates all objects to current values of the dbrow, except for phase
     private Object[] updateObjects(Object[] objects, int[] ids, String[] strings, boolean isCompleted, double workHours,
                                    ArrayList<Participant> listOfParticipants, ArrayList<Task> listOfTasks, ResultSet res,
@@ -159,8 +160,8 @@ public class ProjectCreator {
             workHours = res.getDouble("estimated_work_hours");
 
             // Puts values into objects
-            objects[0] = new Task(workHours);
-            objects[1] = new Assignment(strings[7],strings[8],strings[1],isCompleted,listOfParticipants,listOfTasks);
+            objects[0] = new Task(workHours,listOfParticipants);
+            objects[1] = new Assignment(strings[7],strings[8],strings[1],isCompleted,listOfTasks);
             // TODO Should maps put every time?
             mapOfAssignments.put(String.valueOf(ids[1]),(Assignment) objects[1]);
             objects[7] = mapOfAssignments;
@@ -193,7 +194,6 @@ public class ProjectCreator {
         }
         return objects;
     }
-
     private int[] updateIds(int[] ids, ResultSet res) {
         try {
             ids[0] = res.getInt("task_id");
@@ -208,7 +208,6 @@ public class ProjectCreator {
         }
         return ids;
     }
-
     private String[] updateStrings(String[] strings, ResultSet res) {
         try {
             strings[0] = res.getString("title");
@@ -232,7 +231,6 @@ public class ProjectCreator {
         }
         return strings;
     }
-
     private ArrayList<Phase> addTolistOfPhases(int[] ids, String[] strings, ArrayList<Phase> listOfPhases,Map<String,Assignment> mapOfAssignments) {
         try {
             // Phase

@@ -3,13 +3,9 @@ package patrick_laust_ayo.examproject.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import patrick_laust_ayo.examproject.models.Participant;
-import patrick_laust_ayo.examproject.models.Project;
-import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
@@ -43,9 +39,9 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
 
-        String inputException = exceptionHandler.isLengthAllowedInDatabase(title);
+        String inputException = exceptionHandler.isLengthAllowedInDatabase(title,"title");
 
-        title = exceptionHandler.stringInputToDbInsure(title);
+        title = exceptionHandler.secureInputToDb(title);
 
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);

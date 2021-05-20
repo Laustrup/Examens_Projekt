@@ -43,12 +43,12 @@ public class ProjectRepository extends Repository{
                              phaseId + "); ");
     }
 
+    // TODO Assign participant to participant_task table
     public void putTaskInDatabase(int assignmentId) {
         executeSQLStatement("INSERT INTO task VALUES (" + assignmentId + ", " + null + "); ");
     }
 
     public ResultSet findProject(String projectTitle) {
-
         return executeQuery("SELECT project.project_id, project.title, project.projectmanager_id, " +
                 "projectmanager.username, projectmanager.participant_id, " +
                 "phase_table.phase_id, phase_table.phase_title, " +
@@ -64,7 +64,6 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN department " +
                 "INNER JOIN projectmanager " +
                 "WHERE project.title = '" + projectTitle +  "';");
-
     }
 
     // TODO Not done, when used logic should be moved to service
