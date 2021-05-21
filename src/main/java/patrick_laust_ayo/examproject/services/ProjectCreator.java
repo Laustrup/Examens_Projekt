@@ -39,41 +39,6 @@ public class ProjectCreator {
         projectManagerRepo.closeCurrentConnection();
         return project;
     }
-
-    public Phase createPhase(String projectTitle) {
-
-        phase = new Phase(new String());
-
-        int id = projectRepo.findId("project","title",projectTitle, "project_id");
-        projectRepo.putPhaseInDatabase(id);
-
-        return phase;
-    }
-
-    public Assignment createAssignment(String phaseTitle, String start, String end) {
-
-        assignment = new Assignment(start,end,new String(),false, new ArrayList<Task>());
-
-        int phaseId = projectRepo.findId("phase_table","phase_title",phaseTitle,"phase_id");
-        Integer taskId = null;
-
-        projectRepo.putAssignmentInDatabase(assignment,phaseId);
-
-        return assignment;
-    }
-
-    public Task createTask(String assignmentTitle, Participant participant) {
-
-        Double workHours = null;
-
-        task = new Task(workHours,new ArrayList<>());
-        task.addParticipant(participant);
-
-        projectRepo.putTaskInDatabase(projectRepo.findId("assignment","assignment_title",assignmentTitle,"assignment_id"));
-
-        return task;
-    }
-
     public Project getProject(String projectTitle) {
 
         ResultSet res = projectRepo.findProject(projectTitle);
@@ -98,8 +63,8 @@ public class ProjectCreator {
         Map<String, Assignment> mapOfAssignments = new HashMap<>();
 
         Object[] objects = {task,assignment,phase,participant,projectManager,
-                            department,mapOfParticipants,mapOfAssignments,
-                            listOfPhases, listOfParticipants, listOfTasks};
+                department,mapOfParticipants,mapOfAssignments,
+                listOfPhases, listOfParticipants, listOfTasks};
 
         // Ints
         int taskId = 0;
@@ -113,9 +78,9 @@ public class ProjectCreator {
         int foreignParticipantId = 0;
 
         int[] currentIds = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo,
-                            currentProjectMember,participantId,foreignParticipantId};
+                currentProjectMember,participantId,foreignParticipantId};
         int[] formerIds = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo,
-                            currentProjectMember,participantId,foreignParticipantId};
+                currentProjectMember,participantId,foreignParticipantId};
 
         // Strings
         String dbProjectTitle = new String();
@@ -170,7 +135,7 @@ public class ProjectCreator {
                 if (res.isLast()) {
                     objects =  updateObjects(objects,currentIds, formerIds, strings, res,workHours,isCompleted);
                     project = new Project(strings[0],(ArrayList<Phase>) objects[8],
-                                        (HashMap<String, Participant>)objects[6],(ProjectManager) objects[4]);
+                            (HashMap<String, Participant>)objects[6],(ProjectManager) objects[4]);
                 }
             }
         }
@@ -266,7 +231,6 @@ public class ProjectCreator {
         }
         return strings;
     }
-
     public ArrayList<Project> getProjects(String userId) {
         ResultSet res = projectRepo.findProjects(userId);
         ArrayList<Project> projects = new ArrayList<>();
@@ -297,4 +261,43 @@ public class ProjectCreator {
         }
         return projects;
     }
+
+    public Phase createPhase(String projectTitle) {
+
+        phase = new Phase(new String());
+
+        int id = projectRepo.findId("project","title",projectTitle, "project_id");
+        projectRepo.putPhaseInDatabase(id);
+
+        return phase;
+    }
+    public Phase getPhase(String ) {
+        ResultSet res = projectRepo.findPhase();
+    }
+
+    public Assignment createAssignment(String phaseTitle, String start, String end) {
+
+        assignment = new Assignment(start,end,new String(),false, new ArrayList<Task>());
+
+        int phaseId = projectRepo.findId("phase_table","phase_title",phaseTitle,"phase_id");
+        Integer taskId = null;
+
+        projectRepo.putAssignmentInDatabase(assignment,phaseId);
+
+        return assignment;
+    }
+
+    public Task createTask(String assignmentTitle, Participant participant) {
+
+        Double workHours = null;
+
+        task = new Task(workHours,new ArrayList<>());
+        task.addParticipant(participant);
+
+        projectRepo.putTaskInDatabase(projectRepo.findId("assignment","assignment_title",assignmentTitle,"assignment_id"));
+
+        return task;
+    }
+
+
 }
