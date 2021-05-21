@@ -43,6 +43,10 @@ class GetProjectTest {
             assertEquals("twe@faf2", project.getParticipants().get("ande0137").getPassword());
 
 
+            //Projektets tasks værdier
+            assertEquals(300, project.getPhases().get(0).getAssignments().get(String.valueOf(1)).getTasks().get(0).getEstimatedWorkHours());
+
+
             //Projektets projectmanagers værdier
             assertEquals("Andy Boss", project.getProjectManager().getUsername());
             assertEquals("Manager", project.getProjectManager().getPosition());
