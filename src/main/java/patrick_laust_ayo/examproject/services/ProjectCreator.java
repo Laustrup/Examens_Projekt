@@ -80,8 +80,6 @@ public class ProjectCreator {
 
         // Local variables to be edited from db's values
 
-
-
         // Objects
         Task task = new Task(0,new ArrayList<>());
         Assignment assignment = new Assignment(new String(),new String(),new String(),false,new ArrayList<>());
@@ -190,7 +188,7 @@ public class ProjectCreator {
         try {
             // Phase
             if (currentIds[2] > formerIds[2] || res.isLast()) {
-                ((Phase)objects[2]).setAssignments((Map<String,Assignment>)objects[7]);
+                objects[2] = new Phase(strings[2],(Map<String,Assignment>)objects[7]);
                 objects[7] = new HashMap<String, Assignment>();
                 ((ArrayList<Phase>)objects[8]).add((Phase)objects[2]);
             }

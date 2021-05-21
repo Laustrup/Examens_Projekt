@@ -23,7 +23,7 @@ class GetProjectTest {
 
             //TODO getTitle fra Phases skal opdateres når det virker i ProjectCreator
             //Projektets fases titel
-            //assertEquals("", project.getPhases().get(0).getTitle());
+            assertEquals("Planning", project.getPhases().get(0).getTitle());
 
 
             //Projektets assignments værdier
