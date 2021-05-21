@@ -187,7 +187,6 @@ public class ProjectCreator {
                                    ResultSet res, double workHours,boolean isCompleted) {
         try {
 
-
             // Checks if participant is projectmanager
             if (currentIds[3]>formerIds[3] || currentIds[6]>formerIds[6] || res.isLast()) {
                 objects[5] = new Department(formerIds[5],strings[9],strings[10]);
@@ -266,5 +265,30 @@ public class ProjectCreator {
             System.out.println("Couldn't update strings...\n" + e.getMessage());
         }
         return strings;
+    }
+
+    public ArrayList<Project> getProjects(String userId) {
+        ResultSet res = projectRepo.findProjects(userId);
+        ArrayList<Project> projects = new ArrayList<>();
+
+        int currentProjectId;
+        int formerProjectId = 0;
+
+        try {
+            while (res.next()) {
+                if (res.isFirst()) {
+                    formerProjectId = res.getInt("project_id");
+                }
+                currentProjectId = res.getInt("project_id");
+                if (currentProjectId > formerProjectId) {
+                    projects.add(getProject(res.getString("title")));
+                }
+                formerProjectId = res.getInt("project_id");
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't gather projects...\n" + e.getMessage());
+        }
+        return projects;
     }
 }
