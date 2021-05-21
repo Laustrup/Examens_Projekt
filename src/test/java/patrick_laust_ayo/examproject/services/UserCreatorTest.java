@@ -41,7 +41,15 @@ class UserCreatorTest {
 
         //Assert
         assertEquals(2, projectManager.getDepartment().getDepartmentNo());
-        assertEquals("COPENHAGEN", projectManager.getDepartment().getDepName());
+        assertEquals("0152 Oslo Norway - Tollbugata 8 A/B", projectManager.getDepartment().getLocation());
+        assertEquals("OSLO", projectManager.getDepartment().getDepName());
+        assertEquals("Andy Boss", projectManager.getUsername());
+        assertEquals("erAsD14'd", projectManager.getPassword());
+        assertEquals("andy0432", projectManager.getId());
+        assertEquals("Andy Boss", projectManager.getName());
+        assertEquals("Manager", projectManager.getPosition());
+
+
 
 
     }
