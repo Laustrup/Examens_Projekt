@@ -186,12 +186,7 @@ public class ProjectCreator {
     private Object[] updateObjects(Object[] objects, int[] currentIds, int[] formerIds, String[] strings,
                                    ResultSet res, double workHours,boolean isCompleted) {
         try {
-            // Phase
-            if (currentIds[2] > formerIds[2] || res.isLast()) {
-                objects[2] = new Phase(strings[2],(Map<String,Assignment>)objects[7]);
-                objects[7] = new HashMap<String, Assignment>();
-                ((ArrayList<Phase>)objects[8]).add((Phase)objects[2]);
-            }
+
 
             // Checks if participant is projectmanager
             if (currentIds[3]>formerIds[3] || currentIds[6]>formerIds[6] || res.isLast()) {
@@ -212,6 +207,13 @@ public class ProjectCreator {
                 if (currentIds[1]>formerIds[1] || res.isLast()) {
                     objects[1] = new Assignment(strings[7],strings[8],strings[1],isCompleted,(ArrayList<Task>) objects[10]);
                     ((HashMap<String, Assignment>)objects[7]).put(String.valueOf(formerIds[1]),(Assignment) objects[1]);
+                }
+
+                // Phase
+                if (currentIds[2] > formerIds[2] || res.isLast()) {
+                    objects[2] = new Phase(strings[2],(Map<String,Assignment>)objects[7]);
+                    objects[7] = new HashMap<String, Assignment>();
+                    ((ArrayList<Phase>)objects[8]).add((Phase)objects[2]);
                 }
 
                 // Task
