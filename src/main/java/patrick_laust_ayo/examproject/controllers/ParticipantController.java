@@ -1,5 +1,6 @@
 package patrick_laust_ayo.examproject.controllers;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import patrick_laust_ayo.examproject.services.UserEditor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+@Controller
 public class ParticipantController {
 
     private UserCreator userCreator;
