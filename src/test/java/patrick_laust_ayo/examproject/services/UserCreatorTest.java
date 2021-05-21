@@ -48,10 +48,17 @@ class UserCreatorTest {
         assertEquals("andy0432", projectManager.getId());
         assertEquals("Andy Boss", projectManager.getName());
         assertEquals("Manager", projectManager.getPosition());
+    }
 
 
+    @Test
+    void createManager(){
+        UserCreator userCreator = new UserCreator();
 
+        ProjectManager projectManager = userCreator.createManager("Patrick", "yolo");
 
+        assertEquals("Patrick", projectManager.getUsername());
+        assertEquals("yolo", projectManager.getPassword());
     }
 
 }

@@ -8,13 +8,18 @@ import java.sql.ResultSet;
 
 public class ProjectManagerRepository extends Repository {
 
+    private ParticipantRepository parRepo = new ParticipantRepository();
+
+    //TODO DER ER PROBLEMER MED DENNE METODE VIA PARTICIPANTREPOSITORY, USERCREATOR OG PROJECTMANAGERCONTROLLER!
+    //TODO SKAL DEN FANGE ET PARTICIPANT ID? findParticipant KRÆVER ET USERID, MEN VI PRØVER AT HENTE EN INT NEDENUNDER!
     public void putProjectManagerInDatabase(ProjectManager projectManager){
-        try {
+        try { ;
             executeSQLStatement("INSERT INTO projectmanager(username,participant_id) VALUES ('" + projectManager.getUsername()
-                    + "', " + new ParticipantRepository().findParticipant(projectManager.getId()).getInt("participant_id") + ");");
+                    + "', " + parRepo.findParticipant(projectManager.getId()).getInt("participant_id") + ");");
         }
         catch (Exception e) {
             System.out.println("Couldn't put projectmanager in database..\n" + e.getMessage());
+            e.printStackTrace();
         }
 
     }
