@@ -271,8 +271,8 @@ public class ProjectCreator {
 
         return phase;
     }
-    public Phase getPhase(String phaseTitle, String projectTitle) {
-        ResultSet res = projectRepo.findPhase(phaseTitle, projectTitle);
+    public Phase getPhase(String phaseTitle,String projectTitle) {
+        ResultSet res = projectRepo.findPhase(phaseTitle,projectTitle);
 
         Phase phase = new Phase(new String(),new HashMap<>());
         Map<String, Assignment> assignments = new HashMap<>();

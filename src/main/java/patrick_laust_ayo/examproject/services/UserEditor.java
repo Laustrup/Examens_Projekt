@@ -1,9 +1,6 @@
 package patrick_laust_ayo.examproject.services;
 
-import patrick_laust_ayo.examproject.models.Department;
-import patrick_laust_ayo.examproject.models.Participant;
-import patrick_laust_ayo.examproject.models.Project;
-import patrick_laust_ayo.examproject.models.ProjectManager;
+import patrick_laust_ayo.examproject.models.*;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
@@ -40,10 +37,8 @@ public class UserEditor {
     }
 
     public ProjectManager updateProjectmanager(String username, String password, String formerUsername) {
-
         projectManagerRepo.updateProjectManager(username, password, formerUsername);
-        UserCreator userCreator = new UserCreator();
-        return userCreator.getProjectManager(username);
+        return new UserCreator().getProjectManager(username);
     }
 
     public Participant removeParticipant(String userId) {

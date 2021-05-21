@@ -1,5 +1,6 @@
 package patrick_laust_ayo.examproject.services;
 
+import patrick_laust_ayo.examproject.models.Phase;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 
@@ -19,6 +20,11 @@ public class ProjectEditor {
         ProjectCreator projectCreator = new ProjectCreator();
 
         return projectCreator.getProject(title);
+    }
+
+    public Phase updatePhase(String phaseTitle, String formerphaseTitle, String projectTitle) {
+        new ProjectRepository().updatePhase(phaseTitle,projectTitle,formerphaseTitle);
+        return new ProjectCreator().getPhase(phaseTitle,projectTitle);
     }
 
 }

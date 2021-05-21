@@ -30,10 +30,10 @@ public class ProjectRepository extends Repository{
 
      */
 
-    public void putPhaseInDatabase(int projectmanagerId) {
-        executeSQLStatement("INSERT INTO phase VALUES (default, "  + null + ", " + projectmanagerId + "); ");
+    public void putPhaseInDatabase(int projectId) {
+        executeSQLStatement("INSERT INTO phase_table(phase_title, project_id) VALUES (null, " + projectId + ");");
     }
-    public ResultSet findPhase(String phaseTitle, String projectTitle) {
+    public ResultSet findPhase(String phaseTitle,String projectTitle) {
         return executeQuery("SELECT * FROM phase_table " +
                 "INNER JOIN project ON project.project_id = phase_table.project_id " +
                 "INNER JOIN assignment ON assignment.phase_id = phase_table.phase_id " +
@@ -41,7 +41,13 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN participant_task ON participant_task.task_id = task.task_id " +
                 "INNER JOIN participant ON participant.participant_id = participant_task.participant_id " +
                 "INNER JOIN department ON department.department_no = participant.department_no " +
-                "WHERE phase_title = " + phaseTitle + " AND title = " + projectTitle + ";");
+                "WHERE phase_id = " + phaseTitle + " AND project_id = " + projectTitle + ";");
+    }
+    public void updatePhase(String phaseTitle,String projectTitle,String formerPhaseTitle) {
+        executeSQLStatement("UPDATE phase_table " +
+                "INNER JOIN project ON project.project_id = phase_table.project_id " +
+                "SET phase_table.phase_title = '" + phaseTitle + "', " +
+                "WHERE phase_table.phase_title = '" + formerPhaseTitle + "' AND project.title " + projectTitle + ";");
     }
 
     public void putAssignmentInDatabase(Assignment assignment, int phaseId) {

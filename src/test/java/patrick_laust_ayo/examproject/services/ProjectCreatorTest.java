@@ -5,6 +5,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import patrick_laust_ayo.examproject.models.Phase;
 import patrick_laust_ayo.examproject.models.Project;
+import patrick_laust_ayo.examproject.repositories.ProjectRepository;
+import patrick_laust_ayo.examproject.repositories.Repository;
 
 import java.util.ArrayList;
 
@@ -95,18 +97,18 @@ class ProjectCreatorTest {
     }
 
     // TODO Perhaps add more parameters to test multiple tests
+    // TODO Change safe update to unsafe
     @ParameterizedTest
-    @CsvSource(value = {""}, delimiter = '|')
-    public void createPhaseTest(String projectTitle) {
+    @CsvSource(value = {"Appdev|Building"}, delimiter = '|')
+    public void createPhaseTest(String projectTitle,String phaseTitle) {
         //Act
         Phase actualReturned = projectCreator.createPhase(projectTitle);
-        Phase actualFromDb = projectCreator.
+        new ProjectEditor().updatePhase(phaseTitle,null,projectTitle);
+        Phase actualFromDb = projectCreator.getPhase(actualReturned.getTitle(),projectTitle);
 
         //Assert
-        assertEquals(actualReturned.getTitle(),projectTitle);
-        assertEquals();
+        assertEquals(new String(), actualReturned.getTitle());
+        assertEquals(projectTitle,actualFromDb.getTitle());
     }
-
-
 
 }
