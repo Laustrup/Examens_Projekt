@@ -36,6 +36,11 @@ public class ProjectRepository extends Repository{
     public ResultSet findPhase(String phaseTitle, String projectTitle) {
         return executeQuery("SELECT * FROM phase_table " +
                 "INNER JOIN project ON project.project_id = phase_table.project_id " +
+                "INNER JOIN assignment ON assignment.phase_id = phase_table.phase_id " +
+                "INNER JOIN task ON task.assignment_id = assignment.assignment_id " +
+                "INNER JOIN participant_task ON participant_task.task_id = task.task_id " +
+                "INNER JOIN participant ON participant.participant_id = participant_task.participant_id " +
+                "INNER JOIN department ON department.department_no = participant.department_no " +
                 "WHERE phase_title = " + phaseTitle + " AND title = " + projectTitle + ";");
     }
 
