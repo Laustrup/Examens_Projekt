@@ -219,6 +219,7 @@ public class ProjectCreator {
                 // Task
                 if (currentIds[0]>formerIds[0] || res.isLast()){
                     objects[0] = new Task(workHours,(ArrayList<Participant>) objects[9]);
+                    ((ArrayList<Task>)objects[10]).add((Task)objects[0]);
                 }
             }
         }
