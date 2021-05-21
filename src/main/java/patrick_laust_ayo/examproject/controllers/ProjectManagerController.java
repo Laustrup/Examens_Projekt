@@ -37,6 +37,7 @@ public class  ProjectManagerController {
 
         if (exceptionHandler.doesProjectManagerUsernameExist(username)) {
             model.addAttribute("userAlreadyExist", "This username already exist. Please choose another.");
+            System.out.println(exceptionHandler.doesProjectManagerUsernameExist(username));
             return "create_projectmanager.html";
         }
 
@@ -87,11 +88,12 @@ public class  ProjectManagerController {
 
     @GetMapping("/{projectManager.getId}")
     public String renderDashboard(@PathVariable("projectManager.getId") String userId,
+                                  @PathVariable("projectManager.getUsername") String username,
                                   Model model, HttpServletRequest request) {
 
         ProjectManagerRepository repo = new ProjectManagerRepository(); //Bruges denne ??
         ProjectRepository pRepo = new ProjectRepository();
-        ProjectManager projectManager = userCreator.getProjectManager(userId);
+        ProjectManager projectManager = userCreator.getProjectManager(username);
         ProjectCreator projectCreator = new ProjectCreator();
 
         ArrayList<Project> projectsToRender = projectCreator.getProjects(userId); //vi kalder det id i metoden
@@ -104,7 +106,7 @@ public class  ProjectManagerController {
 
         //få fat i projekter tilknyttet den enkelte projektmanager
 
-        return "project_manager_dashboard";
+        return "projectmanager_dashboard";
     }
 
 }
