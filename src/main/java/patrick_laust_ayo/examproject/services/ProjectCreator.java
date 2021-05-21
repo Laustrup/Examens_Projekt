@@ -275,14 +275,20 @@ public class ProjectCreator {
 
         try {
             while (res.next()) {
-                if (res.isFirst()) {
-                    formerProjectId = res.getInt("project_id");
+                // If there is only one row
+                if (res.isFirst() && res.isLast()) {
+                    projects.add(getProject(res.getString("title")));
+                    break;
                 }
+                // Otherwise it compares former- and current ids, and as well adds the last project
                 currentProjectId = res.getInt("project_id");
-                if (currentProjectId > formerProjectId) {
+                if (currentProjectId > formerProjectId && !res.isFirst()) {
                     projects.add(getProject(res.getString("title")));
                 }
                 formerProjectId = res.getInt("project_id");
+                if (res.isLast()) {
+                    projects.add(getProject(res.getString("title")));
+                }
             }
         }
         catch (Exception e) {
