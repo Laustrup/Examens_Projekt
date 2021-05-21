@@ -350,6 +350,61 @@ public class ProjectCreator {
 
         return assignment;
     }
+    public Assignment getAssignment(String assignmentTitle,String phaseTitle) {
+        ResultSet res = projectRepo.findAssignment(assignmentTitle,phaseTitle);
+        Map<String, Assignment> assignments = new HashMap<>();
+        ArrayList<Task> tasks = new ArrayList<>();
+        ArrayList<Participant> participants = new ArrayList<>();
+        Department department = new Department(0,new String(), new String());
+
+        int formerTaskId = 0;
+        int formerParticipantId = 0;
+        int formerDepartmentId = 0;
+
+        try {
+            while (res.next()) {
+                // If there is only one row
+                if (res.isFirst() && res.isLast()) {
+                    assignment = new Assignment(res.getString("assignment_start"), res.getString("assignment_end"),
+                            res.getString("assignment_title"),res.getBoolean("is_completed"), tasks);
+                    break;
+                }
+
+                // Otherwise it continues to put in all values, and in the end constructs the object
+                int currentTaskId = res.getInt("task_id");
+                int currentParticipantId = res.getInt("participant_id");
+                int currentDepartmentId = res.getInt("department_no");
+
+                if (currentDepartmentId > formerDepartmentId) {
+                    department = new Department(currentDepartmentId,res.getString("location"),res.getString("department_name"));
+                }
+                if (currentParticipantId > formerParticipantId && !res.isFirst()) {
+                    participants.add(new Participant(res.getString("user_id"),res.getString("participant_password"),
+                            res.getString("participant_name"),res.getString("position"),department));
+                }
+                if (currentTaskId > formerTaskId && !res.isFirst()) {
+                    tasks.add(new Task(res.getDouble("estimated_work_hours"),participants));
+                }
+
+                formerTaskId = res.getInt("task_id");
+                formerParticipantId = res.getInt("participant_id");
+                formerDepartmentId = res.getInt("department_no");
+
+                if (res.isLast()) {
+                    tasks.add(new Task(res.getDouble("estimated_work_hours"),participants));
+                    assignment = new Assignment(res.getString("assignment_start"), res.getString("assignment_end"),
+                            res.getString("assignment_title"),res.getBoolean("is_completed"), tasks);
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't create assignment from database...\n" + e.getMessage());
+            assignment = null;
+        }
+
+        return assignment;
+
+    }
 
     public Task createTask(String assignmentTitle, Participant participant) {
 
