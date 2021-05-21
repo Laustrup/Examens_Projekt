@@ -11,6 +11,7 @@ import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
+import patrick_laust_ayo.examproject.services.ProjectCreator;
 import patrick_laust_ayo.examproject.services.UserCreator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,7 @@ public class  ProjectManagerController {
 
         if (exceptionHandler.doesProjectManagerUsernameExist(username)) {
             model.addAttribute("userAlreadyExist", "This username already exist. Please choose another.");
+            System.out.println(exceptionHandler.doesProjectManagerUsernameExist(username));
             return "create_projectmanager.html";
         }
 
@@ -84,15 +86,17 @@ public class  ProjectManagerController {
         }
     }
 
-    @GetMapping("/{projectManager.getUsername}")
-    public String renderDashboard(@PathVariable("projectManager.getUsername") String username,
+    @GetMapping("/{projectManager.getId}")
+    public String renderDashboard(@PathVariable("projectManager.getId") String userId,
+                                  @PathVariable("projectManager.getUsername") String username,
                                   Model model, HttpServletRequest request) {
 
         ProjectManagerRepository repo = new ProjectManagerRepository(); //Bruges denne ??
         ProjectRepository pRepo = new ProjectRepository();
         ProjectManager projectManager = userCreator.getProjectManager(username);
+        ProjectCreator projectCreator = new ProjectCreator();
 
-        ArrayList<Project> projectsToRender = pRepo.getProjects(username); //vi kalder det id i metoden
+        ArrayList<Project> projectsToRender = projectCreator.getProjects(userId); //vi kalder det id i metoden
 
         model.addAttribute("projectsToRender",projectsToRender);
 
@@ -102,7 +106,7 @@ public class  ProjectManagerController {
 
         //få fat i projekter tilknyttet den enkelte projektmanager
 
-        return "project_manager_dashboard";
+        return "projectmanager_dashboard";
     }
 
 }

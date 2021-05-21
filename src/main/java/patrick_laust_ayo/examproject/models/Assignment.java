@@ -57,4 +57,12 @@ public class Assignment {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public ArrayList<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(ArrayList<Task> tasks) {
+        this.tasks = tasks;
+    }
 }

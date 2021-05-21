@@ -39,48 +39,11 @@ public class ProjectCreator {
         projectManagerRepo.closeCurrentConnection();
         return project;
     }
-
-    public Phase createPhase(String projectTitle) {
-
-        phase = new Phase(new String());
-
-        int id = projectRepo.findId("project","title",projectTitle, "project_id");
-        projectRepo.putPhaseInDatabase(id);
-
-        return phase;
-    }
-
-    public Assignment createAssignment(String phaseTitle, String start, String end) {
-
-        assignment = new Assignment(start,end,new String(),false, new ArrayList<Task>());
-
-        int phaseId = projectRepo.findId("phase_table","phase_title",phaseTitle,"phase_id");
-        Integer taskId = null;
-
-        projectRepo.putAssignmentInDatabase(assignment,phaseId);
-
-        return assignment;
-    }
-
-    public Task createTask(String assignmentTitle, Participant participant) {
-
-        Double workHours = null;
-
-        task = new Task(workHours,new ArrayList<>());
-        task.addParticipant(participant);
-
-        projectRepo.putTaskInDatabase(projectRepo.findId("assignment","assignment_title",assignmentTitle,"assignment_id"));
-
-        return task;
-    }
-
     public Project getProject(String projectTitle) {
 
         ResultSet res = projectRepo.findProject(projectTitle);
 
         // Local variables to be edited from db's values
-
-
 
         // Objects
         Task task = new Task(0,new ArrayList<>());
@@ -100,8 +63,8 @@ public class ProjectCreator {
         Map<String, Assignment> mapOfAssignments = new HashMap<>();
 
         Object[] objects = {task,assignment,phase,participant,projectManager,
-                            department,mapOfParticipants,mapOfAssignments,
-                            listOfPhases, listOfParticipants, listOfTasks};
+                department,mapOfParticipants,mapOfAssignments,
+                listOfPhases, listOfParticipants, listOfTasks};
 
         // Ints
         int taskId = 0;
@@ -115,9 +78,9 @@ public class ProjectCreator {
         int foreignParticipantId = 0;
 
         int[] currentIds = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo,
-                            currentProjectMember,participantId,foreignParticipantId};
+                currentProjectMember,participantId,foreignParticipantId};
         int[] formerIds = {taskId,assignmentId,phaseId,projectManagerId,projectId, departmentNo,
-                            currentProjectMember,participantId,foreignParticipantId};
+                currentProjectMember,participantId,foreignParticipantId};
 
         // Strings
         String dbProjectTitle = new String();
@@ -172,7 +135,7 @@ public class ProjectCreator {
                 if (res.isLast()) {
                     objects =  updateObjects(objects,currentIds, formerIds, strings, res,workHours,isCompleted);
                     project = new Project(strings[0],(ArrayList<Phase>) objects[8],
-                                        (HashMap<String, Participant>)objects[6],(ProjectManager) objects[4]);
+                            (HashMap<String, Participant>)objects[6],(ProjectManager) objects[4]);
                 }
             }
         }
@@ -188,12 +151,6 @@ public class ProjectCreator {
     private Object[] updateObjects(Object[] objects, int[] currentIds, int[] formerIds, String[] strings,
                                    ResultSet res, double workHours,boolean isCompleted) {
         try {
-            // Phase
-            if (currentIds[2] > formerIds[2] || res.isLast()) {
-                ((Phase)objects[2]).setAssignments((Map<String,Assignment>)objects[7]);
-                objects[7] = new HashMap<String, Assignment>();
-                ((ArrayList<Phase>)objects[8]).add((Phase)objects[2]);
-            }
 
             // Checks if participant is projectmanager
             if (currentIds[3]>formerIds[3] || currentIds[6]>formerIds[6] || res.isLast()) {
@@ -216,9 +173,17 @@ public class ProjectCreator {
                     ((HashMap<String, Assignment>)objects[7]).put(String.valueOf(formerIds[1]),(Assignment) objects[1]);
                 }
 
+                // Phase
+                if (currentIds[2] > formerIds[2] || res.isLast()) {
+                    objects[2] = new Phase(strings[2],(Map<String,Assignment>)objects[7]);
+                    objects[7] = new HashMap<String, Assignment>();
+                    ((ArrayList<Phase>)objects[8]).add((Phase)objects[2]);
+                }
+
                 // Task
                 if (currentIds[0]>formerIds[0] || res.isLast()){
                     objects[0] = new Task(workHours,(ArrayList<Participant>) objects[9]);
+                    ((ArrayList<Task>)objects[10]).add((Task)objects[0]);
                 }
             }
         }
@@ -266,4 +231,73 @@ public class ProjectCreator {
         }
         return strings;
     }
+    public ArrayList<Project> getProjects(String userId) {
+        ResultSet res = projectRepo.findProjects(userId);
+        ArrayList<Project> projects = new ArrayList<>();
+
+        int currentProjectId;
+        int formerProjectId = 0;
+
+        try {
+            while (res.next()) {
+                // If there is only one row
+                if (res.isFirst() && res.isLast()) {
+                    projects.add(getProject(res.getString("title")));
+                    break;
+                }
+                // Otherwise it compares former- and current ids, and as well adds the last project
+                currentProjectId = res.getInt("project_id");
+                if (currentProjectId > formerProjectId && !res.isFirst()) {
+                    projects.add(getProject(res.getString("title")));
+                }
+                formerProjectId = res.getInt("project_id");
+                if (res.isLast()) {
+                    projects.add(getProject(res.getString("title")));
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't gather projects...\n" + e.getMessage());
+        }
+        return projects;
+    }
+
+    public Phase createPhase(String projectTitle) {
+
+        phase = new Phase(new String());
+
+        int id = projectRepo.findId("project","title",projectTitle, "project_id");
+        projectRepo.putPhaseInDatabase(id);
+
+        return phase;
+    }
+    public Phase getPhase(String ) {
+        ResultSet res = projectRepo.findPhase();
+    }
+
+    public Assignment createAssignment(String phaseTitle, String start, String end) {
+
+        assignment = new Assignment(start,end,new String(),false, new ArrayList<Task>());
+
+        int phaseId = projectRepo.findId("phase_table","phase_title",phaseTitle,"phase_id");
+        Integer taskId = null;
+
+        projectRepo.putAssignmentInDatabase(assignment,phaseId);
+
+        return assignment;
+    }
+
+    public Task createTask(String assignmentTitle, Participant participant) {
+
+        Double workHours = null;
+
+        task = new Task(workHours,new ArrayList<>());
+        task.addParticipant(participant);
+
+        projectRepo.putTaskInDatabase(projectRepo.findId("assignment","assignment_title",assignmentTitle,"assignment_id"));
+
+        return task;
+    }
+
+
 }

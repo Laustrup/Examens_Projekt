@@ -1,11 +1,8 @@
 package patrick_laust_ayo.examproject.repositories;
 
 import patrick_laust_ayo.examproject.models.*;
-import patrick_laust_ayo.examproject.services.ProjectCreator;
-import patrick_laust_ayo.examproject.services.UserCreator;
 
 import java.sql.ResultSet;
-import java.util.ArrayList;
 
 public class ProjectRepository extends Repository{
 
@@ -35,6 +32,11 @@ public class ProjectRepository extends Repository{
 
     public void putPhaseInDatabase(int projectmanagerId) {
         executeSQLStatement("INSERT INTO phase VALUES (default, "  + null + ", " + projectmanagerId + "); ");
+    }
+    public ResultSet findPhase(String phaseTitle, String projectTitle) {
+        return executeQuery("SELECT * FROM phase_table " +
+                "INNER JOIN project ON project.project_id = phase_table.project_id " +
+                "WHERE phase_title = " + phaseTitle + " AND title = " + projectTitle + ";");
     }
 
     public void putAssignmentInDatabase(Assignment assignment, int phaseId) {
@@ -69,32 +71,11 @@ public class ProjectRepository extends Repository{
     }
 
     // TODO Not done, when used logic should be moved to service
-    public ArrayList<Project> getProjects(String userId) {
-        ArrayList<Project> projects = new ArrayList<>();
-        ResultSet res = executeQuery("SELECT * project" +
+    public ResultSet findProjects(String userId) {
+        return executeQuery("SELECT * FROM project " +
                                         "INNER JOIN participant_project ON participant_project.project_id = project.project_id " +
                                         "INNER JOIN participant ON participant.participant_id = participant_project.participant_id " +
-                                        "WHERE participant.user_id = " + userId + ";");
-        int currentProjectId;
-        int formerProjectId = 0;
-        ProjectCreator projectCreator = new ProjectCreator();
-
-        try {
-            while (res.next()) {
-                if (res.isFirst()) {
-                    formerProjectId = res.getInt("project_id");
-                }
-                currentProjectId = res.getInt("project_id");
-                if (currentProjectId > formerProjectId) {
-                    projects.add(projectCreator.getProject(res.getString("title")));
-                }
-                formerProjectId = res.getInt("project_id");
-            }
-        }
-        catch (Exception e) {
-            System.out.println("Couldn't gather projects...\n" + e.getMessage());
-        }
-        return projects;
+                                        "WHERE participant.user_id = '" + userId + "';");
     }
 
     public void updateProject(Project project,String formerTitle) {
