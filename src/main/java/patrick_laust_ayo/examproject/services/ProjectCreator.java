@@ -271,8 +271,72 @@ public class ProjectCreator {
 
         return phase;
     }
-    public Phase getPhase(String ) {
-        ResultSet res = projectRepo.findPhase();
+    public Phase getPhase(String phaseTitle,String projectTitle) {
+        ResultSet res = projectRepo.findPhase(phaseTitle,projectTitle);
+
+        Phase phase = new Phase(new String(),new HashMap<>());
+        Map<String, Assignment> assignments = new HashMap<>();
+        ArrayList<Task> tasks = new ArrayList<>();
+        ArrayList<Participant> participants = new ArrayList<>();
+        Department department = new Department(0,new String(), new String());
+
+        int formerAssignmentId = 0;
+        int formerTaskId = 0;
+        int formerParticipantId = 0;
+        int formerDepartmentId = 0;
+
+        try {
+            while (res.next()) {
+                // If there is only one row
+                if (res.isFirst() && res.isLast()) {
+                    phase = new Phase(res.getString("phase_title"),assignments);
+                    break;
+                }
+
+                // Otherwise it continues to put in all values, and in the end constructs the object
+                int currentAssignmentId = res.getInt("assignment_id");
+                int currentTaskId = res.getInt("task_id");
+                int currentParticipantId = res.getInt("participant_id");
+                int currentDepartmentId = res.getInt("department_no");
+
+                if (currentDepartmentId > formerDepartmentId) {
+                    department = new Department(currentDepartmentId,res.getString("location"),res.getString("department_name"));
+                }
+                if (currentParticipantId > formerParticipantId && !res.isFirst()) {
+                    participants.add(new Participant(res.getString("user_id"),res.getString("participant_password"),
+                            res.getString("participant_name"),res.getString("position"),department));
+                }
+                if (currentTaskId > formerTaskId && !res.isFirst()) {
+                    tasks.add(new Task(res.getDouble("estimated_work_hours"),participants));
+                }
+                if (currentAssignmentId > formerAssignmentId && !res.isFirst()) {
+                    assignments.put(String.valueOf(res.getInt("assignment_id")),
+                            new Assignment(res.getString("assignment_start"), res.getString("assignment_end"),
+                                    res.getString("assignment_title"),res.getBoolean("is_completed"),
+                                    tasks));
+                }
+
+                formerAssignmentId = res.getInt("assignment_id");
+                formerTaskId = res.getInt("task_id");
+                formerParticipantId = res.getInt("participant_id");
+                formerDepartmentId = res.getInt("department_no");
+
+                if (res.isLast()) {
+                    assignments.put(String.valueOf(res.getInt("assignment_id")),
+                            new Assignment(res.getString("assignment_start"), res.getString("assignment_end"),
+                                    res.getString("assignment_title"),res.getBoolean("is_completed"),
+                                    tasks));
+                    phase = new Phase(res.getString("phase_title"),assignments);
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't create phase from database...\n" + e.getMessage());
+            phase = null;
+        }
+
+        return phase;
+
     }
 
     public Assignment createAssignment(String phaseTitle, String start, String end) {
