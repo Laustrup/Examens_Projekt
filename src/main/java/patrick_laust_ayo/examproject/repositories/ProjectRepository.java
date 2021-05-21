@@ -1,11 +1,8 @@
 package patrick_laust_ayo.examproject.repositories;
 
 import patrick_laust_ayo.examproject.models.*;
-import patrick_laust_ayo.examproject.services.ProjectCreator;
-import patrick_laust_ayo.examproject.services.UserCreator;
 
 import java.sql.ResultSet;
-import java.util.ArrayList;
 
 public class ProjectRepository extends Repository{
 
@@ -35,6 +32,11 @@ public class ProjectRepository extends Repository{
 
     public void putPhaseInDatabase(int projectmanagerId) {
         executeSQLStatement("INSERT INTO phase VALUES (default, "  + null + ", " + projectmanagerId + "); ");
+    }
+    public ResultSet findPhase(String phaseTitle, String projectTitle) {
+        return executeQuery("SELECT * FROM phase_table " +
+                "INNER JOIN project ON project.project_id = phase_table.project_id " +
+                "WHERE phase_title = " + phaseTitle + " AND title = " + projectTitle + ";");
     }
 
     public void putAssignmentInDatabase(Assignment assignment, int phaseId) {
