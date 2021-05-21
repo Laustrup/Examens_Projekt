@@ -55,7 +55,7 @@ public class  ProjectManagerController {
             model.addAttribute("Exception",inputException);
             return "create_projectmanager.html";
         }
-
+        //TODO UserCreator.createManager virker ikke!!!
         ProjectManager projectManager = userCreator.createManager(username, password);
         session.setAttribute("username", username);
         session.setAttribute("password", password);
@@ -88,12 +88,12 @@ public class  ProjectManagerController {
 
     @GetMapping("/{projectManager.getId}")
     public String renderDashboard(@PathVariable("projectManager.getId") String userId,
-                                  @PathVariable("projectManager.getUsername") String username,
                                   Model model, HttpServletRequest request) {
 
+        //TODO linje 95 skal have Username istedet for userId! + PATHVARIABLE for userName skal med!
         ProjectManagerRepository repo = new ProjectManagerRepository(); //Bruges denne ??
         ProjectRepository pRepo = new ProjectRepository();
-        ProjectManager projectManager = userCreator.getProjectManager(username);
+        ProjectManager projectManager = userCreator.getProjectManager("USERNAME HER!");
         ProjectCreator projectCreator = new ProjectCreator();
 
         ArrayList<Project> projectsToRender = projectCreator.getProjects(userId); //vi kalder det id i metoden

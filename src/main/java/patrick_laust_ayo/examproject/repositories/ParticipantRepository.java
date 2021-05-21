@@ -34,7 +34,7 @@ public class ParticipantRepository extends Repository {
     }
 
      */
-
+    //TODO SKAL DENNE METODE RETURNERE USERID?
     public ResultSet findParticipant(String userId) {
         return executeQuery("SELECT * FROM participant " +
                         "INNER JOIN department ON participant.department_no = department.department_no " + "INNER JOIN project " +
