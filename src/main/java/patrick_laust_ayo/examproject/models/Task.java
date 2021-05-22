@@ -13,6 +13,13 @@ public class Task extends Assignment {
         this.participants = participants;
     }
 
+    public Task(double estimatedWorkHours,ArrayList<Participant> participants,
+                String start,String end,String title,boolean isCompleted) {
+        super(start,end,title,isCompleted,null);
+        this.estimatedWorkHours = estimatedWorkHours;
+        this.participants = participants;
+    }
+
     public double getEstimatedWorkHours() {
         return estimatedWorkHours;
     }

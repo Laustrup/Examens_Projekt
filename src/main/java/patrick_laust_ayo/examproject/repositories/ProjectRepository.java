@@ -11,25 +11,6 @@ public class ProjectRepository extends Repository{
         executeSQLStatement("INSERT INTO project(title, projectmanager_id) VALUES (\""  + projectToInsert.getTitle() + "\", " + projectmanagerId + "); ");
     }
 
-    /*
-    public Project putProjectInDatabaseWithReturn(Project projectToInsert, int projectmanagerId, ProjectManager projectManager) {
-        executeSQLStatement("insert into project values (default, \""  + projectToInsert.getTitle() + "\", " + projectmanagerId + "); ");
-        ResultSet res = executeQuery("SELECT * FROM project WHERE title = \"" + projectToInsert.getTitle() + "\";");
-
-
-        try {
-            project = new Project(res.getString("title"), new ArrayList<Phase>(), new HashMap<>(), projectManager);
-        }
-        catch (Exception e) {
-            System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
-            project = null;
-        }
-        closeCurrentConnection();
-        return project;
-    }
-
-     */
-
     public void putPhaseInDatabase(int projectId) {
         executeSQLStatement("INSERT INTO phase_table(phase_title, project_id) VALUES (null, " + projectId + ");");
     }
@@ -41,7 +22,7 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN participant_task ON participant_task.task_id = task.task_id " +
                 "INNER JOIN participant ON participant.participant_id = participant_task.participant_id " +
                 "INNER JOIN department ON department.department_no = participant.department_no " +
-                "WHERE phase_title = " + phaseTitle + " AND title = " + projectTitle + ";");
+                "WHERE phase_title = '" + phaseTitle + "' AND title = '" + projectTitle + "';");
     }
     // TODO Change safeupdate
     public void updatePhase(String phaseTitle,String projectTitle,String formerPhaseTitle) {
@@ -70,31 +51,32 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN participant_task ON participant_task.task_id = task.task_id " +
                 "INNER JOIN participant ON participant.participant_id = participant_task.participant_id " +
                 "INNER JOIN department ON department.department_no = participant.department_no " +
-                "WHERE assigment_title = " + assignmentTitle + " AND phase_title = " + phaseTitle + ";");
+                "WHERE assigment_title = '" + assignmentTitle + "' AND phase_title = '" + phaseTitle + "';");
     }
 
     public void putTaskInDatabase(int assignmentId) {
         executeSQLStatement("INSERT INTO task(assignment_id,estimated_work_hours) VALUES (" + assignmentId + ", null); ");
     }
+    public ResultSet findTask(String taskTitle,String assignmentTitle) {
+        return executeQuery("SELECT * FROM task " +
+                "INNER JOIN task ON task.assignment_id = assignment.assignment_id " +
+                "INNER JOIN participant_task ON participant_task.task_id = task.task_id " +
+                "INNER JOIN participant ON participant.participant_id = participant_task.participant_id " +
+                "INNER JOIN department ON department.department_no = participant.department_no " +
+                "WHERE task_title = '" + taskTitle + "' AND assignment_title = '" + assignmentTitle + "';");
+    }
 
     public ResultSet findProject(String projectTitle) {
-
-        return executeQuery("SELECT project.project_id, project.title, project.projectmanager_id, " +
-                "projectmanager.username, projectmanager.participant_id, " +
-                "phase_table.phase_id, phase_table.phase_title, " +
-                "assignment.assignment_id, assignment.assignment_title, assignment.phase_id, assignment.assignment_start, assignment.assignment_end, assignment.is_completed, " +
-                "task.estimated_work_hours, task.task_id, " +
-                "participant.participant_id, participant.user_id, participant.participant_name, participant.participant_password, participant.position, " +
-                "department.department_no, department.location, department.department_name " +
-                "FROM project " +
-                "INNER JOIN phase_table " +
-                "INNER JOIN assignment " +
-                "INNER JOIN task " +
-                "INNER JOIN participant " +
-                "INNER JOIN department " +
-                "INNER JOIN projectmanager " +
-                "WHERE project.title = '" + projectTitle +  "'" +
-                "and participant.department_no = department.department_no;");
+        return executeQuery("SELECT * FROM project " +
+                "INNER JOIN phase_table ON phase.project_id = project_project_id " +
+                "INNER JOIN assignment ON assignment.phase_id = phase_table.phase_id " +
+                "INNER JOIN task ON task.assignment_id = assignment.assignment_id " +
+                "INNER JOIN participant_task ON participant_task.task_id = task.task_id " +
+                "INNER JOIN participant ON participant.participant_id = participant_task.participant_id " +
+                "INNER JOIN projectmanager ON projectmanager.projectmanager_id = project.projectmanager_id " +
+                "INNER JOIN department ON department.department_no = participant.department_no " +
+                "WHERE project.title = '" + projectTitle +  "' " +
+                "AND participant.department_no = department.department_no;");
 
     }
 

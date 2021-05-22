@@ -82,6 +82,7 @@ public class ExceptionHandler {
         }
         return false;
     }
+    /*
     public boolean doesProjectManagerUsernameExist(String username) {
         ProjectManagerRepository repo = new ProjectManagerRepository();
 
@@ -99,6 +100,8 @@ public class ExceptionHandler {
         }
         return false;
     }
+
+     */
     public boolean doesParticipantExist(String participant_ID){
         Map<String, Participant> userList = getParticipantMap();
         return userList.containsKey(participant_ID);
