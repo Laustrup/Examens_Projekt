@@ -110,5 +110,4 @@ class ProjectCreatorTest {
         assertEquals(new String(), actualReturned.getTitle());
         assertEquals(projectTitle,actualFromDb.getTitle());
     }
-
 }
