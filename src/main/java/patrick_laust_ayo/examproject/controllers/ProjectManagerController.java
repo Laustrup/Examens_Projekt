@@ -35,9 +35,9 @@ public class  ProjectManagerController {
                                             HttpServletRequest request, Model model){
 
 
-        if (exceptionHandler.doesProjectManagerUsernameExist(username)) {
+        if (exceptionHandler.doesUserIdExist(username)) {
             model.addAttribute("userAlreadyExist", "This username already exist. Please choose another.");
-            System.out.println(exceptionHandler.doesProjectManagerUsernameExist(username));
+            System.out.println(exceptionHandler.doesUserIdExist(username));
             return "create_projectmanager.html";
         }
 
@@ -55,7 +55,7 @@ public class  ProjectManagerController {
             model.addAttribute("Exception",inputException);
             return "create_projectmanager.html";
         }
-        //TODO UserCreator.createManager virker ikke!!!
+
         ProjectManager projectManager = userCreator.createManager(username, password);
         session.setAttribute("username", username);
         session.setAttribute("password", password);
@@ -90,15 +90,15 @@ public class  ProjectManagerController {
     public String renderDashboard(@PathVariable("projectManager.getId") String userId,
                                   Model model, HttpServletRequest request) {
 
-        //TODO linje 95 skal have Username istedet for userId! + PATHVARIABLE for userName skal med!
         ProjectManagerRepository repo = new ProjectManagerRepository(); //Bruges denne ??
         ProjectRepository pRepo = new ProjectRepository();
-        ProjectManager projectManager = userCreator.getProjectManager("USERNAME HER!");
+        ProjectManager projectManager = userCreator.getProjectManager(userId);
         ProjectCreator projectCreator = new ProjectCreator();
 
         ArrayList<Project> projectsToRender = projectCreator.getProjects(userId); //vi kalder det id i metoden
 
         model.addAttribute("projectsToRender",projectsToRender);
+        model.addAttribute("projectManager", projectManager);
 
         HttpSession session = request.getSession();
         session.setAttribute("projectManager",projectManager);

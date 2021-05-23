@@ -37,14 +37,14 @@ class UserCreatorTest {
         ProjectManager projectManager;
 
         //Act
-        projectManager = userCreator.getProjectManager("Andy boss");
+        projectManager = userCreator.getProjectManager("andy0432");
 
         //Assert
         assertEquals(2, projectManager.getDepartment().getDepartmentNo());
         assertEquals("0152 Oslo Norway - Tollbugata 8 A/B", projectManager.getDepartment().getLocation());
         assertEquals("OSLO", projectManager.getDepartment().getDepName());
-        assertEquals("Andy Boss", projectManager.getUsername());
-        assertEquals("erAsD14'd", projectManager.getPassword());
+        assertEquals("andy0432", projectManager.getUsername());
+        assertEquals("erAsD14d", projectManager.getPassword());
         assertEquals("andy0432", projectManager.getId());
         assertEquals("Andy Boss", projectManager.getName());
         assertEquals("Manager", projectManager.getPosition());

@@ -5,8 +5,6 @@ import patrick_laust_ayo.examproject.models.Phase;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 
-import java.sql.ResultSet;
-
 public class ProjectEditor {
 
     private ProjectRepository repo = new ProjectRepository();
@@ -17,16 +15,35 @@ public class ProjectEditor {
         return creator.getProject(title);
     }
 
+    public void deleteProject(String title) {
+        repo.removeProject(title);
+    }
+    public void deletePhase(String phaseTitle,String projectTitle) {
+        repo.removePhase(phaseTitle,projectTitle);
+    }
+    public void deleteAssignment(String assignmentTitle,String phaseTitle) {
+        repo.removeAssignment(assignmentTitle,phaseTitle);
+    }
+    public void deleteTask(String taskTitle,String assignmentTitle) {
+        repo.removeTask(taskTitle,assignmentTitle);
+    }
+
+
     public Phase updatePhase(String phaseTitle, String formerphaseTitle, String projectTitle) {
         repo.updatePhase(phaseTitle,projectTitle,formerphaseTitle);
         return creator.getPhase(phaseTitle,projectTitle);
     }
 
-    public Assignment updateAssignmentTitle(String column,String updateValue,String assignmentTitle,String phaseTitle) {
-        repo.updateAssignment(column,updateValue,assignmentTitle,phaseTitle);
-        return creator.getAssignment(assignmentTitle,phaseTitle);
+    public Assignment updateAssignmentTitle(String title,String start,String end,boolean isCompleted,
+                                            String formerTitle,String phaseTitle) {
+        if (isCompleted) {
+            repo.updateAssignment(title, start, end, "true", formerTitle, phaseTitle);
+        }
+        else {
+            repo.updateAssignment(title, start, end, "false", formerTitle, phaseTitle);
+        }
+
+        return creator.getAssignment(title,phaseTitle);
     }
-
-
 
 }

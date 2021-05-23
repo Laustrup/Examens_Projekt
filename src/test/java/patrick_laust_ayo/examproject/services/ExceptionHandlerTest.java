@@ -81,7 +81,7 @@ class ExceptionHandlerTest {
         // Arrange
 
         // Act
-        boolean actual = handler.doesProjectManagerUsernameExist(userName);
+        boolean actual = handler.doesUserIdExist(userName);
         // Assert
         assertEquals(expected,actual);
     }
