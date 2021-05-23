@@ -89,9 +89,12 @@ public class  ProjectManagerController {
     @GetMapping("/{projectManager.getId}")
     public String renderDashboard(@PathVariable("projectManager.getId") String userId,
                                   Model model, HttpServletRequest request) {
-
+        //TODO problemer med PathVariable, den er = "create-project", skal være user id'et.
         ProjectManagerRepository repo = new ProjectManagerRepository(); //Bruges denne ??
         ProjectRepository pRepo = new ProjectRepository();
+
+        System.out.println("her er user id'et " + userId);
+
         ProjectManager projectManager = userCreator.getProjectManager(userId);
         ProjectCreator projectCreator = new ProjectCreator();
 
@@ -99,6 +102,9 @@ public class  ProjectManagerController {
 
         model.addAttribute("projectsToRender",projectsToRender);
         model.addAttribute("projectManager", projectManager);
+
+        System.out.println("her er user id'et for anden gang " + userId);
+        System.out.println("Her er projectmanager.getId " + projectManager.getId());
 
         HttpSession session = request.getSession();
         session.setAttribute("projectManager",projectManager);

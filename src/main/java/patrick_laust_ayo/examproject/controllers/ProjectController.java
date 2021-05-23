@@ -59,7 +59,7 @@ public class ProjectController {
         session.setAttribute("projectTitle", title);
 
         return "redirect:/project_page/" + title + "/" +
-                ((ProjectManager) session.getAttribute("projectManager")).getId() + "/" +
+                ((ProjectManager) session.getAttribute("projectManager")).getUsername() + "/" +
                 ((ProjectManager) session.getAttribute("projectManager")).getPassword();
 
     }
