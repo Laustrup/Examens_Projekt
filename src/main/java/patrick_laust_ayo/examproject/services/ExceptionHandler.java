@@ -65,6 +65,30 @@ public class ExceptionHandler {
             return true;
         }
     }
+    public boolean doesPhaseExist(String phaseTitle, String projectTitle) {
+        if (new ProjectCreator().getPhase(phaseTitle,projectTitle) == null) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    public boolean doesAssignmentExist(String assignmentTitle, String phaseTitle) {
+        if (new ProjectCreator().getAssignment(assignmentTitle, phaseTitle) == null) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    public boolean doesTaskExist(String taskTitle, String assignmentTitle) {
+        if (new ProjectCreator().getTask(taskTitle,assignmentTitle) == null) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
     public boolean doesUserIdExist(String userId) {
         ParticipantRepository repo = new ParticipantRepository();
 
@@ -82,6 +106,7 @@ public class ExceptionHandler {
         }
         return false;
     }
+
     /*
     public boolean doesProjectManagerUsernameExist(String username) {
         ProjectManagerRepository repo = new ProjectManagerRepository();
