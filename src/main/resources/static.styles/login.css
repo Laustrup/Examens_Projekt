@@ -1,0 +1,39 @@
+header {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    background-color: #59869d;
+    margin: 0 400px 20px 400px;
+    box-shadow: 5px 10px;
+
+}
+
+section {
+    text-align:center;
+    margin: 40px 0 40px 0;
+}
+
+button {
+    background-color: lightgrey;
+    padding: 8px;
+    cursor: pointer;
+    box-shadow: 3px 4px #888888;
+    margin: 7px;
+}
+.participants_id {
+    padding: 10px;
+    margin: 0 0 10px -20%;
+}
+
+.participants_password {
+    padding: 10px;
+    margin: 0 7px 25px -20%;
+}
+
+.projectmanager_password{
+    padding: 10px;
+    margin: 0 7px 25px -20%;
+}

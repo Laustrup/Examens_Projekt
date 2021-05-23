@@ -1,6 +1,6 @@
 .split {
     height: 100%;
-    width: 50%;
+    width: 60%;
     position: fixed;
     z-index: 1;
     top: 0;
@@ -11,13 +11,39 @@
 /* Control the left side */
 .left {
     left: 0;
-    background-color: white;
-}
-
-/* Control the right side */
-.right {
-    right: 0;
     background-color: antiquewhite;
 }
+.update_participant_form {
+    background-color: #59869d;
+    border: 3px solid grey;
+    padding: 10px;
+    margin: 20px;
+    width: 40%;
+}
 
+.update_participant_form div {
+    margin: 5px;
+}
+button {
+    background-color: lightgrey;
+    padding: 5px;
+    cursor: pointer;
+    box-shadow: 3px 4px #888888;
+}
 
+.implementing {
+    margin: 20px;
+    width: 40%;
+    border: 3px solid green;
+    padding: 10px;
+}
+.project_options {
+    padding: 20px;
+    margin: 20px;
+    color: red;
+}
+
+.implementing submit {
+    display: inline-block;
+
+}
