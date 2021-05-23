@@ -114,13 +114,23 @@ public class ProjectRepository extends Repository{
     // TODO Figure the sql statement to fit the project and participant
     public void addParticipantToProject(Participant participant, Project project) {
         // TODO Should projecttitle be uniq? To insure not to be added to wrong project?
+        int participantId = findId("participant","user_id", participant.getId(),"participant_id");
+        int projectId = findId("project","title", project.getTitle(),"project_id");
+
         executeSQLStatement("UPDATE participant_project " +
                 "INNER JOIN project ON participant_project.project_id = project.project_id " +
                 "INNER JOIN participant ON participant_project.participant_id = participant.participant_id " +
-                "ADD participant_id = " + findId("participant","user_id", participant.getId(), "participant_id") + ", " +
-                "ADD project_id = " + findId("project","title", project.getTitle(), "project_id") + ", " +
-                "WHERE participant.user_id = \"" + participant.getId() + "\"; " +
-                "DELETE ROW FROM participant WHERE project.user_id = null, WHERE participant_project.project_id = participant_project.participant_id;");
+                "SET participant_project.participant_id = " + participantId + " " +
+                "WHERE participant_project.participant_id = " + participantId + " AND participant_project.project_id = " + projectId + ";" +
+                "DELETE ROW FROM participant " +
+                "INNER JOIN participant_project ON participant_project.participant_id = participant.participant_id " +
+                "INNER JOIN project ON project.project_id = participant_project.project_id " +
+                "WHERE project.user_id = null " +
+                "AND WHERE project.name = null " +
+                "AND WHERE project.password = null " +
+                "AND WHERE position = null " +
+                "AND WHERE participant_project.project_id = participant_project.participant_id" +
+                "AND WHERE participant.participant_id = participant_project.participant_id;");
     }
     public void removeProject(String title) {
         executeSQLStatement("DELETE ROW FROM project WHERE title = \"" + title + "\";");
