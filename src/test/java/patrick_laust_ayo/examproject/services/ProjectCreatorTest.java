@@ -56,7 +56,6 @@ class ProjectCreatorTest {
                 appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(0).getParticipants().get(1).getId());
         assertEquals(false,
                 appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(0).isCompleted());
-
         assertEquals(200.00,
                 appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(1).getEstimatedWorkHours());
         assertEquals("Discuss Possible Clients",
@@ -71,9 +70,10 @@ class ProjectCreatorTest {
                 appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(1).getParticipants().get(1).getId());
         assertEquals(false,
                 appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(1).isCompleted());
-
+// error
         assertEquals(100.00,
                 appdevProject.getPhases().get(1).getAssignments().get("Database").getTasks().get(0).getEstimatedWorkHours());
+
         assertEquals("Repositories",
                 appdevProject.getPhases().get(1).getAssignments().get("Database").getTasks().get(0).getTitle());
         assertEquals("2021-11-15 12:30:00",
@@ -147,7 +147,7 @@ class ProjectCreatorTest {
                 appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(0).getTitle());
         assertEquals("2021-12-21 12:30:00",
                 appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(0).getStart());
-        assertEquals("2022-01-4 23:59:59",
+        assertEquals("2022-01-04 23:59:59",
                 appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(0).getEnd());
         assertEquals("andy0432",
                 appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(0).getParticipants().get(0).getId());
@@ -160,7 +160,7 @@ class ProjectCreatorTest {
                 appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(1).getTitle());
         assertEquals("2021-12-21 12:30:00",
                 appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(1).getStart());
-        assertEquals("2022-01-4 23:59:59",
+        assertEquals("2022-01-04 23:59:59",
                 appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(1).getEnd());
         assertEquals("andy0432",
                 appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(1).getParticipants().get(0).getId());
@@ -173,7 +173,7 @@ class ProjectCreatorTest {
                 appdevProject.getPhases().get(2).getAssignments().get("Releasing").getTasks().get(0).getTitle());
         assertEquals("2021-12-21 12:30:00",
                 appdevProject.getPhases().get(2).getAssignments().get("Releasing").getTasks().get(0).getStart());
-        assertEquals("2022-01-4 23:59:59",
+        assertEquals("2022-01-04 23:59:59",
                 appdevProject.getPhases().get(2).getAssignments().get("Releasing").getTasks().get(0).getEnd());
         assertEquals("lone9242",
                 appdevProject.getPhases().get(2).getAssignments().get("Releasing").getTasks().get(0).getParticipants().get(0).getId());
