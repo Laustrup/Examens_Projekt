@@ -17,8 +17,7 @@ import patrick_laust_ayo.examproject.services.UserEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.lang.reflect.Executable;
-import java.sql.ResultSet;
+
 
 @Controller
 public class ParticipantController {
@@ -32,18 +31,19 @@ public class ParticipantController {
     }
 
     @PostMapping("/participant_join_project")
-    public String renderParticipantJoinProject(
-                                               @RequestParam (name="participant_id") String userId,
+    public String renderParticipantJoinProject(@RequestParam (name="participant_id") String userId,
+                                               @RequestParam (name="password") String password,
                                                HttpServletRequest request, Model model){
-        System.out.println("okay");
+
         HttpSession session = request.getSession();
         ParticipantRepository parRepo = new ParticipantRepository();
-        ResultSet res = parRepo.findParticipant(userId);
+        UserCreator userCreator = new UserCreator();
+        UserEditor userEditor = new UserEditor();
 
         try {
-            res.next();
-            if (res.getString("user_id").equals(userId)) {
-                return "redirect:/join/{project.getTitle}";
+            if (userCreator.getParticipant(userId).getId().equals(userId)){
+              //  userEditor.joinParticipantToProject()
+                return "redirect:/participant_dashboard";
             }
         }
         catch (Exception e){
@@ -53,18 +53,24 @@ public class ParticipantController {
         return "redirect:/participant_login_page";
     }
 
-    @PostMapping("/join/{project.getTitle}")
-    public String joinProject(@PathVariable(name="project.getTitle") String projectTitle,
+    @GetMapping("/participant_dashboard")
+    public String renderDashboard(){
+
+    }
+
+    @PostMapping("/join/{project.getTitle()}")
+    public String joinProject(@PathVariable(name="project.getTitle()") String projectTitle,
                               @RequestParam(name="participant_ID") String id,
-                              @RequestParam(name="password") String password, Model model) {
+                              @RequestParam(name="password") String password, Model model,
+                              HttpServletRequest request) {
         //TODO kan ikke få pathvariablen til at virke, den kan ikke finde ud af hvad project.getTitle er
         ExceptionHandler handler = new ExceptionHandler();
         ProjectRepository projectRepo = new ProjectRepository();
         ProjectCreator projectCreator = new ProjectCreator();
-
+        HttpSession session = request.getSession();
         try {
 
-            model.addAttribute("project", projectRepo.findProjects(id).getString("title"));
+            model.addAttribute("project",(Project) session.getAttribute("project"));
         }
         catch (Exception e){
             System.out.println("cannot add project to model (participant controller " + e.getMessage());
@@ -81,7 +87,7 @@ public class ParticipantController {
     }
 
     @PostMapping("/{project.getTitle()}/add_participant")
-    public String addParticipantsToProject(@PathVariable("{project.getTitle()}") String projectTitle,
+    public String addParticipantsToProject(@PathVariable("project.getTitle()") String projectTitle,
                                                 @RequestParam(name = "department_name") String departmentName,
                                                 @RequestParam(name = "amount") int amount, HttpServletRequest request) {
 
