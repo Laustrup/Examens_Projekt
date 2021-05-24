@@ -1,5 +1,6 @@
 package patrick_laust_ayo.examproject.services;
 
+import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
@@ -171,10 +172,11 @@ public class ExceptionHandler {
         }
         return false;
     }
-    public boolean isProjectFullybooked(Project project) {
-        for (int i = 0; i < project.getParticipants().size(); i++) {
-            Participant participant = project.getParticipants().get("Projectmember number " + i);
-            if (participant.getId() == null || participant.getPassword() == null) {
+    public boolean isProjectFullybooked(Project project, int departmentNo) {
+        for (int i = 1; i <= project.getParticipants().size(); i++) {
+            Participant participant = project.getParticipants().get("projectmember " + i);
+            if ((participant.getId() == null || participant.getPassword() == null) &&
+                    participant.getDepartment().getDepartmentNo() == departmentNo) {
                 return false;
             }
         }

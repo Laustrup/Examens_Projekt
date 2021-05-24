@@ -152,7 +152,7 @@ public class ProjectCreator {
                     // Assignment
                     if (currentAssignmentId>formerAssignmentId) {
                         assignment = new Assignment(strings[9],strings[10],strings[11],assignmentIsCompleted,listOfTasks);
-                        mapOfAssignments.put(assignment.getTitle()+assignment.getStart()+assignment.getEnd(),assignment);
+                        mapOfAssignments.put(assignment.getTitle(), assignment);
                     }
 
                     // Phase
@@ -221,7 +221,6 @@ public class ProjectCreator {
         projectRepo.closeCurrentConnection();
         return project;
     }
-
     public ArrayList<Project> getProjects(String userId) {
         ResultSet res = projectRepo.findProjects(userId);
         ArrayList<Project> projects = new ArrayList<>();

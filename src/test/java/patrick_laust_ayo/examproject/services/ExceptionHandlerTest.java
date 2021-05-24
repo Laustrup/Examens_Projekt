@@ -41,14 +41,14 @@ class ExceptionHandlerTest {
 
     // TODO Perhaps make a project that isn't full?
     @ParameterizedTest
-    @CsvSource(value = {"Appdev|true"},delimiter = '|')
-    public void isProjectFullybookedTest(String projectTitle, boolean expected) {
+    @CsvSource(value = {"Appdev|COPENHAGEN|true"},delimiter = '|')
+    public void isProjectFullybookedTest(String projectTitle, String departmentName, boolean expected) {
         // Arrange
         ProjectCreator projectCreator = new ProjectCreator();
         Project project = projectCreator.getProject(projectTitle);
 
         // Act
-        boolean actual = handler.isProjectFullybooked(project);
+        boolean actual = handler.isProjectFullybooked(project,new UserCreator().getDepartment(departmentName).getDepartmentNo());
         // Assert
         assertEquals(expected,actual);
     }
@@ -71,17 +71,6 @@ class ExceptionHandlerTest {
 
         // Act
         boolean actual = handler.doesUserIdExist(userId);
-        // Assert
-        assertEquals(expected,actual);
-    }
-
-    @ParameterizedTest
-    @CsvSource(value = {"Andy Boss|true","Gert Jensen|false"},delimiter = '|')
-    public void doesProjectManagerUsernameExistTest(String userName,boolean expected) {
-        // Arrange
-
-        // Act
-        boolean actual = handler.doesProjectManagerUsernameExist(userName);
         // Assert
         assertEquals(expected,actual);
     }
