@@ -159,6 +159,7 @@ public class ProjectCreator {
                         assignment = new Assignment(strings[9],strings[10],strings[11],assignmentIsCompleted,listOfTasks);
                         listOfTasks = new ArrayList<>();
                         mapOfAssignments.put(assignment.getTitle(), assignment);
+
                     }
 
                     // Phase
