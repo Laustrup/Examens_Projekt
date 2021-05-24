@@ -155,14 +155,14 @@ public class ExceptionHandler {
     }
 
     // Allows logins
-    public boolean allowLogin(String password) {
+    public boolean allowLogin(String userId, String password) {
         ParticipantRepository repo = new ParticipantRepository();
 
         ResultSet res = repo.selectAll("participant");
 
         try {
             while (res.next()) {
-                if (res.getString("participant_password").equals(password)) {
+                if (res.getString("participant_password").equals(password) && res.getString("user_id").equals(userId)) {
                     return true;
                 }
             }
