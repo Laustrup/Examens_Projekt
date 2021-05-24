@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class ParticipantController {
 
-    private UserCreator userCreator;
+    private UserCreator userCreator = new UserCreator();
     private UserEditor userEditor;
 
     @GetMapping("/participant_login_page")
@@ -32,30 +32,33 @@ public class ParticipantController {
 
     @PostMapping("/participant_join_project")
     public String renderParticipantJoinProject(@RequestParam (name="participant_id") String userId,
-                                               @RequestParam (name="password") String password,
+                                               @RequestParam (name="participant_password") String password,
                                                HttpServletRequest request, Model model){
 
         HttpSession session = request.getSession();
-        ParticipantRepository parRepo = new ParticipantRepository();
-        UserCreator userCreator = new UserCreator();
-        UserEditor userEditor = new UserEditor();
+        ExceptionHandler exceptionHandler = new ExceptionHandler();
+
 
         try {
-            if (userCreator.getParticipant(userId).getId().equals(userId)){
-              //  userEditor.joinParticipantToProject()
-                return "redirect:/participant_dashboard";
+            if (exceptionHandler.allowLogin(userId, password)){
+                session.setAttribute("participant", userCreator.getParticipant(userId));
+                return "redirect:/participant_dashboard/" + userId;
             }
         }
         catch (Exception e){
-            System.out.println("Error finding participant (Controller) " + e.getMessage());
+            System.out.println("Login is denied " + e.getMessage());
             e.printStackTrace();
         }
         return "redirect:/participant_login_page";
     }
 
-    @GetMapping("/participant_dashboard")
-    public String renderDashboard(){
+    @GetMapping("/participant_dashboard/{participant.getUserId()}")
+    public String renderDashboard(@PathVariable (name="participant.getUserId()") String userId,
+                                  Model model){
+        ProjectCreator projectCreator = new ProjectCreator();
+        model.addAttribute("projects", projectCreator.getProjects(userId));
 
+        return "participant_dashboard";
     }
 
     @PostMapping("/join/{project.getTitle()}")
@@ -76,7 +79,7 @@ public class ParticipantController {
             System.out.println("cannot add project to model (participant controller " + e.getMessage());
             e.printStackTrace();
         }
-        if (handler.allowLogin(password)) {
+        if (handler.allowLogin(id, password)) {
           //  projectRepo.addParticipantToProject(userCreator.getParticipant(id),projectCreator.getProject(projectTitle));
             return "/" + projectTitle  + "/" + userCreator.getParticipant(id);
         }

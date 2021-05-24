@@ -62,7 +62,7 @@ public class ProjectController {
     }
 
     @PostMapping("/direct_project_page")
-    public String goToChoosenProjectPage(@RequestParam(name = "title") String title, Model model, HttpServletRequest request) {
+    public String goToChoosenProjectPage(@RequestParam(name = "projectTitle") String title, Model model, HttpServletRequest request) {
         ProjectRepository projectRepository = new ProjectRepository();
         HttpSession session = request.getSession();
 
@@ -72,12 +72,11 @@ public class ProjectController {
         return "redirect:/project_page/" + title + "/" + ((Participant) session.getAttribute("current_participant")).getId();
     }
 
-    @GetMapping("/project_page/{project.getTitle()}/{participant.getId()}/{participant.getPassword}")
-    public String renderProjectPageWithParticipantName(@PathVariable(name = "project.getTitle()") String projectTitle,
-                                                        @PathVariable(name = "participant.getId()") String userId,
-                                                        Model model, HttpServletRequest request) {
+    @GetMapping("/project_page/{project.getTitle()}/{participant.getId()}")
+    public String renderProjectPage(@PathVariable(name = "project.getTitle()") String projectTitle,
+                                    Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        System.out.println("Her er pathvariablen med id (ProjectController) " + userId);
+
         model.addAttribute("project",session.getAttribute("project"));
 /*
         if (handler.isParticipantPartOfProject(userId,projectTitle)) {

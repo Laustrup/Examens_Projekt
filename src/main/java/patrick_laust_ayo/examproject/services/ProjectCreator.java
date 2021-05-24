@@ -240,7 +240,7 @@ public class ProjectCreator {
 
         int currentProjectId;
         int formerProjectId = 0;
-
+        //TODO denne metode skal testes, tager kun det første projektnavn med
         try {
             while (res.next()) {
                 // If there is only one row
