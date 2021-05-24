@@ -208,14 +208,16 @@ public class ProjectCreator {
                         taskIsUpdated = true;
                     }
 
+                    boolean assignmentsIsUpdated = false;
                     // If assignment isn't added
                     if (!mapOfAssignments.containsKey(strings[11]) || taskIsCompleted) {
                         assignment = new Assignment(strings[9],strings[10],strings[11],assignmentIsCompleted,listOfTasks);
                         mapOfAssignments.put(assignment.getTitle(),assignment);
+                        assignmentsIsUpdated = true;
                     }
 
                     // Phase
-                    if (currentPhaseId>formerPhaseId || participantIsUpdated) {
+                    if (currentPhaseId>formerPhaseId || assignmentsIsUpdated) {
                         Phase phase = new Phase(strings[13],mapOfAssignments);
                         listOfPhases.add(phase);
                     }
