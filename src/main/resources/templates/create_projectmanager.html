@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{static.styles/create_projectmanager.css}">
     <title>Create Projectmanager</title>
 </head>
 <body>
 
-    <header>
-        <h1>Create A New Projectmanager</h1>
-    </header>
+<header>
+    <h1>Create A New Projectmanager</h1>
+</header>
 
-    <main>
+<main>
+    <div class="container">
         <section id="projectmanager_form">
             <form action="/create_projectmanager" method="post">
 
@@ -28,13 +30,12 @@
                     <p th:text="${userAlreadyExists}">User already exists. Please choose different username</p>
                 </div>
 
-
                 <button type="submit">Create Projectmanager</button>
 
             </form>
             <p><a href="/"><button>Go back</button></a></p>
         </section>
-    </main>
-
+    </div>
+</main>
 </body>
 </html>

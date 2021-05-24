@@ -1,19 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{static.styles/login.css}">
     <title>Projectmanager Login</title>
 </head>
 <body>
 
-    <header>Login As Projectmanager</header>
+<header><h1>Login As Projectmanager</h1></header>
 
-    <main>
+<main>
+    <div class="container">
         <section id="projectmanager_login">
+            <<!TODO form action>>
             <form action="">
 
                 <div class="projectmanager_password">
-                    <label for="manager_password"></label>
+                    <label for="manager_password">Password</label>
                     <input type="text" id="manager_password" name="manager_password" placeholder="Password" required>
                 </div>
 
@@ -22,7 +25,8 @@
 
             </form>
         </section>
-    </main>
+    </div>
+</main>
 
 </body>
 </html>

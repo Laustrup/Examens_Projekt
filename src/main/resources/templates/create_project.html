@@ -1,16 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Create Project</title>
+    <link rel="stylesheet" type="text/css" th:href="@{static.styles/create_project.css}">
 </head>
 <body>
 
-    <header>Create New Project</header>
+<header>
+    <h1>Create New Project</h1>
+</header>
 
-    <main>
+<main>
+    <div class="container">
         <section id="create_project_form">
-            <form action="">
+           /*TODO action link
+            <form action="/create-project" method="post">
 
                 <div class="title_section">
                     <label for="title">Title</label>
@@ -27,7 +31,9 @@
 
             </form>
         </section>
-    </main>
+    </div>
+</main>
+
 
 </body>
 </html>
