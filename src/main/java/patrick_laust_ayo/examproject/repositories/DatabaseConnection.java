@@ -25,7 +25,7 @@ public class DatabaseConnection {
             username = properties.getProperty("username");
             password = properties.getProperty("password");
             connection = DriverManager.getConnection(dbConnection,username,password);
-            System.out.println("Connection is " + dbConnection);
+           // System.out.println("Connection is " + dbConnection);
         }
         catch(Exception e){
             System.out.println("Problem with property file reading...\n" + e.getMessage());

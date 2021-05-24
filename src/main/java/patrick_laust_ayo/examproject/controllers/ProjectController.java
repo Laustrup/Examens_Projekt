@@ -2,10 +2,7 @@ package patrick_laust_ayo.examproject.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
@@ -54,7 +51,6 @@ public class ProjectController {
             return "project_page.html";
         }
         String username = (String) session.getAttribute("username");
-        ProjectManager projectManager = (ProjectManager) session.getAttribute("projectManager");
 
         session.setAttribute("project", projectCreator.createProject(title, username));
         session.setAttribute("projectTitle", title);
@@ -81,13 +77,13 @@ public class ProjectController {
                                                         @PathVariable(name = "participant.getId()") String userId,
                                                         Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
-
+        System.out.println("Her er pathvariablen med id (ProjectController) " + userId);
         model.addAttribute("project",session.getAttribute("project"));
-
+/*
         if (handler.isParticipantPartOfProject(userId,projectTitle)) {
             //TODO
         }
-
+*/
         return "project_page.html";
     }
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
+import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
@@ -16,6 +17,8 @@ import patrick_laust_ayo.examproject.services.UserEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.lang.reflect.Executable;
+import java.sql.ResultSet;
 
 @Controller
 public class ParticipantController {
@@ -28,23 +31,48 @@ public class ParticipantController {
         return "participant_login.html";
     }
 
-    @GetMapping("/participant_join_project")
-    public String renderParticipantJoinProject(){
-        return "participant_join_projcet.html";
+    @PostMapping("/participant_join_project")
+    public String renderParticipantJoinProject(
+                                               @RequestParam (name="participant_id") String userId,
+                                               HttpServletRequest request, Model model){
+        System.out.println("okay");
+        HttpSession session = request.getSession();
+        ParticipantRepository parRepo = new ParticipantRepository();
+        ResultSet res = parRepo.findParticipant(userId);
+
+        try {
+            res.next();
+            if (res.getString("user_id").equals(userId)) {
+                return "redirect:/join/{project.getTitle}";
+            }
+        }
+        catch (Exception e){
+            System.out.println("Error finding participant (Controller) " + e.getMessage());
+            e.printStackTrace();
+        }
+        return "redirect:/participant_login_page";
     }
 
-    @PostMapping("/join_{project.getTitle}")
+    @PostMapping("/join/{project.getTitle}")
     public String joinProject(@PathVariable(name="project.getTitle") String projectTitle,
                               @RequestParam(name="participant_ID") String id,
                               @RequestParam(name="password") String password, Model model) {
-
+        //TODO kan ikke få pathvariablen til at virke, den kan ikke finde ud af hvad project.getTitle er
         ExceptionHandler handler = new ExceptionHandler();
         ProjectRepository projectRepo = new ProjectRepository();
         ProjectCreator projectCreator = new ProjectCreator();
 
+        try {
+
+            model.addAttribute("project", projectRepo.findProjects(id).getString("title"));
+        }
+        catch (Exception e){
+            System.out.println("cannot add project to model (participant controller " + e.getMessage());
+            e.printStackTrace();
+        }
         if (handler.allowLogin(password)) {
-            projectRepo.addParticipantToProject(userCreator.getParticipant(id),projectCreator.getProject(projectTitle));
-            return "/" + projectTitle + "/" + userCreator.getParticipant(id);
+          //  projectRepo.addParticipantToProject(userCreator.getParticipant(id),projectCreator.getProject(projectTitle));
+            return "/" + projectTitle  + "/" + userCreator.getParticipant(id);
         }
         else {
             model.addAttribute("Exception","Wrong password!");

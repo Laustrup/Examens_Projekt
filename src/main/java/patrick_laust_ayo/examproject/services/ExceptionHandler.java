@@ -188,9 +188,14 @@ public class ExceptionHandler {
     public boolean isParticipantPartOfProject(String userId, String projectTitle) {
 
         Repository repo = new ParticipantRepository();
+        //TODO skal det hedde userId ? det er vel participant_id vi skal bruge?
+//        int participantId = repo.findId("participant", "user_id", userId,"participant_id");
+        int participantId = repo.findId("participant", "participant_id", userId,"participant_id");
+        System.out.println("Participant id'et " + participantId);
+        System.out.println("User id'et " + userId);
 
-        int participantId = repo.findId("participant", "user_id", userId,"partipant_id");
         int projectId = repo.findId("project", "title", projectTitle,"project_id");
+        System.out.println("Projekt id'et " + projectId);
 
         ResultSet res = repo.executeQuery("SELECT * FROM participant_project WHERE participant_id = " + participantId + ";");
         repo.closeCurrentConnection();
