@@ -132,14 +132,6 @@ public class ProjectCreator {
                     currentPhaseId = res.getInt("phase_id");
                     currentParticipant = res.getInt("participant_id");
 
-                    // Participant
-                    if (currentParticipant>formerParticipant) {
-                        Participant participant = new Participant(strings[2], strings[3], strings[4], strings[5],
-                                new Department(departmentId,strings[0],strings[1]));
-                        mapOfParticipants.put(participant.getId(), participant);
-                        listOfParticipants.add(participant);
-                    }
-
                     // projectManager
                     if (!isProjectManagerCreated && (strings[15].equals(strings[2]))) {
                         projectManager = new ProjectManager(strings[15],strings[3], strings[2],strings[4],strings[5],
@@ -148,11 +140,25 @@ public class ProjectCreator {
                         listOfParticipants.add(projectManager);
                         isProjectManagerCreated = true;
                     }
+                    // Participant
+                    else if (currentParticipant>formerParticipant) {
+                        Participant participant = new Participant(strings[2], strings[3], strings[4], strings[5],
+                                new Department(departmentId,strings[0],strings[1]));
+                        mapOfParticipants.put(participant.getId(), participant);
+                        listOfParticipants.add(participant);
+                    }
+
+                    // Task
+                    if (currentTaskId>formerTaskId){
+                        listOfTasks.add(new Task(workHours,listOfParticipants,strings[6],strings[7], strings[8],taskIsCompleted));
+                        listOfParticipants = new ArrayList<>();
+                    }
 
                     // Assignment
                     if (currentAssignmentId>formerAssignmentId) {
                         assignment = new Assignment(strings[9],strings[10],strings[11],assignmentIsCompleted,listOfTasks);
-                        mapOfAssignments.put(assignment.getTitle()+assignment.getStart()+assignment.getEnd(),assignment);
+                        listOfTasks = new ArrayList<>();
+                        mapOfAssignments.put(assignment.getTitle(), assignment);
                     }
 
                     // Phase
@@ -160,13 +166,6 @@ public class ProjectCreator {
                         Phase phase = new Phase(strings[13],mapOfAssignments);
                         mapOfAssignments = new HashMap<String, Assignment>();
                         listOfPhases.add(phase);
-                    }
-
-                    // Task
-                    // TODO Perhaps list of participants is wrong
-                    if (currentTaskId>formerTaskId){
-                        listOfTasks.add(new Task(workHours,listOfParticipants,strings[6],strings[7], strings[8],taskIsCompleted));
-                        listOfParticipants = new ArrayList<>();
                     }
                 }
 
@@ -182,14 +181,7 @@ public class ProjectCreator {
                 workHours = res.getDouble("estimated_work_hours");
 
                 if (res.isLast()) {
-                    // If Participant isn't added
-                    Participant participant = new Participant(strings[2], strings[3], strings[4], strings[5],
-                            new Department(departmentId,strings[0],strings[1]));
-                    if (res.isLast() && !mapOfParticipants.containsKey(participant.getId())) {
-                        mapOfParticipants.put(participant.getId(), participant);
-                        listOfParticipants.add(participant);
-                    }
-
+                    boolean participantIsUpdated = false;
                     // If ProjectManager isn't added
                     if (!isProjectManagerCreated) {
                         projectManager = new ProjectManager(strings[15],strings[3], strings[2],strings[4],strings[5],
@@ -198,14 +190,35 @@ public class ProjectCreator {
                             mapOfParticipants.put(projectManager.getId(), projectManager);
                             listOfParticipants.add(projectManager);
                         }
+                        participantIsUpdated = true;
+                    }
+                    // If Participant isn't added
+                    else if (currentParticipant>formerParticipant) {
+                        Participant participant = new Participant(strings[2], strings[3], strings[4], strings[5],
+                                new Department(departmentId,strings[0],strings[1]));
+                        mapOfParticipants.put(participant.getId(), participant);
+                        listOfParticipants.add(participant);
+                        participantIsUpdated = true;
                     }
 
+                    boolean taskIsUpdated = false;
+                    // If task isn't added
+                    if (currentTaskId>formerTaskId || participantIsUpdated){
+                        listOfTasks.add(new Task(workHours,listOfParticipants,strings[6],strings[7], strings[8],taskIsCompleted));
+                        taskIsUpdated = true;
+                    }
+
+                    boolean assignmentsIsUpdated = false;
                     // If assignment isn't added
-                    if (!mapOfAssignments.containsKey(strings[11]+strings[9]+strings[10])) {
+                    if (!mapOfAssignments.containsKey(strings[11]) || taskIsCompleted) {
                         assignment = new Assignment(strings[9],strings[10],strings[11],assignmentIsCompleted,listOfTasks);
-                        mapOfAssignments.put(assignment.getTitle()+assignment.getStart()+assignment.getEnd(),assignment);
+                        mapOfAssignments.put(assignment.getTitle(),assignment);
+                        assignmentsIsUpdated = true;
+                    }
+
+                    // Phase
+                    if (currentPhaseId>formerPhaseId || assignmentsIsUpdated) {
                         Phase phase = new Phase(strings[13],mapOfAssignments);
-                        mapOfAssignments = new HashMap<String, Assignment>();
                         listOfPhases.add(phase);
                     }
 
@@ -221,7 +234,6 @@ public class ProjectCreator {
         projectRepo.closeCurrentConnection();
         return project;
     }
-
     public ArrayList<Project> getProjects(String userId) {
         ResultSet res = projectRepo.findProjects(userId);
         ArrayList<Project> projects = new ArrayList<>();

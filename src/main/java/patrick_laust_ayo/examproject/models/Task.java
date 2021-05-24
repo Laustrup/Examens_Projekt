@@ -24,6 +24,10 @@ public class Task extends Assignment {
         return estimatedWorkHours;
     }
 
+    public ArrayList<Participant> getParticipants() {
+        return participants;
+    }
+
     public void setEstimatedWorkHours(double estimatedWorkHours) {
         this.estimatedWorkHours = estimatedWorkHours;
     }
