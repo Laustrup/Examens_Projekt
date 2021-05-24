@@ -59,6 +59,8 @@ public class  ProjectManagerController {
         ProjectManager projectManager = userCreator.createManager(username, password);
         session.setAttribute("username", username);
         session.setAttribute("password", password);
+        session.setAttribute("projectManager", projectManager);
+
         model.addAttribute("projectManager",projectManager);
 
         return "redirect:/create_project/" + projectManager.getUsername();

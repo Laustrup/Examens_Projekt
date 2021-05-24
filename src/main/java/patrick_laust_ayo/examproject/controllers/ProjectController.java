@@ -38,7 +38,7 @@ public class ProjectController {
     }
 
     @PostMapping("/create-project")
-    public String createProject(@RequestParam(name = "title") String title, @RequestParam(name = "username") String userName,
+    public String createProject(@RequestParam(name = "title") String title,
                                 HttpServletRequest request,Model model) {
 
         HttpSession session = request.getSession();
@@ -54,6 +54,7 @@ public class ProjectController {
             return "project_page.html";
         }
         String username = (String) session.getAttribute("username");
+        ProjectManager projectManager = (ProjectManager) session.getAttribute("projectManager");
 
         session.setAttribute("project", projectCreator.createProject(title, username));
         session.setAttribute("projectTitle", title);
@@ -87,7 +88,7 @@ public class ProjectController {
             //TODO
         }
 
-        return "project.html";
+        return "project_page.html";
     }
 
 }

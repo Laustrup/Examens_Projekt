@@ -93,9 +93,10 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN participant ON participant.participant_id = participant_task.participant_id " +
                 "INNER JOIN projectmanager ON projectmanager.projectmanager_id = project.projectmanager_id " +
                 "INNER JOIN department ON department.department_no = participant.department_no " +
+                "INNER JOIN participant_project " +
                 "WHERE project.title = \"" + projectTitle +  "\" " +
                 "AND participant.department_no = department.department_no " +
-                "AND participant.participant_id = participant_project.participant_id" +
+                "AND participant.participant_id = participant_project.participant_id " +
                 "AND project.project_id = participant_project.project_id;");
 
     }
