@@ -181,7 +181,7 @@ public class ProjectCreator {
                 workHours = res.getDouble("estimated_work_hours");
 
                 if (res.isLast()) {
-                    boolean formerIsUpdated = false;
+                    boolean participantIsUpdated = false;
                     // If ProjectManager isn't added
                     if (!isProjectManagerCreated) {
                         projectManager = new ProjectManager(strings[15],strings[3], strings[2],strings[4],strings[5],
@@ -190,7 +190,7 @@ public class ProjectCreator {
                             mapOfParticipants.put(projectManager.getId(), projectManager);
                             listOfParticipants.add(projectManager);
                         }
-                        formerIsUpdated = true;
+                        participantIsUpdated = true;
                     }
                     // If Participant isn't added
                     else if (currentParticipant>formerParticipant) {
@@ -198,33 +198,26 @@ public class ProjectCreator {
                                 new Department(departmentId,strings[0],strings[1]));
                         mapOfParticipants.put(participant.getId(), participant);
                         listOfParticipants.add(participant);
-                        formerIsUpdated = true;
+                        participantIsUpdated = true;
                     }
 
+                    boolean taskIsUpdated = false;
                     // If task isn't added
-                    if (currentTaskId>formerTaskId || formerIsUpdated){
+                    if (currentTaskId>formerTaskId || participantIsUpdated){
                         listOfTasks.add(new Task(workHours,listOfParticipants,strings[6],strings[7], strings[8],taskIsCompleted));
-                        listOfParticipants = new ArrayList<>();
-                        formerIsUpdated = true;
+                        taskIsUpdated = true;
                     }
-
 
                     // If assignment isn't added
-                    if (!mapOfAssignments.containsKey(strings[11]) || formerIsUpdated) {
+                    if (!mapOfAssignments.containsKey(strings[11]) || taskIsCompleted) {
                         assignment = new Assignment(strings[9],strings[10],strings[11],assignmentIsCompleted,listOfTasks);
                         mapOfAssignments.put(assignment.getTitle(),assignment);
-                        Phase phase = new Phase(strings[13],mapOfAssignments);
-                        mapOfAssignments = new HashMap<String, Assignment>();
-                        listOfPhases.add(phase);
-                        formerIsUpdated = true;
                     }
 
                     // Phase
-                    if (currentPhaseId>formerPhaseId || formerIsUpdated) {
+                    if (currentPhaseId>formerPhaseId || participantIsUpdated) {
                         Phase phase = new Phase(strings[13],mapOfAssignments);
-                        mapOfAssignments = new HashMap<String, Assignment>();
                         listOfPhases.add(phase);
-                        formerIsUpdated = true;
                     }
 
                     project = new Project(strings[12],listOfPhases, mapOfParticipants,projectManager);
