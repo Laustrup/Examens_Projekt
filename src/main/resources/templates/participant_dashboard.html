@@ -5,6 +5,7 @@
     <title>Dashboard</title>
 </head>
 <body>
+
     <form action="/direct_project_page" method="post">
     <ul th:each="projects : ${projects}">
         <li th:text="${projects.getTitle}"></li>
