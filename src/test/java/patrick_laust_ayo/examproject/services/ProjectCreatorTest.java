@@ -401,14 +401,14 @@ class ProjectCreatorTest {
         // Only tests title since the method getProject is being fully tested through
     // TODO Perhaps add more parameters to test multiple tests
     @ParameterizedTest
-    @CsvSource(value = {"lone9242|1|Appdev"}, delimiter = '|')
+    @CsvSource(value = {"lone9242|1|Appdev", "jame4235|2|Advertising_Find New Employees"}, delimiter = '|')
     public void getProjectsTest(String userId, String amounts, String expected) {
         //Act
         ArrayList<Project> actual = projectCreator.getProjects(userId);
-
+        String [] expectedSplit = expected.split("_");
         //Assert
         for (int i = 0; i < Integer.parseInt(amounts);i++) {
-            assertEquals(actual.get(0).getTitle(),expected);
+            assertEquals(actual.get(i).getTitle(),expectedSplit[i]);
         }
     }
 

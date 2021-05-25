@@ -79,7 +79,7 @@ public class  ProjectManagerController {
 
         ExceptionHandler handler = new ExceptionHandler();
 
-        if (handler.allowLogin(password)) {
+        if (handler.allowLogin(username, password)) {
             return "/" + username;
         }
         else {

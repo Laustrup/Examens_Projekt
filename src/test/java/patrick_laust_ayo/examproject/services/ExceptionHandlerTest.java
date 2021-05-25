@@ -81,7 +81,7 @@ class ExceptionHandlerTest {
         // Arrange
 
         // Act
-        boolean actual = handler.allowLogin(password);
+        boolean actual = handler.allowLogin("abe",password);
         // Assert
         assertEquals(expected,actual);
     }
