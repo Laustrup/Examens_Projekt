@@ -70,13 +70,14 @@ public class ProjectRepository extends Repository{
     public void putTaskInDatabase(int assignmentId) {
         executeSQLStatement("INSERT INTO task(assignment_id,estimated_work_hours) VALUES (" + assignmentId + ", null); ");
     }
-    public ResultSet findTask(String taskTitle,String assignmentTitle) {
+    public ResultSet findTask(String taskTitle,String taskStart,String taskEnd) {
         return executeQuery("SELECT * FROM task " +
                 "INNER JOIN task ON task.assignment_id = assignment.assignment_id " +
                 "INNER JOIN participant_task ON participant_task.task_id = task.task_id " +
                 "INNER JOIN participant ON participant.participant_id = participant_task.participant_id " +
                 "INNER JOIN department ON department.department_no = participant.department_no " +
-                "WHERE task_title = \"" + taskTitle + "\" AND assignment_title = \"" + assignmentTitle + "\";");
+                "WHERE task_title = \"" + taskTitle + "\" AND task_start = \"" + taskStart + "\" " +
+                "AND task_end = \"" + taskEnd + "\";");
     }
     public void removeTask(String taskTitle,String assignmentTitle) {
         executeSQLStatement("DELETE ROW FROM project " +

@@ -76,4 +76,42 @@ public class UserEditor {
             return "Project is fully booked, projectmanager needs to add more participants of your department...";
         }
     }
+
+    public String joinParticipantToTask(String userId,Task task) {
+        ResultSet participantRes = participantRepo.findParticipant(userId);
+        ProjectRepository projectRepository = new ProjectRepository();
+        ResultSet taskRes = projectRepository.findTask(task.getTitle(),task.getStart(),task.getEnd());
+
+        try {
+            participantRepo.addParticipantToTask(participantRes.getInt("participant_id"),
+                                                        taskRes.getInt("task_id"));
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't add participant to task...\n" + e.getMessage());
+            return "Couldn't add you to task...";
+        }
+        participantRepo.closeCurrentConnection();
+        projectRepository.closeCurrentConnection();
+        return "You are now added to the task!";
+    }
+
+    public String removeParticipantFromTask(String userId, Task task) {
+        ResultSet participantRes = participantRepo.findParticipant(userId);
+        ProjectRepository projectRepository = new ProjectRepository();
+        ResultSet taskRes = projectRepository.findTask(task.getTitle(),task.getStart(),task.getEnd());
+
+        try {
+            participantRepo.removeParticipantFromTask(participantRes.getInt("participant_id"),
+                    taskRes.getInt("task_id"));
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't remove participant from task...\n" + e.getMessage());
+            return "Couldn't remove you from task...";
+        }
+
+        participantRepo.closeCurrentConnection();
+        projectRepository.closeCurrentConnection();
+        return "You are now removed from task!";
+    }
+
 }
