@@ -1,3 +1,21 @@
+
+/*Header*/
+.header h2 {
+    text-align: center;
+    background-color:#59869d;
+}
+
+button {
+    background-color: white;
+    padding: 8px;
+    cursor: pointer;
+    box-shadow: 3px 4px #888888;
+    font-size: 13px;
+    margin: 8px;
+}
+
+/*PROJECT PAGE*/
+
 .split {
     height: 100%;
     width: 60%;
@@ -8,42 +26,77 @@
     padding-top: 20px;
 }
 
-/* Control the left side */
-.left {
+
+.left-side {
     left: 0;
-    background-color: antiquewhite;
+    background-color: white;
 }
-.update_participant_form {
+.right-side {
+    right: 0;
+}
+/*Participant update box */
+
+.participant_form h3 {
+    text-align: center;
+}
+.participant_form {
     background-color: #59869d;
-    border: 3px solid grey;
+    border: 3px solid;
     padding: 10px;
     margin: 20px;
     width: 40%;
 }
-
-.update_participant_form div {
-    margin: 5px;
+.participant_container {
+    height: 170px;
+    position: relative;
+    border: 1px solid;
+    margin: 20px;
+    padding: 20px 20px 60px 20px;
 }
-button {
-    background-color: lightgrey;
-    padding: 5px;
-    cursor: pointer;
-    box-shadow: 3px 4px #888888;
+.participant_form div {
+    margin: 7px;
 }
+.participant_container button {
+    margin: 0 0 0 185px;
+}
+/*Assignment box */
 
-.implementing {
+.assignment {
     margin: 20px;
     width: 40%;
-    border: 3px solid green;
+    border: 3px solid;
     padding: 10px;
+    background: #ffab91;
 }
-.project_options {
-    padding: 20px;
+
+.assignment header {
+    text-align: center;
+}
+.assignment_container {
+    height: 150px;
+    position: relative;
+    border: 1px solid;
     margin: 20px;
-    color: red;
+    padding: 20px 20px 60px 20px;
 }
 
-.implementing submit {
-    display: inline-block;
+.action_btn {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+.action_btn button {
+    display: block;
+}
+.about_project {
+    background:  #ffe0b2;
+    height: 100px;
+    width: 23%;
+    position: relative;
 
+    margin: 74px 0 0 350px;
+    padding: 10px;
 }

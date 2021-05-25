@@ -1,26 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{static.styles/index.css}">
+    <link rel="stylesheet" type="text/css" href="../static.styles/login_create.css">
     <title>Project</title>
 </head>
 <body>
 
-    <header>
+<header>
 
-    </header>
+</header>
 
-    <main>
-        <h1>Welcome to Projectmanager</h1>
-        <div class="container">
-            <div class="index_options">
-                <h2><a href="/create_new_projectmanager"><button>Create Projectmanager</button></a></h2>
-                <h2><a href="/skriv link til side"><button>Login as Projectmanager</button></a></h2>
-                <h2><a href="/participant_login_page"><button>Login as Participant</button></a></h2>
-            </div>
+<main>
+    <h1>Welcome to Projectmanager</h1>
+    <div class="flex-container">
+        <div class="index_options">
+            <h2><a href="/create_new_projectmanager"><button>Create Projectmanager</button></a></h2>
+            <h2><a href="/manager_login"><button>Login as Projectmanager</button></a></h2>
+            <h2><a href="/participant_login_page"><button>Login as participant</button></a></h2>
         </div>
-    </main>
+    </div>
+</main>
 
 </body>
 </html>

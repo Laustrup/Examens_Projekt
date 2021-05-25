@@ -1,23 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{static.styles/login.css}">
+    <link rel="stylesheet" type="text/css" href="../static.styles/login_create.css">
     <title>Participant Login</title>
 </head>
 <body>
 
-    <header>Login As Participant</header>
+<header><h1>Login As Participant</h1></header>
 
     <main>
+        <div class="flex-container">
         <section id="participant_login">
             <form action="/participant_join_project" method="post">
                 <div class="participants_id">
-                    <label for="participant_id"></label>
+                    <label for="participant_id">User ID</label>
                     <input type="text" id="participant_id" name="participant_id" placeholder="id" required>
                 </div>
                 <div class="participants_password">
-                    <label for="participant_password"></label>
+                    <label for="participant_password">Password</label>
                     <input type="text" id="participant_password" name="participant_password" placeholder="Password" required>
                 </div>
 
@@ -26,6 +27,7 @@
             </form>
             <p><a href="/index"><button>Go back</button></a></p>
         </section>
+        </div>
     </main>
 
 </body>

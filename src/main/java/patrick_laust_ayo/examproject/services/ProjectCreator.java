@@ -459,8 +459,8 @@ public class ProjectCreator {
 
         return task;
     }
-    public Task getTask(String taskTitle,String assignmentTitle) {
-        ResultSet res = projectRepo.findTask(taskTitle,assignmentTitle);
+    public Task getTask(String taskTitle,String taskStart,String taskEnd) {
+        ResultSet res = projectRepo.findTask(taskTitle,taskStart,taskEnd);
         ArrayList<Participant> participants = new ArrayList<>();
         Department department = new Department(0,new String(), new String());
 

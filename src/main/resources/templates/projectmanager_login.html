@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{static.styles/login.css}">
+    <link rel="stylesheet" type="text/css" href="../static.styles/login_create.css">
     <title>Projectmanager Login</title>
 </head>
 <body>
@@ -10,25 +10,18 @@
 <header><h1>Login As Projectmanager</h1></header>
 
 <main>
-    <div class="container">
+    <div class="flex-container">
         <section id="projectmanager_login">
-            <<!TODO form action>>
             <form action="">
-
-                <div class="projectmanager_username">
-                    <label for="projectmanager_username">Username</label>
-                    <input type="text" id="projectmanager_username" name="projectmanager_username" placeholder="Username" required>
-                </div>
-
                 <div class="projectmanager_password">
-                    <label for="manager_password">Password</label>
-                    <input type="text" id="manager_password" name="manager_password" placeholder="Password" required>
-                </div>
+                <label for="manager_password">Password</label>
+                <input type="text" id="manager_password" name="manager_password" placeholder="Password" required>
+            </div>
 
-                <button type="submit">Login</button>
-                <p><a href="/index"><button>Go back</button></a></p>
+            <button type="submit">Login</button>
+            <p><a href="/index"><button>Go back</button></a></p>
 
-            </form>
+        </form>
         </section>
     </div>
 </main>

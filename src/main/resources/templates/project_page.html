@@ -1,72 +1,85 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{static.styles/project_page.css}">
+    <link rel="stylesheet" type="text/css" href="../static.styles/project_page.css">
     <title th:text="${session.projectTitle}">Project</title>
 </head>
 <body>
-<main>
-<div class="split left">
-    <section class="update_participant_form">
-        <form action="/project_page" method="post">
+<div class="header">
+    <h2>Projectname</h2>
+</div>
+<div class="left-side">
 
-            <div class="ID_section">
-                <label for="participant_ID">ID</label>
-                <input type="text" id="participant_ID" name="participant_ID" placeholder="ID" required>
+    <section class="participant_form">
+        <header><h3>Welcome</h3></header>
+            <div class="participant_container">
+                <form action="" method="post">
+
+                    <div class="ID_section">
+                        <label for="participant_ID">ID</label>
+                        <input type="text" id="participant_ID" name="participant_ID" th:placeholder="#{current_participant.getId}" required>
+                    </div>
+
+                    <div class="password_section">
+                        <label for="participant_password">Password</label>
+                        <input type="text" id="participant_password" name="participant_password" th:placeholder="#{current_participant.getPassword}" required>
+                    </div>
+
+                    <div class="project_title_section">
+                        <label for="project_title">Project Title</label>
+                        <input type="text" id="project_title" name="project_title" th:placeholder="#{current_participant.getProjectTitle}" required>
+                    </div>
+
+                    <div class="name_section">
+                        <label for="participant_name">Name</label>
+                        <input type="text" id="participant_name" name="participant_name" th:placeholder="#{current_participant.getName}" required>
+                    </div>
+
+                    <div class="position_section">
+                        <label for="position">Position</label>
+                        <input type="text" id="position" name="position" th:placeholder="#{current_participant.getPosition}" required>
+                    </div>
+
+                    <div class="department_section">
+                        <label for="department">Department</label>
+                        <input type="text" id="department" name="department" th:placeholder="#{current_participant.getDepartment}" required>
+                    </div>
+
+                    <button type="submit">Update participant</button>
+
+            </form>
             </div>
-
-            <div class="password_section">
-                <label for="participant_password">Password</label>
-                <input type="text" id="participant_password" name="participant_password" placeholder="Password" required>
-            </div>
-
-            <div class="project_title_section">
-                <label for="project_title">Project Title</label>
-                <input type="text" id="project_title" name="project_title" placeholder="Project Title" required>
-            </div>
-
-            <div class="name_section">
-                <label for="participant_name">Name</label>
-                <input type="text" id="participant_name" name="participant_name" placeholder="Name" required>
-            </div>
-
-            <div class="position_section">
-                <label for="position">Position</label>
-                <input type="text" id="position" name="position" placeholder="Position" required>
-            </div>
-
-            <div class="department_section">
-                <label for="department">Department</label>
-                <input type="text" id="department" name="department" placeholder="Department" required>
-            </div>
-
-            <button type="submit">Update participant</button>
-        </form>
     </section>
 
-    <section class="options">
-    <div class="implementing">
-        <div class="project_options">
-            <button type="submit">Completed</button>
-            <button type="submit">Delete</button>
-            <button type="submit">Edit</button>
-            <button type="submit">Quit project</button>
-            <p><a href="/index"><button>Go back</button></a></p>
+    <div class="assignment"><header><h3>Assignment</h3></header>
+        <div class="assignment_container">
+            <div class="action_btn">
+                <button type="submit">Add</button>
+                <button type="submit">Edit</button>
+                <button type="submit">Delete</button>
+                <button type="submit">Completed</button>
+            </div>
+
+            <div class="about_project">
+                <button type="submit">About</button>
+                <button type="submit">Participants</button>
+            </div>
+
+
         </div>
     </div>
-        <div class="About">
-            <button type="submit">About</button>
-            <button type="submit">Participants</button>
-        </div>
-
-    </section>
+</div>
+<div class="right-side">
 </div>
 
+<footer>
+    <button type="submit">Quit project</button>
+    <p><a href="/index"><button>Go back</button></a></p>
 
-    <div class="split right">
+</footer>
 
-    </div>
+
 </main>
 </body>
 </html>
