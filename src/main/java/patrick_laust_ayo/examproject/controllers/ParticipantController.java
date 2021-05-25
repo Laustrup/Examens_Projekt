@@ -114,38 +114,6 @@ public class ParticipantController {
         }
     }
 
-    @GetMapping("/projectpage-{project.getTitle()}/{participant.getId()}")
-    public String renderProjectpage(@PathVariable(name = "project.getTitle()") String projectTitle,
-                                    @PathVariable(name = "participant.getId()") String userId,
-                                    HttpServletRequest request,Model model) {
-        HttpSession session = request.getSession();
-        Project project = new ProjectCreator().getProject(projectTitle);
-
-        session.setAttribute("project",project);
-        model.addAttribute("project",project);
-        model.addAttribute("participant",new UserCreator().getParticipant(userId));
-
-        return "project_page";
-
-    }
-
-    @PostMapping("/{project.getTitle()}/add_participant")
-    public String addParticipantsToProject(@PathVariable("project.getTitle()") String projectTitle,
-                                                @RequestParam(name = "department_name") String departmentName,
-                                                @RequestParam(name = "amount") int amount, HttpServletRequest request) {
-
-        HttpSession session = request.getSession();
-
-        for (int i = 0; i < amount; i++) {
-            userCreator.createParticipant(projectTitle,departmentName);
-        }
-
-        // TODO Perhaps key is for wrong participant...
-        Participant participant = (Participant) session.getAttribute("participant");
-
-        return "redirect://project_page/" + projectTitle + "/" + participant.getName();
-    }
-
     // TODO participant in endpoint is not set yet
     @PostMapping("/update_participant/{participant.getUserId}")
     public String updateParticipant(@RequestParam(name="participant_ID") String id, @RequestParam(name="participant_password") String password,

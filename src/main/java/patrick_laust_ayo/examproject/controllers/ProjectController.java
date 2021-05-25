@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import patrick_laust_ayo.examproject.models.Participant;
+import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
@@ -24,14 +25,7 @@ public class ProjectController {
 
     @GetMapping("/create_project/{projectManager.getUsername}")
     public String renderCreateProject(Model model, HttpServletRequest request) {
-
-           HttpSession session = request.getSession();
-           String username = (String) session.getAttribute("username");
-
-           model.addAttribute("username",username);
-
-           return "create_project.html";
-
+        return "create_project.html";
     }
 
     @PostMapping("/create-project")
@@ -50,10 +44,8 @@ public class ProjectController {
             model.addAttribute("Exception","Project already exists...");
             return "project_page.html";
         }
-        String username = (String) session.getAttribute("username");
 
-        session.setAttribute("project", projectCreator.createProject(title, username));
-        session.setAttribute("projectTitle", title);
+        session.setAttribute("project", projectCreator.createProject(title, ((ProjectManager)session.getAttribute("projectManager")).getUsername()));
 
         return "redirect:/project_page/" + title + "/" +
                 ((ProjectManager) session.getAttribute("projectManager")).getUsername() + "/" +
@@ -84,6 +76,21 @@ public class ProjectController {
         }
 */
         return "project_page.html";
+    }
+
+    @GetMapping("/projectpage-{project.getTitle()}/{participant.getId()}")
+    public String renderProjectpage(@PathVariable(name = "project.getTitle()") String projectTitle,
+                                    @PathVariable(name = "participant.getId()") String userId,
+                                    HttpServletRequest request,Model model) {
+        HttpSession session = request.getSession();
+        Project project = new ProjectCreator().getProject(projectTitle);
+
+        session.setAttribute("project",project);
+        model.addAttribute("project",project);
+        model.addAttribute("participant",new UserCreator().getParticipant(userId));
+
+        return "project_page";
+
     }
 
 }

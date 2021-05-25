@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
@@ -36,7 +37,7 @@ public class  ProjectManagerController {
 
 
         if (exceptionHandler.doesUserIdExist(username)) {
-            model.addAttribute("userAlreadyExist", "This username already exist. Please choose another.");
+            model.addAttribute("Exception", "This username already exist. Please choose another.");
             System.out.println(exceptionHandler.doesUserIdExist(username));
             return "create_projectmanager.html";
         }
@@ -75,46 +76,57 @@ public class  ProjectManagerController {
     @PostMapping("/allow_password")
     public String loginProjectManager(@RequestParam(name="password") String password,
                                         @RequestParam(name="username") String username,
-                                      Model model) {
+                                      HttpServletRequest request,Model model) {
 
         ExceptionHandler handler = new ExceptionHandler();
 
         if (handler.allowLogin(username, password)) {
+
+            HttpSession session = request.getSession();
+            session.setAttribute("projectManager",userCreator.getProjectManager(username));
+            session.setAttribute("participant",userCreator.getParticipant(username));
+
             return "/" + username;
         }
         else {
-            model.addAttribute("Exception","Wrong password!");
-            return "projectmanager_login";
+            model.addAttribute("Exception","Wrong username or password!");
+            return "/manager_login";
         }
     }
 
-    @GetMapping("/{projectManager.getId}")
+    @GetMapping("/{projectManager.getId()}")
     public String renderDashboard(@PathVariable("projectManager.getId") String userId,
                                   Model model, HttpServletRequest request) {
-        //TODO problemer med PathVariable, den er = "create-project", skal være user id'et.
-        ProjectManagerRepository repo = new ProjectManagerRepository(); //Bruges denne ??
-        ProjectRepository pRepo = new ProjectRepository();
-
-        System.out.println("her er user id'et " + userId);
 
         ProjectManager projectManager = userCreator.getProjectManager(userId);
         ProjectCreator projectCreator = new ProjectCreator();
 
-        ArrayList<Project> projectsToRender = projectCreator.getProjects(userId); //vi kalder det id i metoden
+        ArrayList<Project> projects = projectCreator.getProjects(userId); //vi kalder det id i metoden
 
-        model.addAttribute("projectsToRender",projectsToRender);
+        model.addAttribute("projects",projects);
         model.addAttribute("projectManager", projectManager);
 
-        System.out.println("her er user id'et for anden gang " + userId);
-        System.out.println("Her er projectmanager.getId " + projectManager.getId());
-
         HttpSession session = request.getSession();
-        session.setAttribute("projectManager",projectManager);
-        session.setAttribute("current_participant",projectManager);
-
-        //få fat i projekter tilknyttet den enkelte projektmanager
+        session.setAttribute("projects",projects);
 
         return "projectmanager_dashboard";
+    }
+
+    @PostMapping("/{project.getTitle()}/add_participant")
+    public String addParticipantsToProject(@PathVariable("project.getTitle()") String projectTitle,
+                                           @RequestParam(name = "department_name") String departmentName,
+                                           @RequestParam(name = "amount") int amount, HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+
+        for (int i = 0; i < amount; i++) {
+            userCreator.createParticipant(projectTitle,departmentName);
+        }
+
+        // TODO Perhaps key is for wrong participant...
+        Participant participant = (Participant) session.getAttribute("participant");
+
+        return "redirect://project_page/" + projectTitle + "/" + participant.getName();
     }
 
 }
