@@ -163,7 +163,7 @@ public class ProjectCreator {
 
                     // Phase
                     if (currentPhaseId>formerPhaseId) {
-                        Phase phase = new Phase(strings[13],mapOfAssignments);
+                        phase = new Phase(strings[13],mapOfAssignments);
                         mapOfAssignments = new HashMap<String, Assignment>();
                         listOfPhases.add(phase);
                     }
@@ -181,44 +181,40 @@ public class ProjectCreator {
                 workHours = res.getDouble("estimated_work_hours");
 
                 if (res.isLast()) {
-                    boolean participantIsUpdated = false;
                     // If ProjectManager isn't added
                     if (!isProjectManagerCreated) {
                         projectManager = new ProjectManager(strings[15],strings[3], strings[2],strings[4],strings[5],
                                 new Department(departmentId,strings[0],strings[1]));
                         if (!mapOfParticipants.containsKey(projectManager.getId())) {
                             mapOfParticipants.put(projectManager.getId(), projectManager);
-                            listOfParticipants.add(projectManager);
                         }
-                        participantIsUpdated = true;
+                        listOfTasks.get(listOfTasks.size()-1).addParticipant(projectManager);
                     }
                     // If Participant isn't added
-                    else if (currentParticipant>formerParticipant) {
-                        Participant participant = new Participant(strings[2], strings[3], strings[4], strings[5],
-                                new Department(departmentId,strings[0],strings[1]));
+                    Participant participant = new Participant(strings[2], strings[3], strings[4], strings[5],
+                            new Department(departmentId,strings[0],strings[1]));
+                    if (!mapOfParticipants.containsKey(participant.getId())) {
                         mapOfParticipants.put(participant.getId(), participant);
-                        listOfParticipants.add(participant);
-                        participantIsUpdated = true;
+                        listOfTasks.get(listOfTasks.size()-1).addParticipant(participant);
                     }
 
-                    boolean taskIsUpdated = false;
                     // If task isn't added
-                    if (currentTaskId>formerTaskId || participantIsUpdated){
+                    if (!(listOfTasks.get(listOfTasks.size()-1).getStart().equals(strings[6]) &&
+                            listOfTasks.get(listOfTasks.size()-1).getEnd().equals(strings[7]) &&
+                            listOfTasks.get(listOfTasks.size()-1).getTitle().equals(strings[8]))) {
                         listOfTasks.add(new Task(workHours,listOfParticipants,strings[6],strings[7], strings[8],taskIsCompleted));
-                        taskIsUpdated = true;
                     }
 
-                    boolean assignmentsIsUpdated = false;
                     // If assignment isn't added
-                    if (!mapOfAssignments.containsKey(strings[11]) || taskIsCompleted) {
+                    if (!mapOfAssignments.containsKey(strings[11])) {
                         assignment = new Assignment(strings[9],strings[10],strings[11],assignmentIsCompleted,listOfTasks);
                         mapOfAssignments.put(assignment.getTitle(),assignment);
-                        assignmentsIsUpdated = true;
+                        phase.putInAssignments(assignment.getTitle(),assignment);
                     }
 
                     // Phase
-                    if (currentPhaseId>formerPhaseId || assignmentsIsUpdated) {
-                        Phase phase = new Phase(strings[13],mapOfAssignments);
+                    if (phase.getTitle().equals(strings[13])) {
+                        phase = new Phase(strings[13],mapOfAssignments);
                         listOfPhases.add(phase);
                     }
 
@@ -305,10 +301,12 @@ public class ProjectCreator {
                     break;
                 }
 
+                int currentAssignmentId = res.getInt("assignment_id");
+                int currentTaskId = res.getInt("task_id");
+                int currentParticipantId = res.getInt("participant_id");
+
                 if (!res.isFirst()) {
-                    int currentAssignmentId = res.getInt("assignment_id");
-                    int currentTaskId = res.getInt("task_id");
-                    int currentParticipantId = res.getInt("participant_id");
+
 
                     // Participant
                     if (currentParticipantId > formerParticipantId) {
@@ -319,6 +317,7 @@ public class ProjectCreator {
                     // Task
                     if (currentTaskId > formerTaskId) {
                         tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
+                        participants = new ArrayList<>();
                     }
 
                     // Assignment
@@ -339,8 +338,23 @@ public class ProjectCreator {
 
                 if (res.isLast()) {
 
+                    // If participant isn't added
+                    if (!(tasks.get(tasks.size()-1).getParticipants().get(participants.size()-1).getId().equals(strings[2]))) {
+                        tasks.get(tasks.size()-1).addParticipant(new Participant(strings[2], strings[3], strings[4], strings[5],
+                                new Department(departmentId, strings[0], strings[1])));
+                    }
+
+                    // If task isn't added
+                    if (!(tasks.get(tasks.size()-1).getStart().equals(strings[6]) &&
+                            tasks.get(tasks.size()-1).getEnd().equals(strings[7]) &&
+                            tasks.get(tasks.size()-1).getTitle().equals(strings[8]))) {
+                        tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
+                    }
+
                     // If assignment isn't added
-                    if (!assignments.containsKey(strings[11]+strings[9]+strings[10])) {
+                    if (!(assignments.get(assignments.size()-1).getStart().equals(strings[9]) &&
+                            assignments.get(assignments.size()-1).getEnd().equals(strings[10]) &&
+                            assignments.get(assignments.size()-1).getTitle().equals(strings[11]))) {
                         assignment = new Assignment(strings[9],strings[10],strings[11],isAssignmentCompleted,tasks);
                         assignments.put(assignment.getTitle()+assignment.getStart()+assignment.getEnd(),assignment);
                     }
