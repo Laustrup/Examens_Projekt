@@ -301,12 +301,10 @@ public class ProjectCreator {
                     break;
                 }
 
-                int currentAssignmentId = res.getInt("assignment_id");
-                int currentTaskId = res.getInt("task_id");
-                int currentParticipantId = res.getInt("participant_id");
-
                 if (!res.isFirst()) {
-
+                    int currentAssignmentId = res.getInt("assignment_id");
+                    int currentTaskId = res.getInt("task_id");
+                    int currentParticipantId = res.getInt("participant_id");
 
                     // Participant
                     if (currentParticipantId > formerParticipantId) {
@@ -391,7 +389,7 @@ public class ProjectCreator {
 
         int formerTaskId = 0;
         int formerParticipantId = 0;
-        int formerDepartmentId = 0;
+        int departmentNo = 0;
 
         String[] strings = new String[16];
 
@@ -410,14 +408,10 @@ public class ProjectCreator {
                 if (!res.isFirst()) {
                     int currentTaskId = res.getInt("task_id");
                     int currentParticipantId = res.getInt("participant_id");
-                    int currentDepartmentId = res.getInt("department_no");
 
-                    if (currentDepartmentId > formerDepartmentId) {
-                        department = new Department(currentDepartmentId,res.getString("location"),res.getString("department_name"));
-                    }
                     if (currentParticipantId > formerParticipantId) {
-                        participants.add(new Participant(res.getString("user_id"),res.getString("participant_password"),
-                                res.getString("participant_name"),res.getString("position"),department));
+                        participants.add(new Participant(strings[2],strings[3], strings[4],strings[5],
+                                            new Department(departmentNo,strings[0],strings[1])));
                     }
                     if (currentTaskId > formerTaskId) {
                         tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
@@ -426,12 +420,14 @@ public class ProjectCreator {
 
                 formerTaskId = res.getInt("task_id");
                 formerParticipantId = res.getInt("participant_id");
-                formerDepartmentId = res.getInt("department_no");
+                departmentNo = res.getInt("department_no");
                 workHours = res.getDouble("estimated_work_hours");
                 isTaskCompleted = res.getBoolean("task_is_completed");
 
                 if (res.isLast()) {
-                    if (!tasks.get(tasks.size()).getTitle().equals(strings[8])) {
+                    if (!(tasks.get(tasks.size()-1).getStart().equals(strings[6]) &&
+                            tasks.get(tasks.size()-1).getEnd().equals(strings[7]) &&
+                            tasks.get(tasks.size()-1).getTitle().equals(strings[8]))) {
                         tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
                     }
                     assignment = new Assignment(res.getString("assignment_start"), res.getString("assignment_end"),
@@ -490,7 +486,7 @@ public class ProjectCreator {
                 departmentId = res.getInt("department_no");
 
                 if (res.isLast()) {
-                    if (!participants.get(participants.size()).getId().equals(strings[2])) {
+                    if (!participants.get(participants.size()-1).getId().equals(strings[2])) {
                         department = new Department(departmentId,strings[0],strings[1]);
                         participants.add(new Participant(strings[2],strings[3],strings[4],strings[5],department));
                     }
