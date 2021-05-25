@@ -28,8 +28,8 @@ public class ProjectRepository extends Repository{
     public void updatePhase(String phaseTitle,String projectTitle,String formerPhaseTitle) {
         executeSQLStatement("UPDATE phase_table " +
                 "INNER JOIN project ON project.project_id = phase_table.project_id " +
-                "SET phase_table.phase_title = \"" + phaseTitle + "\", " +
-                "WHERE phase_table.phase_title = \"" + formerPhaseTitle + "\" AND project.title " + projectTitle + ";");
+                "SET phase_table.phase_title = \"" + phaseTitle + "\" " +
+                "WHERE phase_table.phase_title = \"" + formerPhaseTitle + "\" AND project.title = \"" + projectTitle + "\";");
     }
     public void removePhase(String assignmentTitle,String projectTitle) {
         executeSQLStatement("DELETE ROW FROM phase " +

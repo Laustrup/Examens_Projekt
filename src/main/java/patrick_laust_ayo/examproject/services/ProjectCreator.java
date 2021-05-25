@@ -52,6 +52,7 @@ public class ProjectCreator {
         }
         catch (Exception e) {
             System.out.println("Couldn't update strings...\n" + e.getMessage());
+            e.printStackTrace();
         }
         return strings;
     }
@@ -119,7 +120,7 @@ public class ProjectCreator {
                     project = new Project(res.getString("title"));
                     projectManager = new UserCreator().getProjectManager(res.getString("username"));
                     project.setProjectManager(projectManager);
-                    mapOfParticipants.put("Projectmember number " + 0,projectManager);
+                    mapOfParticipants.put(projectManager.getId(), projectManager);
                     project.setParticipants(mapOfParticipants);
                     break;
                 }
@@ -193,13 +194,13 @@ public class ProjectCreator {
                     // If Participant isn't added
                     Participant participant = new Participant(strings[2], strings[3], strings[4], strings[5],
                             new Department(departmentId,strings[0],strings[1]));
-                    if (!mapOfParticipants.containsKey(participant.getId())) {
+                    if (listOfTasks.size() != 0 && !mapOfParticipants.containsKey(participant.getId())) {
                         mapOfParticipants.put(participant.getId(), participant);
                         listOfTasks.get(listOfTasks.size()-1).addParticipant(participant);
                     }
 
                     // If task isn't added
-                    if (!(listOfTasks.get(listOfTasks.size()-1).getStart().equals(strings[6]) &&
+                    if (listOfTasks.size() != 0 && !(listOfTasks.get(listOfTasks.size()-1).getStart().equals(strings[6]) &&
                             listOfTasks.get(listOfTasks.size()-1).getEnd().equals(strings[7]) &&
                             listOfTasks.get(listOfTasks.size()-1).getTitle().equals(strings[8]))) {
                         listOfTasks.add(new Task(workHours,listOfParticipants,strings[6],strings[7], strings[8],taskIsCompleted));
@@ -246,7 +247,7 @@ public class ProjectCreator {
                 }
                 // Otherwise it compares former- and current ids, and as well adds the last project
                 currentProjectId = res.getInt("project_id");
-                if (currentProjectId > formerProjectId && res.isFirst()) {
+                if (currentProjectId > formerProjectId && !res.isFirst()) {
                     projects.add(getProject(res.getString("title")));
                 }
                 formerProjectId = res.getInt("project_id");
@@ -257,6 +258,7 @@ public class ProjectCreator {
         }
         catch (Exception e) {
             System.out.println("Couldn't gather projects...\n" + e.getMessage());
+            e.printStackTrace();
         }
         for (int i = 0; i < projects.size(); i++){
             System.out.println("Username: " + userId + " | Project: " + projects.get(i).getTitle());
@@ -338,7 +340,6 @@ public class ProjectCreator {
                 strings = updateStrings(strings,res);
 
                 if (res.isLast()) {
-
                     // If participant isn't added
                     if (!(tasks.get(tasks.size()-1).getParticipants().get(participants.size()-1).getId().equals(strings[2]))) {
                         tasks.get(tasks.size()-1).addParticipant(new Participant(strings[2], strings[3], strings[4], strings[5],
@@ -368,6 +369,8 @@ public class ProjectCreator {
         }
         catch (Exception e) {
             System.out.println("Couldn't create phase from database...\n" + e.getMessage());
+            System.out.println(participants.size());
+            e.printStackTrace();
             phase = null;
         }
         return phase;
