@@ -1,0 +1,77 @@
+h1 {
+    text-align: center;
+    margin: 200px 0 20px 0;
+}
+
+.flex-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #59869d;
+    margin: 100px 400px 300px 400px;
+    box-shadow: 5px 10px;
+}
+
+button {
+    background-color: white;
+    padding: 8px;
+    cursor: pointer;
+    box-shadow: 3px 4px #888888;
+    font-size: 13px;
+    margin: 8px;
+}
+
+.index_options h2 {
+    text-align: center;
+    margin: 40px 0 40px 0;
+}
+#projectmanager_form {
+    text-align:center;
+    margin: 40px 0 40px 0;
+}
+#projectmanager_form .username_section {
+    padding: 10px;
+    margin-left: -20%;
+}
+
+#projectmanager_form .password_section {
+    padding: 10px;
+    margin-left: -20%
+}
+
+#create_project_form {
+    text-align:center;
+    margin: 40px 0 40px 0;
+}
+
+#create_project_form .title_section {
+    padding: 10px;
+    margin-left: -7%;
+}
+#create_project_form .project_password {
+    padding: 10px;
+    margin: 0 0 25px -20%;
+}
+#participant_login {
+    text-align:center;
+    margin: 40px 0 40px 0;
+}
+#participant_login .participants_id {
+    padding: 10px;
+    margin: 0 0 10px -20%;
+}
+
+#participant_login .participants_password {
+    padding: 10px;
+    margin: 0 7px 25px -20%;
+}
+#projectmanager_login {
+    text-align:center;
+    margin: 40px 0 40px 0;
+}
+.projectmanager_password{
+    padding: 10px;
+    margin: 0 7px 25px -20%;
+}
+
