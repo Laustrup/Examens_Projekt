@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
+import patrick_laust_ayo.examproject.models.Task;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
@@ -23,7 +24,7 @@ import javax.servlet.http.HttpSession;
 public class ParticipantController {
 
     private UserCreator userCreator = new UserCreator();
-    private UserEditor userEditor;
+    private UserEditor userEditor = new UserEditor();
 
     @GetMapping("/participant_login_page")
     public String renderLoginParticipant(){
@@ -201,18 +202,35 @@ public class ParticipantController {
         return "project";
     }
 
-    /*
-    //Login existing participant
-    @PostMapping ("/participant_login")
-    public String loginParticipant(@RequestParam(name="participant_ID") int id, @RequestParam(name="particiant_password") {
-        String password, HttpServletRequest request)
-
-        HttpSession session = request.getSession();
-
-        return "";
+    // TODO Create html
+    @GetMapping("/accept_delete_of_participant")
+    public String renderDeletePage() {
+        return "accept_delete_of_participant";
     }
 
-     */
+    @PostMapping("/delete_participant")
+    public String removeParticipant(@RequestParam(name = "user_id") String userId,Model model) {
+        userEditor.removeParticipant(userId);
+        model.addAttribute("Exception","User is removed");
+        return "/";
+    }
 
+    // TODO Needs task html
+    @PostMapping("/join-task")
+    public String joinTask(@RequestParam(name = "task_title") String taskTitle,
+                           @RequestParam(name = "task_start") String taskStart,
+                           @RequestParam(name = "task_end") String taskEnd,
+                           HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        Participant participant = (Participant) session.getAttribute("participant");
+        String exception = userEditor.joinParticipantToTask(participant.getId(),new ProjectCreator().getTask(taskTitle, taskStart, taskEnd));
+        if (exception.equals("You are now added to the task!")) {
+            return "/task/" + taskTitle + "/" + exception;
+        }
+        return "/task/" + taskTitle + "/" + exception;
+    }
+
+    // TODO Make a removeFromTask here:
 
 }
