@@ -105,7 +105,7 @@ public class ParticipantController {
                 return "/participant_join_project";
             }
             else {
-                return "/projectpage/" + projectTitle  + "/" + participant.getId();
+                return "/projectpage-" + projectTitle  + "/" + participant.getId();
             }
         }
         else {
@@ -114,7 +114,7 @@ public class ParticipantController {
         }
     }
 
-    @GetMapping("/projectpage/{project.getTitle()}/{participant.getId()}")
+    @GetMapping("/projectpage-{project.getTitle()}/{participant.getId()}")
     public String renderProjectpage(@PathVariable(name = "project.getTitle()") String projectTitle,
                                     @PathVariable(name = "participant.getId()") String userId,
                                     HttpServletRequest request,Model model) {
@@ -197,11 +197,6 @@ public class ParticipantController {
 
     }
 
-    @GetMapping("/project/{project.getTitle()}/{Exception}")
-    public String backToProjectWithException() {
-        return "project";
-    }
-
     // TODO Create html
     @GetMapping("/accept_delete_of_participant")
     public String renderDeletePage() {
@@ -221,16 +216,46 @@ public class ParticipantController {
                            @RequestParam(name = "task_start") String taskStart,
                            @RequestParam(name = "task_end") String taskEnd,
                            HttpServletRequest request) {
-        HttpSession session = request.getSession();
 
+        HttpSession session = request.getSession();
         Participant participant = (Participant) session.getAttribute("participant");
         String exception = userEditor.joinParticipantToTask(participant.getId(),new ProjectCreator().getTask(taskTitle, taskStart, taskEnd));
+        session.setAttribute("Exception",exception+taskTitle+"!");
+
         if (exception.equals("You are now added to the task!")) {
-            return "/task/" + taskTitle + "/" + exception;
+            return "/projectpage-" + taskTitle + "/" + exception;
         }
         return "/task/" + taskTitle + "/" + exception;
     }
 
     // TODO Make a removeFromTask here:
+    @PostMapping("/disjoin-task")
+    public String disjoinTask(@RequestParam(name = "task_title") String taskTitle,
+                           @RequestParam(name = "task_start") String taskStart,
+                           @RequestParam(name = "task_end") String taskEnd,
+                           HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        Participant participant = (Participant) session.getAttribute("participant");
+        String exception = userEditor.joinParticipantToTask(participant.getId(),new ProjectCreator().getTask(taskTitle, taskStart, taskEnd));
+        session.setAttribute("Exception",exception+taskTitle+"!");
+        if (exception.equals("You are now removed from task!")) {
+            return "/projectpage-" + taskTitle + "/" + exception;
+        }
+        return "/task/" + taskTitle + "/" + exception;
+    }
+
+    @GetMapping("/projectpage-{project.getTitle()}/{Exception}")
+    public String projectWithException(@PathVariable(name = "Exception") String exception,
+                                       HttpServletRequest request,Model model) {
+
+        HttpSession session = request.getSession();
+
+        model.addAttribute("Exception",exception);
+        model.addAttribute("project",(Project) session.getAttribute("project"));
+        model.addAttribute("participant",(Participant) session.getAttribute("participant"));
+
+        return "project_page";
+    }
 
 }

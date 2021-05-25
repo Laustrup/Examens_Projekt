@@ -88,11 +88,11 @@ public class UserEditor {
         }
         catch (Exception e) {
             System.out.println("Couldn't add participant to task...\n" + e.getMessage());
-            return "Couldn't add you to task...";
+            return "Couldn't add you to ";
         }
         participantRepo.closeCurrentConnection();
         projectRepository.closeCurrentConnection();
-        return "You are now added to the task!";
+        return "You are now added to ";
     }
 
     public String removeParticipantFromTask(String userId, Task task) {
@@ -106,12 +106,12 @@ public class UserEditor {
         }
         catch (Exception e) {
             System.out.println("Couldn't remove participant from task...\n" + e.getMessage());
-            return "Couldn't remove you from task...";
+            return "Couldn't remove you from ";
         }
 
         participantRepo.closeCurrentConnection();
         projectRepository.closeCurrentConnection();
-        return "You are now removed from task!";
+        return "You are now removed from ";
     }
 
 }
