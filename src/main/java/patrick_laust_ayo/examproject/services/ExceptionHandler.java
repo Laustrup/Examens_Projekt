@@ -82,14 +82,14 @@ public class ExceptionHandler {
             return true;
         }
     }
-    public boolean doesTaskExist(String taskTitle, String assignmentTitle) {
-       // if (new ProjectCreator().getTask(taskTitle,assignmentTitle) == null) {
+    public boolean doesTaskExist(String taskTitle, String taskStart, String taskEnd) {
+       if (new ProjectCreator().getTask(taskTitle,taskStart,taskEnd) == null) {
             return false;
         }
-       // else {
-         //   return true;
-     //   }
-   // }
+       else {
+           return true;
+        }
+    }
     public boolean doesUserIdExist(String userId) {
         ParticipantRepository repo = new ParticipantRepository();
 

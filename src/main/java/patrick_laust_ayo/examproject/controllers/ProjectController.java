@@ -129,18 +129,21 @@ public class ProjectController {
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
         String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
 
-        if (((ProjectManager)session.getAttribute("projectManager"))!=null) {
-            String exception = handler.isLengthAllowedInDatabase(newTitle, "phase_title");
-            if (exception.equals("Input is allowed")) {
-                Phase phase = projectEditor.updatePhase(newTitle, phaseTitle, projectTitle);
-                return "projectpage-" + projectTitle + "/" + phase.getTitle();
-            }
+        String exception = handler.isLengthAllowedInDatabase(newTitle, "phase_title");
+        if (exception.equals("Input is allowed")) {
 
-            model.addAttribute("Exception", exception);
-            return "projectpage-" + projectTitle + "/" + phaseTitle;
+            if (handler.doesPhaseExist(newTitle,phaseTitle)) {
+                model.addAttribute("Exception","Phase already exists...");
+                return "projectpage-" + projectTitle + "/" + phaseTitle;
+            }
+            Phase phase = projectEditor.updatePhase(newTitle, phaseTitle, projectTitle);
+            session.setAttribute("phase",phase);
+            return "projectpage-" + projectTitle + "/" + phase.getTitle();
         }
-        model.addAttribute("Message","You are not project manager...");
+
+        model.addAttribute("Exception", exception);
         return "projectpage-" + projectTitle + "/" + phaseTitle;
+
     }
 
     // TODO Perhaps make submitvalue with both title and split in method?
@@ -212,7 +215,6 @@ public class ProjectController {
         String phaseTitle = ((Phase) session.getAttribute("phase")).getTitle();
         String assignmentTitle = ((Assignment) session.getAttribute("assignment")).getTitle();
 
-        if (((ProjectManager)session.getAttribute("projectManager"))!=null) {
             String exception = handler.isLengthAllowedInDatabase(newTitle, "assignment_title");
             if (!exception.equals("Input is allowed")) {
                 model.addAttribute("Exception", exception);
@@ -233,12 +235,14 @@ public class ProjectController {
 
             Assignment assignment = projectEditor.updateAssignment(newTitle, start, end, assignmentTitle, phaseTitle);
 
+            if (handler.doesAssignmentExist(assignment.getTitle(),phaseTitle)) {
+                model.addAttribute("Exception","Assignment already exists");
+                return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
+            }
             session.setAttribute("assignment", assignment);
 
             return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignment.getTitle();
-        }
-        model.addAttribute("Message","You are not project manager...");
-        return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
+
     }
 
     @PostMapping("/change_assignment_is_completed_status")
@@ -269,8 +273,8 @@ public class ProjectController {
     @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}/{assignment.getTitle()}")
     public String renderAssignment(@PathVariable(name = "project.getTitle()") String projectTitle,
                                    @PathVariable(name = "phase.getTitle()") String phaseTitle,
-                                   @PathVariable(name = "assignment.getTitle()") String assignmentTitle, HttpServletRequest request,
-                                   Model model) {
+                                   @PathVariable(name = "assignment.getTitle()") String assignmentTitle,
+                                   HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
         session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,phaseTitle));
@@ -309,7 +313,6 @@ public class ProjectController {
         String assignmentTitle = ((Assignment)session.getAttribute("assignment")).getTitle();
         Task task = (Task)session.getAttribute("task");
 
-        if(((ProjectManager)session.getAttribute("projectManager"))!=null) {
             String exception = handler.isLengthAllowedInDatabase(newTitle,"task_title");
             if (!exception.equals("Input is allowed")) {
                 model.addAttribute("Exception",exception);
@@ -332,12 +335,14 @@ public class ProjectController {
             }
 
             task = projectEditor.updateTask(newTitle,taskStart,taskEnd,Double.parseDouble(workHours), task.getTitle(),assignmentTitle);
-            session.setAttribute("task",task);
 
+            if (handler.doesTaskExist(task.getTitle(),task.getStart(),taskEnd)) {
+                model.addAttribute("Exception","Task already exists");
+                return "/projectpage-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
+                        task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
+            }
+            session.setAttribute("task",task);
             return "projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle + "\" " + task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
-        }
-        model.addAttribute("Message","You are not project manager...");
-        return "projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle + "\" " + task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
 
     }
 
