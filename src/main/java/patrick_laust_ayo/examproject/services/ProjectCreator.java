@@ -315,12 +315,14 @@ public class ProjectCreator {
                     if (currentParticipantId > formerParticipantId) {
                         participants.add(new Participant(strings[2], strings[3], strings[4], strings[5],
                                 new Department(departmentId, strings[0], strings[1])));
+                        System.out.println("participants size under !res.isFirst " + participants.size());
                     }
 
                     // Task
                     if (currentTaskId > formerTaskId) {
                         tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
                         participants = new ArrayList<>();
+                        System.out.println("tasks size under !res.isFirst " + tasks.size());
                     }
 
                     // Assignment
@@ -339,8 +341,12 @@ public class ProjectCreator {
                 isAssignmentCompleted = res.getBoolean("is_completed");
                 strings = updateStrings(strings,res);
 
+                System.out.println("Tasks size " + tasks.size());
+                System.out.println("participants size " + participants.size());
                 if (res.isLast()) {
                     // If participant isn't added
+                    //TODO participants.size()-1 har en længde på 0. Se sysout linjerne,
+                    // participants size går op til 1 og bliver så nulstillet, mens at tasks fortsæer
                     if (!(tasks.get(tasks.size()-1).getParticipants().get(participants.size()-1).getId().equals(strings[2]))) {
                         tasks.get(tasks.size()-1).addParticipant(new Participant(strings[2], strings[3], strings[4], strings[5],
                                 new Department(departmentId, strings[0], strings[1])));

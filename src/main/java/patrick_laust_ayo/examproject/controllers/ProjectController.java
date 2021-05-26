@@ -153,7 +153,7 @@ public class ProjectController {
 
         return "/projectpage-" + projectTitle + "/" + phaseTitle;
     }
-
+/*
     // TODO Create phase html
     @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}")
     public String renderPhase(@PathVariable(name = "project.getTitle()") String projectTitle,
@@ -165,7 +165,7 @@ public class ProjectController {
 
         return "phase";
     }
-
+*/
     @PostMapping("/add_assignment_to_{project.getTitle()}")
     public String addAssignment(@RequestParam(name="title") String title,
                                 @RequestParam(name="start") String start,

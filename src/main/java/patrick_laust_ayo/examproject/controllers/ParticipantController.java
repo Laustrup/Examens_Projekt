@@ -31,8 +31,7 @@ public class ParticipantController {
         HttpSession session = request.getSession();
         System.out.println(session.isNew());
      //   System.out.println(((Project) session.getAttribute("project")).getTitle());
-        model.addAttribute("project", ((Project) session.getAttribute("project")));
-        return "participant_login.html";
+        return "participant_login";
     }
 
     // TODO Wrong endpoint
@@ -102,8 +101,8 @@ public class ParticipantController {
 
     @PostMapping("/join-project/{project.getTitle()}")
     public String joinProject(@PathVariable("project.getTitle()") String projectTitle,
-                              @RequestParam(name="participant_ID") String id,
-                              @RequestParam(name="password") String password, Model model,
+                              @RequestParam(name="participant_id") String id,
+                              @RequestParam(name="participant_password") String password, Model model,
                               HttpServletRequest request) {
 
         ExceptionHandler handler = new ExceptionHandler();
@@ -113,8 +112,9 @@ public class ParticipantController {
         model.addAttribute("project",((Project) session.getAttribute("project")));
 
         if (handler.allowLogin(id, password)) {
+            //TODO participant er lig med null???
             Participant participant = userCreator.getParticipant(id);
-            Project project = projectCreator.getProject(projectTitle);
+            Project project = projectCreator.getProject("Appdev");
             if (new UserEditor().joinParticipantToProject(participant,project).equals("Project is fully booked, projectmanager needs to add more participants of your department...")) {
                 model.addAttribute("Exception", "Project is fully booked, projectmanager needs to add more participants of your department...");
                 return "redirect:/participant_join_project";

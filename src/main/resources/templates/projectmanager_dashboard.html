@@ -7,16 +7,21 @@
 </head>
 <body>
 <main>
-<section class="current_projects">
+    <section class="current_projects">
         <p th:text="${projectManager.getId}"></p>
+
+
+        <ul th:each="projects : ${projects}">
+            <li th:text="${projects.getTitle}"></li>
+        </ul>
 
         <div class="select_cur_project">
             <div class="department_section">
             <label for="department">Department</label>
             <input type="text" id="department" name="department" placeholder="Department" required>
+            </div>
         </div>
-        </div>
-</section>
+    </section>
         <p><a href="/index"><button>Go back</button></a></p>
 
 
