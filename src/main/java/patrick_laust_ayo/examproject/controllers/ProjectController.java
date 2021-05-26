@@ -166,8 +166,6 @@ public class ProjectController {
         return "phase";
     }
 
-
-
     @PostMapping("/add_assignment_to_{project.getTitle()}")
     public String addAssignment(@RequestParam(name="title") String title,
                                 @RequestParam(name="start") String start,
