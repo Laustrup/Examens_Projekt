@@ -23,7 +23,7 @@ public class ProjectController {
 
 
     @GetMapping("/create_project/{projectManager.getUsername}")
-    public String renderCreateProject(Model model, HttpServletRequest request) {
+    public String renderCreateProject() {
         return "create_project.html";
     }
 
@@ -32,23 +32,22 @@ public class ProjectController {
                                 HttpServletRequest request,Model model) {
 
         HttpSession session = request.getSession();
+        String username = ((ProjectManager) session.getAttribute("projectManager")).getUsername();
 
         String inputException = handler.isLengthAllowedInDatabase(title,"title");
 
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);
-            return "project_page.html";
+            return "create_project/" + username;
         }
         if (handler.doesProjectExist(title)) {
             model.addAttribute("Exception","Project already exists...");
-            return "project_page.html";
+            return "create_project/" + username;
         }
 
         session.setAttribute("project", projectCreator.createProject(title, ((ProjectManager)session.getAttribute("projectManager")).getUsername()));
 
-        return "redirect:/project_page/" + title + "/" +
-                ((ProjectManager) session.getAttribute("projectManager")).getUsername() + "/" +
-                ((ProjectManager) session.getAttribute("projectManager")).getPassword();
+        return "redirect:/project_page/" + title + "/" + username;
 
     }
 
@@ -58,18 +57,26 @@ public class ProjectController {
         HttpSession session = request.getSession();
 
         model.addAttribute("project",projectRepository.findProject(title));
-        model.addAttribute("participant",session.getAttribute("current_participant"));
+        model.addAttribute("participant",session.getAttribute("participant"));
 
-        return "redirect:/project_page/" + title + "/" + ((Participant) session.getAttribute("current_participant")).getId();
+        return "redirect:/project_page/" + title + "/" + ((Participant) session.getAttribute("participant")).getId();
     }
 
+    // TODO Does all three cases work with this endpoint? Redirect needs html
     @GetMapping("/projectpage-{project.getTitle()}/{participant.getId()}")
     public String renderProjectpage(@PathVariable(name = "project.getTitle()") String projectTitle,
                                     @PathVariable(name = "participant.getId()") String userId,
                                     HttpServletRequest request,Model model) {
 
-        if (handler.isParticipantPartOfProject(userId,projectTitle)) {
-            HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
+
+        // Aldrig logget ind
+        if (((Participant) session.getAttribute("participant")).getId() == null) {
+            // Needs create participant method in participant controller
+        }
+        // Får direkte adgang da han er del af projectet
+        else if (handler.isParticipantPartOfProject(userId,projectTitle)) {
+
             Project project = new ProjectCreator().getProject(projectTitle);
 
             session.setAttribute("project",project);
@@ -78,60 +85,84 @@ public class ProjectController {
 
             return "project_page";
         }
-        else {
-            model.addAttribute("Exception","You are not a participant of this project...");
-            return "/participant_dashboard/" + userId;
-        }
+
+        model.addAttribute("Exception","You are not a participant of this project...");
+        return "redirect://login_to_project/" + userId+ "/" + projectTitle;
     }
 
-    @GetMapping("/delete_{project.getTitle()/{projectManager.getPassword()}")
-    public String deleteProject(@PathVariable(name = "project.getTitle()") String projectTitle,
-                                @PathVariable(name = "projectManager.getPassword()") String password,
-                                Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-
-        if (((ProjectManager)session.getAttribute("projectManager")).getPassword().equals(password)) {
-            new ProjectEditor().deleteProject(projectTitle);
-            model.addAttribute("message",projectTitle + " has been deleted.");
-            return "/" + ((ProjectManager)session.getAttribute("projectManager")).getId();
-        }
-        else {
-            model.addAttribute("message","Password not correct...");
-            return "/projectpage-" + projectTitle + "/" + ((Participant)session.getAttribute("participant")).getId();
-        }
+    // TODO Create html
+    @GetMapping("/accept_delete_of_{project.getTitle()}")
+    public String renderDeleteProject() {
+        return "accept_delete_of_project";
     }
 
+    @PostMapping("/delete_{project.getTitle()/{projectManager.getPassword()}")
+    public String deleteProject(@RequestParam(name = "project_title") String projectTitle,
+                                @RequestParam(name = "password") String password,
+                                @RequestParam(name = "user_id") String userId, Model model) {
+
+        if (handler.allowLogin(userId, password)) {
+            projectEditor.deleteProject(projectTitle);
+            model.addAttribute("message","Project is now deleted");
+            return "/" + userId;
+        }
+
+        model.addAttribute("message","Project manager is now deleted");
+        return "/accept_delete_of_" + projectTitle;
+    }
 
     //
     //
 
     @PostMapping("/add_phase_to_{project.getTitle()}")
-    public String addPhase(@PathVariable(name="project.getTitle()") String projectTitle,
-                                HttpServletRequest request, Model model) {
+    public String addPhase(@PathVariable(name="project.getTitle()") String projectTitle, HttpServletRequest request, Model model) {
 
         Phase phase = projectCreator.createPhase(projectTitle);
 
         HttpSession session = request.getSession();
         session.setAttribute("phase",phase);
-        session.setAttribute("project",projectCreator.getProject(projectTitle));
+        //session.setAttribute("project",projectCreator.getProject(projectTitle));
 
-        return "/projectpage-"+ projectTitle + "/" + phase.getTitle();
+        return "/projectpage-" + projectTitle + "/" + phase.getTitle();
     }
 
+    @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}")
+    public String updatePhase(@RequestParam(name="new_title") String newTitle, HttpServletRequest request,Model model) {
+        HttpSession session = request.getSession();
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
+
+        Phase phase = projectEditor.updatePhase(newTitle,phaseTitle, projectTitle);
+
+        session.setAttribute("phase",phase);
+        model.addAttribute("phase",phase);
+
+        return "projectpage-"+projectTitle+"/"+phaseTitle;
+    }
+
+    // TODO Perhaps make submitvalue with both title and split in method?
     @PostMapping("/direct_to_phase")
-    public String directToPhase(@RequestParam(name="phase_title") String phaseTitle,
-                                @RequestParam(name="project_title") String projectTitle,
-                                HttpServletRequest request) {
+    public String directToPhase(@RequestParam(name="phase_title") String phaseTitle, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
-        session.setAttribute("phase",projectCreator.getPhase(phaseTitle, projectTitle));
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+
+        Phase phase = projectCreator.getPhase(phaseTitle, projectTitle);
+
+        session.setAttribute("phase",phase);
 
         return "/projectpage-" + projectTitle + "/" + phaseTitle;
     }
 
     // TODO Create phase html
     @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}")
-    public String renderPhase() {
+    public String renderPhase(@PathVariable(name = "project.getTitle()") String projectTitle,
+                              @PathVariable(name = "phase.getTitle()") String phaseTitle,
+                              Model model) {
+
+        model.addAttribute("project",projectCreator.getProject(projectTitle));
+        model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
+
         return "phase";
     }
 
