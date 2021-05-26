@@ -88,7 +88,6 @@ public class ProjectController {
 
         model.addAttribute("Exception","You are not a participant of this project...");
         return "redirect://login_to_project/" + userId+ "/" + projectTitle;
-
     }
 
     // TODO Create html
@@ -122,32 +121,52 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
         session.setAttribute("phase",phase);
-        session.setAttribute("project",projectCreator.getProject(projectTitle));
+        //session.setAttribute("project",projectCreator.getProject(projectTitle));
 
         return "/projectpage-" + projectTitle + "/" + phase.getTitle();
     }
 
+    @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}")
+    public String updatePhase(@RequestParam(name="new_title") String newTitle, HttpServletRequest request,Model model) {
+        HttpSession session = request.getSession();
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
+
+        Phase phase = projectEditor.updatePhase(newTitle,phaseTitle, projectTitle);
+
+        session.setAttribute("phase",phase);
+        model.addAttribute("phase",phase);
+
+        return "projectpage-"+projectTitle+"/"+phaseTitle;
+    }
+
     // TODO Perhaps make submitvalue with both title and split in method?
     @PostMapping("/direct_to_phase")
-    public String directToPhase(@RequestParam(name="phase_title") String phaseTitle,
-                                @RequestParam(name="project_title") String projectTitle,
-                                HttpServletRequest request,Model model) {
+    public String directToPhase(@RequestParam(name="phase_title") String phaseTitle, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
 
         Phase phase = projectCreator.getPhase(phaseTitle, projectTitle);
 
         session.setAttribute("phase",phase);
-        model.addAttribute("phase",phase);
 
         return "/projectpage-" + projectTitle + "/" + phaseTitle;
     }
 
     // TODO Create phase html
     @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}")
-    public String renderPhase() {
+    public String renderPhase(@PathVariable(name = "project.getTitle()") String projectTitle,
+                              @PathVariable(name = "phase.getTitle()") String phaseTitle,
+                              Model model) {
+
+        model.addAttribute("project",projectCreator.getProject(projectTitle));
+        model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
+
         return "phase";
     }
+
+
 
     @PostMapping("/add_assignment_to_{project.getTitle()}")
     public String addAssignment(@RequestParam(name="title") String title,
