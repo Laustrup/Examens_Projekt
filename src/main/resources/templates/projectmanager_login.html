@@ -12,7 +12,12 @@
 <main>
     <div class="flex-container">
         <section id="projectmanager_login">
-            <form action="">
+            <form action="/allow_password" method="post">
+                <div class="projectmanager_username">
+                    <label for="manager_username">Username</label>
+                    <input type="text" id="manager_username" name="manager_username" placeholder="Username" required>
+                </div>
+
                 <div class="projectmanager_password">
                 <label for="manager_password">Password</label>
                 <input type="text" id="manager_password" name="manager_password" placeholder="Password" required>

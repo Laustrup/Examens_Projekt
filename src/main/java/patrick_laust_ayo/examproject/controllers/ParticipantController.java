@@ -27,7 +27,11 @@ public class ParticipantController {
     private UserEditor userEditor = new UserEditor();
 
     @GetMapping("/participant_login_page")
-    public String renderLoginParticipant(){
+    public String renderLoginParticipant(Model model, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        System.out.println(session.isNew());
+     //   System.out.println(((Project) session.getAttribute("project")).getTitle());
+        model.addAttribute("project", ((Project) session.getAttribute("project")));
         return "participant_login.html";
     }
 
@@ -96,8 +100,8 @@ public class ParticipantController {
         return "/projectpage/" + projectTitle + "/" + userId;
     }
 
-    @PostMapping("/join-project")
-    public String joinProject(@RequestParam(name="project.getTitle()") String projectTitle,
+    @PostMapping("/join-project/{project.getTitle()}")
+    public String joinProject(@PathVariable("project.getTitle()") String projectTitle,
                               @RequestParam(name="participant_ID") String id,
                               @RequestParam(name="password") String password, Model model,
                               HttpServletRequest request) {
@@ -106,22 +110,22 @@ public class ParticipantController {
         HttpSession session = request.getSession();
         ProjectCreator projectCreator = new ProjectCreator();
 
-        model.addAttribute("project",(Project) session.getAttribute("project"));
+        model.addAttribute("project",((Project) session.getAttribute("project")));
 
         if (handler.allowLogin(id, password)) {
             Participant participant = userCreator.getParticipant(id);
             Project project = projectCreator.getProject(projectTitle);
             if (new UserEditor().joinParticipantToProject(participant,project).equals("Project is fully booked, projectmanager needs to add more participants of your department...")) {
                 model.addAttribute("Exception", "Project is fully booked, projectmanager needs to add more participants of your department...");
-                return "/participant_join_project";
+                return "redirect:/participant_join_project";
             }
             else {
-                return "/projectpage-" + projectTitle  + "/" + participant.getId();
+                return "redirect:/projectpage-" + projectTitle  + "/" + participant.getId();
             }
         }
         else {
             model.addAttribute("Exception","Wrong user-id or password!");
-            return "/participant_join_project";
+            return "redirect:/participant_join_project";
         }
     }
 

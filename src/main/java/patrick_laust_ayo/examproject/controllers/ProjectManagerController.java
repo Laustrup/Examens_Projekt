@@ -74,8 +74,8 @@ public class  ProjectManagerController {
     }
 
     @PostMapping("/allow_password")
-    public String loginProjectManager(@RequestParam(name="password") String password,
-                                        @RequestParam(name="username") String username,
+    public String loginProjectManager(@RequestParam(name="manager_password") String password,
+                                        @RequestParam(name="manager_username") String username,
                                       HttpServletRequest request,Model model) {
 
         ExceptionHandler handler = new ExceptionHandler();
@@ -85,8 +85,9 @@ public class  ProjectManagerController {
             HttpSession session = request.getSession();
             session.setAttribute("projectManager",userCreator.getProjectManager(username));
             session.setAttribute("participant",userCreator.getParticipant(username));
-
-            return "/" + username;
+            model.addAttribute("projectManager",((ProjectManager) session.getAttribute("projectManager")));
+            System.out.println(((ProjectManager) session.getAttribute("projectManager")).getId());
+            return "redirect:/manager_dashboard/" + username;
         }
         else {
             model.addAttribute("Exception","Wrong username or password!");
@@ -94,20 +95,20 @@ public class  ProjectManagerController {
         }
     }
 
-    @GetMapping("/{projectManager.getId()}")
-    public String renderDashboard(@PathVariable("projectManager.getId") String userId,
+    @GetMapping("/manager_dashboard/{projectManager.getId()}")
+    public String renderDashboard(@PathVariable("projectManager.getId()") String userId,
                                   Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
 
         ProjectManager projectManager = userCreator.getProjectManager(userId);
         ProjectCreator projectCreator = new ProjectCreator();
 
         ArrayList<Project> projects = projectCreator.getProjects(userId); //vi kalder det id i metoden
 
+        session.setAttribute("projects",projects);
+
         model.addAttribute("projects",projects);
         model.addAttribute("projectManager", projectManager);
-
-        HttpSession session = request.getSession();
-        session.setAttribute("projects",projects);
 
         return "projectmanager_dashboard";
     }

@@ -8,6 +8,7 @@
 <body>
 <main>
 <section class="current_projects">
+        <p th:text="${projectManager.getId}"></p>
 
         <div class="select_cur_project">
             <div class="department_section">
@@ -15,7 +16,7 @@
             <input type="text" id="department" name="department" placeholder="Department" required>
         </div>
         </div>
-
+</section>
         <p><a href="/index"><button>Go back</button></a></p>
 
 

@@ -83,13 +83,13 @@ public class ExceptionHandler {
         }
     }
     public boolean doesTaskExist(String taskTitle, String assignmentTitle) {
-        if (new ProjectCreator().getTask(taskTitle,assignmentTitle) == null) {
+       // if (new ProjectCreator().getTask(taskTitle,assignmentTitle) == null) {
             return false;
         }
-        else {
-            return true;
-        }
-    }
+       // else {
+         //   return true;
+     //   }
+   // }
     public boolean doesUserIdExist(String userId) {
         ParticipantRepository repo = new ParticipantRepository();
 

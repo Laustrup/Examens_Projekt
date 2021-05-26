@@ -8,11 +8,11 @@
 <body>
 
 <header><h1>Login As Participant</h1></header>
-
+<p th:text="${project.getTitle}"></p>
     <main>
         <div class="flex-container">
         <section id="participant_login">
-            <form action="/participant_join_project" method="post">
+            <form action="/join-project/{project.getTitle}" method="post">
                 <div class="participants_id">
                     <label for="participant_id">User ID</label>
                     <input type="text" id="participant_id" name="participant_id" placeholder="id" required>
@@ -21,6 +21,7 @@
                     <label for="participant_password">Password</label>
                     <input type="text" id="participant_password" name="participant_password" placeholder="Password" required>
                 </div>
+
 
                 <button type="submit">Login</button>
 
