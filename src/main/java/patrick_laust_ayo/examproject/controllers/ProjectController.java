@@ -110,29 +110,33 @@ public class ProjectController {
         return "/accept_delete_of_" + projectTitle;
     }
 
-    @PostMapping("/add_phase_to_{project.getTitle()}")
-    public String addPhase(@PathVariable(name="project.getTitle()") String projectTitle, HttpServletRequest request, Model model) {
+    @PostMapping("/add_phase}")
+    public String addPhase(HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
 
         Phase phase = projectCreator.createPhase(projectTitle);
 
-        HttpSession session = request.getSession();
-        session.setAttribute("phase",phase);
-        //session.setAttribute("project",projectCreator.getProject(projectTitle));
-
-        return "/projectpage-" + projectTitle + "/" + phase.getTitle();
+        return "/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" + phase.getTitle();
     }
 
     @PostMapping("/update_phase")
     public String updatePhase(@RequestParam(name="new_title") String newTitle, HttpServletRequest request,Model model) {
+
+        String exception = handler.isLengthAllowedInDatabase(newTitle,"phase_title");
+
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
         String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
 
-        Phase phase = projectEditor.updatePhase(newTitle,phaseTitle, projectTitle);
+        if (exception.equals("Input is allowed")) {
+            Phase phase = projectEditor.updatePhase(newTitle,phaseTitle, projectTitle);
+            return "projectpage-"+projectTitle+"/"+phase.getTitle();
+        }
 
-        session.setAttribute("phase",phase);
-        model.addAttribute("phase",phase);
-
+        model.addAttribute("Exception",exception);
         return "projectpage-"+projectTitle+"/"+phaseTitle;
     }
 
@@ -142,10 +146,6 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
-
-        Phase phase = projectCreator.getPhase(phaseTitle, projectTitle);
-
-        session.setAttribute("phase",phase);
 
         return "/projectpage-" + projectTitle + "/" + phaseTitle;
     }
@@ -168,12 +168,18 @@ public class ProjectController {
     @PostMapping("/add_assignment_to_{project.getTitle()}")
     public String addAssignment(@RequestParam(name="title") String title,
                                 @RequestParam(name="start") String start,
-                                @RequestParam(name="end") String end, HttpServletRequest request) {
+                                @RequestParam(name="end") String end, HttpServletRequest request, Model model) {
+
+        String exception = handler.isLengthAllowedInDatabase(title,"assignment_title");
+
+        if (!exception.equals("Input is allowed")) {
+        }
+        exception = handler.isLengthAllowedInDatabase(start,"assignment_start");
+        exception =
 
         Assignment assignment = projectCreator.createAssignment(title,start,end);
 
         HttpSession session = request.getSession();
-        session.setAttribute("assignment",assignment);
 
         return "/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" +
                 ((Phase)session.getAttribute("phase")).getTitle() + "/" + assignment.getTitle();
