@@ -1,28 +1,29 @@
 package patrick_laust_ayo.examproject.repositories;
 
 import org.junit.jupiter.api.Test;
+import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
 
 import java.sql.ResultSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FindProjectTest {
+class CreateProjectTest {
 
     @Test
-    void findProject() {
+    void createProject() {
         //Arrange
         ProjectRepository pRepo = new ProjectRepository();
         ProjectCreator pCreator = new ProjectCreator();
 
         //Act
-        pCreator.createProject("Cleverbot v.2", "Andy Boss");
-        ResultSet res = pRepo.findProject("Cleverbot v.2");
+        Project project = pCreator.createProject("Cleverbot v.2", "andy0432");
+        int projectId = pRepo.findId("project", "title", project.getTitle(), "project_id");
+        pRepo.putPhaseInDatabase(projectId);
 
         //Assert
         try {
-            res.next();
-            assertEquals("Cleverbot v.2", res.getString("title"));
+            assertEquals("Cleverbot v.2", pCreator.getProject("Cleverbot v.2").getTitle());
         }
         catch (Exception e){
             System.out.println("Find Project Test went wrong " + e.getMessage());
