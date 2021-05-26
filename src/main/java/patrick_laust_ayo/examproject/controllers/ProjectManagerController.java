@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.ProjectManager;
-import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
-import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
 import patrick_laust_ayo.examproject.services.UserCreator;
+import patrick_laust_ayo.examproject.services.UserEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,8 +21,9 @@ import java.util.ArrayList;
 @Controller
 public class  ProjectManagerController {
 
-    private UserCreator userCreator = new UserCreator();
-    private ExceptionHandler exceptionHandler = new ExceptionHandler();
+    private UserCreator creator = new UserCreator();
+    private ExceptionHandler handler = new ExceptionHandler();
+    private UserEditor editor = new UserEditor();
 
     @GetMapping("/create_new_projectmanager")
     public String renderCreateProjectManager(){
@@ -36,28 +36,28 @@ public class  ProjectManagerController {
                                             HttpServletRequest request, Model model){
 
 
-        if (exceptionHandler.doesUserIdExist(username)) {
+        if (handler.doesUserIdExist(username)) {
             model.addAttribute("Exception", "This username already exist. Please choose another.");
-            System.out.println(exceptionHandler.doesUserIdExist(username));
+            System.out.println(handler.doesUserIdExist(username));
             return "create_projectmanager.html";
         }
 
         HttpSession session = request.getSession();
 
-        String inputException = exceptionHandler.isLengthAllowedInDatabase(username,"username");
+        String inputException = handler.isLengthAllowedInDatabase(username,"username");
 
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);
             return "create_projectmanager.html";
         }
 
-        inputException = exceptionHandler.isLengthAllowedInDatabase(password,"participant_password");
+        inputException = handler.isLengthAllowedInDatabase(password,"participant_password");
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);
             return "create_projectmanager.html";
         }
 
-        ProjectManager projectManager = userCreator.createManager(username, password);
+        ProjectManager projectManager = creator.createManager(username, password);
         session.setAttribute("username", username);
         session.setAttribute("password", password);
         session.setAttribute("projectManager", projectManager);
@@ -83,8 +83,8 @@ public class  ProjectManagerController {
         if (handler.allowLogin(username, password)) {
 
             HttpSession session = request.getSession();
-            session.setAttribute("projectManager",userCreator.getProjectManager(username));
-            session.setAttribute("participant",userCreator.getParticipant(username));
+            session.setAttribute("projectManager", creator.getProjectManager(username));
+            session.setAttribute("participant", creator.getParticipant(username));
 
             return "/" + username;
         }
@@ -98,7 +98,7 @@ public class  ProjectManagerController {
     public String renderDashboard(@PathVariable("projectManager.getId") String userId,
                                   Model model, HttpServletRequest request) {
 
-        ProjectManager projectManager = userCreator.getProjectManager(userId);
+        ProjectManager projectManager = creator.getProjectManager(userId);
         ProjectCreator projectCreator = new ProjectCreator();
 
         ArrayList<Project> projects = projectCreator.getProjects(userId); //vi kalder det id i metoden
@@ -120,7 +120,7 @@ public class  ProjectManagerController {
         HttpSession session = request.getSession();
 
         for (int i = 0; i < amount; i++) {
-            userCreator.createParticipant(projectTitle,departmentName);
+            creator.createParticipant(projectTitle,departmentName);
         }
 
         // TODO Perhaps key is for wrong participant...
@@ -128,5 +128,31 @@ public class  ProjectManagerController {
 
         return "redirect://project_page/" + projectTitle + "/" + participant.getName();
     }
+
+    /*
+    // TODO Use delete participant delete?
+    @GetMapping("/accept_delete_of_{projectManager.getUsername()}")
+    public String renderDeleteProjectManager() {
+        return "accept_delete_of_project";
+    }
+
+    @PostMapping("/delete_{projectManager.getUsername()/{projectManager.getPassword()}")
+    public String deleteProjectManager(@RequestParam(name = "project_title") String projectTitle,
+                                       @RequestParam(name = "password") String password,
+                                       @RequestParam(name = "user_id") String userId,
+                                       Model model, HttpServletRequest request) {
+
+        if (handler.allowLogin(userId, password)) {
+            HttpSession session = request.getSession();
+            editor.
+            session.invalidate();
+            model.addAttribute("message","Project manager is now deleted");
+            return "/";
+        }
+
+        model.addAttribute("message","Project manager is now deleted");
+    }
+
+     */
 
 }
