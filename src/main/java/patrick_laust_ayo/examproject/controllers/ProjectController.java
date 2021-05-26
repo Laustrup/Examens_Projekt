@@ -157,8 +157,7 @@ public class ProjectController {
     // TODO Create phase html
     @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}")
     public String renderPhase(@PathVariable(name = "project.getTitle()") String projectTitle,
-                              @PathVariable(name = "phase.getTitle()") String phaseTitle,
-                              Model model) {
+                              @PathVariable(name = "phase.getTitle()") String phaseTitle, Model model) {
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
@@ -169,8 +168,7 @@ public class ProjectController {
     @PostMapping("/add_assignment_to_{project.getTitle()}")
     public String addAssignment(@RequestParam(name="title") String title,
                                 @RequestParam(name="start") String start,
-                                @RequestParam(name="end") String end,
-                                HttpServletRequest request, Model model) {
+                                @RequestParam(name="end") String end, HttpServletRequest request) {
 
         Assignment assignment = projectCreator.createAssignment(title,start,end);
 
@@ -181,17 +179,23 @@ public class ProjectController {
     }
 
     @PostMapping("/direct_to_assignment")
-    public String directToAssignment(@RequestParam(name="assignment_title") String assignmentTitle,
-                                HttpServletRequest request) {
+    public String directToAssignment(@RequestParam(name="assignment_title") String assignmentTitle, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
-        //session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle));
+        session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,((Phase)session.getAttribute("phase")).getTitle()));
         return "/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" + assignmentTitle;
     }
 
     // TODO Create assignment html
     @GetMapping("/projectpage-{project.getTitle()}/{assignment.getTitle()}")
-    public String renderAssignment() {
+    public String renderAssignment(@PathVariable(name = "project.getTitle()") String projectTitle,
+                                   @PathVariable(name = "assignment.getTitle()") String assignmentTitle,
+                                   Model model,HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        model.addAttribute("project",(Project)session.getAttribute("project"));
+        model.addAttribute("assignment",projectCreator.getAssignment(((Phase)session.getAttribute("phase")).getTitle(), projectTitle));
+
         return "assignment";
     }
 
