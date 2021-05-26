@@ -33,29 +33,46 @@ public class ParticipantController {
 
     // TODO Wrong endpoint
     @PostMapping("/login_to_participant_dashboard")
-    public String checkLogin(@RequestParam (name="participant_id") String userId,
+    public String checkLoginToDashboard(@RequestParam (name="participant_id") String userId,
                              @RequestParam (name="participant_password") String password,
-                             HttpServletRequest request){
+                             HttpServletRequest request, Model model){
 
         HttpSession session = request.getSession();
         ExceptionHandler exceptionHandler = new ExceptionHandler();
 
-        try {
-            if (exceptionHandler.allowLogin(userId, password)){
-                session.setAttribute("participant", userCreator.getParticipant(userId));
-                return "redirect:/participant_dashboard/" + userId;
-            }
+        if (exceptionHandler.allowLogin(userId, password)){
+            session.setAttribute("participant", userCreator.getParticipant(userId));
+            return "redirect:/participant_dashboard/" + userId;
         }
-        catch (Exception e){
-            System.out.println("Login is denied " + e.getMessage());
-            e.printStackTrace();
-        }
+
+        model.addAttribute("Exception","Wrong user-id or password!");
         return "redirect:/participant_login_page";
     }
 
+    /*
+    @PostMapping("/login_to_project")
+    public String checkLoginToProject(@RequestParam (name="participant_id") String userId,
+                             @RequestParam (name="participant_password") String password,
+                             HttpServletRequest request, Model model){
+
+        HttpSession session = request.getSession();
+        ExceptionHandler exceptionHandler = new ExceptionHandler();
+
+        if (exceptionHandler.allowLogin(userId, password)){
+            // TODO How to get projectTitle
+            session.setAttribute("participant", userCreator.getParticipant(userId));
+            return "redirect://join-project";
+        }
+
+        model.addAttribute("Exception","Wrong user-id or password!");
+        // TODO Create html
+        return "redirect:/participant_login_page";
+    }
+
+     */
+
     @GetMapping("/participant_dashboard/{participant.getUserId()}")
-    public String renderDashboard(@PathVariable (name="participant.getUserId()") String userId,
-                                  Model model){
+    public String renderDashboard(@PathVariable (name="participant.getUserId()") String userId, Model model){
 
         model.addAttribute("projects", new ProjectCreator().getProjects(userId));
         model.addAttribute("participant", new UserCreator().getParticipant(userId));
@@ -77,12 +94,6 @@ public class ParticipantController {
         model.addAttribute("participant", new UserCreator().getParticipant(userId));
 
         return "/projectpage/" + projectTitle + "/" + userId;
-    }
-
-    // TODO Make html for this...
-    @GetMapping("/participant_join_project")
-    public String loginToJoinProject() {
-        return "";
     }
 
     @PostMapping("/join-project")
@@ -171,6 +182,7 @@ public class ParticipantController {
         return "accept_delete_of_participant";
     }
 
+    // TODO Add password, need html
     @PostMapping("/delete_participant")
     public String removeParticipant(@RequestParam(name = "user_id") String userId,Model model) {
         userEditor.removeParticipant(userId);
@@ -196,7 +208,6 @@ public class ParticipantController {
         return "/task/" + taskTitle + "/" + exception;
     }
 
-    // TODO Make a removeFromTask here:
     @PostMapping("/disjoin-task")
     public String disjoinTask(@RequestParam(name = "task_title") String taskTitle,
                            @RequestParam(name = "task_start") String taskStart,
@@ -213,6 +224,7 @@ public class ParticipantController {
         return "/task/" + taskTitle + "/" + exception;
     }
 
+    // TODO Already exist in projectcontroller?
     @GetMapping("/projectpage-{project.getTitle()}/{Exception}")
     public String projectWithException(@PathVariable(name = "Exception") String exception,
                                        HttpServletRequest request,Model model) {
