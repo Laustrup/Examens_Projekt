@@ -46,14 +46,19 @@ public class ProjectRepository extends Repository{
                             assignment.isCompleted() + ", " + phaseId + "); ");
     }
     // TODO Change safeupdate
-    public void updateAssignment(String title,String start,String end,String isCompleted, String formerTitle,String phaseTitle) {
+    public void updateAssignment(String title,String start,String end, String formerTitle,String phaseTitle) {
         executeSQLStatement("UPDATE assignment " +
                 "INNER JOIN phase ON phase.phase_id = assignment.phase_id " +
                 "SET assignment.assignment_title " + " = \"" + title + "\", " +
                 "SET assignment.assignment_start " + " = \"" + start + "\", " +
                 "SET assignment.assignment_end " + " = \"" + end + "\", " +
+                "WHERE assignment.assignment_title = \"" + formerTitle + "\" AND phase.title \"" + phaseTitle + "\";");
+    }
+    public void updateAssignmentIsCompleted(String isCompleted, String assignmentTitle, String phaseTitle) {
+        executeSQLStatement("UPDATE assignment " +
+                "INNER JOIN phase ON phase.phase_id = assignment.phase_id " +
                 "SET assignment.assignment_is_completed " + " = " + isCompleted + ", " +
-                "WHERE assignment.assignment_title = \"" + formerTitle + "\" AND phase.title " + phaseTitle + ";");
+                "WHERE assignment.assignment_title = \"" + assignmentTitle + "\" AND phase.title \"" + phaseTitle + "\";");
     }
     public ResultSet findAssignment(String assignmentTitle,String phaseTitle) {
         return executeQuery("SELECT * FROM assignment " +
@@ -81,6 +86,22 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN department ON department.department_no = participant.department_no " +
                 "WHERE task_title = \"" + taskTitle + "\" AND task_start = \"" + taskStart + "\" " +
                 "AND task_end = \"" + taskEnd + "\";");
+    }
+    public void updateTask(String title,String start,String end, String workHours, String formerTitle,String assignmentTitle) {
+        executeSQLStatement("UPDATE task " +
+                "INNER JOIN assignment ON assignment.assignment_id = task.assignment_id " +
+                "SET task.task_title " + " = \"" + title + "\", " +
+                "SET task.task_start " + " = \"" + start + "\", " +
+                "SET task.task_end " + " = \"" + end + "\", " +
+                "SET task.estimated_work_hours = " + workHours + " " +
+                "WHERE task.task_title = \"" + formerTitle + "\" AND assignment.title \"" + assignmentTitle + "\";");
+    }
+    public void updateTaskIsCompleted(String isCompleted, Task task) {
+        executeSQLStatement("UPDATE task " +
+                "SET task.task_is_completed = " + isCompleted + ", " +
+                "WHERE task.task_title = \"" + task.getTitle() + "\" " +
+                "AND task.task_start = \"" + task.getStart() + "\" " +
+                "AND task.task_end = \"" + task.getEnd() + "\";");
     }
     public void removeTask(String taskTitle,String assignmentTitle) {
         executeSQLStatement("DELETE ROW FROM project " +

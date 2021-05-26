@@ -456,10 +456,9 @@ public class ProjectCreator {
 
     }
 
-    public Task createTask(String assignmentTitle, Participant participant) {
+    public Task createTask(String assignmentTitle) {
 
         task = new Task(0,new ArrayList<>());
-        task.addParticipant(participant);
 
         projectRepo.putTaskInDatabase(projectRepo.findId("assignment","assignment_title",assignmentTitle,"assignment_id"));
 

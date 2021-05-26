@@ -12,7 +12,6 @@ import patrick_laust_ayo.examproject.services.UserCreator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 
 @Controller
 public class ProjectController {
@@ -111,33 +110,40 @@ public class ProjectController {
         return "/accept_delete_of_" + projectTitle;
     }
 
-    //
-    //
+    @PostMapping("/add_phase}")
+    public String addPhase(HttpServletRequest request, Model model) {
 
-    @PostMapping("/add_phase_to_{project.getTitle()}")
-    public String addPhase(@PathVariable(name="project.getTitle()") String projectTitle, HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
 
         Phase phase = projectCreator.createPhase(projectTitle);
 
-        HttpSession session = request.getSession();
-        session.setAttribute("phase",phase);
-        //session.setAttribute("project",projectCreator.getProject(projectTitle));
-
-        return "/projectpage-" + projectTitle + "/" + phase.getTitle();
+        return "/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" + phase.getTitle();
     }
 
-    @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}")
+    @PostMapping("/update_phase")
     public String updatePhase(@RequestParam(name="new_title") String newTitle, HttpServletRequest request,Model model) {
+
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
         String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
 
-        Phase phase = projectEditor.updatePhase(newTitle,phaseTitle, projectTitle);
+        String exception = handler.isLengthAllowedInDatabase(newTitle, "phase_title");
+        if (exception.equals("Input is allowed")) {
 
-        session.setAttribute("phase",phase);
-        model.addAttribute("phase",phase);
+            if (handler.doesPhaseExist(newTitle,phaseTitle)) {
+                model.addAttribute("Exception","Phase already exists...");
+                return "projectpage-" + projectTitle + "/" + phaseTitle;
+            }
+            Phase phase = projectEditor.updatePhase(newTitle, phaseTitle, projectTitle);
+            session.setAttribute("phase",phase);
+            return "projectpage-" + projectTitle + "/" + phase.getTitle();
+        }
 
-        return "projectpage-"+projectTitle+"/"+phaseTitle;
+        model.addAttribute("Exception", exception);
+        return "projectpage-" + projectTitle + "/" + phaseTitle;
+
     }
 
     // TODO Perhaps make submitvalue with both title and split in method?
@@ -147,51 +153,259 @@ public class ProjectController {
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
 
-        Phase phase = projectCreator.getPhase(phaseTitle, projectTitle);
-
-        session.setAttribute("phase",phase);
-
         return "/projectpage-" + projectTitle + "/" + phaseTitle;
     }
-/*
+
     // TODO Create phase html
     @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}")
     public String renderPhase(@PathVariable(name = "project.getTitle()") String projectTitle,
-                              @PathVariable(name = "phase.getTitle()") String phaseTitle,
+                              @PathVariable(name = "phase.getTitle()") String phaseTitle, HttpServletRequest request,
                               Model model) {
+
+        HttpSession session = request.getSession();
+        session.setAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
 
         return "phase";
     }
-*/
-    @PostMapping("/add_assignment_to_{project.getTitle()}")
+
+    @PostMapping("/add_assignment")
     public String addAssignment(@RequestParam(name="title") String title,
                                 @RequestParam(name="start") String start,
-                                @RequestParam(name="end") String end,
-                                HttpServletRequest request, Model model) {
+                                @RequestParam(name="end") String end, HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
+
+        String exception = handler.isLengthAllowedInDatabase(title,"assignment_title");
+        if (!exception.equals("Input is allowed")) {
+            model.addAttribute("Exception",exception);
+            return "/projectpage-" + projectTitle  + "/" + phaseTitle;
+        }
+
+        exception = handler.isLengthAllowedInDatabase(start,"assignment_start");
+        if (!exception.equals("Input is allowed")) {
+            model.addAttribute("Exception",exception);
+            return "/projectpage-" + projectTitle  + "/" + phaseTitle;
+        }
+
+        exception = handler.isLengthAllowedInDatabase(end,"assignment_end");
+        if (!exception.equals("Input is allowed")) {
+            model.addAttribute("Exception",exception);
+            return "/projectpage-" + projectTitle  + "/" + phaseTitle;
+        }
 
         Assignment assignment = projectCreator.createAssignment(title,start,end);
 
-        HttpSession session = request.getSession();
-        session.setAttribute("assignment",assignment);
+        return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignment.getTitle();
+    }
 
-        return "/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" + assignment.getTitle();
+    @PostMapping("/update_assignment")
+    public String updateAssignment(@RequestParam(name="new_title") String newTitle,
+                                   @RequestParam(name="start") String start,
+                                   @RequestParam(name="end") String end,
+                                   HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+        String projectTitle = ((Project) session.getAttribute("project")).getTitle();
+        String phaseTitle = ((Phase) session.getAttribute("phase")).getTitle();
+        String assignmentTitle = ((Assignment) session.getAttribute("assignment")).getTitle();
+
+            String exception = handler.isLengthAllowedInDatabase(newTitle, "assignment_title");
+            if (!exception.equals("Input is allowed")) {
+                model.addAttribute("Exception", exception);
+                return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
+            }
+
+            exception = handler.isLengthAllowedInDatabase(start, "assignment_start");
+            if (!exception.equals("Input is allowed")) {
+                model.addAttribute("Exception", exception);
+                return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
+            }
+
+            exception = handler.isLengthAllowedInDatabase(end, "assignment_end");
+            if (!exception.equals("Input is allowed")) {
+                model.addAttribute("Exception", exception);
+                return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
+            }
+
+            Assignment assignment = projectEditor.updateAssignment(newTitle, start, end, assignmentTitle, phaseTitle);
+
+            if (handler.doesAssignmentExist(assignment.getTitle(),phaseTitle)) {
+                model.addAttribute("Exception","Assignment already exists");
+                return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
+            }
+            session.setAttribute("assignment", assignment);
+
+            return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignment.getTitle();
+
+    }
+
+    @PostMapping("/change_assignment_is_completed_status")
+    public String changeAssignmentIscompletedStatus(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Assignment assignment = projectCreator.getAssignment(((Assignment)session.getAttribute("assignment")).getTitle(),
+                                                            ((Phase)session.getAttribute("phase")).getTitle());
+        if (assignment.isCompleted()) {
+            projectEditor.changeIsCompletedAssignment(false,assignment.getTitle(),((Phase)session.getAttribute("phase")).getTitle());
+        }
+        else {
+            projectEditor.changeIsCompletedAssignment(true,assignment.getTitle(),((Phase)session.getAttribute("phase")).getTitle());
+        }
+
+        return "/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" +
+                ((Phase)session.getAttribute("phase")).getTitle() + "/" + assignment.getTitle();
     }
 
     @PostMapping("/direct_to_assignment")
-    public String directToAssignment(@RequestParam(name="assignment_title") String assignmentTitle,
-                                HttpServletRequest request) {
-
+    public String directToAssignment(@RequestParam(name="assignment_title") String assignmentTitle, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        //session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle));
-        return "/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" + assignmentTitle;
+        session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,((Phase)session.getAttribute("phase")).getTitle()));
+        return "/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" +
+                ((Phase)session.getAttribute("phase")).getTitle() + "/" +  assignmentTitle;
     }
 
     // TODO Create assignment html
-    @GetMapping("/projectpage-{project.getTitle()}/{assignment.getTitle()}")
-    public String renderAssignment() {
+    @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}/{assignment.getTitle()}")
+    public String renderAssignment(@PathVariable(name = "project.getTitle()") String projectTitle,
+                                   @PathVariable(name = "phase.getTitle()") String phaseTitle,
+                                   @PathVariable(name = "assignment.getTitle()") String assignmentTitle,
+                                   HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+        session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,phaseTitle));
+
+        model.addAttribute("project",projectCreator.getProject(projectTitle));
+        model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
+        model.addAttribute("assignment",projectCreator.getAssignment(assignmentTitle, projectTitle));
+
+        return "assignment";
+    }
+
+    @PostMapping("/add_task")
+    public String addTask(HttpServletRequest request,Model model) {
+
+        HttpSession session = request.getSession();
+
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
+        String assignmentTitle = ((Assignment)session.getAttribute("assignment")).getTitle();
+
+        Task task = projectCreator.createTask(assignmentTitle);
+        session.setAttribute("task",task);
+        return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + phaseTitle + "/" + task.getTitle();
+    }
+
+    @PostMapping("/update_task")
+    public String updateTask(@RequestParam(name="new_title") String newTitle,
+                                   @RequestParam(name="task_start") String taskStart,
+                                   @RequestParam(name="task_end") String taskEnd,
+                                   @RequestParam(name="work_hours") String workHours,
+                                   HttpServletRequest request,Model model) {
+
+        HttpSession session = request.getSession();
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
+        String assignmentTitle = ((Assignment)session.getAttribute("assignment")).getTitle();
+        Task task = (Task)session.getAttribute("task");
+
+            String exception = handler.isLengthAllowedInDatabase(newTitle,"task_title");
+            if (!exception.equals("Input is allowed")) {
+                model.addAttribute("Exception",exception);
+                return "/projectpage-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
+                        task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
+            }
+
+            exception = handler.isLengthAllowedInDatabase(taskStart,"task_start");
+            if (!exception.equals("Input is allowed")) {
+                model.addAttribute("Exception",exception);
+                return "/projectpage-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
+                        task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
+            }
+
+            exception = handler.isLengthAllowedInDatabase(taskEnd,"task_end");
+            if (!exception.equals("Input is allowed")) {
+                model.addAttribute("Exception",exception);
+                return "/projectpage-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
+                        task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
+            }
+
+            task = projectEditor.updateTask(newTitle,taskStart,taskEnd,Double.parseDouble(workHours), task.getTitle(),assignmentTitle);
+
+            if (handler.doesTaskExist(task.getTitle(),task.getStart(),taskEnd)) {
+                model.addAttribute("Exception","Task already exists");
+                return "/projectpage-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
+                        task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
+            }
+            session.setAttribute("task",task);
+            return "projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle + "\" " + task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
+
+    }
+
+    @PostMapping("/change_task_is_completed_status")
+    public String changeTaskIscompletedStatus(HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        Task task = (Task) session.getAttribute("task");
+        String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
+
+        if (task.isCompleted()) {
+            projectEditor.changeIsCompletedTask(false,task.getTitle(), task.getStart(),task.getEnd(),
+                                                ((Phase)session.getAttribute("phase")).getTitle());
+        }
+        else {
+            projectEditor.changeIsCompletedTask(true,task.getTitle(), task.getStart(),task.getEnd(),
+                    ((Phase)session.getAttribute("phase")).getTitle());
+        }
+
+        Assignment assignment = (Assignment) session.getAttribute("assignment");
+
+        boolean allTaskAreComplete = false;
+        for (int i = 0; i < assignment.getTasks().size(); i++) {
+            if (!assignment.getTasks().get(i).isCompleted()) {
+                allTaskAreComplete = true;
+                break;
+            }
+        }
+        if (allTaskAreComplete) {
+            projectEditor.changeIsCompletedAssignment(true,assignment.getTitle(),phaseTitle);
+        }
+
+        // TODO Where should this go?
+        return "/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" + phaseTitle + "/" + task.getTitle() + "+" +
+                task.getStart() + "+" + task.getEnd();
+    }
+
+    // TODO how to get three task variables as RequestParam?
+    @PostMapping("/direct_to_task")
+    public String directToTask(@RequestParam(name="task_title") String taskTitle, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return "/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" + taskTitle;
+    }
+
+    // TODO Create assignment html
+    @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}/{assignment.getTitle()}/{task.getTitle()}+{task.getStart()}+{task.getEnd()}")
+    public String renderTask(@PathVariable(name = "project.getTitle()") String projectTitle,
+                                   @PathVariable(name = "phase.getTitle()") String phaseTitle,
+                                   @PathVariable(name = "assignment.getTitle()") String assignmentTitle,
+                                    @PathVariable(name = "task.getTitle()") String taskTitle,
+                                    @PathVariable(name = "task.getStart()") String taskStart,
+                                    @PathVariable(name = "task.getEnd()") String taskEnd,
+                                    Model model,HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+
+        session.setAttribute("task",projectCreator.getTask(taskTitle,taskStart,taskEnd));
+
+        model.addAttribute("project",projectCreator.getProject(projectTitle));
+        model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
+        model.addAttribute("assignment",projectCreator.getAssignment(assignmentTitle, projectTitle));
+        model.addAttribute("task",projectCreator.getAssignment(assignmentTitle, projectTitle));
+
         return "assignment";
     }
 
