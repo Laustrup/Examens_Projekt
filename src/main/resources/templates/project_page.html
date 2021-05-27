@@ -51,10 +51,16 @@
 
     <section class="project_form">
         <div class="project_title_section">
-            <label for="project_title">Project Title</label>
-            <input type="text" id="project_title" name="project_title" th:placeholder="#{current_participant.getProjectTitle}" required>
+            <p th:text="${Exception}"></p>
+            <form action="/update_project" method="post">
+                <label for="project_title">Project Title</label>
+                <input type="text" id="project_title" name="project_title" th:placeholder="#{current_participant.getProjectTitle}" required>
+                <button type="submit">Update title</button>
+            </form>
         </div>
-        <button type="submit">Quit project</button>
+        <form action="/delete_project" method="post">
+            <button type="submit">Delete project</button>
+        </form>
         <p><a href="/index"><button>Go back</button></a></p>
     </section>
 </section>
@@ -62,8 +68,8 @@
 <section class="right-side">
 
     <div th:if="${current.phase}">
-        <section class="assignment"><header><h3>Assignment</h3></header>
-            <div class="assignment_container">
+        <section class="phase"><header><h3>phase</h3></header>
+            <div class="phase_container">
                 <div class="action_btn">
                     <button type="submit">Add</button>
                     <button type="submit">Edit</button>
@@ -71,7 +77,7 @@
                     <button type="submit">Completed</button>
                 </div>
 
-                <div class="about_project">
+                <div class="about_phase">
                     <button type="submit">About</button>
                     <button type="submit">Participants</button>
                 </div>
@@ -89,7 +95,7 @@
                     <button type="submit">Completed</button>
                 </div>
 
-                <div class="about_project">
+                <div class="about_assignment">
                     <button type="submit">About</button>
                     <button type="submit">Participants</button>
                 </div>
@@ -98,7 +104,8 @@
         </section>
     </div>
     <div th:if="${current.task}">
-        <section class="assignment"><header><h3>Assignment</h3></header>
+        <section class="task">
+            <header><h3>task</h3></header>
             <div class="assignment_container">
                 <div class="action_btn">
                     <button type="submit">Add</button>

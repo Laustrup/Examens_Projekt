@@ -50,6 +50,34 @@ public class ProjectController {
 
     }
 
+
+    @PostMapping("/update_project")
+    public String updateProject(@RequestParam(name="new_title") String newTitle, HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
+
+        if (((ProjectManager)session.getAttribute("projectManager"))!=null) {
+            String exception = handler.isLengthAllowedInDatabase(newTitle, "projcet_title");
+            if (exception.equals("Input is allowed")) {
+                if (handler.doesProjectExist(newTitle)) {
+                    model.addAttribute("Exception","Phase already exists...");
+                    return "projectpage-" + projectTitle;
+                }
+                Phase phase = projectEditor.updatePhase(newTitle, phaseTitle, projectTitle);
+                session.setAttribute("phase",phase);
+                return "projectpage-" + projectTitle;
+            }
+
+            model.addAttribute("Exception", "You are not project manager...");
+            return "projectpage-" + projectTitle;
+        }
+        model.addAttribute("Exception", exception);
+        return "projectpage-" + projectTitle;
+
+    }
+
     @PostMapping("/direct_project_page")
     public String goToChoosenProjectPage(@RequestParam(name = "projectTitle") String title, Model model, HttpServletRequest request) {
         ProjectRepository projectRepository = new ProjectRepository();
@@ -145,6 +173,14 @@ public class ProjectController {
         model.addAttribute("Exception", exception);
         return "projectpage-" + projectTitle + "/" + phaseTitle;
 
+    }
+
+    @PostMapping("/direct_to_phases")
+    public String directToPhasesOfProject(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+
+        return "/projectpage-" + projectTitle;
     }
 
     // TODO Perhaps make submitvalue with both title and split in method?
