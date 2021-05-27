@@ -21,10 +21,11 @@ public class ProjectController {
     private ExceptionHandler handler = new ExceptionHandler();
 
 
-    @GetMapping("/create_project/{projectManager.getUsername}")
-    public String renderCreateProject() {
-        return "create_project.html";
+    @GetMapping("/create_project/{projectmanager_username}")
+    public String renderCreateProject(@PathVariable(name = "projectmanager_username") String username) {
+        return "create_project";
     }
+
 
     @PostMapping("/create-project")
     public String createProject(@RequestParam(name = "title") String title,
@@ -46,7 +47,7 @@ public class ProjectController {
 
         session.setAttribute("project", projectCreator.createProject(title, ((ProjectManager)session.getAttribute("projectManager")).getUsername()));
 
-        return "redirect:/project_page/" + title + "/" + username;
+        return "redirect:/add_participant/projectmanager/" + title;
 
     }
 
@@ -61,20 +62,22 @@ public class ProjectController {
         return "redirect:/project_page/" + title + "/" + ((Participant) session.getAttribute("participant")).getId();
     }
 
+
     // TODO Does all three cases work with this endpoint? Redirect needs html
-    @GetMapping("/projectpage-{project.getTitle()}/{participant.getId()}")
-    public String renderProjectpage(@PathVariable(name = "project.getTitle()") String projectTitle,
-                                    @PathVariable(name = "participant.getId()") String userId,
+    @GetMapping("/project_page/{project_title}/{user_id}")
+    public String renderProjectpage(@PathVariable(name = "project_title") String projectTitle,
+                                    @PathVariable(name = "user_id") String userId,
                                     HttpServletRequest request,Model model) {
 
         HttpSession session = request.getSession();
-
+        UserCreator userCreator = new UserCreator();
         // Aldrig logget ind
-        if (((Participant) session.getAttribute("participant")).getId() == null) {
+        if (userId == null) {
             // Needs create participant method in participant controller
         }
+        //TODO projekt titlen skal være korrekt, fra en attribut/variabel
         // Får direkte adgang da han er del af projectet
-        else if (handler.isParticipantPartOfProject(userId,projectTitle)) {
+        else if (handler.isParticipantPartOfProject(userId, projectTitle)) {
 
             Project project = new ProjectCreator().getProject(projectTitle);
 
@@ -85,8 +88,10 @@ public class ProjectController {
             return "project_page";
         }
 
+        //TODO der skal være det rigtige redirect
         model.addAttribute("Exception","You are not a participant of this project...");
-        return "redirect://login_to_project/" + userId+ "/" + projectTitle;
+        return "redirect:/";
+        // return "redirect:/login_to_project/" + ((Participant) session.getAttribute("participant")).getId()+ "/" + projectTitle;
     }
 
     // TODO Create html

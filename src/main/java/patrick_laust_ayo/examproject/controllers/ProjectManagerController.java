@@ -48,13 +48,13 @@ public class  ProjectManagerController {
 
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);
-            return "create_projectmanager.html";
+            return "redirect:/create_new_projectmanager";
         }
 
         inputException = exceptionHandler.isLengthAllowedInDatabase(password,"participant_password");
         if (!(inputException.equals("Input is allowed"))) {
             model.addAttribute("Exception",inputException);
-            return "create_projectmanager.html";
+            return "redirect:/create_new_projectmanager";
         }
 
         ProjectManager projectManager = userCreator.createManager(username, password);
@@ -73,6 +73,7 @@ public class  ProjectManagerController {
         return "projectmanager_login";
     }
 
+
     @PostMapping("/allow_password")
     public String loginProjectManager(@RequestParam(name="manager_password") String password,
                                         @RequestParam(name="manager_username") String username,
@@ -85,8 +86,10 @@ public class  ProjectManagerController {
             HttpSession session = request.getSession();
             session.setAttribute("projectManager",userCreator.getProjectManager(username));
             session.setAttribute("participant",userCreator.getParticipant(username));
+
             model.addAttribute("projectManager",((ProjectManager) session.getAttribute("projectManager")));
-            System.out.println(((ProjectManager) session.getAttribute("projectManager")).getId());
+
+            System.out.println("Projektmanagers id er: " + ((ProjectManager) session.getAttribute("projectManager")).getId());
             return "redirect:/manager_dashboard/" + username;
         }
         else {
@@ -119,15 +122,16 @@ public class  ProjectManagerController {
                                            @RequestParam(name = "amount") int amount, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
+        String projectManagerUsername = ((ProjectManager)session.getAttribute("projectManager")).getUsername();
 
         for (int i = 0; i < amount; i++) {
-            userCreator.createParticipant(projectTitle,departmentName);
+            userCreator.createParticipant(projectManagerUsername, projectTitle,departmentName);
         }
 
         // TODO Perhaps key is for wrong participant...
         Participant participant = (Participant) session.getAttribute("participant");
 
-        return "redirect://project_page/" + projectTitle + "/" + participant.getName();
+        return "redirect:/project_page/" + projectTitle + "/" + participant.getName();
     }
 
 }
