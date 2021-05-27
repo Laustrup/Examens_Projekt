@@ -228,7 +228,7 @@ public class ExceptionHandler {
         Repository repo = new ParticipantRepository();
         //TODO skal det hedde userId ? det er vel participant_id vi skal bruge?
 //        int participantId = repo.findId("participant", "user_id", userId,"participant_id");
-        int participantId = repo.findId("participant", "participant_id", userId,"participant_id");
+        int participantId = repo.findId("participant", "user_id", userId,"participant_id");
         System.out.println("Participant id'et " + participantId);
         System.out.println("User id'et " + userId);
 

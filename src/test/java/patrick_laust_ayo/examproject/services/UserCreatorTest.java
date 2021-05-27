@@ -61,4 +61,14 @@ class UserCreatorTest {
         assertEquals("yolo", projectManager.getPassword());
     }
 
+
+    @Test
+    void getParticipant(){
+        UserCreator userCreator = new UserCreator();
+
+        Participant participant = userCreator.getParticipant("lone9242");
+
+        assertEquals("lone9242", participant.getId());
+    }
+
 }

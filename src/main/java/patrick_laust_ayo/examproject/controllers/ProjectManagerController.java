@@ -69,8 +69,8 @@ public class  ProjectManagerController {
     }
 
     @GetMapping("/manager_login")
-    public String renderProjectManagerLogin(HttpServletRequest request){
-    return "projectmanager_login";
+    public String renderProjectManagerLogin(){
+        return "projectmanager_login";
     }
 
     @PostMapping("/allow_password")
@@ -95,19 +95,19 @@ public class  ProjectManagerController {
         }
     }
 
-    @GetMapping("/manager_dashboard/{projectManager.getId()}")
-    public String renderDashboard(@PathVariable("projectManager.getId()") String userId,
+    @GetMapping("/manager_dashboard/{manager-id}")
+    public String renderDashboard(@PathVariable("manager-id") String userId,
                                   Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
 
         ProjectManager projectManager = userCreator.getProjectManager(userId);
         ProjectCreator projectCreator = new ProjectCreator();
 
-        ArrayList<Project> projects = projectCreator.getProjects(userId); //vi kalder det id i metoden
+        //ArrayList<Project> projects = projectCreator.getProjects(userId); //vi kalder det id i metoden
 
-        session.setAttribute("projects",projects);
+        //session.setAttribute("projects",projects);
 
-        model.addAttribute("projects",projects);
+        //model.addAttribute("projects",projects);
         model.addAttribute("projectManager", projectManager);
 
         return "projectmanager_dashboard";
