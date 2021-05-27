@@ -139,8 +139,8 @@ public class ProjectController {
         return "/accept_delete_of_" + projectTitle;
     }
 
-    @PostMapping("/add_phase}")
-    public String addPhase(HttpServletRequest request, Model model) {
+    @PostMapping("/add_phase")
+    public String addPhase(HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 

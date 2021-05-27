@@ -68,10 +68,19 @@
 <section class="split-right">
     <div th:if="${current.start}"><header><h3>Phases</h3></header>
 
-        <form method="/direct_to_phase" method="post">
+        <tr>
+            <th>Estimated amount of work hours: <p th:text="${project.getTotalWorkhours()}"></p></th></th>
+            <th>Estimated cost of project: <p th:text="${project.getTotalCost()}"></p></th>
+        </tr>
+
+        <form action="/direct_to_phase" method="post">
             <div th:each="phase : ${project.getPhases()}">
-                <button type="submit" value="phase.getTitle()" name="phase_title"><p th:text="${phase.getTitle()}"></p></pt></button>
+                <button type="submit" value="phase.getTitle()" name="phase_title"><p th:text="${phase.getTitle()}"></p></button>
             </div>
+        </form>
+
+        <form action="/add_phase" method="post">
+            <button type="submit">Add new phase</button>
         </form>
 
     </div>
@@ -79,11 +88,27 @@
         <section class="phase"><header><h3 th:text="${phase.getTitle()}"></h3></header>
             <div class="phase_container">
 
+                <tr>
+                    <th>Estimated amount of work hours: <p th:text="${phase.getTotalWorkhours()}"></p></th></th>
+                    <th>Estimated cost of phase: <p th:text="${phase.getTotalCost()}"></p></th>
+                </tr>
+
                 <form action="direct_to_assignment" method="post">
                 <div th:each="assignment : {phase.getAssignments()}">
                     <button type="submit" value="assignment.getTitle()" name="assignment_title"><p th:text="${assignment.getTitle()}"></p>
                         </pt></button>
                 </div>
+                </form>
+
+                <form action="/add_assignment">
+                    <h5>Add new assignment</h5>
+                    <label for="new_assignment_title">Type title: </label>
+                    <input type="text" id="new_assignment_title" name="title">
+                    <label for="new_assignment_start">Type start of assignment</label>
+                    <input type="text" id="new_assignment_start" name="start">
+                    <label for="new_assignment_end">Type deadline of assignment</label>
+                    <input type="text" id="new_assignment_end" name="start">
+                    <button type="submit">Add new phase</button>
                 </form>
 
                     <div>
@@ -112,7 +137,8 @@
                 <tr>
                     <th>From: <p th:text="${assignment.getStart()}"></p></th>
                     <th>To: <p th:text="${assignment.getEnd()}"></p></th>
-                    <th>Estimated amount of work hours: <p th:text="${assignment.getTotalAssignmentWorkhours()}"></p></th>
+                    <th>Estimated amount of work hours: <p th:text="${assignment.getTotalAssignmentWorkhours()}"></p></th></th>
+                    <th>Estimated cost of assignment: <p th:text="${assignment.getAssignmentTotalCost()}"></p></th>
                 </tr>
 
                 <form action="/direct_to_task" method="post">
@@ -122,6 +148,10 @@
                         <button type="submit" value="task.getTitle()" name="task_title"><p th:text="${task.getTitle()}"></p>
                             </pt></button>
                     </div>
+                </form>
+
+                <form action="/add_task">
+                    <button type="submit">Add new task</button>
                 </form>
 
                 <form action="/update_assignment" method="post">
@@ -159,7 +189,8 @@
                 <tr>
                     <th>From: <p th:text="${task.getStart()}"></p></th>
                     <th>To: <p th:text="${task.getEnd()}"></p></th>
-                    <th>Estimated amount of work hours</th>
+                    <th>Estimated amount of work hours: <p th:text="${task.getEstimatedWorkHours()}"></p></th>
+                    <th>Estimated cost of task: <p th:text="${task.getTotalCost()}"></p></th>
                 </tr>
 
                 <form action="/direct_to_task" method="post">
@@ -192,9 +223,16 @@
                 <div>
                     <p><a href="/accept_delete"><button>Delete Assignment</button></a></p>
                     <form action="/direct_to_phase" method="post">
-                        <button type="submit" value="phase.getTitle()" name="phase_title">Back to phases</pt></button>
+                        <button type="submit" value="phase.getTitle()" name="phase_title">Back to phases</button>
                     </form>
                 </div>
+
+                <form action="/join-task" method="post">
+                    <input value="task.getTitle()" name="task_title">
+                    <input value="task.getStart()" name="task_start">
+                    <input value="task.getEnd()" name="task_end">
+                    <button type="submit">Back to phases</button>
+                </form>
             </div>
         </section>
     </div>
