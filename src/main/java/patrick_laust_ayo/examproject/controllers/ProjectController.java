@@ -187,15 +187,13 @@ public class ProjectController {
             return "/projectpage-" + projectTitle  + "/" + phaseTitle;
         }
 
-        exception = handler.isLengthAllowedInDatabase(start,"assignment_start");
-        if (!exception.equals("Input is allowed")) {
-            model.addAttribute("Exception",exception);
+        if (handler.isDateTimeCorrectFormat(start)) {
+            model.addAttribute("Exception","Start should have the format yyyy-mm-dd hh-mm-dd");
             return "/projectpage-" + projectTitle  + "/" + phaseTitle;
         }
 
-        exception = handler.isLengthAllowedInDatabase(end,"assignment_end");
-        if (!exception.equals("Input is allowed")) {
-            model.addAttribute("Exception",exception);
+        if (handler.isDateTimeCorrectFormat(end)) {
+            model.addAttribute("Exception","End should have the format yyyy-mm-dd hh-mm-dd");
             return "/projectpage-" + projectTitle  + "/" + phaseTitle;
         }
 
@@ -221,15 +219,13 @@ public class ProjectController {
                 return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
             }
 
-            exception = handler.isLengthAllowedInDatabase(start, "assignment_start");
-            if (!exception.equals("Input is allowed")) {
-                model.addAttribute("Exception", exception);
+            if (handler.isDateTimeCorrectFormat(start)) {
+                model.addAttribute("Exception", "Start should have the format yyyy-mm-dd hh-mm-dd");
                 return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
             }
 
-            exception = handler.isLengthAllowedInDatabase(end, "assignment_end");
-            if (!exception.equals("Input is allowed")) {
-                model.addAttribute("Exception", exception);
+            if (handler.isDateTimeCorrectFormat(end)) {
+                model.addAttribute("Exception", "End should have the format yyyy-mm-dd hh-mm-dd");
                 return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
             }
 
@@ -320,16 +316,14 @@ public class ProjectController {
                         task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
             }
 
-            exception = handler.isLengthAllowedInDatabase(taskStart,"task_start");
-            if (!exception.equals("Input is allowed")) {
-                model.addAttribute("Exception",exception);
+            if (handler.isDateTimeCorrectFormat(taskStart)) {
+                model.addAttribute("Exception","Start should have the format yyyy-mm-dd hh-mm-dd");
                 return "/projectpage-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
                         task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
             }
 
-            exception = handler.isLengthAllowedInDatabase(taskEnd,"task_end");
-            if (!exception.equals("Input is allowed")) {
-                model.addAttribute("Exception",exception);
+            if (handler.isDateTimeCorrectFormat("Start should have the format yyyy-mm-dd hh-mm-dd")) {
+                model.addAttribute("Exception","Start should have the format yyyy-mm-dd hh-mm-dd");
                 return "/projectpage-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
                         task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
             }
