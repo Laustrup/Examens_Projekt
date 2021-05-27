@@ -50,6 +50,15 @@ public class Assignment {
         isCompleted = completed;
     }
 
+    public String IsCompletedAsAString() {
+        if (isCompleted) {
+            return "Completed!";
+        }
+        else {
+            return "Not completed...";
+        }
+    }
+
     public String getTitle() {
         return title;
     }
