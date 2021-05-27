@@ -22,20 +22,11 @@ public class Project {
         this.phases = phases;
         this.participants = participants;
         this.projectManager = projectManager;
-        calculateTotalCost();
     }
 
     // For updating title or password
     public Project(String title) {
         this.title = title;
-    }
-
-    // TODO, doesn't do anything yet
-    public int calculateTotalCost() {
-        for (int i = 0; i < phases.size(); i++) {
-            //phases.get(i).getAssignments().forEach();
-        }
-        return 0;
     }
 
     public String getTitle() {
@@ -56,6 +47,22 @@ public class Project {
 
     public ArrayList<Phase> getPhases(){
         return phases;
+    }
+
+    public double getTotalWorkhours() {
+        double total = 0;
+        for (int i = 0; i < phases.size();i++) {
+            total += phases.get(i).getTotalWorkhours();
+        }
+        return total;
+    }
+
+    public double getTotalCost() {
+        double total = 0;
+        for (int i = 0; i < phases.size();i++) {
+            total += phases.get(i).getTotalCost();
+        }
+        return total;
     }
 
     public Map<String, Participant> getParticipants() {
