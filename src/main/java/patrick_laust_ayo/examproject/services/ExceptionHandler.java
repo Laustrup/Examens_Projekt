@@ -182,6 +182,44 @@ public class ExceptionHandler {
         }
         return true;
     }
+    public boolean isDateTimeCorrectFormat(String dateTime) {
+        if(dateTime.contains("-")&&dateTime.contains(":")&&dateTime.contains(" ")&&dateTime.length()<19) {
+            String[] datesAndTime = dateTime.split(" ");
+            String[] dates = datesAndTime[0].split("-");
+            String[] times = datesAndTime[1].split(":");
+
+            int year;
+            int month;
+            int day;
+
+            int hours;
+            int minutes;
+            int seconds;
+
+            if (!(dates.length==3&&times.length==3)) {
+                return false;
+            }
+
+            try {
+                year = Integer.parseInt(dates[0]);
+                month = Integer.parseInt(dates[1]);
+                day = Integer.parseInt(dates[2]);
+
+                hours = Integer.parseInt(times[0]);
+                minutes = Integer.parseInt(times[1]);
+                seconds = Integer.parseInt(times[2]);
+            }
+            catch (Exception e) {
+                System.out.println("Couldn't parse dates and times...\n" + e.getMessage());
+                return false;
+            }
+            if (year>10000||month>12||day>31||hours>23||minutes>59||seconds>59) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
 
     // TODO Perhaps unmake repository as abstract?
     // Accepts if the participant is part of the project
