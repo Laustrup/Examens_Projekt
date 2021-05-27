@@ -66,7 +66,13 @@
 </section>
 
 <section class="right-side">
-
+    <div th:if="${current.start}">
+        <form method="/direct_to_phase" method="post">
+            <div th:each="phase : ${project.getPhases()}">
+                <button type="submit" value="phase.getTitle()" name="phase_title"><p th:text="${phase.getTitle()}"></p></pt></button>
+            </div>
+        </form>
+    </div>
     <div th:if="${current.phase}">
         <section class="phase"><header><h3>phase</h3></header>
             <div class="phase_container">

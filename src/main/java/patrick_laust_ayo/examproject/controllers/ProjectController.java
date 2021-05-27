@@ -70,10 +70,10 @@ public class ProjectController {
                 return "projectpage-" + projectTitle;
             }
 
-            model.addAttribute("Exception", "You are not project manager...");
+            model.addAttribute("Exception", exception);
             return "projectpage-" + projectTitle;
         }
-        model.addAttribute("Exception", exception);
+        model.addAttribute("Exception", "You are not project manager...");
         return "projectpage-" + projectTitle;
 
     }
@@ -205,15 +205,6 @@ public class ProjectController {
         model.addAttribute("project",projectCreator.getProject(projectTitle));
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
         model.addAttribute("current","phase");
-
-        return "phases";
-    }
-
-    @GetMapping("/projectpage-{project.getTitle()}/phases")
-    public String renderPhasesOfProject(@PathVariable(name = "project.getTitle()") String projectTitle,
-                              HttpServletRequest request, Model model) {
-
-        model.addAttribute("project",projectCreator.getProject(projectTitle));
 
         return "phases";
     }

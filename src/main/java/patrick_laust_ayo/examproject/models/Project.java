@@ -54,7 +54,7 @@ public class Project {
         this.projectManager = projectManager;
     }
 
-    public ArrayList<Phase> getPhases (){
+    public ArrayList<Phase> getPhases(){
         return phases;
     }
 
