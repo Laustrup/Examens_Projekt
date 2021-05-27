@@ -35,4 +35,8 @@ public class Task extends Assignment {
     public void addParticipant(Participant participant) {
         participants.add(participant);
     }
+
+    public double totalCost() {
+        return participants.size() * estimatedWorkHours * 37.5;
+    }
 }

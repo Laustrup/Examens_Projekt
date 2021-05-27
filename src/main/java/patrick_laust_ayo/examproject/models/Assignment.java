@@ -50,6 +50,31 @@ public class Assignment {
         isCompleted = completed;
     }
 
+    public String IsCompletedAsAString() {
+        if (isCompleted) {
+            return "Completed!";
+        }
+        else {
+            return "Not completed...";
+        }
+    }
+
+    public double getTotalAssignmentWorkhours() {
+        double total = 0;
+        for (int i = 0; i < tasks.size();i++) {
+            total += tasks.get(i).getEstimatedWorkHours();
+        }
+        return total;
+    }
+
+    public double getTotalAssignmentCost() {
+        double total = 0;
+        for (int i = 0; i < tasks.size();i++) {
+            total += tasks.get(i).totalCost();
+        }
+        return total;
+    }
+
     public String getTitle() {
         return title;
     }

@@ -27,6 +27,22 @@ public class Phase {
         assignments.put(key, assignment);
     }
 
+    // TODO These maps doesn't have i as keys...
+    public double getTotalWorkhours() {
+        double total = 0;
+        for (int i = 0; i < assignments.size();i++) {
+            total += assignments.get(i).getTotalAssignmentWorkhours();
+        }
+        return total;
+    }
+    public double getTotalCost() {
+        double total = 0;
+        for (int i = 0; i < assignments.size();i++) {
+            total += assignments.get(i).getTotalAssignmentCost();
+        }
+        return getTotalWorkhours() * 37.5;
+    }
+
     public String getTitle() {
         return title;
     }

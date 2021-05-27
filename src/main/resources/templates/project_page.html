@@ -9,7 +9,7 @@
 <div class="header">
     <h2>Projectname</h2>
 </div>
-<div class="left-side">
+<section class="split-left">
 
     <section class="participant_form">
         <header><h3>Welcome</h3></header>
@@ -18,67 +18,227 @@
 
                     <div class="ID_section">
                         <label for="participant_ID">ID</label>
-                        <input type="text" id="participant_ID" name="participant_ID" th:placeholder="#{current_participant.getId}" required>
+                        <input type="text" id="participant_ID" name="participant_ID" th:placeholder="${current_participant.getId}" required>
                     </div>
 
                     <div class="password_section">
                         <label for="participant_password">Password</label>
-                        <input type="text" id="participant_password" name="participant_password" th:placeholder="#{current_participant.getPassword}" required>
-                    </div>
-
-                    <div class="project_title_section">
-                        <label for="project_title">Project Title</label>
-                        <input type="text" id="project_title" name="project_title" th:placeholder="#{current_participant.getProjectTitle}" required>
+                        <input type="text" id="participant_password" name="participant_password" th:placeholder="${current_participant.getPassword}" required>
                     </div>
 
                     <div class="name_section">
                         <label for="participant_name">Name</label>
-                        <input type="text" id="participant_name" name="participant_name" th:placeholder="#{current_participant.getName}" required>
+                        <input type="text" id="participant_name" name="participant_name" th:placeholder="${current_participant.getName}" required>
                     </div>
 
                     <div class="position_section">
                         <label for="position">Position</label>
-                        <input type="text" id="position" name="position" th:placeholder="#{current_participant.getPosition}" required>
+                        <input type="text" id="position" name="position" th:placeholder="${current_participant.getPosition}" required>
                     </div>
 
                     <div class="department_section">
                         <label for="department">Department</label>
-                        <input type="text" id="department" name="department" th:placeholder="#{current_participant.getDepartment}" required>
+                        <input type="text" id="department" name="department" th:placeholder="${current_participant.getDepartment}" required>
                     </div>
+
+                    <p th:text="${Exception}"></p>
 
                     <button type="submit">Update participant</button>
 
-            </form>
+                </form>
             </div>
     </section>
 
-    <div class="assignment"><header><h3>Assignment</h3></header>
-        <div class="assignment_container">
-            <div class="action_btn">
-                <button type="submit">Add</button>
-                <button type="submit">Edit</button>
-                <button type="submit">Delete</button>
-                <button type="submit">Completed</button>
-            </div>
-
-            <div class="about_project">
-                <button type="submit">About</button>
-                <button type="submit">Participants</button>
-            </div>
-
-
+    <section class="project_form">
+        <div class="project_title_section">
+            <p th:text="${Exception}"></p>
+            <form action="/update_project" method="post">
+                <label for="project_title">Project Title</label>
+                <input type="text" id="project_title" name="project_title" th:placeholder="${project.getProjectTitle}" required>
+                <button type="submit">Update title</button>
+            </form>
         </div>
+        <form action="/delete_project" method="post">
+            <button type="submit">Delete project</button>
+        </form>
+        <p><a href="/index"><button>Go back</button></a></p>
+    </section>
+</section>
+
+<section class="split-right">
+    <div th:if="${current.start}"><header><h3>Phases</h3></header>
+
+        <tr>
+            <th>Estimated amount of work hours: <p th:text="${project.getTotalWorkhours()}"></p></th></th>
+            <th>Estimated cost of project: <p th:text="${project.getTotalCost()}"></p></th>
+        </tr>
+
+        <form action="/direct_to_phase" method="post">
+            <div th:each="phase : ${project.getPhases()}">
+                <button type="submit" value="phase.getTitle()" name="phase_title"><p th:text="${phase.getTitle()}"></p></button>
+            </div>
+        </form>
+
+        <form action="/add_phase" method="post">
+            <button type="submit">Add new phase</button>
+        </form>
+
     </div>
-</div>
-<div class="right-side">
-</div>
+    <div th:if="${current.phase}">
+        <section class="phase"><header><h3 th:text="${phase.getTitle()}"></h3></header>
+            <div class="phase_container">
 
-<footer>
-    <button type="submit">Quit project</button>
-    <p><a href="/index"><button>Go back</button></a></p>
+                <tr>
+                    <th>Estimated amount of work hours: <p th:text="${phase.getTotalWorkhours()}"></p></th></th>
+                    <th>Estimated cost of phase: <p th:text="${phase.getTotalCost()}"></p></th>
+                </tr>
 
-</footer>
+                <form action="direct_to_assignment" method="post">
+                <div th:each="assignment : {phase.getAssignments()}">
+                    <button type="submit" value="assignment.getTitle()" name="assignment_title"><p th:text="${assignment.getTitle()}"></p>
+                        </pt></button>
+                </div>
+                </form>
 
+                <form action="/add_assignment">
+                    <h5>Add new assignment</h5>
+                    <label for="new_assignment_title">Type title: </label>
+                    <input type="text" id="new_assignment_title" name="title">
+                    <label for="new_assignment_start">Type start of assignment</label>
+                    <input type="text" id="new_assignment_start" name="start">
+                    <label for="new_assignment_end">Type deadline of assignment</label>
+                    <input type="text" id="new_assignment_end" name="start">
+                    <button type="submit">Add new phase</button>
+                </form>
+
+                    <div>
+                        <form action="/update_phase" method="post">
+                            <label for="phase_title">Project Title</label>
+                            <input type="text" id="phase_title" name="phase_title" th:placeholder="${phase.getTitle()}" required>
+                            <button type="submit">Update title</button>
+                        </form>
+                    </div>
+
+                <div>
+                    <p><a href="/accept_delete"><button>Delete phase</button></a></p>
+                    <form action="/direct_project_page" method="post">
+                        <button type="submit" value="project.getTitle()" name="project_title">Back to phases</pt></button>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <div th:if="${current.assignment}">
+        <section class="assignment"><header><h3 th:text="${assignment.getTitle()}"></h3></header>
+            <div class="assignment_container">
+
+                <tr>
+                    <th>From: <p th:text="${assignment.getStart()}"></p></th>
+                    <th>To: <p th:text="${assignment.getEnd()}"></p></th>
+                    <th>Estimated amount of work hours: <p th:text="${assignment.getTotalAssignmentWorkhours()}"></p></th></th>
+                    <th>Estimated cost of assignment: <p th:text="${assignment.getAssignmentTotalCost()}"></p></th>
+                </tr>
+
+                <form action="/direct_to_task" method="post">
+                    <div th:each="task : {assignment.getTasks()}">
+                        <input value="task.getStart()" name="task_start">
+                        <input value="task.getEnd()" name="task_end">
+                        <button type="submit" value="task.getTitle()" name="task_title"><p th:text="${task.getTitle()}"></p>
+                            </pt></button>
+                    </div>
+                </form>
+
+                <form action="/add_task">
+                    <button type="submit">Add new task</button>
+                </form>
+
+                <form action="/update_assignment" method="post">
+                    <div>
+                        <label for="new_title">Change title</label>
+                        <input type="text" id="new_title" name="new_title">
+                        <label for="assignment_start">Change start of assignment</label>
+                        <input type="text" id="assignment_start" name="assignment_start">
+                        <label for="assignment_end">Change end of assignment</label>
+                        <input type="text" id="assignment_end" name="assignment_end">
+
+                        <button type="submit" value="assignment.getTitle" name="assignment_title">Update assignment</button>
+                    </div>
+                </form>
+
+                <form action="/change_assignment_is_completed_status" method="post">
+                    <button type="submit" name="assignment_title"><p th:text="${assignment.IsCompletedAsAString()}"></p></button>
+                </form>
+
+                <div>
+                    <p><a href="/accept_delete"><button>Delete Assignment</button></a></p>
+                    <form action="/direct_to_phase" method="post">
+                        <button type="submit" value="phase.getTitle()" name="phase_title">Back to phases</pt></button>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+    </div>
+    <div th:if="${current.task}">
+        <section class="task">
+            <header><h3 th:text="task.getTitle()"></h3></header>
+            <div class="task_container">
+
+                <tr>
+                    <th>From: <p th:text="${task.getStart()}"></p></th>
+                    <th>To: <p th:text="${task.getEnd()}"></p></th>
+                    <th>Estimated amount of work hours: <p th:text="${task.getEstimatedWorkHours()}"></p></th>
+                    <th>Estimated cost of task: <p th:text="${task.getTotalCost()}"></p></th>
+                </tr>
+
+                <form action="/direct_to_task" method="post">
+                    <div th:each="task : {assignment.getTasks()}">
+                        <input value="task.getStart()" name="task_start">
+                        <input value="task.getEnd()" name="task_end">
+                        <button type="submit" value="task.getTitle()" name="task_title"><p th:text="${task.getTitle()}"></p>
+                            </pt></button>
+                    </div>
+                </form>
+
+                <form action="/update_task" method="post">
+                    <div>
+                        <label for="task_new_title">Change title</label>
+                        <input type="text" id="task_new_title" name="new_title">
+                        <label for="task_start">Change start of assignment</label>
+                        <input type="text" id="task_start" name="task_start">
+                        <label for="task_end">Change end of assignment</label>
+                        <input type="text" id="task_end" name="task_end">
+                        <lavel for="task_work_hours">Change amount of workhours</lavel>
+
+                        <button type="submit">Update assignment</button>
+                    </div>
+                </form>
+
+                <form action="/change_assignment_is_completed_status" method="post">
+                    <button type="submit" name="assignment_title"><p th:text="${assignment.IsCompletedAsAString()}"></p></button>
+                </form>
+
+                <div>
+                    <p><a href="/accept_delete"><button>Delete Assignment</button></a></p>
+                    <form action="/direct_to_phase" method="post">
+                        <button type="submit" value="phase.getTitle()" name="phase_title">Back to phases</button>
+                    </form>
+                </div>
+
+                <form action="/join-task" method="post">
+                    <input value="task.getTitle()" name="task_title">
+                    <input value="task.getStart()" name="task_start">
+                    <input value="task.getEnd()" name="task_end">
+                    <button type="submit">Back to phases</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    </section>
+</section>
 
 </main>
 </body>

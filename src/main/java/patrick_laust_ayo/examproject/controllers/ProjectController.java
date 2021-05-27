@@ -51,6 +51,34 @@ public class ProjectController {
 
     }
 
+
+    @PostMapping("/update_project")
+    public String updateProject(@RequestParam(name="new_title") String newTitle, HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
+
+        if (((ProjectManager)session.getAttribute("projectManager"))!=null) {
+            String exception = handler.isLengthAllowedInDatabase(newTitle, "projcet_title");
+            if (exception.equals("Input is allowed")) {
+                if (handler.doesProjectExist(newTitle)) {
+                    model.addAttribute("Exception","Phase already exists...");
+                    return "projectpage-" + projectTitle;
+                }
+                Phase phase = projectEditor.updatePhase(newTitle, phaseTitle, projectTitle);
+                session.setAttribute("phase",phase);
+                return "projectpage-" + projectTitle;
+            }
+
+            model.addAttribute("Exception", exception);
+            return "projectpage-" + projectTitle;
+        }
+        model.addAttribute("Exception", "You are not project manager...");
+        return "projectpage-" + projectTitle;
+
+    }
+
     @PostMapping("/direct_project_page")
     public String goToChoosenProjectPage(@RequestParam(name = "projectTitle") String title, Model model, HttpServletRequest request) {
         ProjectRepository projectRepository = new ProjectRepository();
@@ -94,7 +122,6 @@ public class ProjectController {
         // return "redirect:/login_to_project/" + ((Participant) session.getAttribute("participant")).getId()+ "/" + projectTitle;
     }
 
-    // TODO Create html
     @GetMapping("/accept_delete_of_{project.getTitle()}")
     public String renderDeleteProject(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -117,8 +144,8 @@ public class ProjectController {
         return "/accept_delete_of_" + projectTitle;
     }
 
-    @PostMapping("/add_phase}")
-    public String addPhase(HttpServletRequest request, Model model) {
+    @PostMapping("/add_phase")
+    public String addPhase(HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
@@ -153,6 +180,14 @@ public class ProjectController {
 
     }
 
+    @PostMapping("/direct_to_phases")
+    public String directToPhasesOfProject(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+
+        return "/projectpage-" + projectTitle;
+    }
+
     // TODO Perhaps make submitvalue with both title and split in method?
     @PostMapping("/direct_to_phase")
     public String directToPhase(@RequestParam(name="phase_title") String phaseTitle, HttpServletRequest request) {
@@ -160,11 +195,11 @@ public class ProjectController {
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
 
-        return "/projectpage-" + projectTitle + "/" + phaseTitle;
+        return "redirect://projectpage-" + projectTitle + "/" + phaseTitle;
     }
 
     // TODO Create phase html
-    @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}")
+    @GetMapping("/projectpage-{pt}/{phase.getTitle()}")
     public String renderPhase(@PathVariable(name = "project.getTitle()") String projectTitle,
                               @PathVariable(name = "phase.getTitle()") String phaseTitle,
                               HttpServletRequest request, Model model) {
@@ -174,11 +209,11 @@ public class ProjectController {
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
+        model.addAttribute("current","phase");
 
-        return "phase";
+        return "phases";
     }
 
-    // TODO Create html
     @GetMapping("/accept_delete_of_{phase.getTitle()}")
     public String renderDeletePhase(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -306,7 +341,6 @@ public class ProjectController {
         return "assignment";
     }
 
-    // TODO Create html
     @GetMapping("/accept_delete_of_{assignment.getTitle()}")
     public String renderDeleteAssignment(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -444,7 +478,6 @@ public class ProjectController {
         return "assignment";
     }
 
-    // TODO Create html
     @GetMapping("/accept_delete_of_{task.getTitle()}")
     public String renderDeleteTask(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
