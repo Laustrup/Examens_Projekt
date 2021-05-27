@@ -154,11 +154,11 @@ public class ProjectController {
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
 
-        return "/projectpage-" + projectTitle + "/" + phaseTitle;
+        return "redirect://projectpage-" + projectTitle + "/" + phaseTitle;
     }
 
     // TODO Create phase html
-    @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}")
+    @GetMapping("/projectpage-{pt}/{phase.getTitle()}")
     public String renderPhase(@PathVariable(name = "project.getTitle()") String projectTitle,
                               @PathVariable(name = "phase.getTitle()") String phaseTitle,
                               HttpServletRequest request, Model model) {
@@ -168,6 +168,7 @@ public class ProjectController {
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
+        model.addAttribute("current","phase");
 
         return "phases";
     }
