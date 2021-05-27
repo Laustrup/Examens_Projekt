@@ -66,7 +66,7 @@
 </section>
 
 <section class="split-right">
-    <div th:if="${current.start}">
+    <div th:if="${current.start}"><header><h3>Phases</h3></header>
         <form method="/direct_to_phase" method="post">
             <div th:each="phase : ${project.getPhases()}">
                 <button type="submit" value="phase.getTitle()" name="phase_title"><p th:text="${phase.getTitle()}"></p></pt></button>
@@ -74,7 +74,7 @@
         </form>
     </div>
     <div th:if="${current.phase}">
-        <section class="phase"><header><h3>phase</h3></header>
+        <section class="phase"><header><h3 th:text="${phase.getTitle()}"></h3></header>
             <div class="phase_container">
                 <form action="direct_to_assignment" method="post">
                 <div th:each="assignment : {phase.getAssignments()}">
@@ -88,6 +88,10 @@
                     <button type="submit">Update title</button>
                 </form>
                 <p><a href="/accept_delete"><button>Delete phase</button></a></p>
+                <form action="/direct_project_page" method="post">
+                    <button type="submit" value="project.getTitle()" name="project_title">Back to phases</pt></button>
+                </form>
+
                 </div>
             </section>
         </div>
