@@ -9,7 +9,7 @@
 <div class="header">
     <h2>Projectname</h2>
 </div>
-<section class="left-side">
+<section class="split-left">
 
     <section class="participant_form">
         <header><h3>Welcome</h3></header>
@@ -18,27 +18,27 @@
 
                     <div class="ID_section">
                         <label for="participant_ID">ID</label>
-                        <input type="text" id="participant_ID" name="participant_ID" th:placeholder="#{current_participant.getId}" required>
+                        <input type="text" id="participant_ID" name="participant_ID" th:placeholder="${current_participant.getId}" required>
                     </div>
 
                     <div class="password_section">
                         <label for="participant_password">Password</label>
-                        <input type="text" id="participant_password" name="participant_password" th:placeholder="#{current_participant.getPassword}" required>
+                        <input type="text" id="participant_password" name="participant_password" th:placeholder="${current_participant.getPassword}" required>
                     </div>
 
                     <div class="name_section">
                         <label for="participant_name">Name</label>
-                        <input type="text" id="participant_name" name="participant_name" th:placeholder="#{current_participant.getName}" required>
+                        <input type="text" id="participant_name" name="participant_name" th:placeholder="${current_participant.getName}" required>
                     </div>
 
                     <div class="position_section">
                         <label for="position">Position</label>
-                        <input type="text" id="position" name="position" th:placeholder="#{current_participant.getPosition}" required>
+                        <input type="text" id="position" name="position" th:placeholder="${current_participant.getPosition}" required>
                     </div>
 
                     <div class="department_section">
                         <label for="department">Department</label>
-                        <input type="text" id="department" name="department" th:placeholder="#{current_participant.getDepartment}" required>
+                        <input type="text" id="department" name="department" th:placeholder="${current_participant.getDepartment}" required>
                     </div>
 
                     <p th:text="${Exception}"></p>
@@ -54,7 +54,7 @@
             <p th:text="${Exception}"></p>
             <form action="/update_project" method="post">
                 <label for="project_title">Project Title</label>
-                <input type="text" id="project_title" name="project_title" th:placeholder="#{current_participant.getProjectTitle}" required>
+                <input type="text" id="project_title" name="project_title" th:placeholder="${project.getProjectTitle}" required>
                 <button type="submit">Update title</button>
             </form>
         </div>
@@ -65,7 +65,7 @@
     </section>
 </section>
 
-<section class="right-side">
+<section class="split-right">
     <div th:if="${current.start}">
         <form method="/direct_to_phase" method="post">
             <div th:each="phase : ${project.getPhases()}">
@@ -76,17 +76,17 @@
     <div th:if="${current.phase}">
         <section class="phase"><header><h3>phase</h3></header>
             <div class="phase_container">
-                <div class="action_btn">
-                    <button type="submit">Add</button>
-                    <button type="submit">Edit</button>
-                    <button type="submit">Delete</button>
-                    <button type="submit">Completed</button>
+                <form action="direct_to_assignment" method="post">
+                <div th:each="assignment : {phase.getAssignments()}">
+                    <button type="submit" value="assignment.getTitle()" name="assignment_title"><p th:text="${assignment.getTitle()}"></p>
+                        </pt></button>
                 </div>
-
-                <div class="about_phase">
-                    <button type="submit">About</button>
-                    <button type="submit">Participants</button>
-                </div>
+                </form>
+                <form action="/update_phase" method="post">
+                    <label for="phase_title">Project Title</label>
+                    <input type="text" id="phase_title" name="phase_title" th:placeholder="${phase.getTitle()}" required>
+                    <button type="submit">Update title</button>
+                </form>
                 </div>
             </section>
         </div>
