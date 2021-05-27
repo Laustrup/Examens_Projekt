@@ -91,11 +91,13 @@ public class ProjectController {
 
     // TODO Create html
     @GetMapping("/accept_delete_of_{project.getTitle()}")
-    public String renderDeleteProject() {
-        return "accept_delete_of_project";
+    public String renderDeleteProject(Model model,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        model.addAttribute("Object_to_delete",((Project)session.getAttribute("Project")));
+        return "accept_delete";
     }
 
-    @PostMapping("/delete_{project.getTitle()/{projectManager.getPassword()}")
+    @PostMapping("/delete_project")
     public String deleteProject(@RequestParam(name = "project_title") String projectTitle,
                                 @RequestParam(name = "password") String password,
                                 @RequestParam(name = "user_id") String userId, Model model) {
@@ -159,8 +161,8 @@ public class ProjectController {
     // TODO Create phase html
     @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}")
     public String renderPhase(@PathVariable(name = "project.getTitle()") String projectTitle,
-                              @PathVariable(name = "phase.getTitle()") String phaseTitle, HttpServletRequest request,
-                              Model model) {
+                              @PathVariable(name = "phase.getTitle()") String phaseTitle,
+                              HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
         session.setAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
@@ -171,10 +173,27 @@ public class ProjectController {
         return "phase";
     }
 
+    // TODO Create html
+    @GetMapping("/accept_delete_of_{phase.getTitle()}")
+    public String renderDeletePhase(Model model,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        model.addAttribute("Object_to_delete",((Phase)session.getAttribute("Phase")));
+        return "accept_delete";
+    }
+
+    @PostMapping("/delete_phase")
+    public String deletePhase(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        projectEditor.deletePhase(((Phase)session.getAttribute("Phase")).getTitle(),projectTitle);
+        return "/projectpage-"+projectTitle+"/" + ((Participant)session.getAttribute("participant")).getId();
+    }
+
     @PostMapping("/add_assignment")
     public String addAssignment(@RequestParam(name="title") String title,
                                 @RequestParam(name="start") String start,
-                                @RequestParam(name="end") String end, HttpServletRequest request, Model model) {
+                                @RequestParam(name="end") String end,
+                                HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
 
@@ -187,15 +206,13 @@ public class ProjectController {
             return "/projectpage-" + projectTitle  + "/" + phaseTitle;
         }
 
-        exception = handler.isLengthAllowedInDatabase(start,"assignment_start");
-        if (!exception.equals("Input is allowed")) {
-            model.addAttribute("Exception",exception);
+        if (handler.isDateTimeCorrectFormat(start)) {
+            model.addAttribute("Exception","Start should have the format yyyy-mm-dd hh-mm-dd");
             return "/projectpage-" + projectTitle  + "/" + phaseTitle;
         }
 
-        exception = handler.isLengthAllowedInDatabase(end,"assignment_end");
-        if (!exception.equals("Input is allowed")) {
-            model.addAttribute("Exception",exception);
+        if (handler.isDateTimeCorrectFormat(end)) {
+            model.addAttribute("Exception","End should have the format yyyy-mm-dd hh-mm-dd");
             return "/projectpage-" + projectTitle  + "/" + phaseTitle;
         }
 
@@ -221,15 +238,13 @@ public class ProjectController {
                 return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
             }
 
-            exception = handler.isLengthAllowedInDatabase(start, "assignment_start");
-            if (!exception.equals("Input is allowed")) {
-                model.addAttribute("Exception", exception);
+            if (handler.isDateTimeCorrectFormat(start)) {
+                model.addAttribute("Exception", "Start should have the format yyyy-mm-dd hh-mm-dd");
                 return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
             }
 
-            exception = handler.isLengthAllowedInDatabase(end, "assignment_end");
-            if (!exception.equals("Input is allowed")) {
-                model.addAttribute("Exception", exception);
+            if (handler.isDateTimeCorrectFormat(end)) {
+                model.addAttribute("Exception", "End should have the format yyyy-mm-dd hh-mm-dd");
                 return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
             }
 
@@ -286,8 +301,25 @@ public class ProjectController {
         return "assignment";
     }
 
+    // TODO Create html
+    @GetMapping("/accept_delete_of_{assignment.getTitle()}")
+    public String renderDeleteAssignment(Model model,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        model.addAttribute("Object_to_delete",((Assignment)session.getAttribute("Assignment")));
+        return "accept_delete";
+    }
+
+    @PostMapping("/delete_assignment")
+    public String deleteAssignment(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
+        projectEditor.deleteAssignment(((Assignment)session.getAttribute("assignment")).getTitle(),phaseTitle);
+        return "/projectpage-" + projectTitle + "/" + phaseTitle;
+    }
+
     @PostMapping("/add_task")
-    public String addTask(HttpServletRequest request,Model model) {
+    public String addTask(HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
@@ -320,16 +352,14 @@ public class ProjectController {
                         task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
             }
 
-            exception = handler.isLengthAllowedInDatabase(taskStart,"task_start");
-            if (!exception.equals("Input is allowed")) {
-                model.addAttribute("Exception",exception);
+            if (handler.isDateTimeCorrectFormat(taskStart)) {
+                model.addAttribute("Exception","Start should have the format yyyy-mm-dd hh-mm-dd");
                 return "/projectpage-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
                         task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
             }
 
-            exception = handler.isLengthAllowedInDatabase(taskEnd,"task_end");
-            if (!exception.equals("Input is allowed")) {
-                model.addAttribute("Exception",exception);
+            if (handler.isDateTimeCorrectFormat("Start should have the format yyyy-mm-dd hh-mm-dd")) {
+                model.addAttribute("Exception","Start should have the format yyyy-mm-dd hh-mm-dd");
                 return "/projectpage-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
                         task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
             }
@@ -407,6 +437,24 @@ public class ProjectController {
         model.addAttribute("task",projectCreator.getAssignment(assignmentTitle, projectTitle));
 
         return "assignment";
+    }
+
+    // TODO Create html
+    @GetMapping("/accept_delete_of_{task.getTitle()}")
+    public String renderDeleteTask(Model model,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        model.addAttribute("Object_to_delete",((Task)session.getAttribute("Task")));
+        return "accept_delete";
+    }
+
+    @PostMapping("/delete_task")
+    public String deleteTask(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
+        String assignmentTitle = ((Assignment)session.getAttribute("assignment")).getTitle();
+        projectEditor.deleteTask(((Task)session.getAttribute("task")).getTitle(),assignmentTitle);
+        return "/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
     }
 
 }
