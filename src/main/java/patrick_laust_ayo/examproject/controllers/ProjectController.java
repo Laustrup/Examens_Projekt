@@ -89,7 +89,6 @@ public class ProjectController {
         return "redirect://login_to_project/" + userId+ "/" + projectTitle;
     }
 
-    // TODO Create html
     @GetMapping("/accept_delete_of_{project.getTitle()}")
     public String renderDeleteProject(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -170,10 +169,18 @@ public class ProjectController {
         model.addAttribute("project",projectCreator.getProject(projectTitle));
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
 
-        return "phase";
+        return "phases";
     }
 
-    // TODO Create html
+    @GetMapping("/projectpage-{project.getTitle()}/phases")
+    public String renderPhasesOfProject(@PathVariable(name = "project.getTitle()") String projectTitle,
+                              HttpServletRequest request, Model model) {
+
+        model.addAttribute("project",projectCreator.getProject(projectTitle));
+
+        return "phases";
+    }
+
     @GetMapping("/accept_delete_of_{phase.getTitle()}")
     public String renderDeletePhase(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -301,7 +308,6 @@ public class ProjectController {
         return "assignment";
     }
 
-    // TODO Create html
     @GetMapping("/accept_delete_of_{assignment.getTitle()}")
     public String renderDeleteAssignment(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -439,7 +445,6 @@ public class ProjectController {
         return "assignment";
     }
 
-    // TODO Create html
     @GetMapping("/accept_delete_of_{task.getTitle()}")
     public String renderDeleteTask(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
