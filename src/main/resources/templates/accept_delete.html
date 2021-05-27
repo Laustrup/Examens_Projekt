@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+
+    <header th:replace="fragments/header.html"></header>
+
+    <main>
+        Are you sure you wish to delete <p th:Text="${Object_to_delete.getTitle()}"></p> ?
+
+        <div th:if="${Object_to_delete.projectManager}">
+            <form action="/delete_projectManager" method="Post">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+        <div th:if="${Object_to_delete.participant}">
+            <form action="/delete_participant" method="Post">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+        <div th:if="${Object_to_delete.project}">
+            <form action="/delete_task" method="Post">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+        <div th:if="${Object_to_delete.phase}">
+            <form action="/delete_phase" method="Post">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+        <div th:if="${Object_to_delete.assignment}">
+            <form action="/delete_task" method="Post">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+        <div th:if="${Object_to_delete.task}">
+            <form action="/delete_task" method="Post">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+
+        <a href="/">Go back</a>
+
+    </main>
+
+    <footer th:replace="fragments/footer.html"></footer>
+
+</body>
+</html>
