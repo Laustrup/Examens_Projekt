@@ -133,9 +133,9 @@ public class ProjectRepository extends Repository{
     // TODO Not done, when used logic should be moved to service
     public ResultSet findProjects(String userId) {
         return executeQuery("SELECT * FROM project " +
-                                        "INNER JOIN participant_project ON participant_project.project_id = project.project_id " +
-                                        "INNER JOIN participant ON participant.participant_id = participant_project.participant_id " +
-                                        "WHERE participant.user_id = \"" + userId + "\";");
+                "INNER JOIN participant_project ON participant_project.project_id = project.project_id " +
+                "INNER JOIN participant ON participant.participant_id = participant_project.participant_id " +
+                "WHERE participant.user_id = \"" + userId + "\";");
     }
     public void updateProject(String currentTitle,String formerTitle) {
         executeSQLStatement("UPDATE project " +

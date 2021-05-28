@@ -174,6 +174,10 @@ public class ProjectCreator {
                 }
 
                 // Updates values of former row
+                formerTaskId = res.getInt("task_id");
+                formerAssignmentId = res.getInt("assignment_id");
+                formerPhaseId = res.getInt("phase_id");
+                formerParticipantId = res.getInt("participant_id");
                 departmentId = res.getInt("department_no");
 
                 strings = updateStrings(strings,res);
@@ -214,23 +218,18 @@ public class ProjectCreator {
                         listOfTasks.add(new Task(workHours,listOfParticipants,strings[6],strings[7], strings[8],taskIsCompleted));
                     }
 
-                    // Assignment
-                    assignment = new Assignment(strings[9],strings[10],strings[11],assignmentIsCompleted,listOfTasks);
-                    mapOfAssignments.put(assignment.getTitle(),assignment);
-                    phase.putInAssignments(assignment.getTitle(),assignment);
-                    mapOfAssignments.put(String.valueOf(assignmentMapKey), assignment);
-
-
                     // Phase
                     phase = new Phase(strings[13],mapOfAssignments);
                     listOfPhases.add(phase);
 
+                    // Assignment
+                    assignment = new Assignment(strings[9],strings[10],strings[11],assignmentIsCompleted,listOfTasks);
+                    mapOfAssignments.put(assignment.getTitle(),assignment);
+                    listOfPhases.get(listOfPhases.size()-1).putInAssignments(assignment.getTitle(),assignment);
+                    mapOfAssignments.put(String.valueOf(assignmentMapKey), assignment);
+
                     project = new Project(strings[12],listOfPhases, mapOfParticipants,projectManager);
                 }
-                formerTaskId = res.getInt("task_id");
-                formerAssignmentId = res.getInt("assignment_id");
-                formerPhaseId = res.getInt("phase_id");
-                formerParticipantId = res.getInt("participant_id");
             }
         }
         catch (Exception e) {
@@ -255,20 +254,7 @@ public class ProjectCreator {
         //TODO denne metode skal testes, tager kun det første projektnavn med
         try {
             while (res.next()) {
-                // If there is only one row
-                if (res.isFirst() && res.isLast()) {
-                    projects.add(getProject(res.getString("title")));
-                    break;
-                }
-                // Otherwise it compares former- and current ids, and as well adds the last project
-                currentProjectId = res.getInt("project_id");
-                if (currentProjectId > formerProjectId && !res.isFirst()) {
-                    projects.add(getProject(res.getString("title")));
-                }
-                formerProjectId = res.getInt("project_id");
-                if (res.isLast()) {
-                    projects.add(getProject(res.getString("title")));
-                }
+                projects.add(getProject(res.getString("title")));
             }
         }
         catch (Exception e) {

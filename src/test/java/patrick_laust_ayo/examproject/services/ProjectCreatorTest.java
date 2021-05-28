@@ -404,11 +404,11 @@ class ProjectCreatorTest {
     public void getProjectsTest(String userId, String expected) {
         //Act
         ArrayList<Project> actual = projectCreator.getProjects(userId);
-        String [] expectedSplit = expected.split("_");
+        String [] expectations = expected.split("_");
 
         //Assert
-        for (int i = 0; i < expectedSplit.length; i++) {
-            assertEquals(actual.get(i).getTitle(),expectedSplit[i]);
+        for (int i = 0; i < expectations.length; i++) {
+            assertEquals(actual.get(i).getTitle(),expectations[i]);
         }
     }
 
