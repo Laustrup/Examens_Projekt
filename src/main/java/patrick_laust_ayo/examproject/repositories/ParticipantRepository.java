@@ -7,7 +7,7 @@ public class ParticipantRepository extends Repository {
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
     public void putParticipantInDatabase(String userId, int departmentNo) {
         executeSQLStatement("INSERT into participant(user_id,participant_name, participant_password, position, department_no) " +
-                "VALUES ('" + userId + "', null, null, null " + ", " + departmentNo + ");");
+                "VALUES (\"" + userId + "\", null, null, null " + ", " + departmentNo + ");");
     }
 
     /*

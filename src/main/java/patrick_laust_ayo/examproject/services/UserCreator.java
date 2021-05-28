@@ -66,7 +66,6 @@ public class UserCreator {
 
     public Participant createParticipant(String userId, String projectTitle, String depName) {
         ParticipantRepository parRepo = new ParticipantRepository();
-        ProjectRepository proRepo = new ProjectRepository();
 
         participant = new Participant(userId, null, null, null, getDepartment(depName));
         ExceptionHandler exceptionHandler = new ExceptionHandler();
@@ -74,6 +73,15 @@ public class UserCreator {
             parRepo.putParticipantInDatabase(userId,  participant.getDepartment().getDepartmentNo());
             System.out.println("Departmentet er " + depName + " no " + participant.getDepartment().getDepartmentNo() + " og depname for participant er " + participant.getDepartment().getDepName());
         }
+        return participant;
+    }
+
+    public Participant createProjectManagerAsParticipant(String userId, String depName) {
+        ParticipantRepository parRepo = new ParticipantRepository();
+
+        participant = new Participant(userId, null, null, null, getDepartment(depName));
+        parRepo.putParticipantInDatabase(userId,  participant.getDepartment().getDepartmentNo());
+
         return participant;
     }
 
