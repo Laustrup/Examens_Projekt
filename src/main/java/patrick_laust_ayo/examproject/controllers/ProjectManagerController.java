@@ -122,7 +122,7 @@ public class  ProjectManagerController {
         String projectManagerUsername = ((ProjectManager)session.getAttribute("projectManager")).getUsername();
 
         for (int i = 0; i < amount; i++) {
-            userCreator.createParticipant(projectManagerUsername,projectTitle,departmentName);
+            userCreator.createParticipant("",projectTitle,departmentName);
         }
 
         // TODO Perhaps key is for wrong participant...
