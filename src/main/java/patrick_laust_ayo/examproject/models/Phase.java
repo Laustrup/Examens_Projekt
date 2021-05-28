@@ -27,7 +27,6 @@ public class Phase {
         assignments.put(key, assignment);
     }
 
-    // TODO These maps doesn't have i as keys...
     public double getTotalWorkhours() {
         double total = 0;
         for (int i = 0; i < assignments.size()/2;i++) {
