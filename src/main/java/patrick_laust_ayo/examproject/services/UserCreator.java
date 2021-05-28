@@ -70,17 +70,19 @@ public class UserCreator {
         participant = new Participant(userId, null, null, null, getDepartment(depName));
         ExceptionHandler exceptionHandler = new ExceptionHandler();
         if (exceptionHandler.doesProjectExist(projectTitle)) {
-            parRepo.putParticipantInDatabase(userId,  participant.getDepartment().getDepartmentNo());
+            parRepo.putParticipantInDatabase(userId, participant.getDepartment().getDepartmentNo());
+            parRepo.putParticipantInParticipantProjectTable(userId, projectTitle);
             System.out.println("Departmentet er " + depName + " no " + participant.getDepartment().getDepartmentNo() + " og depname for participant er " + participant.getDepartment().getDepName());
         }
         return participant;
     }
 
-    public Participant createProjectManagerAsParticipant(String userId, String depName) {
+    public Participant createProjectManagerAsParticipant(String userId, String depName, String projectTitle) {
         ParticipantRepository parRepo = new ParticipantRepository();
 
         participant = new Participant(userId, null, null, null, getDepartment(depName));
         parRepo.putParticipantInDatabase(userId,  participant.getDepartment().getDepartmentNo());
+        parRepo.putParticipantInParticipantProjectTable(userId, projectTitle);
 
         return participant;
     }

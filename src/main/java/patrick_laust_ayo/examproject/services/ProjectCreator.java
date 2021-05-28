@@ -212,7 +212,6 @@ public class ProjectCreator {
                     // Task
                     if (allowAddTask) {
                         listOfTasks.add(new Task(workHours,listOfParticipants,strings[6],strings[7], strings[8],taskIsCompleted));
-                        System.out.println("Tasks size " + listOfTasks.size());
                     }
 
                     // Assignment
@@ -240,8 +239,6 @@ public class ProjectCreator {
             project = null;
         }
         projectRepo.closeCurrentConnection();
-        System.out.println("ProjectCreator - getProject");
-        System.out.println("listOfPhases.size() er: " + listOfPhases.size());
         for (int i = 0; i < listOfPhases.size(); i++){
             System.out.println("Phase Title: " + listOfPhases.get(i).getTitle());
         }

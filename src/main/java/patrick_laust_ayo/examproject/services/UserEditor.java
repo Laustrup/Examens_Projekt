@@ -19,15 +19,33 @@ public class UserEditor {
         participantRepo.updateParticipant(id, name, password, position, formerUserId);
 
         // Makes sure that it's the real participant from db that is being returned
+        //TODO error when using formerUserId below, works better somehow with id???
+        //TODO måske et if statement kan afhjælpe problemet?...
+        //TODO måske er det fordi at når en participant bliver skabt, er nogle af departments res værdier = null?
         ResultSet res = participantRepo.findParticipant(formerUserId);
+
+        System.out.println("\nEfter res (updateParticipant)");
+
         try {
             res.next();
 
+            System.out.println("\nEfter res.next() (updateParticipant)");
+
+            System.out.println(res.getString("location"));
+            System.out.println("department_no");
+            System.out.println(res.getInt("department_no"));
+
             Department department = new Department(res.getInt("department_no"),
                     res.getString("location"), res.getString("department_name"));
+
+            System.out.println("\nEfter department (updateParticipant)");
+
             participant = new Participant(res.getString("user_id"), res.getString("participant_password"),
                     res.getString("participant_name"), res.getString("position"),
                     department);
+
+            System.out.println("\nEfter participant (updateParticipant)");
+
         } catch (Exception e) {
             System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
             participant = null;

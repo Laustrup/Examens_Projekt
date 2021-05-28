@@ -8,6 +8,14 @@ public class ParticipantRepository extends Repository {
     public void putParticipantInDatabase(String userId, int departmentNo) {
         executeSQLStatement("INSERT into participant(user_id,participant_name, participant_password, position, department_no) " +
                 "VALUES (\"" + userId + "\", null, null, null " + ", " + departmentNo + ");");
+
+    }
+
+    public void putParticipantInParticipantProjectTable(String userId, String projectTitle){
+        executeSQLStatement("INSERT INTO participant_project(participant_id, project_id) " +
+                "VALUES (" + findId("participant", "user_id", userId, "participant_id") +
+                ", " + findId("project", "title", projectTitle, "project_id") +
+                ");");
     }
 
     /*
@@ -32,7 +40,7 @@ public class ParticipantRepository extends Repository {
     }
 
      */
-    //TODO SKAL DENNE METODE RETURNERE USERID?
+
     public ResultSet findParticipant(String userId) {
         return executeQuery("SELECT * FROM participant " +
                         "INNER JOIN department ON participant.department_no = department.department_no " + "INNER JOIN project " +
