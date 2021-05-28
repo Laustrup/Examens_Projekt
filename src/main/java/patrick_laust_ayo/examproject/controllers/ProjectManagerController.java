@@ -119,9 +119,10 @@ public class  ProjectManagerController {
 
         HttpSession session = request.getSession();
         String projectTitle = ((Project) session.getAttribute("project")).getTitle();
+        String projectManagerUsername = ((ProjectManager)session.getAttribute("projectManager")).getUsername();
 
         for (int i = 0; i < amount; i++) {
-            userCreator.createParticipant(projectTitle,departmentName);
+            userCreator.createParticipant(projectManagerUsername,projectTitle,departmentName);
         }
 
         // TODO Perhaps key is for wrong participant...
