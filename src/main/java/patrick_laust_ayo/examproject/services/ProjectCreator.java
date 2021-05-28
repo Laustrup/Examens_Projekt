@@ -214,7 +214,7 @@ public class ProjectCreator {
                     }
 
                     // Phase
-                    if (phase.getTitle().equals(strings[13])) {
+                    if (!phase.getTitle().equals(strings[13])) {
                         phase = new Phase(strings[13],mapOfAssignments);
                         listOfPhases.add(phase);
                     }
@@ -229,8 +229,15 @@ public class ProjectCreator {
             project = null;
         }
         projectRepo.closeCurrentConnection();
+        System.out.println("ProjectCreator - getProject");
+        System.out.println("listOfPhases.size() er: " + listOfPhases.size());
+        for (int i = 0; i < listOfPhases.size(); i++){
+            System.out.println("Phase Title: " + listOfPhases.get(i).getTitle());
+        }
         return project;
     }
+
+
     public ArrayList<Project> getProjects(String userId) {
         ResultSet res = projectRepo.findProjects(userId);
         ArrayList<Project> projects = new ArrayList<>();

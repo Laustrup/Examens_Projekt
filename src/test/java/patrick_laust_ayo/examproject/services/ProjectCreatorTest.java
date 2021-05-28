@@ -40,6 +40,10 @@ class ProjectCreatorTest {
         assertEquals("Appdev", appdevProject.getTitle());
         assertEquals("Find New Employees", findNewEmployeesProject.getTitle());
         assertEquals("Advertising", AdvertisingProject.getTitle());
+        System.out.println("\n\nProjectCreatorTest");
+        for (int i = 0; i < appdevProject.getPhases().size(); i++){
+            System.out.println(appdevProject.getPhases().get(i).getTitle());
+        }
 
         //Projektets tasks værdier
         assertEquals(300.00,
