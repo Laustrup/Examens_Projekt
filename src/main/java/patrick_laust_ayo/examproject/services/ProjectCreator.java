@@ -99,6 +99,7 @@ public class ProjectCreator {
         int formerAssignmentId = 0;
         int formerPhaseId = 0;
         int formerParticipant = 0;
+        int assignmentMapKey = 0;
 
         int departmentId = 0;
 
@@ -160,6 +161,8 @@ public class ProjectCreator {
                         assignment = new Assignment(strings[9],strings[10],strings[11],assignmentIsCompleted,listOfTasks);
                         listOfTasks = new ArrayList<>();
                         mapOfAssignments.put(assignment.getTitle(), assignment);
+                        mapOfAssignments.put(String.valueOf(assignmentMapKey), assignment);
+                        assignmentMapKey++;
                     }
 
                     // Phase
@@ -300,6 +303,7 @@ public class ProjectCreator {
         int formerTaskId = 0;
         int formerParticipantId = 0;
         int departmentId = 0;
+        int assignmentMapKey = 0;
 
         double workHours = 0;
         boolean isTaskCompleted = false;
@@ -336,6 +340,8 @@ public class ProjectCreator {
                     if (currentAssignmentId > formerAssignmentId) {
                         assignments.put(String.valueOf(formerAssignmentId), new Assignment(strings[9], strings[10], strings[11],
                                 isAssignmentCompleted, tasks));
+                        assignments.put(String.valueOf(assignmentMapKey), assignment);
+                        assignmentMapKey++;
                     }
                 }
 
