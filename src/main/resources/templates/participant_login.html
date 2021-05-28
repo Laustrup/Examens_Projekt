@@ -11,7 +11,7 @@
     <main>
         <div class="flex-container">
         <section id="participant_login">
-            <form action ="/join-project/{project.getTitle}" method="post">
+            <form action ="/join-project" method="post">
                 <div class="participants_id">
                     <label for="participant_id">User ID</label>
                     <input type="text" id="participant_id" name="participant_id" placeholder="id" required>
@@ -20,6 +20,8 @@
                     <label for="participant_password">Password</label>
                     <input type="text" id="participant_password" name="participant_password" placeholder="Password" required>
                 </div>
+
+                <p th:text="${Exception}"></p>
 
 
                 <button type="submit">Login</button>

@@ -57,7 +57,8 @@ public abstract class Repository {
             return res.getInt(ColumnOfId);
         }
         catch (Exception e) {
-            System.out.println("Couldn't find project id...\n" + e.getMessage());
+            System.out.println("Couldn't find id...\n" + e.getMessage());
+            e.printStackTrace();
             return -1;
         }
     }

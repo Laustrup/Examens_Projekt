@@ -64,15 +64,15 @@ public class UserCreator {
         return projectManager;
     }
 
-    public Participant createParticipant(String projectTitle, String depName) {
+    public Participant createParticipant(String userId, String projectTitle, String depName) {
         ParticipantRepository parRepo = new ParticipantRepository();
         ProjectRepository proRepo = new ProjectRepository();
 
-        participant = new Participant(new String(), null, null, null, getDepartment(depName));
+        participant = new Participant(userId, null, null, null, getDepartment(depName));
         ExceptionHandler exceptionHandler = new ExceptionHandler();
         if (exceptionHandler.doesProjectExist(projectTitle)) {
-            parRepo.putParticipantInDatabase(proRepo.findId("project","title",projectTitle,
-                    "project_id"), participant.getDepartment().getDepartmentNo());
+            parRepo.putParticipantInDatabase(userId,  participant.getDepartment().getDepartmentNo());
+            System.out.println("Departmentet er " + depName + " no " + participant.getDepartment().getDepartmentNo() + " og depname for participant er " + participant.getDepartment().getDepName());
         }
         return participant;
     }

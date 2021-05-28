@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
-import patrick_laust_ayo.examproject.models.Task;
-import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
-import patrick_laust_ayo.examproject.repositories.ProjectRepository;
+import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
 import patrick_laust_ayo.examproject.services.UserCreator;
@@ -27,10 +25,10 @@ public class ParticipantController {
     private UserEditor userEditor = new UserEditor();
 
     @GetMapping("/participant_login_page")
-    public String renderLoginParticipant(Model model, HttpServletRequest request){
+    public String renderLoginParticipant(HttpServletRequest request, Model model){
+
         HttpSession session = request.getSession();
-        System.out.println(session.isNew());
-     //   System.out.println(((Project) session.getAttribute("project")).getTitle());
+        model.addAttribute("Exception", session.getAttribute("userIdOrPasswordException"));
         return "participant_login";
     }
 
@@ -50,6 +48,25 @@ public class ParticipantController {
 
         model.addAttribute("Exception","Wrong user-id or password!");
         return "redirect:/participant_login_page";
+    }
+
+    @GetMapping("/add_participant/projectmanager/{project_title}")
+    public String addParticipant(@PathVariable(name = "project_title") String projectTitle,
+                                 Model model){
+        model.addAttribute("project_title", projectTitle);
+        return "add_projectmanager_as_participant";
+    }
+
+    @PostMapping("/projectmanager/participant_added")
+    public String participantAdded(@RequestParam(name = "project_title") String projectTitle,
+                                   @RequestParam(name = "department_name") String depName,
+                                   HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String projectManagerUsername = ((ProjectManager)session.getAttribute("projectManager")).getUsername();
+        session.setAttribute("participant", userCreator.createParticipant(projectManagerUsername, projectTitle, depName));
+
+
+        return "redirect:/project_page/" + projectTitle + "/" + projectManagerUsername;
     }
 
     /*
@@ -99,8 +116,8 @@ public class ParticipantController {
         return "/projectpage/" + projectTitle + "/" + userId;
     }
 
-    @PostMapping("/join-project/{project.getTitle()}")
-    public String joinProject(@PathVariable("project.getTitle()") String projectTitle,
+    @PostMapping("/join-project")
+    public String joinProject(
                               @RequestParam(name="participant_id") String id,
                               @RequestParam(name="participant_password") String password, Model model,
                               HttpServletRequest request) {
@@ -112,20 +129,23 @@ public class ParticipantController {
         model.addAttribute("project",((Project) session.getAttribute("project")));
 
         if (handler.allowLogin(id, password)) {
-            //TODO participant er lig med null???
             Participant participant = userCreator.getParticipant(id);
-            Project project = projectCreator.getProject("Appdev");
+            session.setAttribute("participant", participant);
+            Project project = projectCreator.getProject(((Project) session.getAttribute("project")).getTitle());
+
             if (new UserEditor().joinParticipantToProject(participant,project).equals("Project is fully booked, projectmanager needs to add more participants of your department...")) {
-                model.addAttribute("Exception", "Project is fully booked, projectmanager needs to add more participants of your department...");
-                return "redirect:/participant_join_project";
+                //model.addAttribute("Exception", "Project is fully booked, projectmanager needs to add more participants of your department...");
+                session.setAttribute("fullyBooked", "Project is fully booked. Contact your Projectmanager to gain access to it.");
+                //return "redirect:/";
+                return "redirect:/projectpage/" + ((Project) session.getAttribute("project")).getTitle() + "/" + participant.getId();
             }
             else {
-                return "redirect:/projectpage-" + projectTitle  + "/" + participant.getId();
+                return "redirect:/projectpage-" + "/project.getTitle()" + "/participant.getId()" + participant.getId();
             }
         }
         else {
-            model.addAttribute("Exception","Wrong user-id or password!");
-            return "redirect:/participant_join_project";
+                session.setAttribute("userIdOrPasswordException", "Wrong user-id or password!");
+            return "redirect:/participant_login_page";
         }
     }
 
@@ -176,7 +196,7 @@ public class ParticipantController {
 
         session.setAttribute("current_participant", userEditor.updateParticipant(id, password, name, position, formerUserId));
 
-        return "redirect://project_page/" + project.getTitle() + "/" + ((Participant)session.getAttribute("current_participant")).getName();
+        return "redirect:/project_page/" + project.getTitle() + "/" + ((Participant)session.getAttribute("current_participant")).getName();
 
     }
 

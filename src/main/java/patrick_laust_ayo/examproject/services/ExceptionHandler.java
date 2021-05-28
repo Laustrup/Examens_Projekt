@@ -172,9 +172,9 @@ public class ExceptionHandler {
         }
         return false;
     }
-    public boolean isProjectFullybooked(Project project, int departmentNo) {
+    public boolean isProjectFullybooked(Project project, int departmentNo, String userId) {
         for (int i = 1; i <= project.getParticipants().size(); i++) {
-            Participant participant = project.getParticipants().get("projectmember " + i);
+            Participant participant = project.getParticipants().get(userId);
             if ((participant.getId() == null || participant.getPassword() == null) &&
                     participant.getDepartment().getDepartmentNo() == departmentNo) {
                 return false;
@@ -236,16 +236,18 @@ public class ExceptionHandler {
         System.out.println("Projekt id'et " + projectId);
 
         ResultSet res = repo.executeQuery("SELECT * FROM participant_project WHERE participant_id = " + participantId + ";");
-        repo.closeCurrentConnection();
 
         try {
+            res.next();
             if (res.getInt("project_id") == projectId) {
                 return true;
             }
         }
         catch (Exception e) {
             System.out.println("Trouble comparing ids when checking if participant part of project...\n" + e.getMessage());
+            e.printStackTrace();
         }
+        repo.closeCurrentConnection();
         return false;
     }
 

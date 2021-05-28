@@ -183,7 +183,7 @@ public class ProjectCreator {
 
                 if (res.isLast()) {
                     // If ProjectManager isn't added
-                    if (!isProjectManagerCreated) {
+                    if (!isProjectManagerCreated && listOfTasks.size() != 0) {
                         projectManager = new ProjectManager(strings[15],strings[3], strings[2],strings[4],strings[5],
                                 new Department(departmentId,strings[0],strings[1]));
                         if (!mapOfParticipants.containsKey(projectManager.getId())) {

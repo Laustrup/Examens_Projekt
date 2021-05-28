@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Add participant</title>
+</head>
+<body>
+
+    <form action="/projectmanager/participant_added" method="post">
+
+        <p th:text="${project_title}"></p>
+
+        <label for="project_title">Project Title</label>
+        <input type="text" name="project_title" id="project_title" th:value="${project_title}" th:placeholder="${project_title}" readonly>
+        <label for="department_name">Department Name</label>
+        <input type="text" name="department_name" id="department_name" placeholder="Department Name" required>
+
+        <button type="submit">Create participant</button>
+    </form>
+
+</body>
+</html>

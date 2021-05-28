@@ -23,8 +23,8 @@ class UserCreatorTest {
         int actualId = -1;
 
         //Act
-        userCreator.createParticipant("Appdev", "COPENHAGEN");
-        actualId = projectRepo.calcNextId("participant") - 1;
+        userCreator.createParticipant("Åge","Appdev", "COPENHAGEN");
+        actualId = projectRepo.calcNextId("participant") -1;
 
         //Assert
         assertEquals(expectedId,actualId);
