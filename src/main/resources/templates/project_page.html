@@ -64,10 +64,10 @@
                 <button type="submit" value="NEW YORK" name="department_name">NEW YORK</button>
             </form>
 
-            <form action="/delete_project" method="post">
+            <form action="/accept_delete_of_project" method="post">
                 <button type="submit">Delete project</button>
             </form>
-            <p><a href="/direct_project_page"><button>Go back</button></a></p>
+            <p><a href="/direct_project_page" value="project.getTitle()" name="project_title"><button>Go back</button></a></p>
         </section>
     </div>
 
@@ -83,10 +83,11 @@
                 </form>
 
             </div>
+
             <form action="/delete_project" method="post">
                 <button type="submit">Delete project</button>
             </form>
-            <p><a href="/index"><button>Go back</button></a></p>
+            <p><a href="/index"><button>Go back to start menu</button></a></p>
         </section>
     </div>
 </section>

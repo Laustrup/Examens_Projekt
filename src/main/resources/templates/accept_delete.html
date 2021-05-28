@@ -14,36 +14,62 @@
 
         <div th:if="${Object_to_delete.projectManager}">
             <form action="/delete_projectManager" method="Post">
+                <label for="user_name">Type userId</label>
+                <input type="text" id="user_name" name="user_id">
+                <label for="project_manager_password">Type password</label>
+                <input type="text" id="project_manager_password" name="password">
                 <button type="submit">Delete</button>
             </form>
         </div>
         <div th:if="${Object_to_delete.participant}">
             <form action="/delete_participant" method="Post">
+                <label for="user_id">Type userId</label>
+                <input type="text" id="user_id" name="user_id">
+                <label for="password">Type password</label>
+                <input type="text" id="password" name="password">
                 <button type="submit">Delete</button>
             </form>
         </div>
         <div th:if="${Object_to_delete.project}">
-            <form action="/delete_task" method="Post">
+            <form action="/delete_project" method="Post">
+                <label for="user_id_project">Type userId</label>
+                <input type="text" id="user_id_project" name="user_id">
+                <label for="password_project">Type password</label>
+                <input type="text" id="password_project" name="password">
                 <button type="submit">Delete</button>
             </form>
         </div>
         <div th:if="${Object_to_delete.phase}">
             <form action="/delete_phase" method="Post">
+                <label for="user_id_phase">Type userId</label>
+                <input type="text" id="user_id_phase" name="user_id">
+                <label for="password_phase">Type password</label>
+                <input type="text" id="password_phase" name="password">
                 <button type="submit">Delete</button>
             </form>
         </div>
         <div th:if="${Object_to_delete.assignment}">
-            <form action="/delete_task" method="Post">
+            <form action="/delete_assignment" method="Post">
+                <label for="user_id_assignment">Type userId</label>
+                <input type="text" id="user_id_assignment" name="user_id">
+                <label for="password_assignment">Type password</label>
+                <input type="text" id="password_assignment" name="password">
                 <button type="submit">Delete</button>
             </form>
         </div>
         <div th:if="${Object_to_delete.task}">
             <form action="/delete_task" method="Post">
+                <label for="user_id_task">Type userId</label>
+                <input type="text" id="user_id_task" name="user_id">
+                <label for="password_task">Type password</label>
+                <input type="text" id="password_task" name="password">
                 <button type="submit">Delete</button>
             </form>
         </div>
 
         <a href="/">Go back</a>
+
+        <p th:text="${Exception}"></p>
 
     </main>
 
