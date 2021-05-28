@@ -436,7 +436,36 @@ class ProjectCreatorTest {
         assertEquals("Arrange Interviews",phase.getAssignments().get("Arrange Interviews").getTitle());
         assertEquals("2021-12-21 12:30:00",phase.getAssignments().get("Arrange Interviews").getStart());
         assertEquals("2022-12-21 12:30:00",phase.getAssignments().get("Arrange Interviews").getEnd());
+
         assertEquals("Interact in Interviews",phase.getAssignments().get("Interact in Interviews").getTitle());
+        assertEquals("2021-12-21 12:30:00",phase.getAssignments().get("Interact in Interviews").getStart());
+        assertEquals("2022-12-21 12:30:00",phase.getAssignments().get("Interact in Interviews").getEnd());
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"Brainstorming|Planning|2021-10-15 12:30:00_2021-11-14 23:59:59_Innovate Concepts_2021-10-15 12:30:00_2021-10-28 23:59:59_300.0",
+            "Buiness Layer|Building Product|2021-12-06 12:30:00_2021-12-20 23:59:59_Services_2021-12-06 12:30:00_2021-12-20 23:59:59_100.0_Models_2021-12-06 12:30:00_2021-12-20 23:59:59_100.0",
+            "Put Commercials in action|Deliver Commercials|2021-12-21 12:30:00_2022-12-21 12:30:00_Send Commercials_2021-12-21 12:30:00_2022-12-21 12:30:00_150.0"}, delimiter = '|')
+    public void getAssignmentTest(String assignmentTitle,String phaseTitle,String expected) {
+        // Arrange
+        String[] expectations = expected.split("_");
+
+        // Act
+        Assignment actual = projectCreator.getAssignment(assignmentTitle, phaseTitle);
+        System.out.println("Actual is " + actual);
+
+        // Assert
+        assertEquals(assignmentTitle,actual.getTitle());
+        assertEquals(expectations[0],actual.getStart());
+        assertEquals(expectations[1],actual.getEnd());
+        for (int i = 0; i < actual.getTasks().size();i++) {
+            assertEquals(expectations[2+(i*4)],actual.getTasks().get(i).getTitle());
+            assertEquals(expectations[3+(i*4)],actual.getTasks().get(i).getStart());
+            assertEquals(expectations[4+(i*4)],actual.getTasks().get(i).getEnd());
+            assertEquals(expectations[5+(i*4)],String.valueOf(actual.getTasks().get(i).getEstimatedWorkHours()));
+            System.out.println("First loop");
+        }
 
     }
+
 }

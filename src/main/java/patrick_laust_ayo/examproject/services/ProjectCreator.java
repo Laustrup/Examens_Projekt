@@ -333,45 +333,36 @@ public class ProjectCreator {
                     }
                 }
 
+                formerAssignmentId = res.getInt("assignment_id");
+                formerTaskId = res.getInt("task_id");
+                formerParticipantId = res.getInt("participant_id");
                 departmentId = res.getInt("department_no");
                 workHours = res.getDouble("estimated_work_hours");
                 isTaskCompleted = res.getBoolean("task_is_completed");
                 isAssignmentCompleted = res.getBoolean("is_completed");
                 strings = updateStrings(strings,res);
 
-
                 if (res.isLast()) {
-                    // If participant isn't added
-
-                    if (currentParticipantId > formerParticipantId || currentTaskId > formerTaskId) {
-                        if(tasks.size() == 0){
-                            tasks.add(new Task(workHours, participants,strings[6],strings[7], strings[8], isTaskCompleted));
-                        }
-                        tasks.get(tasks.size()-1).addParticipant(new Participant(strings[2], strings[3], strings[4], strings[5],
-                                new Department(departmentId, strings[0], strings[1])));
+                    // Participant
+                    boolean allowAddTask = true;
+                    if(tasks.size() == 0){
+                        tasks.add(new Task(workHours, participants,strings[6],strings[7], strings[8], isTaskCompleted));
+                        allowAddTask = false;
                     }
-
-                    // If task isn't added
-                    if (!(tasks.get(tasks.size()-1).getStart().equals(strings[6]) &&
-                            tasks.get(tasks.size()-1).getEnd().equals(strings[7]) &&
-                            tasks.get(tasks.size()-1).getTitle().equals(strings[8]))) {
+                    tasks.get(tasks.size()-1).addParticipant(new Participant(strings[2], strings[3], strings[4], strings[5],
+                            new Department(departmentId, strings[0], strings[1])));
+                    // Task
+                    if (allowAddTask) {
                         tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
                     }
 
-                    // If assignment isn't added
-                    if (!assignments.containsKey(strings[11])) {
-                        assignment = new Assignment(strings[9],strings[10],strings[11],isAssignmentCompleted,tasks);
-                        assignments.put(assignment.getTitle()+assignment.getStart()+assignment.getEnd(),assignment);
-                    }
+                    // Assignment
+                    assignment = new Assignment(strings[9],strings[10],strings[11],isAssignmentCompleted,tasks);
+                    assignments.put(assignment.getTitle(), assignment);
+                    assignments.put(String.valueOf(assignmentMapKey), assignment);
 
-                    assignments.put(String.valueOf(formerAssignmentId), new Assignment(strings[9], strings[10], strings[11],
-                            isAssignmentCompleted, tasks));
                     phase = new Phase(res.getString("phase_title"),assignments);
-                    System.out.println(phase.getTitle());
                 }
-                formerAssignmentId = res.getInt("assignment_id");
-                formerTaskId = res.getInt("task_id");
-                formerParticipantId = res.getInt("participant_id");
             }
         }
         catch (Exception e) {
@@ -427,6 +418,7 @@ public class ProjectCreator {
                     }
                     if (currentTaskId > formerTaskId) {
                         tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
+                        System.out.println(tasks.get(tasks.size()-1).getTitle());
                     }
                 }
 
@@ -435,13 +427,8 @@ public class ProjectCreator {
                 departmentNo = res.getInt("department_no");
                 workHours = res.getDouble("estimated_work_hours");
                 isTaskCompleted = res.getBoolean("task_is_completed");
-
                 if (res.isLast()) {
-                    if (!(tasks.get(tasks.size()-1).getStart().equals(strings[6]) &&
-                            tasks.get(tasks.size()-1).getEnd().equals(strings[7]) &&
-                            tasks.get(tasks.size()-1).getTitle().equals(strings[8]))) {
-                        tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
-                    }
+                    tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
                     assignment = new Assignment(res.getString("assignment_start"), res.getString("assignment_end"),
                             res.getString("assignment_title"),res.getBoolean("is_completed"), tasks);
                 }

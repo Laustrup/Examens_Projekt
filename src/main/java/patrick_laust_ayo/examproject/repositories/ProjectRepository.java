@@ -72,7 +72,7 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN participant_task ON participant_task.task_id = task.task_id " +
                 "INNER JOIN participant ON participant.participant_id = participant_task.participant_id " +
                 "INNER JOIN department ON department.department_no = participant.department_no " +
-                "WHERE assignment.assigment_title = \"" + assignmentTitle + "\" AND phase.phase_title = \"" + phaseTitle + "\";");
+                "WHERE assignment.assignment_title = \"" + assignmentTitle + "\" AND phase_table.phase_title = \"" + phaseTitle + "\";");
     }
     public void removeAssignment(String assignmentTitle,String taskTitle) {
         executeSQLStatement("DELETE ROW FROM assignment " +
