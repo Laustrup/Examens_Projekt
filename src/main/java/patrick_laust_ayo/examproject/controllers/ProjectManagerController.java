@@ -113,12 +113,12 @@ public class  ProjectManagerController {
         return "projectmanager_dashboard";
     }
 
-    @PostMapping("/{project.getTitle()}/add_participant")
-    public String addParticipantsToProject(@PathVariable("project.getTitle()") String projectTitle,
-                                           @RequestParam(name = "department_name") String departmentName,
+    @PostMapping("/add_participants")
+    public String addParticipantsToProject(@RequestParam(name = "department_name") String departmentName,
                                            @RequestParam(name = "amount") int amount, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
+        String projectTitle = ((Project) session.getAttribute("project")).getTitle();
 
         for (int i = 0; i < amount; i++) {
             userCreator.createParticipant(projectTitle,departmentName);
