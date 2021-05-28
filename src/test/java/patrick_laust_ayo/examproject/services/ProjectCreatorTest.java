@@ -421,12 +421,15 @@ class ProjectCreatorTest {
     // TODO Perhaps add more parameters to test multiple tests
     // TODO Change safe update to unsafe
     @ParameterizedTest
-    @CsvSource(value = {"Appdev|Building Product"}, delimiter = '|')
-    public void createPhaseTest(String projectTitle,String phaseTitle) {
+    @CsvSource(value = {"Appdev|Building Project|Database", "Advertising|Deliver Commercials|Put Commercials in action"}, delimiter = '|')
+    public void createPhaseTest(String projectTitle,String phaseTitle, String assignmentsKey) {
         //Act
-        Phase actualReturned = projectCreator.createPhase(projectTitle);
-        new ProjectEditor().updatePhase(phaseTitle,null,projectTitle);
+       // Phase actualReturned = projectCreator.createPhase(projectTitle);
+       // new ProjectEditor().updatePhase(phaseTitle,null,projectTitle);
         Phase actualFromDb = projectCreator.getPhase(phaseTitle,projectTitle);
+
+        System.out.println(actualFromDb.getAssignments().get(assignmentsKey).getStart());
+        System.out.println(actualFromDb.getAssignments().get(assignmentsKey).getEnd());
 
         //Assert
         //assertEquals(new String(), actualReturned.getTitle());

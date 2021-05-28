@@ -327,24 +327,22 @@ public class ProjectCreator {
                     phase = new Phase(res.getString("phase_title"),assignments);
                     break;
                 }
+                int currentAssignmentId = res.getInt("assignment_id");
+                int currentTaskId = res.getInt("task_id");
+                int currentParticipantId = res.getInt("participant_id");
 
                 if (!res.isFirst()) {
-                    int currentAssignmentId = res.getInt("assignment_id");
-                    int currentTaskId = res.getInt("task_id");
-                    int currentParticipantId = res.getInt("participant_id");
 
                     // Participant
-                    if (currentParticipantId > formerParticipantId) {
+                    if (currentParticipantId > formerParticipantId || currentTaskId > formerTaskId) {
                         participants.add(new Participant(strings[2], strings[3], strings[4], strings[5],
                                 new Department(departmentId, strings[0], strings[1])));
-                        System.out.println("participants size under !res.isFirst " + participants.size());
                     }
 
                     // Task
                     if (currentTaskId > formerTaskId) {
                         tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
                         participants = new ArrayList<>();
-                        System.out.println("tasks size under !res.isFirst " + tasks.size());
                     }
 
                     // Assignment
@@ -356,22 +354,20 @@ public class ProjectCreator {
                     }
                 }
 
-                formerAssignmentId = res.getInt("assignment_id");
-                formerTaskId = res.getInt("task_id");
-                formerParticipantId = res.getInt("participant_id");
                 departmentId = res.getInt("department_no");
                 workHours = res.getDouble("estimated_work_hours");
                 isTaskCompleted = res.getBoolean("task_is_completed");
                 isAssignmentCompleted = res.getBoolean("is_completed");
                 strings = updateStrings(strings,res);
 
-                System.out.println("Tasks size " + tasks.size());
-                System.out.println("participants size " + participants.size());
+
                 if (res.isLast()) {
                     // If participant isn't added
-                    //TODO participants.size()-1 har en længde på 0. Se sysout linjerne,
-                    // participants size går op til 1 og bliver så nulstillet, mens at tasks fortsæer
-                    if (!(tasks.get(tasks.size()-1).getParticipants().get(participants.size()-1).getId().equals(strings[2]))) {
+
+                    if (currentParticipantId > formerParticipantId || currentTaskId > formerTaskId) {
+                        if(tasks.size() == 0){
+                            tasks.add(new Task(workHours, participants,strings[6],strings[7], strings[8], isTaskCompleted));
+                        }
                         tasks.get(tasks.size()-1).addParticipant(new Participant(strings[2], strings[3], strings[4], strings[5],
                                 new Department(departmentId, strings[0], strings[1])));
                     }
@@ -384,9 +380,7 @@ public class ProjectCreator {
                     }
 
                     // If assignment isn't added
-                    if (!(assignments.get(assignments.size()-1).getStart().equals(strings[9]) &&
-                            assignments.get(assignments.size()-1).getEnd().equals(strings[10]) &&
-                            assignments.get(assignments.size()-1).getTitle().equals(strings[11]))) {
+                    if (!assignments.containsKey(strings[11])) {
                         assignment = new Assignment(strings[9],strings[10],strings[11],isAssignmentCompleted,tasks);
                         assignments.put(assignment.getTitle()+assignment.getStart()+assignment.getEnd(),assignment);
                     }
@@ -395,11 +389,13 @@ public class ProjectCreator {
                             isAssignmentCompleted, tasks));
                     phase = new Phase(res.getString("phase_title"),assignments);
                 }
+                formerAssignmentId = res.getInt("assignment_id");
+                formerTaskId = res.getInt("task_id");
+                formerParticipantId = res.getInt("participant_id");
             }
         }
         catch (Exception e) {
             System.out.println("Couldn't create phase from database...\n" + e.getMessage());
-            System.out.println(participants.size());
             e.printStackTrace();
             phase = null;
         }
