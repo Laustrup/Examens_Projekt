@@ -40,10 +40,6 @@ class ProjectCreatorTest {
         assertEquals("Appdev", appdevProject.getTitle());
         assertEquals("Find New Employees", findNewEmployeesProject.getTitle());
         assertEquals("Advertising", AdvertisingProject.getTitle());
-        System.out.println("\n\nProjectCreatorTest");
-        for (int i = 0; i < appdevProject.getPhases().size(); i++){
-            System.out.println(appdevProject.getPhases().get(i).getTitle());
-        }
 
         //Projektets tasks værdier
         assertEquals(300.00,
@@ -74,10 +70,9 @@ class ProjectCreatorTest {
                 appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(1).getParticipants().get(1).getId());
         assertEquals(false,
                 appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(1).isCompleted());
-// error
+
         assertEquals(100.00,
                 appdevProject.getPhases().get(1).getAssignments().get("Database").getTasks().get(0).getEstimatedWorkHours());
-
         assertEquals("Repositories",
                 appdevProject.getPhases().get(1).getAssignments().get("Database").getTasks().get(0).getTitle());
         assertEquals("2021-11-15 12:30:00",
@@ -417,22 +412,31 @@ class ProjectCreatorTest {
         }
     }
 
-
-    // TODO Perhaps add more parameters to test multiple tests
-    // TODO Change safe update to unsafe
+    /*
+    // TODO Can update, put not fast enough to test
     @ParameterizedTest
-    @CsvSource(value = {"Appdev|Building Project|Database", "Advertising|Deliver Commercials|Put Commercials in action"}, delimiter = '|')
-    public void createPhaseTest(String projectTitle,String phaseTitle, String assignmentsKey) {
+    @CsvSource(value = {"Appdev|Extra"}, delimiter = '|')
+    public void createPhaseTest(String projectTitle,String phaseTitle) {
         //Act
-       // Phase actualReturned = projectCreator.createPhase(projectTitle);
-       // new ProjectEditor().updatePhase(phaseTitle,null,projectTitle);
-        Phase actualFromDb = projectCreator.getPhase(phaseTitle,projectTitle);
-
-        System.out.println(actualFromDb.getAssignments().get(assignmentsKey).getStart());
-        System.out.println(actualFromDb.getAssignments().get(assignmentsKey).getEnd());
+        Phase createdPhase = projectCreator.createPhase(projectTitle);
+        Phase updatedPhase = new ProjectEditor().updatePhase(phaseTitle,"NEW PHASE",projectTitle);
 
         //Assert
-        //assertEquals(new String(), actualReturned.getTitle());
-        assertEquals(phaseTitle, actualFromDb.getTitle());
+        assertEquals("NEW PHASE", createdPhase.getTitle());
+        assertEquals(phaseTitle, updatedPhase.getTitle());
+    }
+
+     */
+
+    @Test
+    public void getPhaseTest() {
+        Phase phase = projectCreator.getPhase("Interviews","Find New Employees");
+
+        assertEquals("Interviews",phase.getTitle());
+        assertEquals("Arrange Interviews",phase.getAssignments().get("Arrange Interviews").getTitle());
+        assertEquals("2021-12-21 12:30:00",phase.getAssignments().get("Arrange Interviews").getStart());
+        assertEquals("2022-12-21 12:30:00",phase.getAssignments().get("Arrange Interviews").getEnd());
+        assertEquals("Interact in Interviews",phase.getAssignments().get("Interact in Interviews").getTitle());
+
     }
 }

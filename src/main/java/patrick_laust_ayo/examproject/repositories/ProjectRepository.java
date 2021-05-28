@@ -12,7 +12,7 @@ public class ProjectRepository extends Repository{
     }
 
     public void putPhaseInDatabase(int projectId) {
-        executeSQLStatement("INSERT INTO phase_table(phase_title, project_id) VALUES (null, " + projectId + ");");
+        executeSQLStatement("INSERT INTO phase_table(phase_title, project_id) VALUES (\"NEW PHASE\", " + projectId + ");");
     }
     public ResultSet findPhase(String phaseTitle,String projectTitle) {
         return executeQuery("SELECT * FROM phase_table " +
@@ -24,15 +24,20 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN department ON department.department_no = participant.department_no " +
                 "INNER JOIN projectmanager ON projectmanager.projectmanager_id = project.projectmanager_id " +
                 "WHERE phase_title = \"" + phaseTitle + "\" AND title = \"" + projectTitle + "\";") ;
-                //TODO denne ORDER BY sorterer participant id'erne numerisk.
-                //+ "ORDER BY participant.participant_id;");
     }
-    // TODO Change safeupdate
     public void updatePhase(String phaseTitle,String projectTitle,String formerPhaseTitle) {
+        if (phaseTitle == null) {
+            executeSQLStatement("UPDATE phase_table " +
+                    "INNER JOIN project ON project.project_id = phase_table.project_id " +
+                    "SET phase_table.phase_title = \"" + phaseTitle + "\" " +
+                    "WHERE phase_table.phase_title = null AND project.title = \"" + projectTitle + "\";");
+        }
+        else {
         executeSQLStatement("UPDATE phase_table " +
                 "INNER JOIN project ON project.project_id = phase_table.project_id " +
                 "SET phase_table.phase_title = \"" + phaseTitle + "\" " +
                 "WHERE phase_table.phase_title = \"" + formerPhaseTitle + "\" AND project.title = \"" + projectTitle + "\";");
+        }
     }
     public void removePhase(String assignmentTitle,String projectTitle) {
         executeSQLStatement("DELETE ROW FROM phase " +

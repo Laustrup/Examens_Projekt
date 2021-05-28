@@ -30,9 +30,9 @@ public class ProjectEditor {
     }
 
 
-    public Phase updatePhase(String phaseTitle, String formerphaseTitle, String projectTitle) {
-        repo.updatePhase(phaseTitle,projectTitle,formerphaseTitle);
-        return creator.getPhase(phaseTitle,projectTitle);
+    public Phase updatePhase(String newPhaseTitle, String formerPhaseTitle, String projectTitle) {
+        repo.updatePhase(newPhaseTitle,projectTitle,formerPhaseTitle);
+        return creator.getPhase(newPhaseTitle,projectTitle);
     }
 
     public Assignment updateAssignment(String title,String start,String end, String formerTitle,String phaseTitle) {
