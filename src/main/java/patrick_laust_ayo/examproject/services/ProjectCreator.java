@@ -199,7 +199,6 @@ public class ProjectCreator {
                             new Department(departmentId,strings[0],strings[1]));
                     if (currentTaskId > formerTaskId || currentParticipantId > formerParticipantId) {
                         if (listOfTasks.size() == 0){
-                            System.out.println("listoftasks size er == 0");
                             listOfTasks.add(new Task(workHours,listOfParticipants,strings[6],strings[7], strings[8],taskIsCompleted));
                         }
                         System.out.println("Overordnet if sætning");
@@ -212,7 +211,6 @@ public class ProjectCreator {
                             listOfTasks.get(listOfTasks.size()-1).getEnd().equals(strings[7]) &&
                             listOfTasks.get(listOfTasks.size()-1).getTitle().equals(strings[8]))) {
                         listOfTasks.add(new Task(workHours,listOfParticipants,strings[6],strings[7], strings[8],taskIsCompleted));
-                        System.out.println("Tasks size " + listOfTasks.size());
                     }
 
                     // If assignment isn't added
@@ -243,8 +241,6 @@ public class ProjectCreator {
             project = null;
         }
         projectRepo.closeCurrentConnection();
-        System.out.println("ProjectCreator - getProject");
-        System.out.println("listOfPhases.size() er: " + listOfPhases.size());
         for (int i = 0; i < listOfPhases.size(); i++){
             System.out.println("Phase Title: " + listOfPhases.get(i).getTitle());
         }

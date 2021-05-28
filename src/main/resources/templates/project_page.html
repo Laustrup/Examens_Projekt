@@ -14,31 +14,31 @@
     <section class="participant_form">
         <header><h3>Welcome</h3></header>
             <div class="participant_container">
-                <form action="" method="post">
+                <form action="/project_page_update-participant_pressed" method="post">
 
                     <div class="ID_section">
                         <label for="participant_ID">ID</label>
-                        <input type="text" id="participant_ID" name="participant_ID" th:placeholder="${current_participant.getId}" required>
+                        <input type="text" id="participant_ID" name="participant_ID" th:placeholder="${participant.getId}">
                     </div>
 
                     <div class="password_section">
                         <label for="participant_password">Password</label>
-                        <input type="text" id="participant_password" name="participant_password" th:placeholder="${current_participant.getPassword}" required>
+                        <input type="text" id="participant_password" name="participant_password" th:placeholder="${participant.getPassword}" required>
                     </div>
 
                     <div class="name_section">
                         <label for="participant_name">Name</label>
-                        <input type="text" id="participant_name" name="participant_name" th:placeholder="${current_participant.getName}" required>
+                        <input type="text" id="participant_name" name="participant_name" th:placeholder="${participant.getName}" required>
                     </div>
 
                     <div class="position_section">
                         <label for="position">Position</label>
-                        <input type="text" id="position" name="position" th:placeholder="${current_participant.getPosition}" required>
+                        <input type="text" id="position" name="position" th:placeholder="${participant.getPosition}" required>
                     </div>
 
                     <div class="department_section">
                         <label for="department">Department</label>
-                        <input type="text" id="department" name="department" th:placeholder="${current_participant.getDepartment}" required>
+                        <input type="text" id="department" name="department" th:placeholder="${participant.getDepartment.getDepName()}" required>
                     </div>
 
                     <p th:text="${Exception}"></p>
@@ -49,7 +49,7 @@
             </div>
     </section>
 
-    <div th:if="${current_project.add_participant}"><header><h3><p th:text="${project.getTitle()}"></p></h3></header>
+    <div th:if="${current_project eq 'add_participant'}"><header><h3><p th:text="${project.getTitle()}"></p></h3></header>
         <section class="project_form">
             <p th:text="${Exception}"></p>
 
@@ -67,18 +67,18 @@
             <form action="/accept_delete_of_project" method="post">
                 <button type="submit">Delete project</button>
             </form>
-            <p><a href="/direct_project_page" value="project.getTitle()" name="project_title"><button>Go back</button></a></p>
+            <p><a href="/direct_project_page" th:value="${project.getTitle()}" name="project_title"><button>Go back</button></a></p>
         </section>
     </div>
 
-    <div th:if="${current_project.start}"><header><h3><p th:text="${project.getTitle()}"></p></h3></header>
+    <div th:if="${current_project eq 'start'}"><p th:text="${project.getTitle()}"></p>
         <section class="project_form">
             <div class="project_title_section">
                 <p th:text="${Exception}"></p>
 
                 <form action="/update_project" method="post">
                     <label for="project_title">Project Title</label>
-                    <input type="text" id="project_title" name="project_title" th:placeholder="${project.getProjectTitle}" required>
+                    <input type="text" id="project_title" name="project_title" th:placeholder="${project.getTitle}" required>
                     <button type="submit">Update title</button>
                 </form>
 
@@ -87,13 +87,13 @@
             <form action="/delete_project" method="post">
                 <button type="submit">Delete project</button>
             </form>
-            <p><a href="/index"><button>Go back to start menu</button></a></p>
+            <p><a href="/"><button>Go back to start menu</button></a></p>
         </section>
     </div>
 </section>
 
 <section class="split-right">
-    <div th:if="${current.start}"><header><h3>Phases</h3></header>
+    <div th:if="${current eq 'start'}"><header><h3>Phases</h3></header>
 
         <tr>
             <th>Estimated amount of work hours: <p th:text="${project.getTotalWorkhours()}"></p></th></th>
@@ -102,7 +102,7 @@
 
         <form action="/direct_to_phase" method="post">
             <div th:each="phase : ${project.getPhases()}">
-                <button type="submit" value="phase.getTitle()" name="phase_title"><p th:text="${phase.getTitle()}"></p></button>
+                <button type="submit" th:value="${phase.getTitle()}" name="phase_title"><p th:text="${phase.getTitle()}"></p></button>
             </div>
         </form>
 
@@ -111,7 +111,7 @@
         </form>
 
     </div>
-    <div th:if="${current.phase}">
+    <div th:if="${current eq 'phase'}">
         <section class="phase"><header><h3 th:text="${phase.getTitle()}"></h3></header>
             <div class="phase_container">
 
@@ -122,7 +122,7 @@
 
                 <form action="direct_to_assignment" method="post">
                 <div th:each="assignment : {phase.getAssignments()}">
-                    <button type="submit" value="assignment.getTitle()" name="assignment_title"><p th:text="${assignment.getTitle()}"></p>
+                    <button type="submit" th:value="${assignment.getTitle()}" name="assignment_title"><p th:text="${assignment.getTitle()}"></p>
                         </pt></button>
                 </div>
                 </form>
@@ -150,7 +150,7 @@
                 <div>
                     <p><a href="/accept_delete"><button>Delete phase</button></a></p>
                     <form action="/direct_project_page" method="post">
-                        <button type="submit" value="project.getTitle()" name="project_title">Back to phases</pt></button>
+                        <button type="submit" th:value="${project.getTitle()}" name="project_title">Back to phases</pt></button>
                     </form>
                 </div>
 
@@ -158,7 +158,7 @@
         </section>
     </div>
 
-    <div th:if="${current.assignment}">
+    <div th:if="${current eq 'assignment'}">
         <section class="assignment"><header><h3 th:text="${assignment.getTitle()}"></h3></header>
             <div class="assignment_container">
 
@@ -171,9 +171,9 @@
 
                 <form action="/direct_to_task" method="post">
                     <div th:each="task : {assignment.getTasks()}">
-                        <input value="task.getStart()" name="task_start">
-                        <input value="task.getEnd()" name="task_end">
-                        <button type="submit" value="task.getTitle()" name="task_title"><p th:text="${task.getTitle()}"></p>
+                        <input th:value="${task.getStart()}" name="task_start">
+                        <input th:value="${task.getEnd()}" name="task_end">
+                        <button type="submit" th:value="${task.getTitle()}" name="task_title"><p th:text="${task.getTitle()}"></p>
                             </pt></button>
                     </div>
                 </form>
@@ -191,7 +191,7 @@
                         <label for="assignment_end">Change end of assignment</label>
                         <input type="text" id="assignment_end" name="assignment_end">
 
-                        <button type="submit" value="assignment.getTitle" name="assignment_title">Update assignment</button>
+                        <button type="submit" th:value="${assignment.getTitle()}" name="assignment_title">Update assignment</button>
                     </div>
                 </form>
                 <p th:text="${Exception}"></p>
@@ -203,16 +203,16 @@
                 <div>
                     <p><a href="/accept_delete"><button>Delete Assignment</button></a></p>
                     <form action="/direct_to_phase" method="post">
-                        <button type="submit" value="phase.getTitle()" name="phase_title">Back to phases</pt></button>
+                        <button type="submit" th:value="${phase.getTitle()}" name="phase_title">Back to phases</pt></button>
                     </form>
                 </div>
 
             </div>
         </section>
     </div>
-    <div th:if="${current.task}">
+    <div th:if="${current eq 'task'}">
         <section class="task">
-            <header><h3 th:text="task.getTitle()"></h3></header>
+            <header><h3 th:text="${task.getTitle()}"></h3></header>
             <div class="task_container">
 
                 <tr>
@@ -224,9 +224,9 @@
 
                 <form action="/direct_to_task" method="post">
                     <div th:each="task : {assignment.getTasks()}">
-                        <input value="task.getStart()" name="task_start">
-                        <input value="task.getEnd()" name="task_end">
-                        <button type="submit" value="task.getTitle()" name="task_title"><p th:text="${task.getTitle()}"></p>
+                        <input th:value="${task.getStart()}" name="task_start">
+                        <input th:value="${task.getEnd()}" name="task_end">
+                        <button type="submit" th:value="${task.getTitle()}" name="task_title"><p th:text="${task.getTitle()}"></p>
                             </pt></button>
                     </div>
                 </form>
@@ -253,14 +253,14 @@
                 <div>
                     <p><a href="/accept_delete"><button>Delete Assignment</button></a></p>
                     <form action="/direct_to_phase" method="post">
-                        <button type="submit" value="phase.getTitle()" name="phase_title">Back to phases</button>
+                        <button type="submit" th:value="${phase.getTitle()}" name="phase_title">Back to phases</button>
                     </form>
                 </div>
 
                 <form action="/join-task" method="post">
-                    <input value="task.getTitle()" name="task_title">
-                    <input value="task.getStart()" name="task_start">
-                    <input value="task.getEnd()" name="task_end">
+                    <input th:value="${task.getTitle()}" name="task_title">
+                    <input th:value="${task.getStart()}" name="task_start">
+                    <input th:value="${task.getEnd()}" name="task_end">
                     <button type="submit">Back to phases</button>
                 </form>
             </div>
