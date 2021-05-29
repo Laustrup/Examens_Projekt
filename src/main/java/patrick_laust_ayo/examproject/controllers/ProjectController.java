@@ -102,9 +102,8 @@ public class ProjectController {
         else if (handler.isParticipantPartOfProject(userId, projectTitle)) {
 
             // TODO project from session instead
-            Project project = new Project(projectTitle);
+            Project project = projectCreator.getProject(projectTitle);
             session.setAttribute("project",project);
-
 
             model.addAttribute("project",project);
             model.addAttribute("participant",new UserCreator().getParticipant(userId));
@@ -115,8 +114,6 @@ public class ProjectController {
 
             return "project_page";
         }
-
-
 
         //TODO der skal være det rigtige redirect
         model.addAttribute("Exception","You are not a participant of this project...");

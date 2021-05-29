@@ -259,8 +259,6 @@ public class ExceptionHandler {
 
     }
     private int inputAsTitleIsTooLongByAmount(String input,String column) {
-        Repository repo = new ParticipantRepository();
-
         try {
             if (column.equals("phase_title") ||
                     column.equals("username") ||
