@@ -134,8 +134,9 @@ public class ProjectController {
 
 
         String projectTitle = ((Project) session.getAttribute("project")).getTitle();
+        // TODO Temp boolean value
         session.setAttribute("updated-participant", userEditor.updateParticipant(userId, password, name, position,
-                                                    ((Participant) session.getAttribute("participant")).getId()));
+                                                    ((Participant) session.getAttribute("participant")).getId(),true));
 
         Participant participant = (Participant) session.getAttribute("updated-participant");
 

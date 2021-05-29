@@ -485,19 +485,18 @@ public class ProjectCreator {
 
                 formerParticipantId = res.getInt("participant_id");
                 departmentId = res.getInt("department_no");
+                strings = updateStrings(strings,res,false);
 
                 if (res.isLast()) {
-                    if (!participants.get(participants.size()-1).getId().equals(strings[2])) {
-                        department = new Department(departmentId,strings[0],strings[1]);
-                        participants.add(new Participant(strings[2],strings[3],strings[4],strings[5],department));
-                    }
+                    department = new Department(departmentId,strings[0],strings[1]);
+                    participants.add(new Participant(strings[2],strings[3],strings[4],strings[5],department));
                     task = new Task(res.getDouble("estimated_work_hours"), participants, strings[6],
                                     strings[7], strings[8], res.getBoolean("task_is_completed"));
                 }
             }
         }
         catch (Exception e) {
-            System.out.println("Couldn't create assignment from database...\n" + e.getMessage());
+            System.out.println("Couldn't create task from database...\n" + e.getMessage());
             task = null;
         }
 

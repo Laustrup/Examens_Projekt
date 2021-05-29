@@ -85,12 +85,12 @@ public class ProjectRepository extends Repository{
     }
     public ResultSet findTask(String taskTitle,String taskStart,String taskEnd) {
         return executeQuery("SELECT * FROM task " +
-                "INNER JOIN task ON task.assignment_id = assignment.assignment_id " +
+                "INNER JOIN assignment ON assignment.assignment_id = task.assignment_id " +
                 "INNER JOIN participant_task ON participant_task.task_id = task.task_id " +
                 "INNER JOIN participant ON participant.participant_id = participant_task.participant_id " +
                 "INNER JOIN department ON department.department_no = participant.department_no " +
-                "WHERE task_title = \"" + taskTitle + "\" AND task_start = \"" + taskStart + "\" " +
-                "AND task_end = \"" + taskEnd + "\";");
+                "WHERE task.task_title = \"" + taskTitle + "\" AND task.task_start = \"" + taskStart + "\" " +
+                "AND task.task_end = \"" + taskEnd + "\";");
     }
     public void updateTask(String title,String start,String end, String workHours, String formerTitle,String assignmentTitle) {
         executeSQLStatement("UPDATE task " +

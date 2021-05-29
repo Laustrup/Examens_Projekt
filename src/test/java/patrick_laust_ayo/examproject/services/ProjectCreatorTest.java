@@ -6,6 +6,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import patrick_laust_ayo.examproject.models.Assignment;
 import patrick_laust_ayo.examproject.models.Phase;
 import patrick_laust_ayo.examproject.models.Project;
+import patrick_laust_ayo.examproject.models.Task;
 
 import java.util.ArrayList;
 
@@ -466,6 +467,18 @@ class ProjectCreatorTest {
                 assertEquals(expectations[5+(i*4)],String.valueOf(actual.getTasks().get(i).getEstimatedWorkHours()));
             }
         }
+    }
+
+    @Test
+    public void getTaskTest() {
+
+        // Act
+        Task actual = projectCreator.getTask("Discuss Possible Clients","2021-10-29 12:30:00","2021-11-14 23:59:59");
+
+        // Assert
+        assertEquals("Discuss Possible Clients",actual.getTitle());
+        assertEquals("2021-10-29 12:30:00",actual.getStart());
+        assertEquals("2021-11-14 23:59:59",actual.getEnd());
     }
 
 }
