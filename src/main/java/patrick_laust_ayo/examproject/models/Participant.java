@@ -6,7 +6,8 @@ public class Participant {
 
     private String id;
     private String username;
-    private String password;
+    private String password = new String();
+    private String hiddenPassword = new String();
     private String name;
     private String position;
     private Department department;
@@ -17,11 +18,13 @@ public class Participant {
         this.name = name;
         this.position = position;
         this.department = department;
+        setHiddenPassword();
     }
 
     public Participant(String id, String username) {
         this.id = id;
         this.username = username;
+        setHiddenPassword();
     }
 
     // Constructor for updating
@@ -30,6 +33,7 @@ public class Participant {
         this.password = password;
         this.name = name;
         this.position = position;
+        setHiddenPassword();
     }
 
     public String getPassword(){
@@ -38,6 +42,20 @@ public class Participant {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String setHiddenPassword() {
+        hiddenPassword = new String();
+        if (password != null) {
+            for (int i = 0; i < password.length(); i++) {
+                hiddenPassword += "*";
+            }
+        }
+        return hiddenPassword;
+    }
+
+    public String getHiddenPassword() {
+        return hiddenPassword;
     }
 
     public String getName() {

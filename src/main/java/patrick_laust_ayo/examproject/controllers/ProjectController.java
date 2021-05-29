@@ -102,6 +102,7 @@ public class ProjectController {
             Project project = new Project(projectTitle);
             session.setAttribute("project",project);
 
+
             model.addAttribute("project",project);
             model.addAttribute("participant",new UserCreator().getParticipant(userId));
             model.addAttribute("current","start");
