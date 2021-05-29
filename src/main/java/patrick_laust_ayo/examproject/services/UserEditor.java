@@ -15,7 +15,10 @@ public class UserEditor {
     private ProjectManager projectManager;
     private Participant participant;
 
-    public Participant updateParticipant(String id, String password, String name, String position, String formerUserId) {
+    public Participant updateParticipant(String id, String password, String name, String position, String formerUserId, boolean isProjectManager) {
+        if (isProjectManager) {
+            updateProjectmanager(id,password,formerUserId);
+        }
         participantRepo.updateParticipant(id, name, password, position, formerUserId);
 
         // Makes sure that it's the real participant from db that is being returned
