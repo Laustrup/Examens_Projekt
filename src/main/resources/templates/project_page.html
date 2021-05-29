@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="../static.styles/project_page.css">
+    <link rel="stylesheet" type="text/css" href="/static.styles/project_page.css">
     <title th:text="${session.projectTitle}">Project</title>
 </head>
 <body>
@@ -38,7 +38,7 @@
 
                     <div class="department_section">
                         <label for="department">Department</label>
-                        <input type="text" id="department" name="department" th:placeholder="${participant.getDepartment.getDepName()}" required>
+                        <input type="text" id="department" name="department" th:placeholder="${participant.getDepartment.getDepName()}">
                     </div>
 
                     <p th:text="${Exception}"></p>
@@ -77,8 +77,8 @@
                 <p th:text="${Exception}"></p>
 
                 <form action="/update_project" method="post">
-                    <label for="project_title">Project Title</label>
-                    <input type="text" id="project_title" name="project_title" th:placeholder="${project.getTitle}" required>
+                    <label for="new_project_title">Project Title</label>
+                    <input type="text" id="new_project_title" name="new_project_title" th:placeholder="${project.getTitle}" required>
                     <button type="submit">Update title</button>
                 </form>
 

@@ -51,7 +51,7 @@ public class ProjectController {
 
 
     @PostMapping("/update_project")
-    public String updateProject(@RequestParam(name="new_title") String newTitle, HttpServletRequest request, Model model) {
+    public String updateProject(@RequestParam(name="new_project_title") String newTitle, HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
@@ -127,6 +127,7 @@ public class ProjectController {
                                                     @RequestParam (name = "participant_password") String password,
                                                     @RequestParam (name = "participant_name") String name,
                                                     @RequestParam (name = "position") String position,
+                                                    @RequestParam (name = "department") String depName,
                                                     HttpServletRequest request, Model model){
 
         HttpSession session = request.getSession();
@@ -157,6 +158,8 @@ public class ProjectController {
             session.setAttribute("Exception",exception);
             return "redirect:/project_page-" + projectTitle + "/" + formerUserId;
         }
+
+        System.out.println("ABEJOHN");
 
         session.setAttribute("participant", userEditor.updateParticipant(userId, password, name, position,formerUserId,
                                                     handler.isParticipantProjectManager(formerUserId)));
