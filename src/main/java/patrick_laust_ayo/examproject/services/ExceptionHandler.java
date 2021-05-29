@@ -250,6 +250,9 @@ public class ExceptionHandler {
         repo.closeCurrentConnection();
         return false;
     }
+    public boolean isParticipantProjectManager(String userId) {
+        return new UserCreator().getProjectManager(userId) == null;
+    }
 
     // Checks if input is too long and writes a message as return, if input is allowed, it returns "Input is allowed"
     public String isLengthAllowedInDatabase(String input,String column)  {
