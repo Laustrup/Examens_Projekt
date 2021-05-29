@@ -194,7 +194,7 @@ public class ParticipantController {
             return "redirect:/project/" + project.getTitle() + "/" + inputException;
         }
 
-        session.setAttribute("current_participant", userEditor.updateParticipant(id, password, name, position, formerUserId));
+        session.setAttribute("current_participant", userEditor.updateParticipant(id, password, name, position, formerUserId, false));
 
         return "redirect:/project_page/" + project.getTitle() + "/" + ((Participant)session.getAttribute("current_participant")).getName();
 

@@ -131,11 +131,18 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
         UserEditor userEditor = new UserEditor();
+        boolean isProjectManager;
+        if (position.equalsIgnoreCase("manager")){
+            isProjectManager = true;
+        }
+        else{
+            isProjectManager = false;
+        }
 
         //TODO Exceptionhandler
         String projectTitle = ((Project) session.getAttribute("project")).getTitle();
         session.setAttribute("participant", userEditor.updateParticipant(userId, password, name, position,
-                                                    ((Participant) session.getAttribute("participant")).getId()));
+                                                    ((Participant) session.getAttribute("participant")).getId(), isProjectManager));
 
         Participant participant = (Participant) session.getAttribute("participant");
 
