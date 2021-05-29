@@ -132,14 +132,14 @@ public class ProjectController {
         HttpSession session = request.getSession();
         UserEditor userEditor = new UserEditor();
 
-
+        //TODO Exceptionhandler
         String projectTitle = ((Project) session.getAttribute("project")).getTitle();
-        session.setAttribute("updated-participant", userEditor.updateParticipant(userId, password, name, position,
+        session.setAttribute("participant", userEditor.updateParticipant(userId, password, name, position,
                                                     ((Participant) session.getAttribute("participant")).getId()));
 
-        Participant participant = (Participant) session.getAttribute("updated-participant");
+        Participant participant = (Participant) session.getAttribute("participant");
 
-        model.addAttribute("updated-participant", participant);
+        model.addAttribute("participant", participant);
 
         return "redirect:/project_page-" + projectTitle + "/" + userId;
     }
