@@ -131,18 +131,35 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
         UserEditor userEditor = new UserEditor();
-        boolean isProjectManager;
-        if (position.equalsIgnoreCase("manager")){
-            isProjectManager = true;
-        }
-        else{
-            isProjectManager = false;
+        String formerUserId = ((Participant) session.getAttribute("participant")).getId();
+        String projectTitle = ((Project) session.getAttribute("project")).getTitle();
+
+        String exception = handler.isLengthAllowedInDatabase(userId,"user_id");
+        if (!exception.equals("Input is allowed!")) {
+            session.setAttribute("Exception",exception);
+            return "redirect:/project_page-" + projectTitle + "/" + formerUserId;
         }
 
-        //TODO Exceptionhandler
-        String projectTitle = ((Project) session.getAttribute("project")).getTitle();
-        session.setAttribute("participant", userEditor.updateParticipant(userId, password, name, position,
-                                                    ((Participant) session.getAttribute("participant")).getId(), isProjectManager));
+        exception = handler.isLengthAllowedInDatabase(password,"participant_password");
+        if (!exception.equals("Input is allowed!")) {
+            session.setAttribute("Exception",exception);
+            return "redirect:/project_page-" + projectTitle + "/" + formerUserId;
+        }
+
+        exception = handler.isLengthAllowedInDatabase(name,"participant_name");
+        if (!exception.equals("Input is allowed!")) {
+            session.setAttribute("Exception",exception);
+            return "redirect:/project_page-" + projectTitle + "/" + formerUserId;
+        }
+
+        exception = handler.isLengthAllowedInDatabase(position,"position");
+        if (!exception.equals("Input is allowed!")) {
+            session.setAttribute("Exception",exception);
+            return "redirect:/project_page-" + projectTitle + "/" + formerUserId;
+        }
+
+        session.setAttribute("participant", userEditor.updateParticipant(userId, password, name, position,formerUserId,
+                                                    handler.isParticipantProjectManager(formerUserId)));
 
         Participant participant = (Participant) session.getAttribute("participant");
 
