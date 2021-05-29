@@ -63,7 +63,7 @@ public class ProjectRepository extends Repository{
         executeSQLStatement("UPDATE assignment " +
                 "INNER JOIN phase ON phase.phase_id = assignment.phase_id " +
                 "SET assignment.assignment_is_completed " + " = " + isCompleted + ", " +
-                "WHERE assignment.assignment_title = \"" + assignmentTitle + "\" AND phase.title \"" + phaseTitle + "\";");
+                "WHERE assignment.assignment_title = \"" + assignmentTitle + "\" AND phase_table.title \"" + phaseTitle + "\";");
     }
     public ResultSet findAssignment(String assignmentTitle,String phaseTitle) {
         return executeQuery("SELECT * FROM assignment " +

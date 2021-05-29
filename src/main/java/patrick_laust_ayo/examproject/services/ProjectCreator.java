@@ -19,7 +19,7 @@ public class ProjectCreator {
     private ProjectRepository projectRepo = new ProjectRepository();
     private ProjectManagerRepository projectManagerRepo = new ProjectManagerRepository();
 
-    private String[] updateStrings(String[] strings, ResultSet res) {
+    private String[] updateStrings(String[] strings, ResultSet res,boolean withPhaseAndProject) {
         try {
             // Department
             strings[0] = res.getString("location");
@@ -41,14 +41,17 @@ public class ProjectCreator {
             strings[10] = res.getString("assignment_end");
             strings[11] = res.getString("assignment_title");
 
-            // Project
-            strings[12] = res.getString("title");
+            if (withPhaseAndProject) {
+                // Project
+                strings[12] = res.getString("title");
 
-            // Phase
-            strings[13] = res.getString("phase_title");
+                // Phase
+                strings[13] = res.getString("phase_title");
 
-            // ProjectManager
-            strings[15] = res.getString("username");
+                // ProjectManager
+                strings[15] = res.getString("username");
+            }
+
         }
         catch (Exception e) {
             System.out.println("Couldn't update strings...\n" + e.getMessage());
@@ -180,7 +183,7 @@ public class ProjectCreator {
                 formerParticipantId = res.getInt("participant_id");
                 departmentId = res.getInt("department_no");
 
-                strings = updateStrings(strings,res);
+                strings = updateStrings(strings,res,true);
                 assignmentIsCompleted = res.getBoolean("is_completed");
                 taskIsCompleted = res.getBoolean("task_is_completed");
                 workHours = res.getDouble("estimated_work_hours");
@@ -224,7 +227,6 @@ public class ProjectCreator {
 
                     // Assignment
                     assignment = new Assignment(strings[9],strings[10],strings[11],assignmentIsCompleted,listOfTasks);
-                    mapOfAssignments.put(assignment.getTitle(),assignment);
                     listOfPhases.get(listOfPhases.size()-1).putInAssignments(assignment.getTitle(),assignment);
                     mapOfAssignments.put(String.valueOf(assignmentMapKey), assignment);
 
@@ -340,7 +342,7 @@ public class ProjectCreator {
                 workHours = res.getDouble("estimated_work_hours");
                 isTaskCompleted = res.getBoolean("task_is_completed");
                 isAssignmentCompleted = res.getBoolean("is_completed");
-                strings = updateStrings(strings,res);
+                strings = updateStrings(strings,res,true);
 
                 if (res.isLast()) {
                     // Participant
@@ -388,7 +390,6 @@ public class ProjectCreator {
         ResultSet res = projectRepo.findAssignment(assignmentTitle,phaseTitle);
         ArrayList<Task> tasks = new ArrayList<>();
         ArrayList<Participant> participants = new ArrayList<>();
-        Department department = new Department(0,new String(), new String());
 
         int formerTaskId = 0;
         int formerParticipantId = 0;
@@ -419,6 +420,7 @@ public class ProjectCreator {
                     if (currentTaskId > formerTaskId) {
                         tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
                         System.out.println(tasks.get(tasks.size()-1).getTitle());
+
                     }
                 }
 
@@ -427,6 +429,7 @@ public class ProjectCreator {
                 departmentNo = res.getInt("department_no");
                 workHours = res.getDouble("estimated_work_hours");
                 isTaskCompleted = res.getBoolean("task_is_completed");
+                strings = updateStrings(strings,res,false);
                 if (res.isLast()) {
                     tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
                     assignment = new Assignment(res.getString("assignment_start"), res.getString("assignment_end"),
