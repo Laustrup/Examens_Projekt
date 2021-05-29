@@ -122,13 +122,12 @@ public class  ProjectManagerController {
         String projectManagerUsername = ((ProjectManager)session.getAttribute("projectManager")).getUsername();
 
         for (int i = 0; i < amount; i++) {
-            userCreator.createParticipant("",projectTitle,departmentName);
+            userCreator.createParticipant("User ID" + i + 1, projectTitle, departmentName);
         }
 
-        // TODO Perhaps key is for wrong participant...
         Participant participant = (Participant) session.getAttribute("participant");
 
-        return "redirect://project_page/" + projectTitle + "/" + participant.getName();
+        return "redirect:/project_page-" + projectTitle + "/" + participant.getName();
     }
 
 }

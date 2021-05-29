@@ -139,8 +139,8 @@ public class ProjectRepository extends Repository{
     }
     public void updateProject(String currentTitle,String formerTitle) {
         executeSQLStatement("UPDATE project " +
-                "SET title = \"" + currentTitle + "\", " +
-                "WHERE projectmanager_username = \"" + formerTitle + "\";");
+                "SET title = \"" + currentTitle + "\" " +
+                "WHERE title = \"" + formerTitle + "\";");
     }
     // TODO Figure the sql statement to fit the project and participant
     public void addParticipantToProject(Participant participant, Project project) {

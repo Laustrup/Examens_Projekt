@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="header">
-    <h2>Projectname</h2>
+    <h2 th:text="${project.getTitle()}"></h2>
 </div>
 <section class="split-left">
 
@@ -23,7 +23,7 @@
 
                     <div class="password_section">
                         <label for="participant_password">Password</label>
-                        <input type="text" id="participant_password" name="participant_password" th:placeholder="${participant.getPassword}" required>
+                        <input type="password" id="participant_password" name="participant_password" th:placeholder="${participant.getPassword}" required>
                     </div>
 
                     <div class="name_section">
@@ -54,15 +54,21 @@
             <p th:text="${Exception}"></p>
 
             <form action="/add_participants" method="post">
+                <p>Amount of participants:</p>
                 <input type="number" name="amount">
-
-                <p>To: </p>
-                <button type="submit" value="COPENHAGEN" name="department_name">COPENHAGEN</button>
-                <button type="submit" value="OSLO" name="department_name">OSLO</button>
-                <button type="submit" value="DALLAS" name="department_name">DALLAS</button>
-                <button type="submit" value="LOS ANGELES" name="department_name">LOS ANGELES</button>
-                <button type="submit" value="NEW YORK" name="department_name">NEW YORK</button>
+            <div>
+                    <label for="chosen_department">To department:</label>
+                    <select name="chosen_department" id="chosen_department">
+                        <option value="COPENHAGEN">COPENHAGEN</option>
+                        <option value="OSLO">OSLO</option>
+                        <option value="DALLAS">DALLAS</option>
+                        <option value="LOS ANGELES">LOS ANGELES</option>
+                        <option value="NEW YORK">NEW YORK</option>
+                    </select>
+            </div>
+                <button type="submit">Add participants</button>
             </form>
+
 
             <form action="/accept_delete_of_project" method="post">
                 <button type="submit">Delete project</button>
@@ -71,24 +77,33 @@
         </section>
     </div>
 
-    <div th:if="${current_project eq 'start'}"><p th:text="${project.getTitle()}"></p>
-        <section class="project_form">
-            <div class="project_title_section">
-                <p th:text="${Exception}"></p>
+    <div th:if="${current_project eq 'start'}">
 
-                <form action="/update_project" method="post">
-                    <label for="new_project_title">Project Title</label>
-                    <input type="text" id="new_project_title" name="new_project_title" th:placeholder="${project.getTitle}" required>
-                    <button type="submit">Update title</button>
-                </form>
+        <div>
+        <form action="/direct_to_add_participants" method="post">
+            <button type="submit">Go to add participants</button>
+        </form>
+        </div>
 
-            </div>
+                <div>
+                    <section class="project_form">
+                        <div class="project_title_section">
+                    <form action="/update_project" method="post">
+                        <label for="new_project_title">Project Title</label>
+                        <input type="text" id="new_project_title" name="new_project_title" th:placeholder="${project.getTitle}" required>
+                        <button type="submit">Update title</button>
+                    </form>
+                </div>
 
+            <div>
             <form action="/delete_project" method="post">
                 <button type="submit">Delete project</button>
             </form>
             <p><a href="/"><button>Go back to start menu</button></a></p>
+            </div>
+
         </section>
+    </div>
     </div>
 </section>
 

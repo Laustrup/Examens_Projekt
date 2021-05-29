@@ -9,7 +9,7 @@ public class Project {
 
     private String title;
 
-    private ArrayList<Phase> phases;
+    private ArrayList<Phase> phases = new ArrayList<>();
 
     private Map<String, Participant> participants;
     private ProjectManager projectManager;

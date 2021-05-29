@@ -7,15 +7,27 @@
 <body>
 
     <form action="/projectmanager/participant_added" method="post">
-
-        <p th:text="${project_title}"></p>
-
+        <div>
         <label for="project_title">Project Title</label>
         <input type="text" name="project_title" id="project_title" th:value="${project_title}" th:placeholder="${project_title}" readonly>
-        <label for="department_name">Department Name</label>
-        <input type="text" name="department_name" id="department_name" placeholder="Department Name" required>
+        </div>
 
+        <div>
+            <label for="department_name">Choose department:</label>
+        <div>
+        <select name="department_name" id="department_name">
+            <option value="COPENHAGEN">COPENHAGEN</option>
+            <option value="OSLO">OSLO</option>
+            <option value="DALLAS">DALLAS</option>
+            <option value="LOS ANGELES">LOS ANGELES</option>
+            <option value="NEW YORK">NEW YORK</option>
+        </select>
+        </div>
+        </div>
+
+        <div>
         <button type="submit">Create participant</button>
+        </div>
     </form>
 
 </body>

@@ -64,7 +64,7 @@ public class ParticipantController {
         HttpSession session = request.getSession();
         String projectManagerUsername = ((ProjectManager)session.getAttribute("projectManager")).getUsername();
         session.setAttribute("participant", userCreator.createProjectManagerAsParticipant(projectManagerUsername, depName, projectTitle));
-
+        session.setAttribute("current_project", "start");
 
         return "redirect:/project_page-" + projectTitle + "/" + projectManagerUsername;
     }

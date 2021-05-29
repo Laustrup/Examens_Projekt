@@ -53,25 +53,24 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
-        String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
+        String participantUserId = ((Participant) session.getAttribute("participant")).getId();
 
-        if (handler.isParticipantProjectManager(((Participant)session.getAttribute("participant")).getId())) {
-            String exception = handler.isLengthAllowedInDatabase(newTitle, "projcet_title");
-            if (exception.equals("Input is allowed")) {
+
+        if (handler.isParticipantProjectManager(participantUserId)) {
+            String exception = handler.isLengthAllowedInDatabase(newTitle, "title");
+            if (!exception.equals("Input is allowed")) {
                 if (handler.doesProjectExist(newTitle)) {
-                    model.addAttribute("Exception","Phase already exists...");
-                    return "projectpage-" + projectTitle;
+                    session.setAttribute("Exception","Project already exists...");
+                    return "redirect:/project_page-" + projectTitle + "/" + participantUserId;
                 }
-                Phase phase = projectEditor.updatePhase(newTitle, phaseTitle, projectTitle);
-                session.setAttribute("phase",phase);
-                return "projectpage-" + projectTitle;
+                session.setAttribute("Exception", exception);
+                return "redirect:/project_page-" + projectTitle + "/" + participantUserId;
             }
-
-            model.addAttribute("Exception", exception);
-            return "projectpage-" + projectTitle;
+            session.setAttribute("project", projectEditor.updateProject(newTitle, projectTitle));
+            return "redirect:/project_page-" + newTitle + "/" + participantUserId;
         }
-        model.addAttribute("Exception", "You are not project manager...");
-        return "projectpage-" + projectTitle;
+        session.setAttribute("Exception", "You are not project manager...");
+        return "redirect:/project_page-" + projectTitle + "/" + participantUserId;
 
     }
 
@@ -80,7 +79,7 @@ public class ProjectController {
         ProjectRepository projectRepository = new ProjectRepository();
         HttpSession session = request.getSession();
 
-        return "redirect://project_page/" + title + "/" + ((Participant) session.getAttribute("participant")).getId();
+        return "redirect:/project_page/" + title + "/" + ((Participant) session.getAttribute("participant")).getId();
     }
 
     // TODO Does all three cases work with this endpoint? Redirect needs html
@@ -100,13 +99,15 @@ public class ProjectController {
         // Får direkte adgang da han er del af projectet
         else if (handler.isParticipantPartOfProject(userId, projectTitle)) {
 
-            Project project = (Project) session.getAttribute("project");
+            Project project = new Project(projectTitle);
+            session.setAttribute("project",project);
 
-            //session.setAttribute("project",project);
             model.addAttribute("project",project);
             model.addAttribute("participant",new UserCreator().getParticipant(userId));
             model.addAttribute("current","start");
-            model.addAttribute("current_project","start");
+            model.addAttribute("current_project",session.getAttribute("current_project"));
+            model.addAttribute("Exception", session.getAttribute("Exception"));
+            System.out.println("Renderprojectpage " + session.getAttribute("current_project"));
 
             return "project_page";
         }
@@ -133,38 +134,43 @@ public class ProjectController {
         String projectTitle = ((Project) session.getAttribute("project")).getTitle();
 
         String exception = handler.isLengthAllowedInDatabase(userId,"user_id");
-        if (!exception.equals("Input is allowed!")) {
+        if (!exception.equals("Input is allowed")) {
             session.setAttribute("Exception",exception);
             return "redirect:/project_page-" + projectTitle + "/" + formerUserId;
         }
 
-        if (handler.doesUserIdExist(userId)) {
+        if (handler.doesUserIdExist(userId) && !userId.equals("")) {
             session.setAttribute("Exception","User-id already in use...");
             return "redirect:/project_page-" + projectTitle + "/" + formerUserId;
         }
 
         exception = handler.isLengthAllowedInDatabase(password,"participant_password");
-        if (!exception.equals("Input is allowed!")) {
+        if (!exception.equals("Input is allowed")) {
             session.setAttribute("Exception",exception);
             return "redirect:/project_page-" + projectTitle + "/" + formerUserId;
         }
 
         exception = handler.isLengthAllowedInDatabase(name,"participant_name");
-        if (!exception.equals("Input is allowed!")) {
+        if (!exception.equals("Input is allowed")) {
             session.setAttribute("Exception",exception);
             return "redirect:/project_page-" + projectTitle + "/" + formerUserId;
         }
 
         exception = handler.isLengthAllowedInDatabase(position,"position");
-        if (!exception.equals("Input is allowed!")) {
+        if (!exception.equals("Input is allowed")) {
             session.setAttribute("Exception",exception);
             return "redirect:/project_page-" + projectTitle + "/" + formerUserId;
         }
 
-        System.out.println("ABEJOHN");
-
-        session.setAttribute("participant", userEditor.updateParticipant(userId, password, name, position,formerUserId,
-                                                    handler.isParticipantProjectManager(formerUserId)));
+        if (userId.equals("")){
+            session.setAttribute("participant" ,userEditor.updateParticipant(formerUserId, password, name,
+                    position, formerUserId, handler.isParticipantProjectManager(formerUserId)));
+            userId = formerUserId;
+        }
+        else {
+            session.setAttribute("participant", userEditor.updateParticipant(userId, password, name,
+                    position, formerUserId, handler.isParticipantProjectManager(formerUserId)));
+        }
 
         Participant participant = (Participant) session.getAttribute("participant");
 
@@ -181,10 +187,13 @@ public class ProjectController {
         String participantId = ((Participant)session.getAttribute("participant")).getId();
         session.setAttribute("Exception","");
         session.setAttribute("Message","");
+        session.setAttribute("current_project","add_participant");
+        System.out.println("DirectToAddParticipants " + session.getAttribute("current_project"));
 
-        return "redirect:/projectpage-" + projectTitle + "/" + participantId + "/add_participants";
+        return "redirect:/projectpage-" + projectTitle + "/" + participantId;
     }
 
+    /*
     @GetMapping("/project_page-{project_title}/{user_id}/add_participants")
     public String renderAddParticipants(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -196,6 +205,8 @@ public class ProjectController {
 
         return "project_page";
     }
+
+     */
 
     @GetMapping("/accept_delete_of_project")
     public String renderDeleteProject(Model model,HttpServletRequest request) {
@@ -291,9 +302,10 @@ public class ProjectController {
     }
 
     // TODO Create phase html
-    @GetMapping("/projectpage-{pt}/{phase.getTitle()}")
-    public String renderPhase(@PathVariable(name = "project.getTitle()") String projectTitle,
-                              @PathVariable(name = "phase.getTitle()") String phaseTitle,
+    @GetMapping("/projectpage-{project_title}/{user_id}/{phase_title}")
+    public String renderPhase(@PathVariable(name = "project_title") String projectTitle,
+                              @PathVariable(name = "user_id") String user_Id,
+                              @PathVariable(name = "phase_title") String phaseTitle,
                               HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
