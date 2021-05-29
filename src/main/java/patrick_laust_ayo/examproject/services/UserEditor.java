@@ -25,7 +25,7 @@ public class UserEditor {
         //TODO error when using formerUserId below, works better somehow with id???
         //TODO måske et if statement kan afhjælpe problemet?...
         //TODO måske er det fordi at når en participant bliver skabt, er nogle af departments res værdier = null?
-        ResultSet res = participantRepo.findParticipant(formerUserId);
+        ResultSet res = participantRepo.findParticipant(id);
 
         System.out.println("\nEfter res (updateParticipant)");
 
