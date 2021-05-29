@@ -20,7 +20,9 @@ public class ProjectController {
 
 
     @GetMapping("/create_project/{projectmanager_username}")
-    public String renderCreateProject(@PathVariable(name = "projectmanager_username") String username) {
+    public String renderCreateProject(@PathVariable(name = "projectmanager_username") String username,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("current_project","start");
         return "create_project";
     }
 
@@ -75,9 +77,9 @@ public class ProjectController {
     }
 
     @PostMapping("/direct_project_page")
-    public String goToChoosenProjectPage(@RequestParam(name = "projectTitle") String title, Model model, HttpServletRequest request) {
-        ProjectRepository projectRepository = new ProjectRepository();
+    public String goToChoosenProjectPage(@RequestParam(name = "projectTitle") String title, HttpServletRequest request) {
         HttpSession session = request.getSession();
+        session.setAttribute("current_project","start");
 
         return "redirect:/project_page/" + title + "/" + ((Participant) session.getAttribute("participant")).getId();
     }
@@ -99,13 +101,14 @@ public class ProjectController {
         // Får direkte adgang da han er del af projectet
         else if (handler.isParticipantPartOfProject(userId, projectTitle)) {
 
+            // TODO project from session instead
             Project project = new Project(projectTitle);
             session.setAttribute("project",project);
 
 
             model.addAttribute("project",project);
             model.addAttribute("participant",new UserCreator().getParticipant(userId));
-            model.addAttribute("current","start");
+            model.addAttribute("current",session.getAttribute("current_project"));
             model.addAttribute("current_project",session.getAttribute("current_project"));
             model.addAttribute("Exception", session.getAttribute("Exception"));
             System.out.println("Renderprojectpage " + session.getAttribute("current_project"));

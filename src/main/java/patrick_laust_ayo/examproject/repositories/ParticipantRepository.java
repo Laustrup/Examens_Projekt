@@ -73,6 +73,5 @@ public class ParticipantRepository extends Repository {
         catch (Exception e) {
             System.out.println("Couldn't remove participant...\n" + e.getMessage());
         }
-
     }
 }
