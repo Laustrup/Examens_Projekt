@@ -46,9 +46,7 @@ public class ProjectController {
         session.setAttribute("project", projectCreator.createProject(title, ((ProjectManager)session.getAttribute("projectManager")).getUsername()));
 
         return "redirect:/add_participant/projectmanager/" + title;
-
     }
-
 
     @PostMapping("/update_project")
     public String updateProject(@RequestParam(name="new_project_title") String newTitle, HttpServletRequest request, Model model) {
@@ -57,7 +55,7 @@ public class ProjectController {
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
         String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
 
-        if (((ProjectManager)session.getAttribute("projectManager"))!=null) {
+        if (handler.isParticipantProjectManager(((Participant)session.getAttribute("participant")).getId())) {
             String exception = handler.isLengthAllowedInDatabase(newTitle, "projcet_title");
             if (exception.equals("Input is allowed")) {
                 if (handler.doesProjectExist(newTitle)) {
@@ -121,7 +119,6 @@ public class ProjectController {
         // return "redirect:/login_to_project/" + ((Participant) session.getAttribute("participant")).getId()+ "/" + projectTitle;
     }
 
-
     @PostMapping("/project_page_update-participant_pressed")
     public String participantUpdatedByPressedButton(@RequestParam (name = "participant_ID") String userId,
                                                     @RequestParam (name = "participant_password") String password,
@@ -138,6 +135,11 @@ public class ProjectController {
         String exception = handler.isLengthAllowedInDatabase(userId,"user_id");
         if (!exception.equals("Input is allowed!")) {
             session.setAttribute("Exception",exception);
+            return "redirect:/project_page-" + projectTitle + "/" + formerUserId;
+        }
+
+        if (handler.doesUserIdExist(userId)) {
+            session.setAttribute("Exception","User-id already in use...");
             return "redirect:/project_page-" + projectTitle + "/" + formerUserId;
         }
 

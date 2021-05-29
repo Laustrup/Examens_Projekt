@@ -107,6 +107,9 @@ public class ExceptionHandler {
         }
         return false;
     }
+    public boolean doesDepartmentExist(String depName) {
+        return new UserCreator().getDepartment(depName) != null;
+    }
 
     /*
     public boolean doesProjectManagerUsernameExist(String username) {
@@ -251,7 +254,7 @@ public class ExceptionHandler {
         return false;
     }
     public boolean isParticipantProjectManager(String userId) {
-        return new UserCreator().getProjectManager(userId) == null;
+        return new UserCreator().getProjectManager(userId) != null;
     }
 
     // Checks if input is too long and writes a message as return, if input is allowed, it returns "Input is allowed"
