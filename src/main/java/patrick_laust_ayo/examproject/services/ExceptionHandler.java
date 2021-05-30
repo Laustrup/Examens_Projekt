@@ -160,19 +160,10 @@ public class ExceptionHandler {
 
     // Allows logins
     public boolean allowLogin(String userId, String password) {
-        ParticipantRepository repo = new ParticipantRepository();
+        Participant participant = new UserCreator().getParticipant(userId);
 
-        ResultSet res = repo.selectAll("participant");
-
-        try {
-            while (res.next()) {
-                if (res.getString("participant_password").equals(password) && res.getString("user_id").equals(userId)) {
-                    return true;
-                }
-            }
-        }
-        catch (Exception e) {
-            System.out.println("Trouble identifying ResultSet when searching user_id...\n" + e.getMessage());
+        if (participant.getPassword().equals(password)) {
+            return true;
         }
         return false;
     }

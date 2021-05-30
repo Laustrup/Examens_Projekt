@@ -10,9 +10,9 @@
     <header th:replace="fragments/header.html"></header>
 
     <main>
-        Are you sure you wish to delete <p th:Text="${Object_to_delete.getTitle()}"></p> ?
+         <p th:text="${Object_to_delete eq project.'getTitle()'}">Delete???</p> ?
 
-        <div th:if="${Object_to_delete.projectManager}">
+        <div th:if="${Object_to_delete eq 'projectManager'} ">
             <form action="/delete_projectManager" method="Post">
                 <label for="user_name">Type userId</label>
                 <input type="text" id="user_name" name="user_id">
@@ -21,7 +21,7 @@
                 <button type="submit">Delete</button>
             </form>
         </div>
-        <div th:if="${Object_to_delete.participant}">
+        <div th:if="${Object_to_delete eq 'projectManager'} ">
             <form action="/delete_participant" method="Post">
                 <label for="user_id">Type userId</label>
                 <input type="text" id="user_id" name="user_id">
@@ -30,16 +30,16 @@
                 <button type="submit">Delete</button>
             </form>
         </div>
-        <div th:if="${Object_to_delete.project}">
+        <div th:if="${Object_to_delete eq 'project'} ">
             <form action="/delete_project" method="Post">
                 <label for="user_id_project">Type userId</label>
                 <input type="text" id="user_id_project" name="user_id">
-                <label for="password_project">Type password</label>
-                <input type="text" id="password_project" name="password">
+                <label for="password_delete_project">Type password</label>
+                <input type="text" id="password_delete_project" name="password_delete_project">
                 <button type="submit">Delete</button>
             </form>
         </div>
-        <div th:if="${Object_to_delete.phase}">
+        <div th:if="${Object_to_delete eq 'phase'} ">
             <form action="/delete_phase" method="Post">
                 <label for="user_id_phase">Type userId</label>
                 <input type="text" id="user_id_phase" name="user_id">
@@ -48,7 +48,7 @@
                 <button type="submit">Delete</button>
             </form>
         </div>
-        <div th:if="${Object_to_delete.assignment}">
+        <div th:if="${Object_to_delete eq 'assignment'} ">
             <form action="/delete_assignment" method="Post">
                 <label for="user_id_assignment">Type userId</label>
                 <input type="text" id="user_id_assignment" name="user_id">
@@ -57,7 +57,7 @@
                 <button type="submit">Delete</button>
             </form>
         </div>
-        <div th:if="${Object_to_delete.task}">
+        <div th:if="${Object_to_delete eq 'task'} ">
             <form action="/delete_task" method="Post">
                 <label for="user_id_task">Type userId</label>
                 <input type="text" id="user_id_task" name="user_id">

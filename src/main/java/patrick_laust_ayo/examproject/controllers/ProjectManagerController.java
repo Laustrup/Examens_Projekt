@@ -68,7 +68,7 @@ public class  ProjectManagerController {
 
     }
 
-    @GetMapping("/manager_login")
+    @GetMapping("/projectmanager_login")
     public String renderProjectManagerLogin(){
         return "projectmanager_login";
     }
@@ -83,15 +83,17 @@ public class  ProjectManagerController {
         if (handler.allowLogin(username, password)) {
 
             HttpSession session = request.getSession();
+
             session.setAttribute("projectManager",userCreator.getProjectManager(username));
             session.setAttribute("participant",userCreator.getParticipant(username));
+
             model.addAttribute("projectManager",((ProjectManager) session.getAttribute("projectManager")));
-            System.out.println(((ProjectManager) session.getAttribute("projectManager")).getId());
+
             return "redirect:/manager_dashboard/" + username;
         }
         else {
             model.addAttribute("Exception","Wrong username or password!");
-            return "/manager_login";
+            return "redirect:/projectmanager_login";
         }
     }
 
@@ -115,20 +117,22 @@ public class  ProjectManagerController {
 
     @PostMapping("/add_participants")
     public String addParticipantsToProject(@RequestParam(name = "chosen_department") String departmentName,
-                                           @RequestParam(name = "amount") int amount, HttpServletRequest request) {
+                                           @RequestParam(name = "amount") int amount, HttpServletRequest request,
+                                           Model model) {
 
         HttpSession session = request.getSession();
         String projectTitle = ((Project) session.getAttribute("project")).getTitle();
         String projectManagerUsername = ((ProjectManager)session.getAttribute("projectManager")).getUsername();
 
         for (int i = 0; i < amount; i++) {
-            userCreator.createParticipant("User ID" + i + 1, projectTitle, departmentName);
+            userCreator.createParticipant("Enter User Id", projectTitle, departmentName);
         }
 
         Participant participant = (Participant) session.getAttribute("participant");
         session.setAttribute("current_project","start");
+        model.addAttribute("current_project", session.getAttribute("current_project"));
 
-        return "redirect:/project_page-" + projectTitle + "/" + participant.getName();
+        return "redirect:/project_page-" + projectTitle + "/" + participant.getId();
     }
 
 }

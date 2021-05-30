@@ -20,9 +20,11 @@ public class ProjectController {
 
 
     @GetMapping("/create_project/{projectmanager_username}")
-    public String renderCreateProject(@PathVariable(name = "projectmanager_username") String username,HttpServletRequest request) {
+    public String renderCreateProject(@PathVariable(name = "projectmanager_username") String username,
+                                      HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
         session.setAttribute("current_project","start");
+        model.addAttribute("current_project", session.getAttribute("current_project"));
         return "create_project";
     }
 
@@ -77,11 +79,16 @@ public class ProjectController {
     }
 
     @PostMapping("/direct_project_page")
-    public String goToChoosenProjectPage(@RequestParam(name = "projectTitle") String title, HttpServletRequest request) {
+    public String goToChoosenProjectPage(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
-        session.setAttribute("current_project","start");
 
-        return "redirect:/project_page/" + title + "/" + ((Participant) session.getAttribute("participant")).getId();
+        String projectTitle = ((Project) session.getAttribute("project")).getTitle();
+        String participantId = ((Participant) session.getAttribute("participant")).getId();
+
+        session.setAttribute("current_project","start");
+        model.addAttribute("current_project", session.getAttribute("current_project"));
+
+        return "redirect:/project_page-" + projectTitle + "/" + participantId;
     }
 
     // TODO Does all three cases work with this endpoint? Redirect needs html
@@ -107,6 +114,8 @@ public class ProjectController {
 
             model.addAttribute("project",project);
             model.addAttribute("participant",new UserCreator().getParticipant(userId));
+            session.setAttribute("participant", model.getAttribute("participant"));
+
             model.addAttribute("current",session.getAttribute("current_project"));
             model.addAttribute("current_project",session.getAttribute("current_project"));
             model.addAttribute("Exception", session.getAttribute("Exception"));
@@ -182,16 +191,17 @@ public class ProjectController {
 
 
     @PostMapping("/direct_to_add_participants")
-    public String directToAddParticipants(HttpServletRequest request) {
+    public String directToAddParticipants(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
         String participantId = ((Participant)session.getAttribute("participant")).getId();
         session.setAttribute("Exception","");
         session.setAttribute("Message","");
         session.setAttribute("current_project","add_participant");
+        model.addAttribute("current_project", session.getAttribute("current_project"));
         System.out.println("DirectToAddParticipants " + session.getAttribute("current_project"));
 
-        return "redirect:/projectpage-" + projectTitle + "/" + participantId;
+        return "redirect:/project_page-" + projectTitle + "/" + participantId;
     }
 
     /*
@@ -215,11 +225,11 @@ public class ProjectController {
         model.addAttribute("Object_to_delete",((Project)session.getAttribute("Project")));
         model.addAttribute("Exception","");
         model.addAttribute("Message","");
-        return "redirect:/accept_delete";
+        return "accept_delete";
     }
 
     @PostMapping("/delete_project")
-    public String deleteProject(@RequestParam(name = "password") String password,
+    public String deleteProject(@RequestParam(name = "password_delete_project") String password,
                                 @RequestParam(name = "user_id") String userId, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
@@ -249,7 +259,7 @@ public class ProjectController {
 
         projectCreator.createPhase(projectTitle);
 
-        return "redirect:/projectpage-" + ((Project)session.getAttribute("project")).getTitle();
+        return "redirect:/project_page-" + ((Project)session.getAttribute("project")).getTitle();
     }
 
     @PostMapping("/update_phase")
@@ -264,29 +274,30 @@ public class ProjectController {
 
             if (handler.doesPhaseExist(newTitle,phaseTitle)) {
                 session.setAttribute("Exception","Phase already exists...");
-                return "redirect:/projectpage-" + projectTitle + "/" + phaseTitle;
+                return "redirect:/project_page-" + projectTitle + "/" + phaseTitle;
             }
             Phase phase = projectEditor.updatePhase(newTitle, phaseTitle, projectTitle);
             session.setAttribute("phase",phase);
             session.setAttribute("Exception","");
-            return "redirect:/projectpage-" + projectTitle + "/" + phase.getTitle();
+            return "redirect:/project_page-" + projectTitle + "/" + phase.getTitle();
         }
 
         session.setAttribute("Exception", exception);
         session.setAttribute("Message", "Title of phase has changed!");
-        return "redirect:/projectpage-" + projectTitle + "/" + phaseTitle;
+        return "redirect:/project_page-" + projectTitle + "/" + phaseTitle;
 
     }
 
     @PostMapping("/direct_to_phases")
-    public String directToPhasesOfProject(HttpServletRequest request) {
+    public String directToPhasesOfProject(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
         session.setAttribute("current","start");
+        model.addAttribute("current", session.getAttribute("current"));
         session.setAttribute("Exception","");
         session.setAttribute("Message","");
 
-        return "redirect:/projectpage-" + projectTitle;
+        return "redirect:/project_page-" + projectTitle;
     }
 
     // TODO Perhaps make submitvalue with both title and split in method?
@@ -299,11 +310,11 @@ public class ProjectController {
         session.setAttribute("Exception","");
         session.setAttribute("Message","");
 
-        return "redirect:/projectpage-" + projectTitle + "/" + phaseTitle;
+        return "redirect:/project_page-" + projectTitle + "/" + phaseTitle;
     }
 
     // TODO Create phase html
-    @GetMapping("/projectpage-{project_title}/{user_id}/{phase_title}")
+    @GetMapping("/project_page-{project_title}/{user_id}/{phase_title}")
     public String renderPhase(@PathVariable(name = "project_title") String projectTitle,
                               @PathVariable(name = "user_id") String user_Id,
                               @PathVariable(name = "phase_title") String phaseTitle,
@@ -328,7 +339,7 @@ public class ProjectController {
         session.setAttribute("Exception","");
         session.setAttribute("Message","");
         model.addAttribute("Object_to_delete",((Phase)session.getAttribute("Phase")));
-        return "redirect:/accept_delete";
+        return "accept_delete";
     }
 
     // TODO Does deletePhase also delete assignments and tasks of phase?
@@ -341,7 +352,7 @@ public class ProjectController {
         session.setAttribute("Exception","");
         session.setAttribute("Message",phaseTitle + " is now deleted!");
         projectEditor.deletePhase(phaseTitle,projectTitle);
-        return "redirect:/projectpage-"+projectTitle+"/" + ((Participant)session.getAttribute("participant")).getId();
+        return "redirect:/project_page-"+projectTitle+"/" + ((Participant)session.getAttribute("participant")).getId();
     }
 
     @PostMapping("/add_assignment")
@@ -358,24 +369,24 @@ public class ProjectController {
         String exception = handler.isLengthAllowedInDatabase(title,"assignment_title");
         if (!exception.equals("Input is allowed")) {
             session.setAttribute("Exception",exception);
-            return "redirect:/projectpage-" + projectTitle  + "/" + phaseTitle;
+            return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle;
         }
 
         if (handler.isDateTimeCorrectFormat(start)) {
             session.setAttribute("Exception","Start should have the format yyyy-mm-dd hh-mm-dd");
-            return "redirect:/projectpage-" + projectTitle  + "/" + phaseTitle;
+            return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle;
         }
 
         if (handler.isDateTimeCorrectFormat(end)) {
             session.setAttribute("Exception","End should have the format yyyy-mm-dd hh-mm-dd");
-            return "redirect:/projectpage-" + projectTitle  + "/" + phaseTitle;
+            return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle;
         }
 
         Assignment assignment = projectCreator.createAssignment(title,start,end);
         session.setAttribute("Exception","");
         session.setAttribute("Message","");
 
-        return "redirect:/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignment.getTitle();
+        return "redirect:/project_page-" + projectTitle + "/" + phaseTitle + "/" + assignment.getTitle();
     }
 
     @PostMapping("/update_assignment")
@@ -392,30 +403,30 @@ public class ProjectController {
             String exception = handler.isLengthAllowedInDatabase(newTitle, "assignment_title");
             if (!exception.equals("Input is allowed")) {
                 session.setAttribute("Exception", exception);
-                return "redirect:/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
+                return "redirect:/project_page-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
             }
 
             if (handler.isDateTimeCorrectFormat(start)) {
                 session.setAttribute("Exception", "Start should have the format yyyy-mm-dd hh-mm-dd");
-                return "redirect:/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
+                return "redirect:/project_page-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
             }
 
             if (handler.isDateTimeCorrectFormat(end)) {
                 session.setAttribute("Exception", "End should have the format yyyy-mm-dd hh-mm-dd");
-                return "redirect:/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
+                return "redirect:/project_page-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
             }
 
             Assignment assignment = projectEditor.updateAssignment(newTitle, start, end, assignmentTitle, phaseTitle);
 
             if (handler.doesAssignmentExist(assignment.getTitle(),phaseTitle)) {
                 session.setAttribute("Exception","Assignment already exists");
-                return "redirect:/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
+                return "redirect:/project_page-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
             }
             session.setAttribute("assignment", assignment);
             session.setAttribute("Exception","");
             session.setAttribute("Message","Assignment is now updated!");
 
-            return "redirect:/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignment.getTitle();
+            return "redirect:/project_page-" + projectTitle + "/" + phaseTitle + "/" + assignment.getTitle();
 
     }
 
@@ -438,7 +449,7 @@ public class ProjectController {
             }
         }
 
-        return "redirect:/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" +
+        return "redirect:/project_page-" + ((Project)session.getAttribute("project")).getTitle() + "/" +
                 ((Phase)session.getAttribute("phase")).getTitle() + "/" + assignment.getTitle();
     }
 
@@ -448,7 +459,7 @@ public class ProjectController {
         session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,((Phase)session.getAttribute("phase")).getTitle()));
         session.setAttribute("Exception","");
         session.setAttribute("Message","");
-        return "redirect:/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" +
+        return "redirect:/project_page-" + ((Project)session.getAttribute("project")).getTitle() + "/" +
                 ((Phase)session.getAttribute("phase")).getTitle() + "/" +  assignmentTitle;
     }
 
@@ -487,7 +498,7 @@ public class ProjectController {
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
         String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
         projectEditor.deleteAssignment(((Assignment)session.getAttribute("assignment")).getTitle(),phaseTitle);
-        return "redirect:/projectpage-" + projectTitle + "/" + phaseTitle;
+        return "redirect:/project_page-" + projectTitle + "/" + phaseTitle;
     }
 
     @PostMapping("/add_task")
@@ -501,7 +512,7 @@ public class ProjectController {
 
         Task task = projectCreator.createTask(assignmentTitle);
         session.setAttribute("task",task);
-        return "redirect:/projectpage-" + projectTitle + "/" + phaseTitle + "/" + phaseTitle + "/" + task.getTitle();
+        return "redirect:/project_page-" + projectTitle + "/" + phaseTitle + "/" + phaseTitle + "/" + task.getTitle();
     }
 
     @PostMapping("/update_task")
@@ -520,19 +531,19 @@ public class ProjectController {
             String exception = handler.isLengthAllowedInDatabase(newTitle,"task_title");
             if (!exception.equals("Input is allowed")) {
                 model.addAttribute("Exception",exception);
-                return "redirect:/projectpage-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
+                return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
                         task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
             }
 
             if (handler.isDateTimeCorrectFormat(taskStart)) {
                 model.addAttribute("Exception","Start should have the format yyyy-mm-dd hh-mm-dd");
-                return "redirect:/projectpage-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
+                return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
                         task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
             }
 
             if (handler.isDateTimeCorrectFormat("Start should have the format yyyy-mm-dd hh-mm-dd")) {
                 model.addAttribute("Exception","Start should have the format yyyy-mm-dd hh-mm-dd");
-                return "redirect:/projectpage-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
+                return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
                         task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
             }
 
@@ -540,11 +551,11 @@ public class ProjectController {
 
             if (handler.doesTaskExist(task.getTitle(),task.getStart(),taskEnd)) {
                 model.addAttribute("Exception","Task already exists");
-                return "redirect:/projectpage-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
+                return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle + "/" + assignmentTitle + "/" +
                         task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
             }
             session.setAttribute("task",task);
-            return "redirect:/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle + "\" " + task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
+            return "redirect:/project_page-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle + "\" " + task.getTitle() + "+" + task.getStart() + "+" + task.getEnd();
 
     }
 
@@ -578,14 +589,14 @@ public class ProjectController {
         }
 
         // TODO Where should this go?
-        return "redirect:/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" + phaseTitle + "/" + task.getTitle() + "+" +
+        return "redirect:/project_page-" + ((Project)session.getAttribute("project")).getTitle() + "/" + phaseTitle + "/" + task.getTitle() + "+" +
                 task.getStart() + "+" + task.getEnd();
     }
 
     @PostMapping("/direct_to_task")
     public String directToTask(@RequestParam(name="task_title") String taskTitle, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        return "redirect:/projectpage-" + ((Project)session.getAttribute("project")).getTitle() + "/" + taskTitle;
+        return "redirect:/project_page-" + ((Project)session.getAttribute("project")).getTitle() + "/" + taskTitle;
     }
 
     @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}/{assignment.getTitle()}/{task.getTitle()}+{task.getStart()}+{task.getEnd()}")
@@ -623,6 +634,6 @@ public class ProjectController {
         String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
         String assignmentTitle = ((Assignment)session.getAttribute("assignment")).getTitle();
         projectEditor.deleteTask(((Task)session.getAttribute("task")).getTitle(),assignmentTitle);
-        return "redirect:/projectpage-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
+        return "redirect:/project_page-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
     }
 }

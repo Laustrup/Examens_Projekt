@@ -60,11 +60,12 @@ public class ParticipantController {
     @PostMapping("/projectmanager/participant_added")
     public String participantAdded(@RequestParam(name = "project_title") String projectTitle,
                                    @RequestParam(name = "department_name") String depName,
-                                   HttpServletRequest request){
+                                   HttpServletRequest request, Model model){
         HttpSession session = request.getSession();
         String projectManagerUsername = ((ProjectManager)session.getAttribute("projectManager")).getUsername();
         session.setAttribute("participant", userCreator.createProjectManagerAsParticipant(projectManagerUsername, depName, projectTitle));
         session.setAttribute("current_project", "start");
+        model.addAttribute("current_project", session.getAttribute("current_project"));
 
         return "redirect:/project_page-" + projectTitle + "/" + projectManagerUsername;
     }

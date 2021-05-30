@@ -63,11 +63,9 @@ public class ProjectManagerRepository extends Repository {
     }
 
     public ResultSet findProjectManager(String username) {
-        return executeQuery("SELECT projectmanager.projectmanager_id, username, " +
-                "participant_password, " + "participant.user_id, " + "participant_name, " +
-                "position, project.project_id, department.department_no, location, department_name " +
+        return executeQuery("SELECT * " +
                 "FROM projectmanager " +
-                "INNER JOIN participant " +
+                "INNER JOIN participant ON participant.user_id = projectmanager.username " +
                 "INNER JOIN project " +
                 "INNER JOIN department " +
                 "WHERE projectmanager.username = '" + username + "' " +

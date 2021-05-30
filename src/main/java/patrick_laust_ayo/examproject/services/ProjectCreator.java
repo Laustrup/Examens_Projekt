@@ -82,10 +82,9 @@ public class ProjectCreator {
         project = new Project(title, new ArrayList<>(), new HashMap<>(), userCreator.getProjectManager(managerName));
         projectManagerRepo.closeCurrentConnection();
         try {
-            ResultSet res = projectManagerRepo.findProjectManager(managerName);
-            res.next();
 
-            projectRepo.putProjectInDatabase(project, res.getInt("projectmanager_id"));
+            projectRepo.putProjectInDatabase(project, projectManagerRepo.findId("projectmanager",
+                    "username",managerName,"projectmanager_id"));
                 //    projectManagerRepo.findProjectManager(managerName).getInt("projectmanager_id"));
         }
         catch (Exception e) {
