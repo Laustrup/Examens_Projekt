@@ -211,9 +211,9 @@ public class ProjectRepository extends Repository{
                 "AND participant.department_no = department.department_no " +
                 "AND participant.participant_id = participant_project.participant_id " +
                 "AND project.project_id = participant_project.project_id;");
-
         try {
             res.next();
+            res.getString("task_title");
             return executeQuery("SELECT * FROM project " +
                     "INNER JOIN phase_table ON phase_table.project_id = project.project_id " +
                     "INNER JOIN assignment ON assignment.phase_id = phase_table.phase_id " +
@@ -245,6 +245,7 @@ public class ProjectRepository extends Repository{
                 "AND project.project_id = participant_project.project_id;");
         try {
             res.next();
+            res.getString("assignment_title");
             return executeQuery("SELECT * FROM project " +
                     "INNER JOIN phase_table ON phase_table.project_id = project.project_id " +
                     "INNER JOIN assignment ON assignment.phase_id = phase_table.phase_id " +
@@ -273,6 +274,7 @@ public class ProjectRepository extends Repository{
                 "AND project.project_id = participant_project.project_id;");
         try {
             res.next();
+            res.getString("phase_table.title");
             return executeQuery("SELECT * FROM project " +
                     "INNER JOIN phase_table ON phase_table.project_id = project.project_id " +
                     "INNER JOIN participant_project " +
