@@ -26,8 +26,8 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN projectmanager ON projectmanager.projectmanager_id = project.projectmanager_id " +
                 "WHERE phase_title = \"" + phaseTitle + "\" AND title = \"" + projectTitle + "\";");
         try {
-            res.next();
-            res.getString("task_title");
+            ResultSetMetaData rsmd = res.getMetaData();
+            rsmd.getTableName(1);
             return res;
         }
         catch (Exception e) {
@@ -39,18 +39,17 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN projectmanager ON projectmanager.projectmanager_id = project.projectmanager_id " +
                 "WHERE phase_title = \"" + phaseTitle + "\" AND title = \"" + projectTitle + "\";");
         try {
-            res.next();
-            res.getString("assignment_title");
+            ResultSetMetaData rsmd = res.getMetaData();
+            rsmd.getTableName(1);
             return res;
         }
         catch (Exception e) {
             System.out.println("No task assignment in findPhase...\n" + e.getMessage());
         }
-        res = executeQuery("SELECT * FROM phase_table " +
+        return executeQuery("SELECT * FROM phase_table " +
                 "INNER JOIN project ON project.project_id = phase_table.project_id " +
                 "INNER JOIN projectmanager ON projectmanager.projectmanager_id = project.projectmanager_id " +
                 "WHERE phase_title = \"" + phaseTitle + "\" AND title = \"" + projectTitle + "\";");
-        return res;
     }
     public void updatePhase(String phaseTitle,String projectTitle,String formerPhaseTitle) {
         if (phaseTitle == null) {
@@ -101,8 +100,8 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN department ON department.department_no = participant.department_no " +
                 "WHERE assignment.assignment_title = \"" + assignmentTitle + "\" AND phase_table.phase_title = \"" + phaseTitle + "\";");
         try {
-            res.next();
-            res.getString("participant_name");
+            ResultSetMetaData rsmd = res.getMetaData();
+            rsmd.getTableName(1);
             return res;
         }
         catch (Exception e) {
@@ -113,8 +112,8 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN task ON task.assignment_id = assignment.assignment_id " +
                 "WHERE assignment.assignment_title = \"" + assignmentTitle + "\" AND phase_table.phase_title = \"" + phaseTitle + "\";");
         try {
-            res.next();
-            res.getString("task_title");
+            ResultSetMetaData rsmd = res.getMetaData();
+            rsmd.getTableName(1);
             return res;
         }
         catch (Exception e) {
@@ -142,8 +141,8 @@ public class ProjectRepository extends Repository{
                 "WHERE task.task_title = \"" + taskTitle + "\" AND task.task_start = \"" + taskStart + "\" " +
                 "AND task.task_end = \"" + taskEnd + "\";");
         try {
-            res.next();
-            res.getString("participant_name");
+            ResultSetMetaData rsmd = res.getMetaData();
+            rsmd.getTableName(1);
             return res;
         }
         catch (Exception e) {
@@ -192,23 +191,9 @@ public class ProjectRepository extends Repository{
                 "AND project.project_id = participant_project.project_id;");
 
         try {
-            res.next();
-            System.out.println(res.getString("task_title"));
-
-            return executeQuery("SELECT * FROM project " +
-                    "INNER JOIN phase_table ON phase_table.project_id = project.project_id " +
-                    "INNER JOIN assignment ON assignment.phase_id = phase_table.phase_id " +
-                    "INNER JOIN task ON task.assignment_id = assignment.assignment_id " +
-                    "INNER JOIN participant_task ON participant_task.task_id = task.task_id " +
-                    "INNER JOIN participant ON participant.participant_id = participant_task.participant_id " +
-                    "INNER JOIN projectmanager ON projectmanager.projectmanager_id = project.projectmanager_id " +
-                    "INNER JOIN department ON department.department_no = participant.department_no " +
-                    "INNER JOIN participant_project ON participant_project.participant_id = participant.participant_id " +
-                    "WHERE project.title = \"" + projectTitle +  "\" " +
-                    "AND participant.department_no = department.department_no " +
-                    "AND participant.participant_id = participant_project.participant_id " +
-                    "AND project.project_id = participant_project.project_id;");
-
+            ResultSetMetaData rsmd = res.getMetaData();
+            rsmd.getTableName(1);
+            return res;
         }
         catch (Exception e) {
             System.out.println("No task title in findProject...\n" + e.getMessage());
@@ -226,8 +211,8 @@ public class ProjectRepository extends Repository{
                 "AND participant.participant_id = participant_project.participant_id " +
                 "AND project.project_id = participant_project.project_id;");
         try {
-            res.next();
-            res.getString("assignment_title");
+            ResultSetMetaData rsmd = res.getMetaData();
+            rsmd.getTableName(1);
             return res;
         }
         catch (Exception e) {
@@ -245,8 +230,8 @@ public class ProjectRepository extends Repository{
                 "AND participant.participant_id = participant_project.participant_id " +
                 "AND project.project_id = participant_project.project_id;");
         try {
-            res.next();
-            res.getString("phase_title");
+            ResultSetMetaData rsmd = res.getMetaData();
+            rsmd.getTableName(1);
             return res;
         }
         catch (Exception e) {
