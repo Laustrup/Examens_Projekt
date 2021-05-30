@@ -20,51 +20,59 @@ public class ProjectCreator {
     private ProjectRepository projectRepo = new ProjectRepository();
     private ProjectManagerRepository projectManagerRepo = new ProjectManagerRepository();
 
-    private String[] updateStrings(String[] strings, ResultSet res,boolean withPhaseAndProject,
-                                   boolean withTask,boolean withAssignment,boolean withParticipant) {
+    private String[] updateStrings(String[] strings, ResultSet res) {
         try {
-            if (withParticipant) {
-                // Department
-                strings[0] = res.getString("location");
-                strings[1] = res.getString("department_name");
+            strings[0] = res.getString("location");
+            strings[1] = res.getString("department_name");
 
-                // Participant
-                strings[2] = res.getString("user_id");
-                strings[3] = res.getString("participant_password");
-                strings[4] = res.getString("participant_name");
-                strings[5] = res.getString("position");
-            }
-
-            if (withTask) {
-                // Task
-                strings[6] = res.getString("task_start");
-                strings[7] = res.getString("task_end");
-                strings[8] = res.getString("task_title");
-            }
-
-            if (withAssignment) {
-                // Assignment
-                strings[9] = res.getString("assignment_start");
-                strings[10] = res.getString("assignment_end");
-                strings[11] = res.getString("assignment_title");
-            }
-
-            if (withPhaseAndProject) {
-                // Project
-                strings[12] = res.getString("title");
-
-                // Phase
-                strings[13] = res.getString("phase_title");
-
-                // ProjectManager
-                strings[15] = res.getString("username");
-            }
-
+            strings[2] = res.getString("user_id");
+            strings[3] = res.getString("participant_password");
+            strings[4] = res.getString("participant_name");
+            strings[5] = res.getString("position");
         }
         catch (Exception e) {
-            System.out.println("Couldn't update strings...\n" + e.getMessage());
-            e.printStackTrace();
+            System.out.println("Not updated participant...\n" + e.getMessage());
         }
+
+        try {
+            strings[6] = res.getString("task_start");
+            strings[7] = res.getString("task_end");
+            strings[8] = res.getString("task_title");
+        }
+        catch (Exception e) {
+            System.out.println("Not updated task...\n" + e.getMessage());
+        }
+
+        try {
+            strings[9] = res.getString("assignment_start");
+            strings[10] = res.getString("assignment_end");
+            strings[11] = res.getString("assignment_title");
+        }
+        catch (Exception e) {
+            System.out.println("Not updated assignment...\n" + e.getMessage());
+        }
+
+        try {
+            strings[12] = res.getString("title");
+        }
+        catch (Exception e) {
+            System.out.println("Not updated project...\n" + e.getMessage());
+        }
+        try {
+            strings[13] = res.getString("phase_title");
+        }
+        catch (Exception e) {
+            System.out.println("Not updated phase...\n" + e.getMessage());
+        }
+
+        try {
+            strings[15] = res.getString("username");
+        }
+        catch (Exception e) {
+            System.out.println("Not updated projectManager...\n" + e.getMessage());
+        }
+
+
         return strings;
     }
 
@@ -204,10 +212,7 @@ public class ProjectCreator {
                 }
                 formerParticipantId = res.getInt("participant_id");
                 departmentId = res.getInt("department_no");
-
-                // TODO Perhaps without participant as well?
-                strings = updateStrings(strings,res,columnCount >= 20,
-                        columnCount == 35,columnCount >= 26,true);
+                strings = updateStrings(strings,res);
                 assignmentIsCompleted = res.getBoolean("is_completed");
                 taskIsCompleted = res.getBoolean("task_is_completed");
                 workHours = res.getDouble("estimated_work_hours");
@@ -395,7 +400,7 @@ public class ProjectCreator {
                 isAssignmentCompleted = res.getBoolean("is_completed");
 
                 // TODO Perhaps without participant as well?
-                strings = updateStrings(strings,res,true,columnCount == 33,columnCount >= 27,true);
+                strings = updateStrings(strings,res);
 
                 if (res.isLast()) {
                     // Participant
@@ -496,7 +501,7 @@ public class ProjectCreator {
 
                 workHours = res.getDouble("estimated_work_hours");
                 isTaskCompleted = res.getBoolean("task_is_completed");
-                strings = updateStrings(strings,res,false,columnCount >= 16,true,columnCount == 27);
+                strings = updateStrings(strings,res);
 
                 if (res.isLast()) {
                     tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
@@ -562,7 +567,7 @@ public class ProjectCreator {
                     departmentId = res.getInt("department_no");
                 }
 
-                strings = updateStrings(strings,res,false,true,false,columnCount > 13);
+                strings = updateStrings(strings,res);
 
                 if (res.isLast()) {
                     department = new Department(departmentId,strings[0],strings[1]);
