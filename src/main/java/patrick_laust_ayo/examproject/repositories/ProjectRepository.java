@@ -27,6 +27,7 @@ public class ProjectRepository extends Repository{
                 "WHERE phase_title = \"" + phaseTitle + "\" AND title = \"" + projectTitle + "\";");
         try {
             res.next();
+            res.getString("task_title");
             return executeQuery("SELECT * FROM phase_table " +
                     "INNER JOIN project ON project.project_id = phase_table.project_id " +
                     "INNER JOIN assignment ON assignment.phase_id = phase_table.phase_id " +
@@ -47,6 +48,7 @@ public class ProjectRepository extends Repository{
                 "WHERE phase_title = \"" + phaseTitle + "\" AND title = \"" + projectTitle + "\";");
         try {
             res.next();
+            res.getString("assignment_title");
             return executeQuery("SELECT * FROM phase_table " +
                     "INNER JOIN project ON project.project_id = phase_table.project_id " +
                     "INNER JOIN assignment ON assignment.phase_id = phase_table.phase_id " +
@@ -54,7 +56,7 @@ public class ProjectRepository extends Repository{
                     "WHERE phase_title = \"" + phaseTitle + "\" AND title = \"" + projectTitle + "\";");
         }
         catch (Exception e) {
-            System.out.println("No task assignment in findPhase...\n" + e.getMessage());
+            System.out.println("No assignment in findPhase...\n" + e.getMessage());
         }
         return executeQuery("SELECT * FROM phase_table " +
                 "INNER JOIN project ON project.project_id = phase_table.project_id " +
@@ -111,6 +113,7 @@ public class ProjectRepository extends Repository{
                 "WHERE assignment.assignment_title = \"" + assignmentTitle + "\" AND phase_table.phase_title = \"" + phaseTitle + "\";");
         try {
             res.next();
+            res.getString("participant_name");
             return executeQuery("SELECT * FROM assignment " +
                     "INNER JOIN phase_table ON phase_table.phase_id = assignment.phase_id " +
                     "INNER JOIN task ON task.assignment_id = assignment.assignment_id " +
@@ -128,6 +131,7 @@ public class ProjectRepository extends Repository{
                 "WHERE assignment.assignment_title = \"" + assignmentTitle + "\" AND phase_table.phase_title = \"" + phaseTitle + "\";");
         try {
             res.next();
+            res.getString("task_title");
             return executeQuery("SELECT * FROM assignment " +
                     "INNER JOIN phase_table ON phase_table.phase_id = assignment.phase_id " +
                     "INNER JOIN task ON task.assignment_id = assignment.assignment_id " +
@@ -159,6 +163,7 @@ public class ProjectRepository extends Repository{
                 "AND task.task_end = \"" + taskEnd + "\";");
         try {
             res.next();
+            res.getString("participant_title");
             return executeQuery("SELECT * FROM task " +
                     "INNER JOIN assignment ON assignment.assignment_id = task.assignment_id " +
                     "INNER JOIN participant_task ON participant_task.task_id = task.task_id " +
