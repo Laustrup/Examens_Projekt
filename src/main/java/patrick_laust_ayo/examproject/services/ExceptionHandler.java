@@ -251,9 +251,6 @@ public class ExceptionHandler {
         if (column.equals("participant_password") && input.length()>25) {
             return "Password is too long... Write less than 25 words!";
         }
-        if (column.equals("user_id") && input.length()>15) {
-            return "ID is too long... Write less than 15 words!";
-        }
 
         return "Input is allowed";
 
@@ -263,7 +260,8 @@ public class ExceptionHandler {
             if (column.equals("phase_title") ||
                     column.equals("username") ||
                     column.equals("participant_name") ||
-                    column.equals("position")) {
+                    column.equals("position") ||
+                    column.equals("user_id")) {
                 if (input.length()>25) {
                     return 25;
                 }
