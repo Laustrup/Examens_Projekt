@@ -203,9 +203,12 @@ public class ProjectCreator {
                 // Updates values of former row
                 if (columnCount == 35) {
                     formerTaskId = res.getInt("task_id");
+                    taskIsCompleted = res.getBoolean("task_is_completed");
+                    workHours = res.getDouble("estimated_work_hours");
                 }
                 if (columnCount >= 26) {
                     formerAssignmentId = res.getInt("assignment_id");
+                    assignmentIsCompleted = res.getBoolean("is_completed");
                 }
                 if (columnCount >= 20) {
                     formerPhaseId = res.getInt("phase_id");
@@ -213,9 +216,6 @@ public class ProjectCreator {
                 formerParticipantId = res.getInt("participant_id");
                 departmentId = res.getInt("department_no");
                 strings = updateStrings(strings,res);
-                assignmentIsCompleted = res.getBoolean("is_completed");
-                taskIsCompleted = res.getBoolean("task_is_completed");
-                workHours = res.getDouble("estimated_work_hours");
 
                 if (res.isLast()) {
                     boolean allowAddTask = true;

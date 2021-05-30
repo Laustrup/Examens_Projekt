@@ -190,6 +190,7 @@ public class ProjectRepository extends Repository{
                 "AND participant.department_no = department.department_no " +
                 "AND participant.participant_id = participant_project.participant_id " +
                 "AND project.project_id = participant_project.project_id;");
+
         try {
             res.next();
             System.out.println(res.getString("task_title"));
