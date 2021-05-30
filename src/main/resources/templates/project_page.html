@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="da" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../static.styles/project_page.css">
@@ -23,7 +23,7 @@
 
                     <div class="password_section">
                         <label for="participant_password">Password</label>
-                        <input type="password" id="participant_password" name="participant_password" th:placeholder="${participant.getPassword}" required>
+                        <input type="password" id="participant_password" name="participant_password" th:placeholder="${participant.getHiddenPassword}" required>
                     </div>
 
                     <div class="name_section">
@@ -37,8 +37,14 @@
                     </div>
 
                     <div class="department_section">
-                        <label for="department">Department</label>
-                        <input type="text" id="department" name="department" th:placeholder="${participant.getDepartment.getDepName()}">
+                        <label for="participant_update_department">Department:</label>
+                        <select name="department" id="participant_update_department">
+                            <option value="COPENHAGEN">COPENHAGEN</option>
+                            <option value="OSLO">OSLO</option>
+                            <option value="DALLAS">DALLAS</option>
+                            <option value="LOS ANGELES">LOS ANGELES</option>
+                            <option value="NEW YORK">NEW YORK</option>
+                        </select>
                     </div>
 
                     <p th:text="${Exception}"></p>

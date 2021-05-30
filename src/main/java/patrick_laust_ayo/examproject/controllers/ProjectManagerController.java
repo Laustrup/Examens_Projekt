@@ -114,7 +114,7 @@ public class  ProjectManagerController {
     }
 
     @PostMapping("/add_participants")
-    public String addParticipantsToProject(@RequestParam(name = "department_name") String departmentName,
+    public String addParticipantsToProject(@RequestParam(name = "chosen_department") String departmentName,
                                            @RequestParam(name = "amount") int amount, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
@@ -126,6 +126,7 @@ public class  ProjectManagerController {
         }
 
         Participant participant = (Participant) session.getAttribute("participant");
+        session.setAttribute("current_project","start");
 
         return "redirect:/project_page-" + projectTitle + "/" + participant.getName();
     }
