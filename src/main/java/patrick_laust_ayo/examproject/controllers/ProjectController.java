@@ -329,6 +329,8 @@ public class ProjectController {
         session.setAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
         System.out.println("GetPhaseTitle is " + projectCreator.getPhase(phaseTitle,projectTitle).getTitle());
 
+        System.err.println(phaseTitle);
+
         model.addAttribute("project",projectCreator.getProject(projectTitle));
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
         model.addAttribute("participant",session.getAttribute("participant"));
@@ -479,6 +481,8 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
         session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,phaseTitle));
+
+        System.err.println("render assignment getproject title er " + projectCreator.getProject(projectTitle).getTitle());
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));

@@ -131,8 +131,8 @@
 <section class="split right">
 
     <!--PHASES BOX -->
+    <div th:if="${current_project eq 'start'}"><header><h3>Phases</h3></header>
     <section class="phase">
-        <div th:if="${current_project eq 'start'}"><header><h3>Phases</h3></header>
 
             <tr>
                 <th>Estimated amount of work hours: <p th:text="${project.getTotalWorkhours()}"></p></th>
@@ -148,8 +148,10 @@
             <form action="/add_phase" method="post">
                 <button type="submit">Add new phase</button>
             </form>
+    </section>
 
-        </div>
+
+    </div>
         <div th:if="${current eq 'phase'}">
             <section class="phase_container"><header><h3 th:text="${phase.getTitle()}"></h3></header>
 
@@ -197,7 +199,6 @@
                     </div>
             </section>
         </div>
-    </section>
 
     <!-- ASSIGMENT BOX -->
 
