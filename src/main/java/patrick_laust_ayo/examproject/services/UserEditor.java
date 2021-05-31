@@ -68,11 +68,7 @@ public class UserEditor {
 
         return participant;
     }
-/*
-    public void joinParticipantsToProject(Participant[] participants, Project project) {
-            new ProjectRepository().addParticipantsToProject(participants,project.getTitle());
-    }
-*/
+
     public String joinParticipantToProject(Participant participant, Project project) {
         ProjectRepository repo = new ProjectRepository();
         ExceptionHandler handler = new ExceptionHandler();
