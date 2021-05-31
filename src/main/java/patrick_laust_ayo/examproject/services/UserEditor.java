@@ -35,7 +35,7 @@ public class UserEditor {
                     department);
 
         } catch (Exception e) {
-            System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
+            System.out.println("Couldn't create a participant from resultSet in updateParticipant...\n" + e.getMessage());
             participant = null;
             e.printStackTrace();
         }
@@ -59,7 +59,7 @@ public class UserEditor {
                     res.getString("participant_name"), res.getString("position"),
                     department);
         } catch (Exception e) {
-            System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
+            System.out.println("Couldn't create a participant from resultSet in removeParticipant...\n" + e.getMessage());
             participant = null;
             e.printStackTrace();
         }
@@ -92,7 +92,7 @@ public class UserEditor {
                                                         taskRes.getInt("task_id"));
         }
         catch (Exception e) {
-            System.out.println("Couldn't add participant to task...\n" + e.getMessage());
+            System.out.println("Couldn't add participant to task in joinParticipantToTask...\n" + e.getMessage());
             return "Couldn't add you to ";
         }
         participantRepo.closeCurrentConnection();

@@ -5,7 +5,6 @@ import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 public class Participant {
 
     private String id;
-    private String username;
     private String password = new String();
     private String hiddenPassword = new String();
     private String name;
@@ -21,9 +20,9 @@ public class Participant {
         setHiddenPassword();
     }
 
-    public Participant(String id, String username) {
+    public Participant(String id, String password) {
         this.id = id;
-        this.username = username;
+        this.password = password;
         setHiddenPassword();
     }
 
