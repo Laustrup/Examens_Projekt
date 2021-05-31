@@ -49,6 +49,10 @@ public class Project {
         return phases;
     }
 
+    public void setPhases(ArrayList<Phase> phases) {
+        this.phases = phases;
+    }
+
     public double getTotalWorkhours() {
         double total = 0;
         for (int i = 0; i < phases.size();i++) {
