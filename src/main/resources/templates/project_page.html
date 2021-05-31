@@ -43,9 +43,9 @@
                             <select name="department" id="participant_update_department">
                                 <option value="COPENHAGEN">COPENHAGEN</option>
                                 <option value="OSLO">OSLO</option>
+                                <option value="NEW YORK">NEW YORK</option>
                                 <option value="DALLAS">DALLAS</option>
                                 <option value="LOS ANGELES">LOS ANGELES</option>
-                                <option value="NEW YORK">NEW YORK</option>
                             </select>
                         </div>
 
@@ -58,8 +58,9 @@
 
 
                             <!--ADD PARTICIPANTS TO DEPARTMENT (PROJECTMANAGER ADDS) -->
+        <section class="project_form">
         <div th:if="${current_project eq 'add_participant'}"><header><h3><p th:text="${project.getTitle()}"></p></h3></header>
-            <section class="project_form">
+
                 <p th:text="${Exception}"></p>
 
                 <form action="/add_participants" method="post">
@@ -70,9 +71,9 @@
                         <select name="chosen_department" id="chosen_department">
                             <option value="COPENHAGEN">COPENHAGEN</option>
                             <option value="OSLO">OSLO</option>
+                            <option value="NEW YORK">NEW YORK</option>
                             <option value="DALLAS">DALLAS</option>
                             <option value="LOS ANGELES">LOS ANGELES</option>
-                            <option value="NEW YORK">NEW YORK</option>
                         </select>
                 </div>
                     <button type="submit">Add participants</button>
@@ -81,46 +82,54 @@
                 <form action="/direct_project_page" method="post">
                     <button type="submit">Go back</button>
                 </form>
-            </section>
-        </div>
 
-                                <!-- DELETE PROJECT -->
-                <form action="/accept_delete_of_project" method="post">
+
+                <!-- DELETE PROJECT -->
+                <form action="/direct_to_accept_delete" method="post">
+
+                    <label for="password_delete"></label>
+                    <input type="text" name="password_delete_verify" id="password_delete" placeholder="password">
+
+                    <label for="user_id"></label>
+                    <input type="text" name="projectmanager_user_id" id="user_id" placeholder="user_id">
+
                     <button type="submit">Delete project</button>
                 </form>
 
-           <!--     <p><a href="/direct_project_page" th:value="${project.getTitle()}" name="project_title"><button>Go back</button></a></p>
-          -->
+        </div>
+    </section>
 
 
 
-                                <!-- BUTTON FOR DIRECTING TO THE ADD PARTICIPANTS PAGE -->
-        <div th:if="${current_project eq 'start'}">
-            <div>
+                        <!-- BUTTON FOR DIRECTING TO THE ADD PARTICIPANTS PAGE -->
+        <section class="direct_to_add_participants_section">
+            <div th:if="${current_project eq 'start'}">
             <form action="/direct_to_add_participants" method="post">
                 <button type="submit">Go to add participants</button>
             </form>
             </div>
+        </section>
 
 
                         <!-- FORM FOR UPDATING THE CURRENT PROJECT TITLE -->
-                    <div>
-                        <section class="project_form">
-                            <div class="project_title_section">
-                        <form action="/update_project" method="post">
-                            <label for="new_project_title">Project Title</label>
-                            <input type="text" id="new_project_title" name="new_project_title" th:placeholder="${project.getTitle}" required>
-                            <button type="submit">Update title</button>
-                        </form>
-                    </div>
+        <section class="project_form">
+            <div>
+
+                <div class="project_title_section">
+                    <form action="/update_project" method="post">
+                        <label for="new_project_title">Project Title</label>
+                        <input type="text" id="new_project_title" name="new_project_title" th:placeholder="${project.getTitle}" required>
+                        <button type="submit">Update title</button>
+                    </form>
+                </div>
 
 
                             <!--FORM FOR DELETING THE PROJECT (ONLY PROJECTMANAGER) -->
                 <div>
-                <form action="/delete_project" method="post">
+                <form action="/direct_to_accept_delete" method="post">
 
-                    <label for="projectmanager_password"></label>
-                    <input type="text" name="projectmanager_password" id="projectmanager_password" placeholder="password">
+                    <label for="password_delete_project"></label>
+                    <input type="text" name="password_delete_verify" id="password_delete_project" placeholder="password">
 
                     <label for="projectmanager_user_id"></label>
                     <input type="text" name="projectmanager_user_id" id="projectmanager_user_id" placeholder="user_id">
@@ -132,9 +141,9 @@
                 </div>
 
 
-            </section>
+
         </div>
-        </div>
+        </section>
     </section>
 
 
