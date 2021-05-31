@@ -72,11 +72,11 @@ public abstract class Repository {
             while (res.next()) {
                 nextId++;
             }
+            connection.close();
         }
         catch (Exception e) {
             System.out.println("Something went wrong with calculating next id...\n" + e.getMessage());
         }
-
         return nextId + 1;
     }
 

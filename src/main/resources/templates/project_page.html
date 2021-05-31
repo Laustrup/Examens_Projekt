@@ -142,14 +142,14 @@
         <div th:if="${current eq 'start'}"><header><h3>Phases</h3></header>
 
             <tr>
-                <th>Estimated amount of work hours: <p th:text="${project.getTotalWorkhours()}"></p></th></th>
-                <th>Estimated cost of project: <p th:text="${project.getTotalCost()}"></p></th>
+                <th>Estimated amount of work hours: <p th:text="${project.getTotalWorkhours()}"></p></th>
+                <th>Estimated cost of project: <p th:text="${project.getTotalCost()}">$</p></th>
             </tr>
 
             <form action="/direct_to_phase" method="post">
-                <div th:each="phase : ${project.getPhases()}">
-                    <button type="submit" th:value="${phase.getTitle()}" name="phase_title"><p th:text="${phase.getTitle()}"></p></button>
-                </div>
+                <ul th:each="phase : ${project.getPhases()}">
+                    <li><button type="submit" th:value="${phase.getTitle()}" name="phase_title"><p th:text="${phase.getTitle()}"></p></button></li>
+                </ul>
             </form>
 
             <form action="/add_phase" method="post">

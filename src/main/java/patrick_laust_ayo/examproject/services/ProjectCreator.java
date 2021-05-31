@@ -257,6 +257,7 @@ public class ProjectCreator {
                     if (columnCount >= 20) {
                         phase = new Phase(strings[13],mapOfAssignments);
                         listOfPhases.add(phase);
+                        System.out.println("Phase ");
                     }
 
 
