@@ -107,7 +107,6 @@ public class ProjectController {
         // Får direkte adgang da han er del af projectet
         else if (handler.isParticipantPartOfProject(userId, projectTitle)) {
 
-            // TODO project from session instead
             Project project = projectCreator.getProject(projectTitle);
             session.setAttribute("project",project);
 
@@ -308,11 +307,13 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
-        model.addAttribute("current","phase");
+        String userId = ((Participant)session.getAttribute("participant")).getId();
+
+        session.setAttribute("current","phase");
         session.setAttribute("Exception","");
         session.setAttribute("Message","");
 
-        return "redirect:/project_page-" + projectTitle + "/" + phaseTitle;
+        return "redirect:/project_page-" + projectTitle + "/" + userId + "/" + phaseTitle;
     }
 
     // TODO Create phase html
@@ -324,7 +325,6 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
         session.setAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
-        session.setAttribute("Exception","");
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));

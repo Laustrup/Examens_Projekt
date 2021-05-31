@@ -167,10 +167,10 @@
                     </tr>
 
                     <form action="direct_to_assignment" method="post">
-                    <div th:each="assignment : {phase.getAssignments()}">
-                        <button type="submit" th:value="${assignment.getTitle()}" name="assignment_title"><p th:text="${assignment.getTitle()}"></p>
-                            </pt></button>
-                    </div>
+                    <ul th:each="assignment : {phase.getAssignments()}">
+                        <li><button type="submit" th:value="${assignment.getTitle()}" name="assignment_title"><p th:text="${assignment.getTitle()}"></p>
+                            </pt></button></li>
+                    </ul>
                     </form>
 
                     <form action="/add_assignment">
