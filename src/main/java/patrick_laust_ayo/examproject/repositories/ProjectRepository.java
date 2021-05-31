@@ -85,7 +85,7 @@ public class ProjectRepository extends Repository{
 
     public void putAssignmentInDatabase(Assignment assignment, int phaseId) {
         executeSQLStatement("INSERT INTO assignment(assignment_title, assignment_start, assignment_end, is_Completed, phase_id) " +
-                            "VALUES (null, \""  + assignment.getStart() +  "\", \"" + assignment.getEnd() + "\", " +
+                            "VALUES (\"" + assignment.getTitle() + "\", \""  + assignment.getStart() +  "\", \"" + assignment.getEnd() + "\", " +
                             assignment.isCompleted() + ", " + phaseId + "); ");
     }
     // TODO Change safeupdate

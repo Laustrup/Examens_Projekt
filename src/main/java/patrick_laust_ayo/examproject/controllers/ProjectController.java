@@ -311,6 +311,7 @@ public class ProjectController {
         String userId = ((Participant)session.getAttribute("participant")).getId();
 
         session.setAttribute("current","phase");
+        session.setAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
         session.setAttribute("Exception","");
         session.setAttribute("Message","");
 
@@ -326,6 +327,7 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
         session.setAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
+        System.out.println("GetPhaseTitle is " + projectCreator.getPhase(phaseTitle,projectTitle).getTitle());
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));

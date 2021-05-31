@@ -324,7 +324,7 @@ public class ProjectCreator {
         ResultSet res = projectRepo.findPhase(phaseTitle,projectTitle);
 
         // Objects
-        Phase phase = new Phase(new String(),new HashMap<>());
+        phase = new Phase(new String(),new HashMap<>());
 
         // Map and Lists
         Map<String, Assignment> assignments = new HashMap<>();
