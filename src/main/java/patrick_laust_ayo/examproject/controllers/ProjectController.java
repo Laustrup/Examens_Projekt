@@ -115,7 +115,7 @@ public class ProjectController {
             model.addAttribute("participant",new UserCreator().getParticipant(userId));
             session.setAttribute("participant", model.getAttribute("participant"));
 
-            model.addAttribute("current",session.getAttribute("current_project"));
+            model.addAttribute("current",session.getAttribute("current"));
             model.addAttribute("current_project",session.getAttribute("current_project"));
             model.addAttribute("Exception", session.getAttribute("Exception"));
 
@@ -303,7 +303,7 @@ public class ProjectController {
 
     // TODO Perhaps make submitvalue with both title and split in method?
     @PostMapping("/direct_to_phase")
-    public String directToPhase(@RequestParam(name="phase_title") String phaseTitle, HttpServletRequest request, Model model) {
+    public String directToPhase(@RequestParam(name="phase_title") String phaseTitle, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
@@ -331,6 +331,7 @@ public class ProjectController {
         model.addAttribute("Exception",session.getAttribute("Exception"));
         model.addAttribute("Message",session.getAttribute("Message"));
         model.addAttribute("current","phase");
+        model.addAttribute("current_project","start");
 
         return "project_page";
     }

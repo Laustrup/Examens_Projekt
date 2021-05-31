@@ -52,7 +52,9 @@ public class ParticipantController {
 
     @GetMapping("/add_participant/projectmanager/{project_title}")
     public String addParticipant(@PathVariable(name = "project_title") String projectTitle,
-                                 Model model){
+                                 Model model,HttpServletRequest request){
+        HttpSession session = request.getSession();
+        session.setAttribute("current", "start");
         model.addAttribute("project_title", projectTitle);
         return "add_projectmanager_as_participant";
     }

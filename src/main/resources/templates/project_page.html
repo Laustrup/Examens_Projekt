@@ -13,10 +13,10 @@
 <section class="split left">
 
     <!-- PARTICIPANT FORM -->
-    <section class="participant_form">
-        <header><h3>Welcome</h3></header>
-        <div th:if="${current_project eq 'start'}" class="participant_container">
-            <form action="/project_page_update-participant_pressed" method="post">
+    <div th:if="${current_project eq 'start'}" class="participant_container">
+        <section class="participant_form">
+            <header><h3>Welcome</h3></header>
+                <form action="/project_page_update-participant_pressed" method="post">
 
                 <div class="ID_section">
                     <label for="participant_ID">ID</label>
@@ -53,14 +53,13 @@
 
                 <button type="submit">Update participant</button>
             </form>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <!--PROJECT BOX -->
     <!-- FORM FOR UPDATING THE CURRENT PROJECT TITLE -->
     <section class="project_form">
         <div>
-
             <div class="project_title_section">
                 <form action="/update_project" method="post">
                     <label for="new_project_title">Project Title</label>
@@ -97,8 +96,9 @@
     </section>
 
     <!--ADD PARTICIPANTS TO DEPARTMENT (PROJECTMANAGER ADDS) -->
-    <section class="add_participants_form">
-        <div th:if="${current_project eq 'add_participant'}"><header><h3><p th:text="${project.getTitle()}"></p></h3></header>
+
+    <div th:if="${current_project eq 'add_participant'}"><header><h3><p th:text="${project.getTitle()}"></p></h3></header>
+        <section class="add_participants_form">
 
             <p th:text="${Exception}"></p>
 
@@ -121,14 +121,8 @@
             <form action="/direct_project_page" method="post">
                 <button type="submit">Go back</button>
             </form>
-
-        </div>
-    </section>
-
-
-
-
-
+        </section>
+    </div>
 
 </section>
 
@@ -204,9 +198,8 @@
 
     <!-- ASSIGMENT BOX -->
 
-
-    <section class="assignment"><header>Assignment<h3 th:text="${assignment.getTitle()}"></h3></header>
-        <div th:if="${current eq 'assignment'}">
+    <div th:if="${current eq 'assignment'}">
+        <section class="assignment"><header>Assignment<h3 th:text="${assignment.getTitle()}"></h3></header>
             <div class="assignment_container">
 
                 <tr>
@@ -255,8 +248,9 @@
                 </div>
 
             </div>
+        </section>
+    </div>
 
-    </section>
 
 
     <!-- TASK BOX -->
