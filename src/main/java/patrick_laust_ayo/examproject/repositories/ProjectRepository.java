@@ -3,7 +3,6 @@ package patrick_laust_ayo.examproject.repositories;
 import patrick_laust_ayo.examproject.models.*;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 
 public class ProjectRepository extends Repository{
 
@@ -39,7 +38,7 @@ public class ProjectRepository extends Repository{
                     "WHERE phase_title = \"" + phaseTitle + "\" AND title = \"" + projectTitle + "\";");
         }
         catch (Exception e) {
-            System.out.println("No task title in findPhase...\n" + e.getMessage());
+            System.out.println("No task title in findPhase...\n");
         }
         res = executeQuery("SELECT * FROM phase_table " +
                 "INNER JOIN project ON project.project_id = phase_table.project_id " +
@@ -56,7 +55,7 @@ public class ProjectRepository extends Repository{
                     "WHERE phase_title = \"" + phaseTitle + "\" AND title = \"" + projectTitle + "\";");
         }
         catch (Exception e) {
-            System.out.println("No assignment in findPhase...\n" + e.getMessage());
+            System.out.println("No assignment in findPhase...\n");
         }
         return executeQuery("SELECT * FROM phase_table " +
                 "INNER JOIN project ON project.project_id = phase_table.project_id " +
@@ -123,7 +122,7 @@ public class ProjectRepository extends Repository{
                     "WHERE assignment.assignment_title = \"" + assignmentTitle + "\" AND phase_table.phase_title = \"" + phaseTitle + "\";");
         }
         catch (Exception e) {
-            System.out.println("No participant name in findAssignment...\n" + e.getMessage());
+            System.out.println("No participant name in findAssignment...\n");
         }
         res = executeQuery("SELECT * FROM assignment " +
                 "INNER JOIN phase_table ON phase_table.phase_id = assignment.phase_id " +
@@ -138,7 +137,7 @@ public class ProjectRepository extends Repository{
                     "WHERE assignment.assignment_title = \"" + assignmentTitle + "\" AND phase_table.phase_title = \"" + phaseTitle + "\";");
         }
         catch (Exception e) {
-            System.out.println("No task title in findAssignment...\n" + e.getMessage());
+            System.out.println("No task title in findAssignment...\n");
         }
         return executeQuery("SELECT * FROM assignment " +
                 "INNER JOIN phase_table ON phase_table.phase_id = assignment.phase_id " +
@@ -173,7 +172,7 @@ public class ProjectRepository extends Repository{
                     "AND task.task_end = \"" + taskEnd + "\";");
         }
         catch (Exception e) {
-            System.out.println("No participant name in findTask...\n" + e.getMessage());
+            System.out.println("No participant name in findTask...\n");
         }
         return executeQuery("SELECT * FROM task " +
                 "INNER JOIN assignment ON assignment.assignment_id = task.assignment_id " +
@@ -234,7 +233,7 @@ public class ProjectRepository extends Repository{
                     "AND project.project_id = participant_project.project_id;");
         }
         catch (Exception e) {
-            System.out.println("No task title in findProject...\n" + e.getMessage());
+            System.out.println("No task title in findProject...\n");
         }
         // Without task
         res = executeQuery("SELECT * FROM project " +
@@ -264,7 +263,7 @@ public class ProjectRepository extends Repository{
                     "AND project.project_id = participant_project.project_id;");
         }
         catch (Exception e) {
-            System.out.println("No assignment title in findProject...\n" + e.getMessage());
+            System.out.println("No assignment title in findProject...\n");
         }
         // Without assignment
         res = executeQuery("SELECT * FROM project " +
@@ -292,7 +291,7 @@ public class ProjectRepository extends Repository{
                     "AND project.project_id = participant_project.project_id;");
         }
         catch (Exception e) {
-            System.out.println("No phase title in findProject...\n" + e.getMessage());
+            System.out.println("No phase title in findProject...\n");
         }
         // Without phase
         return executeQuery("SELECT * FROM project " +
@@ -305,7 +304,7 @@ public class ProjectRepository extends Repository{
                 "AND participant.participant_id = participant_project.participant_id " +
                 "AND project.project_id = participant_project.project_id;");
     }
-    // TODO Not done, when used logic should be moved to service
+
     public ResultSet findProjects(String userId) {
         return executeQuery("SELECT * FROM project " +
                 "INNER JOIN participant_project ON participant_project.project_id = project.project_id " +
@@ -317,9 +316,7 @@ public class ProjectRepository extends Repository{
                 "SET title = \"" + currentTitle + "\" " +
                 "WHERE title = \"" + formerTitle + "\";");
     }
-    // TODO Figure the sql statement to fit the project and participant
     public void addParticipantToProject(Participant participant, Project project) {
-        // TODO Should projecttitle be uniq? To insure not to be added to wrong project?
         int participantId = findId("participant","user_id", participant.getId(),"participant_id");
         int projectId = findId("project","title", project.getTitle(),"project_id");
 
