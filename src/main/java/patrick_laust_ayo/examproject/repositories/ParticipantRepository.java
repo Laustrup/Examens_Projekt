@@ -3,19 +3,22 @@ package patrick_laust_ayo.examproject.repositories;
 import java.sql.ResultSet;
 
 public class ParticipantRepository extends Repository {
-    //TODO en participant har ikke et projectId inde i table i SQL.
-    // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
-    public void putParticipantInDatabase(String userId, int departmentNo) {
-        executeSQLStatement("INSERT into participant(user_id,participant_name, participant_password, position, department_no) " +
-                "VALUES (\"" + userId + "\", null, null, null " + ", " + departmentNo + ");");
+
+    public void putParticipantsInDatabase(String userId, int departmentNo, int amount) {
+        for (int i = 0; i < amount; i++) {
+            executeSQLStatement(" INSERT INTO participant(user_id,participant_name, participant_password, position, department_no) " +
+                    "VALUES (\"" + userId + "\", null, null, null, " + departmentNo + "); ");
+        }
 
     }
 
-    public void putParticipantInParticipantProjectTable(String userId, String projectTitle){
-        executeSQLStatement("INSERT INTO participant_project(participant_id, project_id) " +
-                "VALUES (" + findId("participant", "user_id", userId, "participant_id") +
-                ", " + findId("project", "title", projectTitle, "project_id") +
-                ");");
+    public void putParticipantsInParticipantProjectTable(String userId, String projectTitle, int amount){
+        for (int i = 0; i < amount;i++) {
+            executeSQLStatement(" INSERT INTO participant_project(participant_id, project_id) " +
+                    "VALUES (" + findId("participant", "user_id", userId, "participant_id") +
+                    ", " + findId("project", "title", projectTitle, "project_id") +
+                    "); ");
+        }
     }
 
     /*

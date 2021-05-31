@@ -4,6 +4,7 @@ import patrick_laust_ayo.examproject.models.*;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.util.ArrayList;
 
 public class ProjectRepository extends Repository{
 
@@ -317,9 +318,7 @@ public class ProjectRepository extends Repository{
                 "SET title = \"" + currentTitle + "\" " +
                 "WHERE title = \"" + formerTitle + "\";");
     }
-    // TODO Figure the sql statement to fit the project and participant
     public void addParticipantToProject(Participant participant, Project project) {
-        // TODO Should projecttitle be uniq? To insure not to be added to wrong project?
         int participantId = findId("participant","user_id", participant.getId(),"participant_id");
         int projectId = findId("project","title", project.getTitle(),"project_id");
 
@@ -331,7 +330,7 @@ public class ProjectRepository extends Repository{
                 "DELETE ROW FROM participant " +
                 "INNER JOIN participant_project ON participant_project.participant_id = participant.participant_id " +
                 "INNER JOIN project ON project.project_id = participant_project.project_id " +
-                "WHERE project.user_id = null " +
+                "WHERE project.user_id = Enter User Id " +
                 "AND WHERE project.name = null " +
                 "AND WHERE project.password = null " +
                 "AND WHERE position = null " +
@@ -340,6 +339,21 @@ public class ProjectRepository extends Repository{
     }
     public void removeProject(String title) {
         executeSQLStatement("DELETE ROW FROM project WHERE title = \"" + title + "\";");
+    }
+
+    public void addParticipantsToProject(Participant[] participants, String projectTitle) {
+        String sql = new String();
+        ArrayList<Integer> participantIds = new ArrayList<>();
+        for (int i = 0; i < participants.length; i++) {
+            participantIds.add(findId("participant","user_id", participants[i].getId(), "participant_id"));
+        }
+        int projectId = findId("project","title", projectTitle,"project_id");
+        for (int i = 0; i < participants.length; i++) {
+            sql += " INSERT INTO participant_project(participant_id,project_id) VALUES (" + participantIds.get(i) + ", " +
+                    projectId + "); ";
+        }
+        executeSQLStatement(sql);
+
     }
 
 }

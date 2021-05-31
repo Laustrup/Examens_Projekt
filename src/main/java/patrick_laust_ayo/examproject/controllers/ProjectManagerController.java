@@ -14,6 +14,7 @@ import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
 import patrick_laust_ayo.examproject.services.UserCreator;
+import patrick_laust_ayo.examproject.services.UserEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -122,11 +123,9 @@ public class  ProjectManagerController {
 
         HttpSession session = request.getSession();
         String projectTitle = ((Project) session.getAttribute("project")).getTitle();
-        String projectManagerUsername = ((ProjectManager)session.getAttribute("projectManager")).getUsername();
 
-        for (int i = 0; i < amount; i++) {
-            userCreator.createParticipant("Enter User Id", projectTitle, departmentName);
-        }
+        userCreator.createParticipants("Enter user-ID",projectTitle,departmentName,amount);
+
 
         Participant participant = (Participant) session.getAttribute("participant");
         session.setAttribute("current_project","start");
