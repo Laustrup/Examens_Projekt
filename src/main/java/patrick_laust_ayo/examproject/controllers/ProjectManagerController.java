@@ -112,6 +112,7 @@ public class  ProjectManagerController {
 
         //model.addAttribute("projects",projects);
         model.addAttribute("projectManager", projectManager);
+        model.addAttribute("projects", projectCreator.getProjects(userId));
 
         return "projectmanager_dashboard";
     }
