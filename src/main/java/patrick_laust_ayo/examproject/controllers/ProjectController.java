@@ -112,13 +112,13 @@ public class ProjectController {
             session.setAttribute("project",project);
 
             model.addAttribute("project",project);
+
             model.addAttribute("participant",new UserCreator().getParticipant(userId));
             session.setAttribute("participant", model.getAttribute("participant"));
 
             model.addAttribute("current",session.getAttribute("current_project"));
             model.addAttribute("current_project",session.getAttribute("current_project"));
             model.addAttribute("Exception", session.getAttribute("Exception"));
-            System.out.println("Renderprojectpage " + session.getAttribute("current_project"));
 
             return "project_page";
         }
@@ -257,10 +257,11 @@ public class ProjectController {
         HttpSession session = request.getSession();
 
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String userId = ((Participant)session.getAttribute("participant")).getId();
 
         projectCreator.createPhase(projectTitle);
 
-        return "redirect:/project_page-" + ((Project)session.getAttribute("project")).getTitle();
+        return "redirect:/project_page-" + projectTitle + "/" + userId;
     }
 
     @PostMapping("/update_phase")

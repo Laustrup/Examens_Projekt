@@ -142,6 +142,10 @@ public class ProjectCreator {
                     project.setProjectManager(projectManager);
                     mapOfParticipants.put(projectManager.getId(), projectManager);
                     project.setParticipants(mapOfParticipants);
+                    if (columnCount >= 20) {
+                        listOfPhases.add(new Phase(res.getString("phase_title")));
+                        project.setPhases(listOfPhases);
+                    }
                     break;
                 }
 
@@ -257,7 +261,6 @@ public class ProjectCreator {
                         phase = new Phase(strings[13],mapOfAssignments);
                         listOfPhases.add(phase);
                     }
-
 
                     // Assignment
                     if (columnCount >= 26) {
