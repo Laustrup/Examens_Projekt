@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="da" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <link rel="stylesheet" type="text/css" href="../static/project_page.css">
+
     <meta charset="UTF-8">
     <title th:text="${session.projectTitle}">Project</title>
 </head>
@@ -185,9 +185,9 @@
 
                     <div>
                         <form action="/update_phase" method="post">
-                            <label for="phase_title">Project Title</label>
+                            <label for="phase_title">Phase Title</label>
                             <input type="text" id="phase_title" name="phase_title" th:placeholder="${phase.getTitle()}" required>
-                            <button type="submit">Update title</button>
+                            <button type="submit">Update phase title</button>
                         </form>
                     </div>
 

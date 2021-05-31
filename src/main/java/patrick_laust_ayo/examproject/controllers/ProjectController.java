@@ -111,6 +111,7 @@ public class ProjectController {
             session.setAttribute("project",project);
 
             model.addAttribute("project",project);
+            model.addAttribute("phase", session.getAttribute("phase"));
 
             model.addAttribute("participant",new UserCreator().getParticipant(userId));
             session.setAttribute("participant", model.getAttribute("participant"));
@@ -259,7 +260,7 @@ public class ProjectController {
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
         String userId = ((Participant)session.getAttribute("participant")).getId();
 
-        projectCreator.createPhase(projectTitle);
+        session.setAttribute("phase", projectCreator.createPhase(projectTitle));
 
         return "redirect:/project_page-" + projectTitle + "/" + userId;
     }
@@ -332,6 +333,8 @@ public class ProjectController {
         System.err.println(phaseTitle);
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
+        System.err.println("projekt titel  er? " + projectCreator.getProject(projectTitle).getTitle());
+
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
         model.addAttribute("participant",session.getAttribute("participant"));
         model.addAttribute("Exception",session.getAttribute("Exception"));
@@ -472,11 +475,11 @@ public class ProjectController {
                 ((Phase)session.getAttribute("phase")).getTitle() + "/" +  assignmentTitle;
     }
 
-    // TODO Create assignment html
-    @GetMapping("/projectpage-{project_Title}/{phase_Title}/{assignment_Title}")
-    public String renderAssignment(@PathVariable(name = "project_Title") String projectTitle,
-                                   @PathVariable(name = "phase_Title") String phaseTitle,
-                                   @PathVariable(name = "assignment_Title") String assignmentTitle,
+
+    @GetMapping("/projectpage-{project_title}/{phase_title}/{assignment_title}")
+    public String renderAssignment(@PathVariable(name = "project_title") String projectTitle,
+                                   @PathVariable(name = "phase_title") String phaseTitle,
+                                   @PathVariable(name = "assignment_title") String assignmentTitle,
                                    HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
