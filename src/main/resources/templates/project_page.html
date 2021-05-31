@@ -132,7 +132,7 @@
 
     <!--PHASES BOX -->
     <section class="phase">
-        <div th:if="${current eq 'start'}"><header><h3>Phases</h3></header>
+        <div th:if="${current_project eq 'start'}"><header><h3>Phases</h3></header>
 
             <tr>
                 <th>Estimated amount of work hours: <p th:text="${project.getTotalWorkhours()}"></p></th>
@@ -160,21 +160,24 @@
                     </tr>
 
                     <form action="direct_to_assignment" method="post">
-                        <div th:each="assignment : {phase.getAssignments()}">
-                            <button type="submit" th:value="${assignment.getTitle()}" name="assignment_title"><p th:text="${assignment.getTitle()}"></p>
-                                </pt></button>
-                        </div>
+                        <label for="assignment_search">Type assignment title</label>
+                        <input type="text" id="assignment_search" name="assignment_title">
+                        <button type="submit">Search</button>
                     </form>
 
-                    <form action="/add_assignment">
+                <ul th:each="assignment_title : ${phase.getAssignmentTitles()}">
+                    <li><p th:text="${assignment_title}"></p></li>
+                </ul>
+
+                    <form action="/add_assignment" method="post">
                         <h5>Add new assignment</h5>
                         <label for="new_assignment_title">Type title: </label>
                         <input type="text" id="new_assignment_title" name="title">
                         <label for="new_assignment_start">Type start of assignment</label>
                         <input type="text" id="new_assignment_start" name="start">
                         <label for="new_assignment_end">Type deadline of assignment</label>
-                        <input type="text" id="new_assignment_end" name="start">
-                        <button type="submit">Add new phase</button>
+                        <input type="text" id="new_assignment_end" name="end">
+                        <button type="submit">Add new assignment</button>
                     </form>
                     <p th:text="${Exception}"></p>
 

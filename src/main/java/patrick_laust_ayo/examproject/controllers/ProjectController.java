@@ -119,6 +119,7 @@ public class ProjectController {
             model.addAttribute("current_project",session.getAttribute("current_project"));
             model.addAttribute("Exception", session.getAttribute("Exception"));
 
+
             return "project_page";
         }
 
@@ -328,6 +329,7 @@ public class ProjectController {
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
+        model.addAttribute("participant",session.getAttribute("participant"));
         model.addAttribute("Exception",session.getAttribute("Exception"));
         model.addAttribute("Message",session.getAttribute("Message"));
         model.addAttribute("current","phase");
@@ -385,7 +387,7 @@ public class ProjectController {
             return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle;
         }
 
-        Assignment assignment = projectCreator.createAssignment(title,start,end);
+        Assignment assignment = projectCreator.createAssignment(phaseTitle,title,start,end);
         session.setAttribute("Exception","");
         session.setAttribute("Message","");
 
@@ -467,10 +469,10 @@ public class ProjectController {
     }
 
     // TODO Create assignment html
-    @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}/{assignment.getTitle()}")
-    public String renderAssignment(@PathVariable(name = "project.getTitle()") String projectTitle,
-                                   @PathVariable(name = "phase.getTitle()") String phaseTitle,
-                                   @PathVariable(name = "assignment.getTitle()") String assignmentTitle,
+    @GetMapping("/projectpage-{project_Title}/{phase_Title}/{assignment_Title}")
+    public String renderAssignment(@PathVariable(name = "project_Title") String projectTitle,
+                                   @PathVariable(name = "phase_Title") String phaseTitle,
+                                   @PathVariable(name = "assignment_Title") String assignmentTitle,
                                    HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
@@ -482,8 +484,9 @@ public class ProjectController {
         model.addAttribute("Exception",session.getAttribute("Exception"));
         model.addAttribute("Message",session.getAttribute("Message"));
         model.addAttribute("current","assignment");
+        model.addAttribute("current_project","start");
 
-        return "assignment";
+        return "project_page";
     }
 
     @GetMapping("/accept_delete_of_{assignment.getTitle()}")

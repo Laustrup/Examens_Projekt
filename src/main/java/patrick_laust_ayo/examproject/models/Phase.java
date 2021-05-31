@@ -2,6 +2,7 @@ package patrick_laust_ayo.examproject.models;
 
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Phase {
@@ -9,14 +10,18 @@ public class Phase {
     private Map<String, Assignment> assignments;
 
     private String title;
+    private String[] assignmentTitles = new String[0];
 
     public Phase(String title) {
         this.title = title;
+        this.assignments = new HashMap<>();
+        setAssignmentTitles();
     }
 
     public Phase(String title, Map<String, Assignment> assignments) {
         this.title = title;
         this.assignments = assignments;
+        setAssignmentTitles();
     }
 
     public Map<String,Assignment> getAssignments() {
@@ -44,6 +49,18 @@ public class Phase {
             }
         }
         return total;
+    }
+
+    public void setAssignmentTitles() {
+        assignmentTitles = new String[assignments.size()];
+
+        for (int i = 0; i < assignments.size()/2; i++) {
+            assignmentTitles[i] = assignments.get(i).getTitle();
+        }
+    }
+
+    public String[] getAssignmentTitles() {
+        return assignmentTitles;
     }
 
     public String getTitle() {
