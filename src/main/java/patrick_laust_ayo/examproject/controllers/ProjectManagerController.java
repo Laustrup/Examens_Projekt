@@ -57,7 +57,7 @@ public class  ProjectManagerController {
             return "create_projectmanager.html";
         }
 
-        ProjectManager projectManager = userCreator.createManager(username, password);
+        ProjectManager projectManager = userCreator.createManager(username, password, 1);
         session.setAttribute("username", username);
         session.setAttribute("password", password);
         session.setAttribute("projectManager", projectManager);

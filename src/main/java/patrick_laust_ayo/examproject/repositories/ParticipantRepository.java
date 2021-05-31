@@ -48,12 +48,22 @@ public class ParticipantRepository extends Repository {
     }
 
     public void updateParticipant(String userId, String name, String password, String position, String formerUserId) {
-        executeSQLStatement("UPDATE participant " +
-                "SET participant.user_id = \"" + userId + "\", " +
-                "participant.participant_name = \"" + name + "\", " +
-                "participant.participant_password = \"" + password + "\", " +
-                "participant.position = \"" + position + "\" " +
-                "WHERE participant.user_id = \"" + formerUserId + "\";");
+        if (name.equals("null") && position.equals("null")){
+            executeSQLStatement("UPDATE participant " +
+                    "SET participant.user_id = \"" + userId + "\", " +
+                    "participant.participant_name = null, " +
+                    "participant.participant_password = \"" + password + "\", " +
+                    "participant.position = null " +
+                    "WHERE participant.user_id = \"" + formerUserId + "\";");
+        }
+        else {
+            executeSQLStatement("UPDATE participant " +
+                    "SET participant.user_id = \"" + userId + "\", " +
+                    "participant.participant_name = \"" + name + "\", " +
+                    "participant.participant_password = \"" + password + "\", " +
+                    "participant.position = \"" + position + "\" " +
+                    "WHERE participant.user_id = \"" + formerUserId + "\";");
+        }
     }
 
     public void addParticipantToTask(int participantId, int taskId) {

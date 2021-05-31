@@ -62,12 +62,18 @@ public class ParticipantController {
                                    @RequestParam(name = "department_name") String depName,
                                    HttpServletRequest request, Model model){
         HttpSession session = request.getSession();
-        String projectManagerUsername = ((ProjectManager)session.getAttribute("projectManager")).getUsername();
-        session.setAttribute("participant", userCreator.createProjectManagerAsParticipant(projectManagerUsername, depName, projectTitle));
+        ProjectManager projectManager = (ProjectManager) session.getAttribute("projectManager");
+
+        userCreator.createProjectManagerAsParticipant(projectManager.getUsername(), depName, projectTitle);
+
+        session.setAttribute("participant", userEditor.updateParticipant(projectManager.getUsername(),
+                projectManager.getPassword(), "null", "null",
+                projectManager.getUsername(), true));
+
         session.setAttribute("current_project", "start");
         model.addAttribute("current_project", session.getAttribute("current_project"));
 
-        return "redirect:/project_page-" + projectTitle + "/" + projectManagerUsername;
+        return "redirect:/project_page-" + projectTitle + "/" + projectManager.getUsername();
     }
 
     /*

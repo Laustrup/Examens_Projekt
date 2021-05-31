@@ -15,10 +15,12 @@ public class UserCreator {
     private ProjectManager projectManager;
     private Participant participant;
 
-    public ProjectManager createManager(String username, String password) {
+    public ProjectManager createManager(String username, String password, int departmentNo) {
        projectManager = new ProjectManager(username, password);
 
        ProjectManagerRepository pmRepo = new ProjectManagerRepository();
+       ParticipantRepository parRepo = new ParticipantRepository();
+
        pmRepo.putProjectManagerInDatabase(projectManager);
 
        return projectManager;

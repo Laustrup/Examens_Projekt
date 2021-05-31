@@ -13,17 +13,6 @@ public class ProjectManagerRepository extends Repository {
 
     public void putProjectManagerInDatabase(ProjectManager projectManager){
         try {
-            System.out.println(parRepo.findParticipant(projectManager.getId()).findColumn("participant_id"));
-            System.out.println(projectManager.getUsername());
-            System.out.println(projectManager.getPassword());
-            System.out.println(projectManager.getDepartment());
-            System.out.println(projectManager.getPosition());
-            System.out.println(projectManager.getName());
-        }
-        catch(Exception e){
-            System.out.println("For fanden");
-        }
-        try {
             executeSQLStatement("INSERT INTO projectmanager(username,participant_id) VALUES ('" + projectManager.getUsername()
                     + "', " + parRepo.findParticipant(projectManager.getId()).findColumn("participant_id") + ");");
         }

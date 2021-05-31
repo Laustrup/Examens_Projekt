@@ -219,26 +219,12 @@ public class ProjectController {
 
      */
 
-    @PostMapping("/direct_to_accept_delete")
-    public String directToAcceptDelete(@RequestParam (name ="projectmanager_user_id") String userId,
-                                       @RequestParam (name = "password_delete_verify") String password,
-                                       HttpServletRequest request){
-        HttpSession session = request.getSession();
-        String projectTitle = ((Project) session.getAttribute("project")).getTitle();
 
-        if (handler.allowLogin(userId, password)){
-            return "redirect:/accept_delete_of_project-" + projectTitle + "/" + userId;
-        }
-        return "redirect:/project_page-" + projectTitle + "/" + userId;
-    }
-
-
-    @GetMapping("/accept_delete_of_project-{project_title}/{user_id}")
-    public String renderDeleteProject(@PathVariable (name = "project_title") String projectTitle,
-                                      @PathVariable (name = "user_id") String userId,
-                                      Model model,HttpServletRequest request) {
+    @GetMapping("/accept_delete_of_project")
+    public String renderDeleteProject(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
         model.addAttribute("Object_to_delete",((Project)session.getAttribute("Project")));
+        model.addAttribute("current_delete", "project");
         model.addAttribute("Exception","");
         model.addAttribute("Message","");
         return "accept_delete";
@@ -246,7 +232,7 @@ public class ProjectController {
 
     @PostMapping("/delete_project")
     public String deleteProject(@RequestParam(name = "password_delete_project") String password,
-                                @RequestParam(name = "projectmanager_user_id") String userId, HttpServletRequest request) {
+                                @RequestParam(name = "user_id") String userId, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
@@ -256,7 +242,7 @@ public class ProjectController {
                 projectEditor.deleteProject(projectTitle);
                 session.setAttribute("Message","Project is now deleted");
                 session.setAttribute("Exception","");
-                return "redirect:/" + userId;
+                return "redirect:/";
             }
             session.setAttribute("Exception","Wrong user-id or password...");
             return "redirect:/accept_delete_of_" + projectTitle;

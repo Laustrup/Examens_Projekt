@@ -338,8 +338,44 @@ public class ProjectRepository extends Repository{
                 "AND WHERE participant_project.project_id = participant_project.participant_id" +
                 "AND WHERE participant.participant_id = participant_project.participant_id;");
     }
-    public void removeProject(String title) {
-        executeSQLStatement("DELETE ROW FROM project WHERE title = \"" + title + "\";");
-    }
+    public void removeProject(String projectTitle) {
+        executeSQLStatement("DELETE participant_task " +
+                "FROM participant_task " +
+                "INNER JOIN task ON task.task_id = participant_task.task_id " +
+                "INNER JOIN assignment ON assignment.assignment_id = task.assignment_id " +
+                "INNER JOIN phase_table ON phase_table.phase_id = assignment.phase_id " +
+                "INNER JOIN project ON phase_table.project_id = project.project_id " +
+                "WHERE project.title = \"" + projectTitle + "\";");
 
+
+        executeSQLStatement("DELETE task " +
+                "FROM task " +
+                "INNER JOIN assignment ON assignment.assignment_id = task.assignment_id " +
+                "INNER JOIN phase_table ON phase_table.phase_id = assignment.phase_id " +
+                "INNER JOIN project ON phase_table.project_id = project.project_id " +
+                "WHERE project.title = \"" + projectTitle + "\";");
+
+
+        executeSQLStatement("DELETE assignment " +
+                "FROM assignment " +
+                "INNER JOIN phase_table ON assignment.phase_id = phase_table.phase_id " +
+                "INNER JOIN project ON phase_table.project_id = project.project_id " +
+                "WHERE project.title = \"" + projectTitle + "\";");
+
+
+        executeSQLStatement("DELETE phase_table " +
+                "FROM phase_table " +
+                "INNER JOIN project ON phase_table.project_id = project.project_id " +
+                "WHERE project.title = \"" + projectTitle + "\";");
+
+
+        executeSQLStatement("DELETE participant_project " +
+                "FROM participant_project " +
+                "INNER JOIN project ON participant_project.project_id = project.project_id " +
+                "WHERE project.title = \"" + projectTitle + "\";");
+
+
+        executeSQLStatement("DELETE FROM project " +
+                "WHERE title = \"" + projectTitle + "\";");
+    }
 }
