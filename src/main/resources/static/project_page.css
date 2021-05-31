@@ -1,10 +1,9 @@
 
-/*Header*/
+/* HEADER */
 .header h2 {
     text-align: center;
     background-color:#59869d;
 }
-
 button {
     background-color: white;
     padding: 8px;
@@ -14,91 +13,185 @@ button {
     margin: 8px;
 }
 
-
-
-/*PROJECT PAGE*/
+/* PROJECT PAGE */
 
 .split {
     height: 100%;
-    width: 60%;
+    width: 55%;
     position: fixed;
     z-index: 1;
     top: 0;
     overflow-x: hidden;
     padding-top: 20px;
 }
-
-
-.left-side {
+.left {
     left: 0;
-    background-color: white;
+    background-color: #D5D8DC;
 }
-.right-side {
+.right {
     right: 0;
+    background-color: #D5D8DC;
 }
-/*Participant update box */
 
-.participant_form h3 {
+/* LEFT SIDE */
+
+/* PARTICIPANT BOX */
+
+.participant_container h3 {
     text-align: center;
 }
-.participant_form {
+.participant_container {
     background-color: #59869d;
     border: 3px solid;
     padding: 10px;
     margin: 20px;
-    width: 40%;
+    width: 65%;
 }
-.participant_container {
+.participant_form {
     height: 170px;
     position: relative;
     border: 1px solid;
     margin: 20px;
     padding: 20px 20px 60px 20px;
 }
-.participant_form div {
+.participant_container div {
     margin: 7px;
 }
-.participant_container button {
-    margin: 0 0 0 185px;
-}
-/*Assignment box */
+/* PROJECT BOX */
 
-.assignment {
-    margin: 20px;
-    width: 40%;
+.project_form {
+    background-color: #59869d;
     border: 3px solid;
     padding: 10px;
-    background: #ffab91;
+    margin: 20px;
+    width: 65%;
+}
+.project_title_section button {
+    display: block;
+}
+.project_container {
+    height: 170px;
+    position: relative;
+    border: 1px solid;
+    margin: 20px;
+    padding: 20px 20px 60px 20px;
+}
+.add_participants_form {
+    background-color: #ffab91;
+    border: 3px solid;
+    padding: 10px;
+    margin: 20px;
+    width: 65%;
+}
+.delete_project {
+    margin: 5% 0 0 0;
+}
+.delete_project button {
+    display: block;
 }
 
-.assignment header {
+/* ADD PARTICIPANTS BOX */
+
+.add_participants_form {
+    background-color: #59869d;
+    border: 3px solid;
+    padding: 10px;
+    margin: 20px;
+    width: 65%;
+}
+.add_participants_form div {
+    padding: 10px;
+}
+
+/*RIGHT SIDE*/
+
+/*PHASE BOX*/
+
+.phase {
+    margin: 20px;
+    width: 80%;
+    border: 3px solid;
+    padding: 10px;
+    background: #7FB3D5;
+}
+.phase header {
     text-align: center;
 }
-.assignment_container {
-    height: 150px;
+.phase_container {
     position: relative;
     border: 1px solid;
     margin: 20px;
     padding: 20px 20px 60px 20px;
 }
 
-.action_btn {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+/* PHASE OPTIONS */
+
+.phase_options {
+    margin: 20px;
+    width: 80%;
+    border: 3px solid;
+    padding: 10px;
+    background: #7FB3D5;
 }
-.action_btn button {
+.phase_option_container {
+    position: relative;
+    border: 1px solid;
+    margin: 20px;
+    padding: 20px 20px 60px 20px;
+}
+.add_assignment input{
     display: block;
 }
-.about_project {
-    background:  #ffe0b2;
-    height: 100px;
-    width: 23%;
-    position: relative;
+.update_phase {
+    margin: 20px 0 0 0;
+}
+.update_phase button {
+    display: block;
+}
 
-    margin: 74px 0 0 350px;
+/*ASSIGNMENT BOX */
+
+.assignment {
+    margin: 20px;
+    width: 80%;
+    border: 3px solid;
     padding: 10px;
+    background: #AFEEEE;
+}
+.assignment header {
+    text-align: center;
+}
+.assignment_container {
+    position: relative;
+    border: 1px solid;
+    margin: 20px;
+    padding: 20px 20px 60px 20px;
+}
+.update_assignment {
+    margin: 20px 0 0 0;
+}
+.update_assignment input{
+    display: block;
+}
+
+/* TASK BOX */
+
+.task {
+    margin: 20px;
+    width: 80%;
+    border: 3px solid;
+    padding: 10px;
+    background: #E0FFFF;
+}
+.task header {
+    text-align: center;
+}
+.task_container {
+    position: relative;
+    border: 1px solid;
+    margin: 20px;
+    padding: 20px 20px 60px 20px;
+}
+.update_task input {
+    display: block;
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="da" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-
+    <link rel="stylesheet" type="text/css" href="../static/project_page.css">
     <meta charset="UTF-8">
     <title th:text="${session.projectTitle}">Project</title>
 </head>
@@ -14,9 +14,9 @@
 
     <!-- PARTICIPANT FORM -->
     <div th:if="${current_project eq 'start'}" class="participant_container">
+        <header><h3>Welcome</h3></header>
         <section class="participant_form">
-            <header><h3>Welcome</h3></header>
-                <form action="/project_page_update-participant_pressed" method="post">
+            <form action="/project_page_update-participant_pressed" method="post">
 
                 <div class="ID_section">
                     <label for="participant_ID">ID</label>
@@ -62,7 +62,7 @@
         <div>
             <div class="project_title_section">
                 <form action="/update_project" method="post">
-                    <label for="new_project_title">Project Title</label>
+                    <label for="new_project_title"><h4>Project Title</h4></label>
                     <input type="text" id="new_project_title" name="new_project_title" th:placeholder="${project.getTitle}" required>
                     <button type="submit">Update title</button>
                 </form>
@@ -78,7 +78,7 @@
 
 
             <!--FORM FOR DELETING THE PROJECT (ONLY PROJECTMANAGER) -->
-            <div>
+            <div class="delete_project">
                 <form action="/direct_to_accept_delete" method="post">
 
                     <label for="password_delete_project"></label>
@@ -131,48 +131,50 @@
 <section class="split right">
 
     <!--PHASES BOX -->
-    <div th:if="${current_project eq 'start'}"><header><h3>Phases</h3></header>
-    <section class="phase">
+    <div th:if="${current_project eq 'start'}">
+        <section class="phase">
+            <header><h3>Phases</h3></header>
+            <div class="phase_container">
+                <tr>
+                    <th>Estimated amount of work hours: <p th:text="${project.getTotalWorkhours()}"></p></th>
+                    <th>Estimated cost of project: <p th:text="${project.getTotalCost()}">$</p></th>
+                </tr>
 
-            <tr>
-                <th>Estimated amount of work hours: <p th:text="${project.getTotalWorkhours()}"></p></th>
-                <th>Estimated cost of project: <p th:text="${project.getTotalCost()}">$</p></th>
-            </tr>
+                <form action="/direct_to_phase" method="post">
+                    <ul th:each="phase : ${project.getPhases()}">
+                        <li><button type="submit" th:value="${phase.getTitle()}" name="phase_title"><p th:text="${phase.getTitle()}"></p></button></li>
+                    </ul>
+                </form>
 
-            <form action="/direct_to_phase" method="post">
-                <ul th:each="phase : ${project.getPhases()}">
-                    <li><button type="submit" th:value="${phase.getTitle()}" name="phase_title"><p th:text="${phase.getTitle()}"></p></button></li>
-                </ul>
-            </form>
-
-            <form action="/add_phase" method="post">
-                <button type="submit">Add new phase</button>
-            </form>
-    </section>
+                <form action="/add_phase" method="post">
+                    <button type="submit">Add new phase</button>
+                </form>
+            </div>
+        </section>
 
 
     </div>
-        <div th:if="${current eq 'phase'}">
-            <section class="phase_container"><header><h3 th:text="${phase.getTitle()}"></h3></header>
+    <div th:if="${current eq 'phase'}">
+        <section class="phase_options"><header><h3 th:text="${phase.getTitle()}"></h3></header>
+            <div class="phase_option_container">
 
+                <tr>
+                    <th>Estimated amount of work hours: <p th:text="${phase.getTotalWorkhours()}"></p></th></th>
+                    <th>Estimated cost of phase: <p th:text="${phase.getTotalCost()}"></p></th>
+                </tr>
 
-                    <tr>
-                        <th>Estimated amount of work hours: <p th:text="${phase.getTotalWorkhours()}"></p></th></th>
-                        <th>Estimated cost of phase: <p th:text="${phase.getTotalCost()}"></p></th>
-                    </tr>
-
-                    <form action="direct_to_assignment" method="post">
-                        <label for="assignment_search">Type assignment title</label>
-                        <input type="text" id="assignment_search" name="assignment_title">
-                        <button type="submit">Search</button>
-                    </form>
+                <form action="direct_to_assignment" method="post">
+                    <label for="assignment_search">Type assignment title</label>
+                    <input type="text" id="assignment_search" name="assignment_title">
+                    <button type="submit">Search</button>
+                </form>
 
                 <ul th:each="assignment_title : ${phase.getAssignmentTitles()}">
                     <li><p th:text="${assignment_title}"></p></li>
                 </ul>
-
+                <div class="add_assignment">
                     <form action="/add_assignment" method="post">
-                        <h5>Add new assignment</h5>
+                        <h4>Add new assignment</h4>
                         <label for="new_assignment_title">Type title: </label>
                         <input type="text" id="new_assignment_title" name="title">
                         <label for="new_assignment_start">Type start of assignment</label>
@@ -182,23 +184,24 @@
                         <button type="submit">Add new assignment</button>
                     </form>
                     <p th:text="${Exception}"></p>
+                </div>
+                <div class="update_phase">
+                    <form action="/update_phase" method="post">
+                        <label for="phase_title">Phase Title</label>
+                        <input type="text" id="phase_title" name="phase_title" th:placeholder="${phase.getTitle()}" required>
+                        <button type="submit">Update title</button>
+                    </form>
+                </div>
 
-                    <div>
-                        <form action="/update_phase" method="post">
-                            <label for="phase_title">Phase Title</label>
-                            <input type="text" id="phase_title" name="phase_title" th:placeholder="${phase.getTitle()}" required>
-                            <button type="submit">Update phase title</button>
-                        </form>
-                    </div>
-
-                    <div>
-                        <p><a href="/accept_delete"><button>Delete phase</button></a></p>
-                        <form action="/direct_project_page" method="post">
-                            <button type="submit" th:value="${project.getTitle()}" name="project_title">Back to phases</pt></button>
-                        </form>
-                    </div>
-            </section>
-        </div>
+                <div>
+                    <p><a href="/accept_delete"><button>Delete phase</button></a></p>
+                    <form action="/direct_project_page" method="post">
+                        <button type="submit" th:value="${project.getTitle()}" name="project_title">Back to phases</pt></button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <!-- ASSIGMENT BOX -->
 
@@ -227,7 +230,7 @@
                 </form>
 
                 <form action="/update_assignment" method="post">
-                    <div>
+                    <div class ="update_assignment">
                         <label for="new_title">Change title</label>
                         <input type="text" id="new_title" name="new_title">
                         <label for="assignment_start">Change start of assignment</label>
@@ -281,16 +284,17 @@
                 </form>
 
                 <form action="/update_task" method="post">
-                    <div>
+                    <div class="update_task">
                         <label for="task_new_title">Change title</label>
                         <input type="text" id="task_new_title" name="new_title">
-                        <label for="task_start">Change start of assignment</label>
+                        <label for="task_start">Change start of task</label>
                         <input type="text" id="task_start" name="task_start">
-                        <label for="task_end">Change end of assignment</label>
+                        <label for="task_end">Change end of task</label>
                         <input type="text" id="task_end" name="task_end">
-                        <lavel for="task_work_hours">Change amount of workhours</lavel>
+                        <label for="task_work_hours">Change amount of workhours</label>
+                        <input type="text" id="task_work_hours" name="task_work_hours">
 
-                        <button type="submit">Update assignment</button>
+                        <button type="submit">Update task</button>
                     </div>
                 </form>
                 <p th:text="${Exception}"></p>
@@ -300,7 +304,7 @@
                 </form>
 
                 <div>
-                    <p><a href="/accept_delete"><button>Delete Assignment</button></a></p>
+                    <p><a href="/accept_delete"><button>Delete task</button></a></p>
                     <form action="/direct_to_phase" method="post">
                         <button type="submit" th:value="${phase.getTitle()}" name="phase_title">Back to phases</button>
                     </form>
@@ -310,7 +314,7 @@
                     <input th:value="${task.getTitle()}" name="task_title">
                     <input th:value="${task.getStart()}" name="task_start">
                     <input th:value="${task.getEnd()}" name="task_end">
-                    <button type="submit">Back to phases</button>
+                    <button type="submit">Join task</button>
                 </form>
             </div>
         </section>
