@@ -5,10 +5,10 @@ import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.ProjectManager;
 import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
-import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class UserCreator {
 
@@ -72,19 +72,32 @@ public class UserCreator {
         participant = new Participant(userId, null, null, null, getDepartment(depName));
         ExceptionHandler exceptionHandler = new ExceptionHandler();
         if (exceptionHandler.doesProjectExist(projectTitle)) {
-            parRepo.putParticipantInDatabase(userId, participant.getDepartment().getDepartmentNo());
-            parRepo.putParticipantInParticipantProjectTable(userId, projectTitle);
-            System.out.println("Departmentet er " + depName + " no " + participant.getDepartment().getDepartmentNo() + " og depname for participant er " + participant.getDepartment().getDepName());
+            parRepo.putParticipantsInDatabase(userId, participant.getDepartment().getDepartmentNo(),1);
+            parRepo.putParticipantsInParticipantProjectTable(userId, projectTitle,1);
         }
         return participant;
+    }
+
+    public ArrayList<Participant> createParticipants(String userId, String projectTitle, String depName, int amount) {
+        ParticipantRepository parRepo = new ParticipantRepository();
+        ArrayList<Participant> participants = new ArrayList<>();
+
+        parRepo.putParticipantsInDatabase(userId, getDepartment(depName).getDepartmentNo(),amount);
+        for (int i = 0; i < amount;i++) {
+            participants.add(new Participant(userId, null, null, null, getDepartment(depName)));
+        }
+
+        parRepo.putParticipantsInParticipantProjectTable(userId, projectTitle,amount);
+
+        return participants;
     }
 
     public Participant createProjectManagerAsParticipant(String userId, String depName, String projectTitle) {
         ParticipantRepository parRepo = new ParticipantRepository();
 
         participant = new Participant(userId, null, null, null, getDepartment(depName));
-        parRepo.putParticipantInDatabase(userId,  participant.getDepartment().getDepartmentNo());
-        parRepo.putParticipantInParticipantProjectTable(userId, projectTitle);
+        parRepo.putParticipantsInDatabase(userId,  participant.getDepartment().getDepartmentNo(),1);
+        parRepo.putParticipantsInParticipantProjectTable(userId, projectTitle,1);
 
         return participant;
     }

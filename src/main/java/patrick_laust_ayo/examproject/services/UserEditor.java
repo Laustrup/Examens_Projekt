@@ -69,7 +69,10 @@ public class UserEditor {
         return participant;
     }
 
-    // Returns an exception as a string, if project is booked
+    public void joinParticipantsToProject(Participant[] participants, Project project) {
+            new ProjectRepository().addParticipantsToProject(participants,project.getTitle());
+    }
+
     public String joinParticipantToProject(Participant participant, Project project) {
         ProjectRepository repo = new ProjectRepository();
         ExceptionHandler handler = new ExceptionHandler();

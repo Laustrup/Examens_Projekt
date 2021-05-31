@@ -79,10 +79,9 @@ public class ProjectController {
     }
 
     @PostMapping("/direct_project_page")
-    public String goToChoosenProjectPage(HttpServletRequest request, Model model) {
+    public String goToChoosenProjectPage(@RequestParam(name = "project_title") String projectTitle, HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
 
-        String projectTitle = ((Project) session.getAttribute("project")).getTitle();
         String participantId = ((Participant) session.getAttribute("participant")).getId();
 
         session.setAttribute("current_project","start");

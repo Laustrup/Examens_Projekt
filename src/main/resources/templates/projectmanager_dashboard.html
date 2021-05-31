@@ -10,10 +10,12 @@
     <section class="current_projects">
         <p th:text="${projectManager.getId}"></p>
 
+        <form action="/direct_project_page" method="POST">
+            <ul th:each="project : ${projects}">
+                <li><button type="submit" th:value="${project.getTitle()}" name="project_title"><p th:text="${project.getTitle()}"></p></button></li>
+            </ul>
+        </form>
 
-        <ul th:each="projects : ${projects}">
-            <li th:text="${projects.getTitle}"></li>
-        </ul>
 
         <div class="select_cur_project">
             <div class="department_section">
