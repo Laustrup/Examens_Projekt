@@ -63,11 +63,12 @@ public class ParticipantController {
                                    HttpServletRequest request, Model model){
         HttpSession session = request.getSession();
         ProjectManager projectManager = (ProjectManager) session.getAttribute("projectManager");
+        String projectManagerPassword = (String) session.getAttribute("projectmanager_password");
 
         userCreator.createProjectManagerAsParticipant(projectManager.getUsername(), depName, projectTitle);
 
         session.setAttribute("participant", userEditor.updateParticipant(projectManager.getUsername(),
-                projectManager.getPassword(), "null", "null",
+                projectManagerPassword, "null", "null",
                 projectManager.getUsername(), true));
 
         session.setAttribute("current_project", "start");

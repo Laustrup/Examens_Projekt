@@ -55,7 +55,7 @@ class UserCreatorTest {
     void createManager(){
         UserCreator userCreator = new UserCreator();
 
-        ProjectManager projectManager = userCreator.createManager("Patrick", "yolo", 1);
+        ProjectManager projectManager = userCreator.createManager("Patrick");
 
         assertEquals("Patrick", projectManager.getUsername());
         assertEquals("yolo", projectManager.getPassword());

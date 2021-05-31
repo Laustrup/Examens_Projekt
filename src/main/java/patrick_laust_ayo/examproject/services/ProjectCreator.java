@@ -85,10 +85,9 @@ public class ProjectCreator {
 
             projectRepo.putProjectInDatabase(project, projectManagerRepo.findId("projectmanager",
                     "username",managerName,"projectmanager_id"));
-                //    projectManagerRepo.findProjectManager(managerName).getInt("projectmanager_id"));
         }
         catch (Exception e) {
-            System.out.println("Couldn't put project in database...\n" + e.getMessage());
+            System.out.println("Couldn't put project in database in createProject...\n" + e.getMessage());
             e.printStackTrace();
         }
         projectManagerRepo.closeCurrentConnection();
@@ -273,7 +272,7 @@ public class ProjectCreator {
             }
         }
         catch (Exception e) {
-            System.out.println("Couldn't create project...\n" + e.getMessage());
+            System.out.println("Couldn't create project in getProject...\n" + e.getMessage());
             e.printStackTrace();
             project = null;
         }
@@ -303,7 +302,7 @@ public class ProjectCreator {
             }
         }
         catch (Exception e) {
-            System.out.println("Couldn't gather projects...\n" + e.getMessage());
+            System.out.println("Couldn't gather projects in getProjects...\n" + e.getMessage());
             e.printStackTrace();
         }
         return projects;
@@ -443,6 +442,7 @@ public class ProjectCreator {
 
         return assignment;
     }
+
     public Assignment getAssignment(String assignmentTitle,String phaseTitle) {
         ResultSet res = projectRepo.findAssignment(assignmentTitle,phaseTitle);
         ArrayList<Task> tasks = new ArrayList<>();

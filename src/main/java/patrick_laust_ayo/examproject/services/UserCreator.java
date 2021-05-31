@@ -15,6 +15,8 @@ public class UserCreator {
     private ProjectManager projectManager;
     private Participant participant;
 
+    //TODO denne metode er ikke længere nødvendig umiddelbart, fordi den under den, kan erstatte den!
+    /*
     public ProjectManager createManager(String username, String password, int departmentNo) {
        projectManager = new ProjectManager(username, password);
 
@@ -24,6 +26,18 @@ public class UserCreator {
        pmRepo.putProjectManagerInDatabase(projectManager);
 
        return projectManager;
+    }
+*/
+
+
+    public ProjectManager createManager(String username) {
+        projectManager = new ProjectManager(username);
+
+        ProjectManagerRepository pmRepo = new ProjectManagerRepository();
+
+        pmRepo.putProjectManagerInDatabase(projectManager);
+
+        return projectManager;
     }
 
     public Department getDepartment(String depName) {
@@ -50,15 +64,15 @@ public class UserCreator {
         ResultSet res = projectManagerRepo.findProjectManager(username);
         try {
             res.next();
-
+            //TODO Department skal først skabes i participant-delen, så projectmanager skal kun have username
+/*
             Department department = new Department(res.getInt("department_no"),
                     res.getString("location"), res.getString("department_name"));
-            projectManager = new ProjectManager(res.getString("username"),res.getString("participant_password"),
-                    res.getString("user_id"),res.getString("participant_name"),
-                    res.getString("position"),department);
+            */
+            projectManager = new ProjectManager(res.getString("username"));
         }
         catch (Exception e) {
-            System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
+            System.out.println("Couldn't create a projectmanager from resultSet in getProjectManager...\n" + e.getMessage());
             e.printStackTrace();
             projectManager = null;
         }
@@ -115,7 +129,7 @@ public class UserCreator {
                     res.getString("participant_name"), res.getString("position"),
                     department);
         } catch (Exception e) {
-            System.out.println("Couldn't create a participant from resultSet...\n" + e.getMessage());
+            System.out.println("Couldn't create a participant from resultSet in getParticipant...\n" + e.getMessage());
             participant = null;
             e.printStackTrace();
         }
