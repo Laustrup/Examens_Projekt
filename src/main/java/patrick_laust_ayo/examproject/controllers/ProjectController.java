@@ -98,7 +98,7 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
 
-        if (session.getAttribute("participant")==null && projectCreator.getProject(projectTitle) != null) {
+        if (session.getAttribute("participant")==null && handler.doesProjectExist(projectTitle)) {
             session.setAttribute("project",projectCreator.getProject(projectTitle));
             session.setAttribute("current_login","with_invite");
             return "redirect:/participant_login_page";
@@ -124,10 +124,8 @@ public class ProjectController {
             return "project_page";
         }
 
-        //TODO der skal være det rigtige redirect
-        model.addAttribute("Exception","You are not a participant of this project...");
-        return "project_page";
-        // return "redirect:/login_to_project/" + ((Participant) session.getAttribute("participant")).getId()+ "/" + projectTitle;
+        session.setAttribute("Exception","Project doesn't exist...");
+        return "redirect:/";
     }
 
     @PostMapping("/project_page_update-participant_pressed")

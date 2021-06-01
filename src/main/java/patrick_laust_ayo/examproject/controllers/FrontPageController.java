@@ -14,7 +14,7 @@ public class FrontPageController {
     @GetMapping("/")
     public String indexPage(Model model, HttpServletRequest request){
         HttpSession session = request.getSession();
-        model.addAttribute("fullyBooked", session.getAttribute("fullyBooked"));
+        model.addAttribute("Exception", session.getAttribute("Exception"));
         return "index";
     }
 

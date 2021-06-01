@@ -317,6 +317,21 @@ public class ProjectRepository extends Repository{
                 "WHERE title = \"" + formerTitle + "\";");
     }
     public void addParticipantToProject(Participant participant, Project project) {
+        ResultSet res = executeQuery("SELECT * FROM participant " +
+                "INNER JOIN participant_project ON participant_project.participant_id = participant.participant_id " +
+                "INNER JOIN project ON project.project_id = participant_project.project_id " +
+                "INNER JOIN department ON department.department_no = participant.department_no " +
+                "WHERE user_id = \"Enter user-ID\" AND project_title = \"" + project.getTitle() + "\" AND department_no = "
+                + participant.getDepartment().getDepartmentNo() + ";");
+
+        int emptyParticipantId = -1;
+
+        try {
+        emptyParticipantId = res.getInt("participant_id");
+        }
+        catch (Exception e) {
+            System.err.println("Couldn't get emptyParticipantId...\n");
+        }
         int participantId = findId("participant","user_id", participant.getId(),"participant_id");
         int projectId = findId("project","title", project.getTitle(),"project_id");
 
@@ -324,16 +339,10 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN project ON participant_project.project_id = project.project_id " +
                 "INNER JOIN participant ON participant_project.participant_id = participant.participant_id " +
                 "SET participant_project.participant_id = " + participantId + " " +
-                "WHERE participant_project.participant_id = " + participantId + " AND participant_project.project_id = " + projectId + ";" +
-                "DELETE participant FROM participant " +
-                "INNER JOIN participant_project ON participant_project.participant_id = participant.participant_id " +
-                "INNER JOIN project ON project.project_id = participant_project.project_id " +
-                "WHERE project.user_id = null " +
-                "AND WHERE project.name = null " +
-                "AND WHERE project.password = null " +
-                "AND WHERE position = null " +
-                "AND WHERE participant_project.project_id = participant_project.participant_id" +
-                "AND WHERE participant.participant_id = participant_project.participant_id;");
+                "WHERE participant_project.participant_id = " + emptyParticipantId + " AND participant_project.project_id = " + projectId + ";");
+        executeSQLStatement("DELETE participant FROM participant " +
+                "WHERE participant.user_id = \"Enter user-ID\" " +
+                "AND WHERE participant_id = " + emptyParticipantId + " ;");
     }
     public void removeProject(String projectTitle) {
         executeSQLStatement("DELETE participant_task " +
