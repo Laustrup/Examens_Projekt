@@ -7,8 +7,9 @@
 </head>
 <body>
 
-<header><h1>Login As Participant</h1></header>
+<header th:replace="fragments/header.html"></header>
     <main>
+        <h1>Login As Participant</h1>
         <div class="flex-container">
         <section id="participant_login">
             <form action ="/join-project" method="post">
@@ -31,6 +32,6 @@
         </section>
         </div>
     </main>
-
+<footer th:replace="fragments/footer.html"></footer>
 </body>
 </html>

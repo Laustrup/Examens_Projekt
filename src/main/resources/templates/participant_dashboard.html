@@ -6,6 +6,8 @@
     <title>Dashboard</title>
 </head>
 <body>
+<header th:replace="fragments/header.html"></header>
+<main>
 <div class="flex-container">
     <form action="/direct_project_page" method="post">
     <ul th:each="projects : ${projects}">
@@ -14,5 +16,7 @@
     </ul>
     </form>
 </div>
+</main>
+<footer th:replace="fragments/footer.html"></footer>
 </body>
 </html>

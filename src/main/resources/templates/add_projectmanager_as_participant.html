@@ -5,7 +5,8 @@
     <title>Add participant</title>
 </head>
 <body>
-
+<header th:replace="fragments/header.html"></header>
+<main>
     <form action="/projectmanager/participant_added" method="post">
         <div>
         <label for="project_title">Project Title</label>
@@ -29,6 +30,7 @@
         <button type="submit">Create participant</button>
         </div>
     </form>
-
+</main>
+<footer th:replace="fragments/footer.html"></footer>
 </body>
 </html>
