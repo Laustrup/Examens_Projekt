@@ -62,6 +62,7 @@ public class UserCreator {
         ProjectManagerRepository projectManagerRepo = new ProjectManagerRepository();
 
         ResultSet res = projectManagerRepo.findProjectManager(username);
+
         try {
             res.next();
             //TODO Department skal først skabes i participant-delen, så projectmanager skal kun have username

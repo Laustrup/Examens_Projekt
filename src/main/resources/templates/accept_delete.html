@@ -7,9 +7,10 @@
 
 <body>
 
-    <header th:replace="fragments/header.html"></header>
+<header th:replace="fragments/header.html"></header>
 
-    <main>
+<main>
+    <div class="special_container">
         <h3>Are you sure to delete <p th:text="${Object_to_delete}"></p></h3>
 
         <div th:if="${current_delete eq 'participant'} ">
@@ -61,10 +62,10 @@
         <a href="/">Go back</a>
 
         <p th:text="${Exception}"></p>
+    </div>
+</main>
 
-    </main>
-
-    <footer th:replace="fragments/footer.html"></footer>
+<footer th:replace="fragments/footer.html"></footer>
 
 </body>
 </html>

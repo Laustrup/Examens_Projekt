@@ -2,32 +2,38 @@
 <html lang="da" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/login_create.css}">
     <title>Add participant</title>
 </head>
 <body>
 <header th:replace="fragments/header.html"></header>
 <main>
     <form action="/projectmanager/participant_added" method="post">
-        <div>
-        <label for="project_title">Project Title</label>
-        <input type="text" name="project_title" id="project_title" th:value="${project_title}" th:placeholder="${project_title}" readonly>
-        </div>
 
-        <div>
-            <label for="department_name">Choose department:</label>
-        <div>
-        <select name="department_name" id="department_name">
-            <option value="COPENHAGEN">COPENHAGEN</option>
-            <option value="OSLO">OSLO</option>
-            <option value="DALLAS">DALLAS</option>
-            <option value="LOS ANGELES">LOS ANGELES</option>
-            <option value="NEW YORK">NEW YORK</option>
-        </select>
-        </div>
-        </div>
+        <div class="flex-container">
+            <section id="manager_is_participant_form">
+                <div class="project_title">
+                    <label for="project_title">Project Title</label>
+                    <input type="text" name="project_title" id="project_title" th:value="${project_title}" th:placeholder="${project_title}" readonly>
+                </div>
 
-        <div>
-        <button type="submit">Create participant</button>
+                <div class="choose_department">
+                    <label for="department_name">Choose department:</label>
+                    <div>
+                        <select name="department_name" id="department_name">
+                            <option value="COPENHAGEN">COPENHAGEN</option>
+                            <option value="OSLO">OSLO</option>
+                            <option value="DALLAS">DALLAS</option>
+                            <option value="LOS ANGELES">LOS ANGELES</option>
+                            <option value="NEW YORK">NEW YORK</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="create_btn">
+                    <button type="submit">Create participant</button>
+                </div>
+            </section>
         </div>
     </form>
 </main>
