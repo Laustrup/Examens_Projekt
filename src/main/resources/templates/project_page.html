@@ -249,7 +249,7 @@
                 <p th:text="${Exception}"></p>
 
                 <form action="/change_assignment_is_completed_status" method="post">
-                    <button type="submit" name="assignment_title"><p th:text="${assignment.IsCompletedAsAString()}"></p></button>
+                    <button type="submit"><p th:text="${assignment.IsCompletedAsAString()}"></p></button>
                 </form>
 
                 <div>
@@ -279,14 +279,17 @@
                     <th>Estimated cost of task: <p th:text="${task.getTotalCost()}"></p></th>
                 </tr>
 
-                <form action="/direct_to_task" method="post">
-                    <div th:each="task : {assignment.getTasks()}">
-                        <input th:value="${task.getStart()}" name="task_start">
-                        <input th:value="${task.getEnd()}" name="task_end">
-                        <button type="submit" th:value="${task.getTitle()}" name="task_title"><p th:text="${task.getTitle()}"></p>
-                            </pt></button>
-                    </div>
-                </form>
+                <h5>Participants of this task are: </h5>
+                <div>
+                    <tr th:each="participant : {task.getParticipants()}">
+                        <div>
+                            <th>Name: <p th:text="${participant.getName()}"></p></th>
+                            <th>User-id: <p th:text="${participant.getId()}"></p></th>
+                            <th>Position: <p th:text="${participant.getPosition()}"></p></th>
+                            <th>Department: <p th:text="${participant.getDepartment().getDepartmentName()}"></p></th>
+                        </div>
+                    </tr>
+                </div>
 
                 <form action="/update_task" method="post">
                     <div class="update_task">
@@ -304,21 +307,21 @@
                 </form>
                 <p th:text="${Exception}"></p>
 
-                <form action="/change_assignment_is_completed_status" method="post">
-                    <button type="submit" name="assignment_title"><p th:text="${assignment.IsCompletedAsAString()}"></p></button>
+                <form action="/change_task_is_completed_status" method="post">
+                    <button type="submit"><p th:text="${task.IsCompletedAsAString()}"></p></button>
                 </form>
 
                 <div>
-                    <p><a href="/accept_delete"><button>Delete task</button></a></p>
+                    <p><a href="/accept_delete_of_task"><button>Delete task</button></a></p>
                     <form action="/direct_to_phase" method="post">
                         <button type="submit" th:value="${phase.getTitle()}" name="phase_title">Back to phases</button>
                     </form>
                 </div>
 
                 <form action="/join-task" method="post">
-                    <input th:value="${task.getTitle()}" name="task_title">
-                    <input th:value="${task.getStart()}" name="task_start">
-                    <input th:value="${task.getEnd()}" name="task_end">
+                    <input type="text" th:value="${task.getTitle()}" name="task_title" hidden>
+                    <input type="text" th:value="${task.getStart()}" name="task_start" hidden>
+                    <input type="text" th:value="${task.getEnd()}" name="task_end" hidden>
                     <button type="submit">Join task</button>
                 </form>
             </div>

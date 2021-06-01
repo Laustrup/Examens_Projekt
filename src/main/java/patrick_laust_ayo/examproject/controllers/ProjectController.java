@@ -656,10 +656,10 @@ public class ProjectController {
         return "assignment";
     }
 
-    @GetMapping("/accept_delete_of_{task.getTitle()}")
+    @GetMapping("/accept_delete_of_task")
     public String renderDeleteTask(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
-        model.addAttribute("Object_to_delete",((Task)session.getAttribute("Task")));
+        model.addAttribute("Object_to_delete",((Task)session.getAttribute("Task")).getTitle());
         return "accept_delete";
     }
 
