@@ -35,7 +35,6 @@ public class  ProjectManagerController {
 
         if (exceptionHandler.doesUserIdExist(username)) {
             model.addAttribute("Exception", "This username already exist. Please choose another.");
-            System.out.println(exceptionHandler.doesUserIdExist(username));
             return "create_projectmanager.html";
         }
 
@@ -94,6 +93,7 @@ public class  ProjectManagerController {
 
     @GetMapping("/manager_dashboard/{manager-id}")
     public String renderDashboard(@PathVariable("manager-id") String userId, Model model) {
+
         ProjectCreator projectCreator = new ProjectCreator();
 
         model.addAttribute("projectManager", userCreator.getProjectManager(userId));
@@ -121,5 +121,4 @@ public class  ProjectManagerController {
 
         return "redirect:/project_page-" + projectTitle + "/" + participant.getId();
     }
-
 }

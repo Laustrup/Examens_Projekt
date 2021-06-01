@@ -195,7 +195,7 @@ public class ExceptionHandler {
     public String isLengthAllowedInDatabase(String input,String column)  {
 
         if (inputAsTitleIsTooLongByAmount(input,column) != -1) {
-            return "Title is too long... Write less than " + inputAsTitleIsTooLongByAmount(input,column) + " words!";
+            return column + " is too long... Write less than " + inputAsTitleIsTooLongByAmount(input,column) + " words!";
         }
         if (column.equals("participant_password") && input.length()>25) {
             return "Password is too long... Write less than 25 words!";

@@ -20,6 +20,7 @@ class ProjectCreatorTest {
     @ParameterizedTest
     @CsvSource(value = {"Save the homeless|andy0432", "Skydiving App|cind2352"}, delimiter = '|')
     public void createProjectTest(String title, String managerUsername) {
+
         //Act
         Project actual = projectCreator.createProject(title,managerUsername);
 
@@ -398,11 +399,11 @@ class ProjectCreatorTest {
 
     }
 
-        // Only tests title since the method getProject is being fully tested through
-    // TODO Perhaps add more parameters to test multiple tests
+    // Only tests title since the method getProject is being fully tested through
     @ParameterizedTest
     @CsvSource(value = {"lone9242|Appdev", "jame4235|Find New Employees_Advertising", "ande0137|Appdev"}, delimiter = '|')
     public void getProjectsTest(String userId, String expected) {
+
         //Act
         ArrayList<Project> actual = projectCreator.getProjects(userId);
         String [] expectations = expected.split("_");
@@ -414,17 +415,17 @@ class ProjectCreatorTest {
     }
 
 
-    // TODO Can update, put not fast enough to test
     @ParameterizedTest
     @CsvSource(value = {"Appdev|Extra|1", "Appdev|Extra|2", "Advertising|SuperPhase|1"}, delimiter = '|')
     public void createPhaseTest(String projectTitle,String phaseTitle, String newestPhaseNo) {
-        //Act
-        ProjectRepository proRepo = new ProjectRepository();
 
+        //Arrange
+        ProjectRepository proRepo = new ProjectRepository();
         String phaseTitleFromRepo = "";
 
         //Phase createdPhase = projectCreator.createPhase(projectTitle,"Temp");
 
+        //Act
         Phase updatedPhase = new ProjectEditor().updatePhase(phaseTitle,
                 projectTitle + " NEW PHASE " +
                         newestPhaseNo, projectTitle);
@@ -435,11 +436,11 @@ class ProjectCreatorTest {
         catch (Exception e){
             System.out.println(e.getMessage());
         }
+
         //Assert
         //assertEquals(projectTitle + " - NEW PHASE " + newestPhaseNo, proRepo.);
         assertEquals(phaseTitleFromRepo, updatedPhase.getTitle());
     }
-
 
 
     @Test

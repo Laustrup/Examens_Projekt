@@ -10,10 +10,13 @@ class ExceptionHandlerTest {
 
     private ExceptionHandler handler = new ExceptionHandler();
 
+
     @ParameterizedTest
-    @CsvSource(value = {"afdasg12421456ds|user_id|ID is too long... Write less than 15 words!", "afd12421456ds|user_id|Input is allowed",
-                "***************************|participant_password|Password is too long... Write less than 25 words!", "****************|participant_password|Input is allowed"}
-            , delimiter = '|')
+    @CsvSource(value = {"afdasg12421456ds2l34kgdso3|user_id|user_id is too long... Write less than 25 words!",
+            "afd12421456ds|user_id|Input is allowed",
+            "***************************|participant_password|Password is too long... Write less than" +
+                    " 25 words!", "****************|participant_password|Input is allowed"},
+            delimiter = '|')
     public void isLengthAllowedInDatabaseTest(String input,String column,String expected) {
 
         // Act
@@ -22,7 +25,6 @@ class ExceptionHandlerTest {
         // Assert
         assertEquals(expected,actual);
     }
-
 
     @ParameterizedTest
     @CsvSource(value = {"Appdev|true","Saledev|false"},delimiter = '|')
@@ -50,7 +52,7 @@ class ExceptionHandlerTest {
     public void allowLoginTest(String password,boolean expected) {
 
         // Act
-        boolean actual = handler.allowLogin("abe",password);
+        boolean actual = handler.allowLogin("lone9242",password);
         // Assert
         assertEquals(expected,actual);
     }
