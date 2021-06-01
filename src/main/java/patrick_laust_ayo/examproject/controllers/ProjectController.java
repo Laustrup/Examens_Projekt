@@ -111,6 +111,8 @@ public class ProjectController {
             session.setAttribute("project",project);
 
             model.addAttribute("project",project);
+            model.addAttribute("work_hours",project.getTotalWorkhours());
+            model.addAttribute("total_cost",project.getTotalCost());
             model.addAttribute("phase", session.getAttribute("phase"));
 
             model.addAttribute("participant",new UserCreator().getParticipant(userId));

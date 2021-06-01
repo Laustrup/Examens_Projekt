@@ -14,8 +14,8 @@ public class Project {
     private Map<String, Participant> participants;
     private ProjectManager projectManager;
 
-    private int totalCost;
-    private double totalWorkHours;
+    private double totalCost;
+    private int totalWorkHours;
 
     public Project(String title, ArrayList<Phase> phases, Map<String,
                     Participant> participants, ProjectManager projectManager) {
@@ -23,8 +23,7 @@ public class Project {
         this.phases = phases;
         this.participants = participants;
         this.projectManager = projectManager;
-        setTotalCost();
-        setTotalWorkhours();
+
     }
 
     // For updating title or password
@@ -56,27 +55,19 @@ public class Project {
         this.phases = phases;
     }
 
-    public void setTotalWorkhours() {
+    public int getTotalWorkhours() {
         totalWorkHours = 0;
         for (int i = 0; i < phases.size();i++) {
             totalWorkHours += phases.get(i).getTotalWorkhours();
         }
-        System.out.println("Total work hours " + totalWorkHours);
-    }
-
-    public double getTotalWorkHours() {
         return totalWorkHours;
     }
 
-    public void setTotalCost() {
+    public double getTotalCost() {
         totalCost = 0;
         for (int i = 0; i < phases.size();i++) {
             totalCost += phases.get(i).getTotalCost();
         }
-        System.out.println("Total cost " + totalCost);
-    }
-
-    public double getTotalCost() {
         return totalCost;
     }
 
