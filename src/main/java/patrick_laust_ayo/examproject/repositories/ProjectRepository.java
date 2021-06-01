@@ -9,11 +9,22 @@ public class ProjectRepository extends Repository{
     // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
     public void putProjectInDatabase(Project projectToInsert, int projectmanagerId) {
         executeSQLStatement("INSERT INTO project(title, projectmanager_id) VALUES (\""  + projectToInsert.getTitle() + "\", " + projectmanagerId + "); ");
+
     }
 
 
-    public void putPhaseInDatabase(String phaseTitle, int projectId) {
+    public void putPhaseInDatabase(String phaseTitle, int projectId, String projectManagerUsername) {
+        int assignmentId = calcNextId("assignment");
+        int taskId = calcNextId("task");
+        int participantId = findId("participant","user_id",projectManagerUsername,"participant_id");
         executeSQLStatement("INSERT INTO phase_table(phase_title, project_id) VALUES (\"" + phaseTitle + "\", " + projectId + ");");
+        executeSQLStatement("INSERT INTO assignment(assignment_title, assignment_start, assignment_end, is_Completed, phase_id) " +
+                "VALUES (null, null, null, false, " + findId("phase_table", "phase_title",phaseTitle,"phase_id") + "); ");
+        executeSQLStatement("INSERT INTO task(assignment_id,estimated_work_hours,task_title,task_start,task_end,task_is_completed) " +
+                "VALUES (" + assignmentId + ", null, null,null,null,false); ");
+        executeSQLStatement("INSERT INTO participant_task(participant_id,task_id) " +
+                "VALUES (" + participantId + "," + taskId + "); ");
+
     }
 
     public ResultSet findPhase(String phaseTitle,String projectTitle) {

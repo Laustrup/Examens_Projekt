@@ -423,7 +423,7 @@ class ProjectCreatorTest {
 
         String phaseTitleFromRepo = "";
 
-        Phase createdPhase = projectCreator.createPhase(projectTitle,"Temp");
+        //Phase createdPhase = projectCreator.createPhase(projectTitle,"Temp");
 
         Phase updatedPhase = new ProjectEditor().updatePhase(phaseTitle,
                 projectTitle + " NEW PHASE " +
@@ -436,7 +436,7 @@ class ProjectCreatorTest {
             System.out.println(e.getMessage());
         }
         //Assert
-        assertEquals(projectTitle + " - NEW PHASE " + newestPhaseNo, proRepo.);
+        //assertEquals(projectTitle + " - NEW PHASE " + newestPhaseNo, proRepo.);
         assertEquals(phaseTitleFromRepo, updatedPhase.getTitle());
     }
 

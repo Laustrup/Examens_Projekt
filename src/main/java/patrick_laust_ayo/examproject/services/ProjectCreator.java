@@ -297,12 +297,12 @@ public class ProjectCreator {
         return projects;
     }
 
-    public Phase createPhase(String projectTitle,String phaseTitle) {
+    public Phase createPhase(String projectTitle,String phaseTitle,String projectManagerUsername) {
 
         phase = new Phase(phaseTitle);
 
         int id = projectRepo.findId("project","title",projectTitle, "project_id");
-        projectRepo.putPhaseInDatabase(phaseTitle, id);
+        projectRepo.putPhaseInDatabase(phaseTitle, id,projectManagerUsername);
 
         return phase;
     }

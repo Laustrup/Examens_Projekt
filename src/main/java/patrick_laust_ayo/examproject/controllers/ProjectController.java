@@ -262,7 +262,7 @@ public class ProjectController {
             session.setAttribute("Exception","Phase already exists in project");
         }
         else {
-            session.setAttribute("phase", projectCreator.createPhase(projectTitle,phaseTitle));
+            session.setAttribute("phase", projectCreator.createPhase(projectTitle,phaseTitle,userId));
         }
         return "redirect:/project_page-" + projectTitle + "/" + userId;
     }
@@ -466,38 +466,33 @@ public class ProjectController {
     }
 
     @PostMapping("/direct_to_assignment")
-    public String directToAssignment(@RequestParam(name="assignment_title_search") String assignmentTitle,
+    public String directToAssignment(@RequestParam(name="assignment_title") String assignmentTitle,
                                      HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,((Phase)session.getAttribute("phase")).getTitle()));
         session.setAttribute("Exception","");
         session.setAttribute("Message","");
         return "redirect:/project_page-" + ((Project)session.getAttribute("project")).getTitle() + "/" +
+                ((Participant)session.getAttribute("participant")).getId() + "/" +
                 ((Phase)session.getAttribute("phase")).getTitle() + "/" +  assignmentTitle;
     }
 
 
-    @GetMapping("/projectpage-{project_title}/{phase_title}/{assignment_title}")
+    @GetMapping("/project_page-{project_title}/{user_id}/{phase_title}/{assignment_title}")
     public String renderAssignment(@PathVariable(name = "project_title") String projectTitle,
+                                   @PathVariable(name = "user_id") String user_id,
                                    @PathVariable(name = "phase_title") String phaseTitle,
                                    @PathVariable(name = "assignment_title") String assignmentTitle,
                                    HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
-        //session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,phaseTitle));
 
-        System.err.println("render assignment getproject title er " + projectCreator.getProject(projectTitle).getTitle());
-        System.err.println("project page med assignment, titlen er " + assignmentTitle);
-
-        model.addAttribute("project",projectCreator.getProject(projectTitle));
-        System.err.println("project page med phase og assignment, projectTitle " + projectCreator.getProject(projectTitle).getTitle());
-
-        model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
-        System.err.println("project page med phase og assignment, phaseTitle " + projectCreator.getPhase(phaseTitle, projectTitle).getTitle());
-
-        model.addAttribute("assignment",projectCreator.getAssignment(assignmentTitle, projectTitle));
-        System.err.println("project page med phase og assignment, assignmentTitle " + projectCreator.getAssignment(assignmentTitle, projectTitle).getTitle());
-
+        model.addAttribute("project",session.getAttribute("project"));
+        model.addAttribute("phase",session.getAttribute("phase"));
+        model.addAttribute("assignment",session.getAttribute("assignment"));
+        model.addAttribute("assignment_total_cost",((Assignment)session.getAttribute("assignment")).getTotalAssignmentCost());
+        model.addAttribute("assignment_work_hours",((Assignment)session.getAttribute("assignment")).getTotalAssignmentWorkhours());
+        model.addAttribute("participant",session.getAttribute("participant"));
         model.addAttribute("Exception",session.getAttribute("Exception"));
         model.addAttribute("Message",session.getAttribute("Message"));
         model.addAttribute("current","assignment");
