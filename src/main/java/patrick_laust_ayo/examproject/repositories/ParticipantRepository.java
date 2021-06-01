@@ -9,7 +9,6 @@ public class ParticipantRepository extends Repository {
             executeSQLStatement(" INSERT INTO participant(user_id,participant_name, participant_password, position, department_no) " +
                     "VALUES (\"" + userId + "\", null, null, null, " + departmentNo + "); ");
         }
-
     }
 
     public void putParticipantsInParticipantProjectTable(String userId, String projectTitle, int amount){
@@ -21,42 +20,22 @@ public class ParticipantRepository extends Repository {
         }
     }
 
-    /*
-    public Participant putParticipantInDatabaseWithReturn(Participant participantToInsert, int projectId, Department department) {
-        executeSQLStatement("INSERT into participant " +
-                "VALUES (default, \" " + participantToInsert.getName() + "\", \"" + participantToInsert.getPosition() +
-                "\", " + projectId + ", " + department.getDepartmentNo() + ";");
-        ResultSet res = executeQuery("SELECT * FROM project WHERE participant_name = \""
-                + participantToInsert.getName() + "\");");
-
-
-        try {
-            participant = new Participant(res.getString("user_id"), res.getString("password"), res.getString("participant_name"),
-                    res.getString("position"), department);
-
-        } catch (Exception e) {
-            System.out.println("Couldn't create a projectmanager from resultSet...\n" + e.getMessage());
-            participant = null;
-        }
-        closeCurrentConnection();
-        return participant;
-    }
-
-     */
-
     public ResultSet findParticipant(String userId) {
         return executeQuery("SELECT * FROM participant " +
                         "INNER JOIN department ON participant.department_no = department.department_no " + "INNER JOIN project " +
                         "WHERE user_id = \"" + userId + "\";");
     }
 
-    public void updateParticipant(String userId, String name, String password, String position, String formerUserId) {
+    public void updateParticipant(String userId, String name, String password, String position, String departmentName, String formerUserId) {
+        int departmentId = findId("department","department_name",departmentName,"department_no");
+
         if (name.equals("null") && position.equals("null")){
             executeSQLStatement("UPDATE participant " +
                     "SET participant.user_id = \"" + userId + "\", " +
                     "participant.participant_name = null, " +
                     "participant.participant_password = \"" + password + "\", " +
                     "participant.position = null " +
+                    "participant.department_no = " + departmentId + " " +
                     "WHERE participant.user_id = \"" + formerUserId + "\";");
         }
         else {
@@ -65,6 +44,7 @@ public class ParticipantRepository extends Repository {
                     "participant.participant_name = \"" + name + "\", " +
                     "participant.participant_password = \"" + password + "\", " +
                     "participant.position = \"" + position + "\" " +
+                    "participant.department_no = " + departmentId + " " +
                     "WHERE participant.user_id = \"" + formerUserId + "\";");
         }
     }

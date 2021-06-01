@@ -15,12 +15,13 @@ public class UserEditor {
     private ProjectManager projectManager;
     private Participant participant;
 
-    public Participant updateParticipant(String id, String password, String name, String position, String formerUserId, boolean isProjectManager) {
+    public Participant updateParticipant(String id, String password, String name, String position,
+                                         String departmentName, String formerUserId, boolean isProjectManager) {
         if (isProjectManager) {
-            updateProjectmanager(id,password,formerUserId);
+            updateProjectmanager(id,formerUserId);
         }
 
-        participantRepo.updateParticipant(id, name, password, position, formerUserId);
+        participantRepo.updateParticipant(id, name, password, position, departmentName, formerUserId);
 
         // Makes sure that it's the real participant from db that is being returned
         ResultSet res = participantRepo.findParticipant(id);
@@ -42,8 +43,8 @@ public class UserEditor {
         return participant;
     }
 
-    public ProjectManager updateProjectmanager(String username, String password, String formerUsername) {
-        projectManagerRepo.updateProjectManager(username, password, formerUsername);
+    public ProjectManager updateProjectmanager(String username, String formerUsername) {
+        projectManagerRepo.updateProjectManager(username, formerUsername);
         return new UserCreator().getProjectManager(username);
     }
 

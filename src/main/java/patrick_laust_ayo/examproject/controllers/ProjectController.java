@@ -133,7 +133,7 @@ public class ProjectController {
     }
 
     @PostMapping("/project_page_update-participant_pressed")
-    public String participantUpdatedByPressedButton(@RequestParam (name = "participant_ID") String userId,
+    public String participantUpdatedInProject(@RequestParam (name = "participant_ID") String userId,
                                                     @RequestParam (name = "participant_password") String password,
                                                     @RequestParam (name = "participant_name") String name,
                                                     @RequestParam (name = "position") String position,
@@ -176,12 +176,12 @@ public class ProjectController {
 
         if (userId.equals("")){
             session.setAttribute("participant" ,userEditor.updateParticipant(formerUserId, password, name,
-                    position, formerUserId, handler.isParticipantProjectManager(formerUserId)));
+                    position, depName,formerUserId, handler.isParticipantProjectManager(formerUserId)));
             userId = formerUserId;
         }
         else {
             session.setAttribute("participant", userEditor.updateParticipant(userId, password, name,
-                    position, formerUserId, handler.isParticipantProjectManager(formerUserId)));
+                    position, depName, formerUserId, handler.isParticipantProjectManager(formerUserId)));
         }
 
         Participant participant = (Participant) session.getAttribute("participant");

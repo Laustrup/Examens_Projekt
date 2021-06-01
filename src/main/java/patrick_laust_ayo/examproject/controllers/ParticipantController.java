@@ -70,7 +70,7 @@ public class ParticipantController {
         userCreator.createProjectManagerAsParticipant(projectManager.getUsername(), depName, projectTitle);
 
         session.setAttribute("participant", userEditor.updateParticipant(projectManager.getUsername(),
-                projectManagerPassword, "null", "null",
+                projectManagerPassword, "null", "null", depName,
                 projectManager.getUsername(), true));
 
         session.setAttribute("current_project", "start");
@@ -79,30 +79,8 @@ public class ParticipantController {
         return "redirect:/project_page-" + projectTitle + "/" + projectManager.getUsername();
     }
 
-    /*
-    @PostMapping("/login_to_project")
-    public String checkLoginToProject(@RequestParam (name="participant_id") String userId,
-                             @RequestParam (name="participant_password") String password,
-                             HttpServletRequest request, Model model){
-
-        HttpSession session = request.getSession();
-        ExceptionHandler exceptionHandler = new ExceptionHandler();
-
-        if (exceptionHandler.allowLogin(userId, password)){
-            // TODO How to get projectTitle
-            session.setAttribute("participant", userCreator.getParticipant(userId));
-            return "redirect://join-project";
-        }
-
-        model.addAttribute("Exception","Wrong user-id or password!");
-        // TODO Create html
-        return "redirect:/participant_login_page";
-    }
-
-     */
-
-    @GetMapping("/participant_dashboard/{participant.getUserId()}")
-    public String renderDashboard(@PathVariable (name="participant.getUserId()") String userId, Model model){
+    @GetMapping("/participant_dashboard/{participant_user_id}")
+    public String renderDashboard(@PathVariable (name="participant_user_id") String userId, Model model){
 
         model.addAttribute("projects", new ProjectCreator().getProjects(userId));
         model.addAttribute("participant", new UserCreator().getParticipant(userId));
@@ -159,11 +137,10 @@ public class ParticipantController {
         }
     }
 
-    // TODO participant in endpoint is not set yet
-    @PostMapping("/update_participant/{participant.getUserId}")
-    public String updateParticipant(@RequestParam(name="participant_ID") String id, @RequestParam(name="participant_password") String password,
+    @PostMapping("/update_participant")
+    public String updateParticipant(@RequestParam(name="participant_id") String id, @RequestParam(name="participant_password") String password,
                                     @RequestParam(name="name") String name, @RequestParam(name="position") String position,
-                                    @PathVariable("participant.getUserId") String formerUserId, HttpServletRequest request, Model model){
+                                    @RequestParam(name="department_name") String departmentName, HttpServletRequest request, Model model){
 
         ExceptionHandler handler = new ExceptionHandler();
 
@@ -204,10 +181,17 @@ public class ParticipantController {
             return "redirect:/project/" + project.getTitle() + "/" + inputException;
         }
 
-        // TODO Temp boolean value
-        session.setAttribute("current_participant", userEditor.updateParticipant(id, password, name, position, formerUserId,true));
+        if (session.getAttribute("projectManager")==null) {
+            session.setAttribute("participant", userEditor.updateParticipant(id, password, name, position, departmentName,
+                    ((Participant)session.getAttribute("participant")).getId(),false));
+        }
+        else {
+            session.setAttribute("participant", userEditor.updateParticipant(id, password, name, position, departmentName,
+                    ((Participant)session.getAttribute("participant")).getId(),true));
+            session.setAttribute("projectManager",userCreator.getProjectManager(id));
+        }
 
-        return "redirect:/project_page/" + project.getTitle() + "/" + ((Participant)session.getAttribute("current_participant")).getName();
+        return "redirect:/participant_dashboard/" + id;
 
     }
 
