@@ -54,8 +54,10 @@ public class Phase {
     public void setAssignmentTitles() {
         assignmentTitles = new String[assignments.size()];
 
-        for (int i = 0; i < assignments.size()/2; i++) {
-            assignmentTitles[i] = assignments.get(i).getTitle();
+        if (assignments.get(0)!=null) {
+            for (int i = 0; i < assignments.size()/2; i++) {
+                assignmentTitles[i] = assignments.get(i).getTitle();
+            }
         }
     }
 

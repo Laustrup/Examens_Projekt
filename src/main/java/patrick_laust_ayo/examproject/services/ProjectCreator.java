@@ -31,7 +31,7 @@ public class ProjectCreator {
             strings[5] = res.getString("position");
         }
         catch (Exception e) {
-            System.out.println("Not updated participant...\n" + e.getMessage());
+            System.out.println("Not updated participant...\n");
         }
 
         try {
@@ -40,7 +40,7 @@ public class ProjectCreator {
             strings[8] = res.getString("task_title");
         }
         catch (Exception e) {
-            System.out.println("Not updated task...\n" + e.getMessage());
+            System.out.println("Not updated task...\n");
         }
 
         try {
@@ -49,27 +49,27 @@ public class ProjectCreator {
             strings[11] = res.getString("assignment_title");
         }
         catch (Exception e) {
-            System.out.println("Not updated assignment...\n" + e.getMessage());
+            System.out.println("Not updated assignment...\n");
         }
 
         try {
             strings[12] = res.getString("title");
         }
         catch (Exception e) {
-            System.out.println("Not updated project...\n" + e.getMessage());
+            System.out.println("Not updated project...\n");
         }
         try {
             strings[13] = res.getString("phase_title");
         }
         catch (Exception e) {
-            System.out.println("Not updated phase...\n" + e.getMessage());
+            System.out.println("Not updated phase...\n");
         }
 
         try {
             strings[15] = res.getString("username");
         }
         catch (Exception e) {
-            System.out.println("Not updated projectManager...\n" + e.getMessage());
+            System.out.println("Not updated projectManager...\n");
         }
 
 
@@ -289,19 +289,11 @@ public class ProjectCreator {
 
     public ArrayList<Project> getProjects(String userId) {
         ResultSet res = projectRepo.findProjects(userId);
-
-
-
         ArrayList<Project> projects = new ArrayList<>();
-
-        System.out.println("projects in getProjects " + projects);
 
         try {
             while (res.next()) {
-                System.out.println("resultset " + res.getString("title"));
                 projects.add(getProject(res.getString("title")));
-                System.out.println("In whileloop " + projects);
-                System.out.println("From getProject " + getProject(res.getString("title")));
             }
         }
         catch (Exception e) {
