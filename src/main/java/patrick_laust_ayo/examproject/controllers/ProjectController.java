@@ -89,8 +89,6 @@ public class ProjectController {
         return "redirect:/project_page-" + projectTitle + "/" + participantId;
     }
 
-    // TODO Does all three cases work with this endpoint? Redirect needs html
-    // Have changed project_page/ to project_page-
     @GetMapping("/project_page-{project_title}/{user_id}")
     public String renderProjectpage(@PathVariable(name = "project_title") String projectTitle,
                                     @PathVariable(name = "user_id") String userId,
@@ -190,6 +188,7 @@ public class ProjectController {
 
     @PostMapping("/direct_to_add_participants")
     public String directToAddParticipants(HttpServletRequest request, Model model) {
+
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
         String participantId = ((Participant)session.getAttribute("participant")).getId();
@@ -197,26 +196,9 @@ public class ProjectController {
         session.setAttribute("Message","");
         session.setAttribute("current_project","add_participant");
         model.addAttribute("current_project", session.getAttribute("current_project"));
-        System.out.println("DirectToAddParticipants " + session.getAttribute("current_project"));
 
         return "redirect:/project_page-" + projectTitle + "/" + participantId;
     }
-
-    /*
-    @GetMapping("/project_page-{project_title}/{user_id}/add_participants")
-    public String renderAddParticipants(Model model,HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        model.addAttribute("project",session.getAttribute("project"));
-        model.addAttribute("phase",session.getAttribute("phase"));
-        model.addAttribute("assignment",session.getAttribute("assignment"));
-        model.addAttribute("task",session.getAttribute("task"));
-        model.addAttribute("current_project","add_participants");
-
-        return "project_page";
-    }
-
-     */
-
 
     @GetMapping("/accept_delete_of_project")
     public String renderDeleteProject(Model model,HttpServletRequest request) {
@@ -305,7 +287,6 @@ public class ProjectController {
         return "redirect:/project_page-" + projectTitle;
     }
 
-    // TODO Perhaps make submitvalue with both title and split in method?
     @PostMapping("/direct_to_phase")
     public String directToPhase(@RequestParam(name="phase_title") String phaseTitle, HttpServletRequest request) {
 
@@ -321,7 +302,6 @@ public class ProjectController {
         return "redirect:/project_page-" + projectTitle + "/" + userId + "/" + phaseTitle;
     }
 
-    // TODO Create phase html
     @GetMapping("/project_page-{project_title}/{user_id}/{phase_title}")
     public String renderPhase(@PathVariable(name = "project_title") String projectTitle,
                               @PathVariable(name = "user_id") String user_Id,
@@ -329,9 +309,6 @@ public class ProjectController {
                               HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
-        //session.setAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
-        System.out.println("GetPhaseTitle is " + projectCreator.getPhase(phaseTitle,projectTitle).getTitle());
-        System.err.println(phaseTitle);
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
 
@@ -354,7 +331,6 @@ public class ProjectController {
         return "accept_delete";
     }
 
-    // TODO Does deletePhase also delete assignments and tasks of phase?
     @PostMapping("/delete_phase")
     public String deletePhase(HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -444,6 +420,7 @@ public class ProjectController {
 
     @PostMapping("/change_assignment_is_completed_status")
     public String changeAssignmentIscompletedStatus(HttpServletRequest request) {
+
         HttpSession session = request.getSession();
         String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
         Assignment assignment = projectCreator.getAssignment(((Assignment)session.getAttribute("assignment")).getTitle(),
@@ -606,7 +583,6 @@ public class ProjectController {
             projectEditor.changeIsCompletedAssignment(true,assignment.getTitle(),phaseTitle);
         }
 
-        // TODO Where should this go?
         return "redirect:/project_page-" + ((Project)session.getAttribute("project")).getTitle() + "/" + phaseTitle + "/" + task.getTitle() + "+" +
                 task.getStart() + "+" + task.getEnd();
     }
@@ -647,11 +623,13 @@ public class ProjectController {
 
     @PostMapping("/delete_task")
     public String deleteTask(HttpServletRequest request) {
+
         HttpSession session = request.getSession();
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
         String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
         String assignmentTitle = ((Assignment)session.getAttribute("assignment")).getTitle();
         projectEditor.deleteTask(((Task)session.getAttribute("task")).getTitle(),assignmentTitle);
+
         return "redirect:/project_page-" + projectTitle + "/" + phaseTitle + "/" + assignmentTitle;
     }
 }

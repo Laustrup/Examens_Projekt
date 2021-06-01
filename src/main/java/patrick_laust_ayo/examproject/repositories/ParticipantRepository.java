@@ -52,7 +52,7 @@ public class ParticipantRepository extends Repository {
                     "SET participant.user_id = \"" + userId + "\", " +
                     "participant.participant_name = \"" + name + "\", " +
                     "participant.participant_password = \"" + password + "\", " +
-                    "participant.position = \"" + position + "\" " +
+                    "participant.position = \"" + position + "\", " +
                     "participant.department_no = " + departmentId + " " +
                     "WHERE participant.user_id = \"" + formerUserId + "\";");
         }

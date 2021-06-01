@@ -57,7 +57,7 @@ public class UserEditor {
         participantRepo.removeParticipant(userId);
     }
 
-    public void removeProjcetManager(String userName) {
+    public void removeProjectManager(String userName) {
 
         projectManagerRepo.removeProjectManager(userName);
     }

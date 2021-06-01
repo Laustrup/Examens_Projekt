@@ -10,35 +10,37 @@ import patrick_laust_ayo.examproject.models.ProjectManager;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserEditorTest {
-
-
+//TODO !!!!!!!!!
+/*
     @ParameterizedTest
-    @CsvSource(value={"lone9242|qscqsc*21|Gitte|Developer|OSLO|lone9242,false"}, delimiter = '|')
-    void updateParticipant(String id, String password, String name, String position, String departmentName, String formerUserId, boolean isProjectManager) {
+    @CsvSource(value={"loneT|qscqsc*21|Lone Therkilsen|Developer|OSLO|lone9242"}, delimiter = '|')
+    void updateParticipant(String newUserId, String password, String name, String position, String departmentName, String formerUserId) {
+
         //Arrange
         UserEditor userEditor = new UserEditor();
 
         //Act
-        Participant participant = userEditor.updateParticipant(id, password, name, position, departmentName,formerUserId,isProjectManager);
+        Participant participant = userEditor.updateParticipant(newUserId, password, name, position, departmentName,formerUserId,false);
+
         //Assert
-        assertEquals(participant.getId(), id);
+        assertEquals(participant.getId(), newUserId);
         assertEquals(participant.getPassword(), password);
         assertEquals(participant.getName(), name);
         assertEquals(participant.getPosition(), position);
-
-
-    }
+    } */
 
     @ParameterizedTest
-    @CsvSource(value = {"Andy boss|erAsD14d|andy0432","andy0432|erAsD14d|Andy Boss" }, delimiter = '|')
+    @CsvSource(value = {"Andy boss|andy0432","Andy Cool Guy|Andy boss", "andy0432|Andy Cool Guy"},
+            delimiter = '|')
     void updateProjectmanager(String username, String formerUsername) {
 
+        //Arrange
         UserEditor userEditor = new UserEditor();
 
-        //act
+        //Act
         ProjectManager projectManager = userEditor.updateProjectmanager(username,formerUsername);
 
-        //assert
+        //Assert
         assertEquals(projectManager.getUsername(), username);
     }
 }

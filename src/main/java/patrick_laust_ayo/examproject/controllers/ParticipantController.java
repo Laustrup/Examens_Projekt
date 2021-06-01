@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.ProjectManager;
-import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
 import patrick_laust_ayo.examproject.services.UserCreator;
@@ -17,7 +16,7 @@ import patrick_laust_ayo.examproject.services.UserEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
+
 
 
 @Controller
@@ -41,7 +40,7 @@ public class ParticipantController {
         return "participant_login";
     }
 
-    // TODO Wrong endpoint
+
     @PostMapping("/login_to_participant_dashboard")
     public String checkLoginToDashboard(@RequestParam (name="participant_id") String userId,
                              @RequestParam (name="participant_password") String password,
@@ -243,7 +242,7 @@ public class ParticipantController {
 
         userEditor.removeParticipant(userId);
         if (session.getAttribute("projectManager")!=null) {
-            userEditor.removeProjcetManager(userId);
+            userEditor.removeProjectManager(userId);
         }
         model.addAttribute("Message","User is removed");
         return "/";
