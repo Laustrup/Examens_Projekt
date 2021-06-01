@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.ProjectManager;
+import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
 import patrick_laust_ayo.examproject.services.UserCreator;
@@ -16,7 +17,7 @@ import patrick_laust_ayo.examproject.services.UserEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
+import javax.servlet.http.Part;
 
 
 @Controller
@@ -39,7 +40,6 @@ public class ParticipantController {
         session.setAttribute("current_login","without_invite");
         return "participant_login";
     }
-
 
     @PostMapping("/login_to_participant_dashboard")
     public String checkLoginToDashboard(@RequestParam (name="participant_id") String userId,
@@ -162,6 +162,7 @@ public class ParticipantController {
         else {
             session.setAttribute("participant",participant);
             session.setAttribute("current_project","start");
+            session.setAttribute("current","phases");
             return "redirect:/project_page-" + project.getTitle() + "/" + participant.getId();
         }
 
@@ -242,7 +243,7 @@ public class ParticipantController {
 
         userEditor.removeParticipant(userId);
         if (session.getAttribute("projectManager")!=null) {
-            userEditor.removeProjectManager(userId);
+            userEditor.removeProjcetManager(userId);
         }
         model.addAttribute("Message","User is removed");
         return "/";

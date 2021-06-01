@@ -7,10 +7,9 @@
 </head>
 <body>
 <main>
-
     <div class="special_container">
         <section class="current_projects">
-            <p th:text="${projectManager.getId}"></p>
+            <p th:text="${participant.getId}"></p>
 
             <form action="/direct_project_page" method="POST">
                 <ul th:each="project : ${projects}">
@@ -59,18 +58,9 @@
             </section>
         </section>
 
-
-        <div th:if="${current_user eq 'participant'}">
-            <form action="/accept_delete_of_participant">
-                <button type="submit">Delete profile</button>
-            </form>
-        </div>
-
-
         <form action="/accept_delete_of_participant" method="post">
             <button type="submit">Delete profile</button>
         </form>
-
 
         <form action="/log_out" method="post">
             <button type="submit">Log out</button>
