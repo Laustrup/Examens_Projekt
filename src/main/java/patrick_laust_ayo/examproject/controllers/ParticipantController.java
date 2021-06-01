@@ -41,7 +41,6 @@ public class ParticipantController {
         return "participant_login";
     }
 
-    // TODO Wrong endpoint
     @PostMapping("/login_to_participant_dashboard")
     public String checkLoginToDashboard(@RequestParam (name="participant_id") String userId,
                              @RequestParam (name="participant_password") String password,

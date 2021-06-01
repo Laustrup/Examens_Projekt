@@ -502,7 +502,7 @@ public class ProjectController {
         return "project_page";
     }
 
-    @GetMapping("/accept_delete_of_{assignment.getTitle()}")
+    @GetMapping("/accept_delete_of_assignment}")
     public String renderDeleteAssignment(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
         model.addAttribute("Object_to_delete",session.getAttribute("Assignment"));
@@ -641,8 +641,6 @@ public class ProjectController {
                                     @PathVariable(name = "task_end") String taskEnd,
                                     Model model,HttpServletRequest request) {
 
-        System.out.println("task start and end is " + taskStart + taskEnd);
-
         HttpSession session = request.getSession();
 
         session.setAttribute("task",projectCreator.getTask(taskTitle,taskStart,taskEnd));
@@ -652,8 +650,11 @@ public class ProjectController {
         model.addAttribute("phase",session.getAttribute("phase"));
         model.addAttribute("assignment",session.getAttribute("assignment"));
         model.addAttribute("task",session.getAttribute("task"));
+        model.addAttribute("current","task");
+        model.addAttribute("current_project","start");
+        model.addAttribute("task_cost",((Task)session.getAttribute("task")).totalCost());
 
-        return "assignment";
+        return "project_page";
     }
 
     @GetMapping("/accept_delete_of_task")
