@@ -281,14 +281,14 @@
 
                 <h5>Participants of this task are: </h5>
                 <div>
-                    <tr th:each="participant : {task.getParticipants()}">
+                    <ul th:each="participant : ${task.getParticipants()}">
                         <div>
-                            <th>Name: <p th:text="${participant.getName()}"></p></th>
-                            <th>User-id: <p th:text="${participant.getId()}"></p></th>
-                            <th>Position: <p th:text="${participant.getPosition()}"></p></th>
-                            <th>Department: <p th:text="${participant.getDepartment().getDepartmentName()}"></p></th>
+                            <li>Name: <p th:text="${participant.getName()}"></p></li>
+                            <li>User-id: <p th:text="${participant.getId()}"></p></li>
+                            <li>Position: <p th:text="${participant.getPosition()}"></p></li>
+                            <li>Department: <p th:text="${participant.getDepartment().getDepartmentName()}"></p></li>
                         </div>
-                    </tr>
+                    </ul>
                 </div>
 
                 <form action="/update_task" method="post">
