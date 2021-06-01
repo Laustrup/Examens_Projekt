@@ -17,11 +17,7 @@ public class ProjectCreator {
     private Assignment assignment;
     private Task task;
 
-    private String phaseNumberToString = "";
-    private int newPhaseNumberSetter = 1;
-    public int currentPhaseNo = 0;
-
-
+    private int currentPhaseNo = 0;
 
     private ProjectRepository projectRepo = new ProjectRepository();
     private ProjectManagerRepository projectManagerRepo = new ProjectManagerRepository();
@@ -305,30 +301,14 @@ public class ProjectCreator {
 
     public Phase createPhase(String projectTitle) {
 
-        int highestNumberOfPhasesInProgram = 1000000;
-        updatePhaseNo();
-
-
-        if (currentPhaseNo <= highestNumberOfPhasesInProgram) {
-            phaseNumberToString = String.valueOf(currentPhaseNo);
-        }
-
         phase = new Phase(projectTitle + " - NEW PHASE " + currentPhaseNo);
+        currentPhaseNo++;
 
         int id = projectRepo.findId("project","title",projectTitle, "project_id");
-        projectRepo.putPhaseInDatabase(projectTitle, phaseNumberToString, id);
-
-        System.err.println(phase.getTitle());
+        projectRepo.putPhaseInDatabase(projectTitle, String.valueOf(currentPhaseNo), id);
 
         return phase;
     }
-
-    public int updatePhaseNo(){
-
-        currentPhaseNo += newPhaseNumberSetter;
-        return currentPhaseNo;
-    }
-
 
     public Phase getPhase(String phaseTitle,String projectTitle) {
         ResultSet res = projectRepo.findPhase(phaseTitle,projectTitle);

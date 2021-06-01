@@ -92,6 +92,18 @@ public class UserCreator {
         return participant;
     }
 
+    public Participant createParticipant(String userId, String password, String name,String position, String projectTitle, String depName) {
+        ParticipantRepository parRepo = new ParticipantRepository();
+
+        participant = new Participant(userId, null, null, null, getDepartment(depName));
+        ExceptionHandler exceptionHandler = new ExceptionHandler();
+        if (exceptionHandler.doesProjectExist(projectTitle)) {
+            parRepo.putParticipantsInDatabase(userId, name,password,position, participant.getDepartment().getDepartmentNo(),1);
+            parRepo.putParticipantsInParticipantProjectTable(userId, projectTitle,1);
+        }
+        return participant;
+    }
+
     public ArrayList<Participant> createParticipants(String userId, String projectTitle, String depName, int amount) {
         ParticipantRepository parRepo = new ParticipantRepository();
         ArrayList<Participant> participants = new ArrayList<>();
