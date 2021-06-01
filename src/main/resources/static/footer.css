@@ -1,0 +1,11 @@
+footer {
+    background-color: lightblue;
+    background-size: 100%;
+    padding: 10px;
+}
+.footer_content{
+    text-align: center;
+}
+.footer_content a{
+    display: block;
+}

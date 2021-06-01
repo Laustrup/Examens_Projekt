@@ -1,0 +1,8 @@
+header {
+    background-color: lightblue;
+    background-size: 100%;
+    padding: 3px;
+}
+#header_title {
+    text-align: center;
+}

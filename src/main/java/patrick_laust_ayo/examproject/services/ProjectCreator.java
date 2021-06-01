@@ -37,7 +37,7 @@ public class ProjectCreator {
             strings[5] = res.getString("position");
         }
         catch (Exception e) {
-            System.out.println("Not updated participant...\n" + e.getMessage());
+            System.out.println("Not updated participant...\n");
         }
 
         try {
@@ -46,7 +46,7 @@ public class ProjectCreator {
             strings[8] = res.getString("task_title");
         }
         catch (Exception e) {
-            System.out.println("Not updated task...\n" + e.getMessage());
+            System.out.println("Not updated task...\n");
         }
 
         try {
@@ -55,27 +55,27 @@ public class ProjectCreator {
             strings[11] = res.getString("assignment_title");
         }
         catch (Exception e) {
-            System.out.println("Not updated assignment...\n" + e.getMessage());
+            System.out.println("Not updated assignment...\n");
         }
 
         try {
             strings[12] = res.getString("title");
         }
         catch (Exception e) {
-            System.out.println("Not updated project...\n" + e.getMessage());
+            System.out.println("Not updated project...\n");
         }
         try {
             strings[13] = res.getString("phase_title");
         }
         catch (Exception e) {
-            System.out.println("Not updated phase...\n" + e.getMessage());
+            System.out.println("Not updated phase...\n");
         }
 
         try {
             strings[15] = res.getString("username");
         }
         catch (Exception e) {
-            System.out.println("Not updated projectManager...\n" + e.getMessage());
+            System.out.println("Not updated projectManager...\n");
         }
 
 
@@ -107,10 +107,10 @@ public class ProjectCreator {
         ArrayList<Phase> listOfPhases = new ArrayList<>();
         ArrayList<Participant> listOfParticipants = new ArrayList<>();
         ArrayList<Task> listOfTasks = new ArrayList<>();
+        ArrayList<Assignment> listOfAssignments = new ArrayList<>();
 
-        // Maps for project
+        // Map for project
         Map<String, Participant> mapOfParticipants = new HashMap<>();
-        Map<String, Assignment> mapOfAssignments = new HashMap<>();
 
         // Ints
         int currentTaskId = 0;
@@ -122,7 +122,6 @@ public class ProjectCreator {
         int formerAssignmentId = 0;
         int formerPhaseId = 0;
         int formerParticipantId = 0;
-        int assignmentMapKey = 0;
 
         int departmentId = 0;
 
@@ -195,15 +194,13 @@ public class ProjectCreator {
                     if (currentAssignmentId>formerAssignmentId) {
                         assignment = new Assignment(strings[9],strings[10],strings[11],assignmentIsCompleted,listOfTasks);
                         listOfTasks = new ArrayList<>();
-                        mapOfAssignments.put(assignment.getTitle(), assignment);
-                        mapOfAssignments.put(String.valueOf(assignmentMapKey), assignment);
-                        assignmentMapKey++;
+                        listOfAssignments.add(assignment);
                     }
 
                     // Phase
                     if (currentPhaseId>formerPhaseId) {
-                        phase = new Phase(strings[13],mapOfAssignments);
-                        mapOfAssignments = new HashMap<String, Assignment>();
+                        phase = new Phase(strings[13],listOfAssignments);
+                        listOfAssignments = new ArrayList<>();
                         listOfPhases.add(phase);
                     }
                 }
@@ -264,16 +261,16 @@ public class ProjectCreator {
 
                     // Phase
                     if (columnCount >= 20) {
-                        phase = new Phase(strings[13],mapOfAssignments);
+                        phase = new Phase(strings[13],listOfAssignments);
                         listOfPhases.add(phase);
                     }
 
                     // Assignment
                     if (columnCount >= 26) {
                         assignment = new Assignment(strings[9],strings[10],strings[11],assignmentIsCompleted,listOfTasks);
-                        mapOfAssignments.put(String.valueOf(assignmentMapKey), assignment);
+                        listOfAssignments.add(assignment);
                         if (columnCount >= 20) {
-                            listOfPhases.get(listOfPhases.size()-1).putInAssignments(assignment.getTitle(),assignment);
+                            listOfPhases.get(listOfPhases.size()-1).addToAssignments(assignment);
                         }
                     }
                     project = new Project(strings[12],listOfPhases, mapOfParticipants,projectManager);
@@ -286,28 +283,17 @@ public class ProjectCreator {
             project = null;
         }
         projectRepo.closeCurrentConnection();
-        for (int i = 0; i < listOfPhases.size(); i++){
-            System.out.println("Phase Title: " + listOfPhases.get(i).getTitle());
-        }
         return project;
     }
 
 
     public ArrayList<Project> getProjects(String userId) {
         ResultSet res = projectRepo.findProjects(userId);
-
-
-
         ArrayList<Project> projects = new ArrayList<>();
-
-        System.out.println("projects in getProjects " + projects);
 
         try {
             while (res.next()) {
-                System.out.println("resultset " + res.getString("title"));
                 projects.add(getProject(res.getString("title")));
-                System.out.println("In whileloop " + projects);
-                System.out.println("From getProject " + getProject(res.getString("title")));
             }
         }
         catch (Exception e) {
@@ -348,10 +334,10 @@ public class ProjectCreator {
         ResultSet res = projectRepo.findPhase(phaseTitle,projectTitle);
 
         // Objects
-        phase = new Phase(new String(),new HashMap<>());
+        phase = new Phase(new String(),new ArrayList<>());
 
         // Map and Lists
-        Map<String, Assignment> assignments = new HashMap<>();
+        ArrayList<Assignment> assignments = new ArrayList<>();
         ArrayList<Task> tasks = new ArrayList<>();
         ArrayList<Participant> participants = new ArrayList<>();
 
@@ -365,7 +351,6 @@ public class ProjectCreator {
         int formerTaskId = 0;
         int formerParticipantId = 0;
         int departmentId = 0;
-        int assignmentMapKey = 0;
 
         double workHours = 0;
         boolean isTaskCompleted = false;
@@ -406,9 +391,7 @@ public class ProjectCreator {
                     // Assignment
                     if (currentAssignmentId > formerAssignmentId) {
                         assignment = new Assignment(strings[9], strings[10], strings[11], isAssignmentCompleted, tasks);
-                        assignments.put(assignment.getTitle(), assignment);
-                        assignments.put(String.valueOf(assignmentMapKey), assignment);
-                        assignmentMapKey++;
+                        assignments.add(assignment);
                     }
                 }
 
@@ -443,9 +426,7 @@ public class ProjectCreator {
 
                     // Assignment
                     assignment = new Assignment(strings[9],strings[10],strings[11],isAssignmentCompleted,tasks);
-                    assignments.put(assignment.getTitle(), assignment);
-                    assignments.put(String.valueOf(assignmentMapKey), assignment);
-
+                    assignments.add(assignment);
                     phase = new Phase(res.getString("phase_title"),assignments);
                 }
             }

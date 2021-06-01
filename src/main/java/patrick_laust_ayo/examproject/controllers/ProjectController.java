@@ -98,19 +98,20 @@ public class ProjectController {
                                     HttpServletRequest request,Model model) {
 
         HttpSession session = request.getSession();
-        // Aldrig logget ind
-        if (userId == null) {
-            // Needs create participant method in participant controller
-        }
-        //TODO projekt titlen skal være korrekt, fra en attribut/variabel
 
-        // Får direkte adgang da han er del af projectet
+        if (session.getAttribute("participant")==null && handler.doesProjectExist(projectTitle)) {
+            session.setAttribute("project",projectCreator.getProject(projectTitle));
+            session.setAttribute("current_login","with_invite");
+            return "redirect:/participant_login_page";
+        }
         else if (handler.isParticipantPartOfProject(userId, projectTitle)) {
 
             Project project = projectCreator.getProject(projectTitle);
             session.setAttribute("project",project);
 
             model.addAttribute("project",project);
+            model.addAttribute("work_hours",project.getTotalWorkhours());
+            model.addAttribute("total_cost",project.getTotalCost());
             model.addAttribute("phase", session.getAttribute("phase"));
 
             model.addAttribute("participant",new UserCreator().getParticipant(userId));
@@ -124,14 +125,12 @@ public class ProjectController {
             return "project_page";
         }
 
-        //TODO der skal være det rigtige redirect
-        model.addAttribute("Exception","You are not a participant of this project...");
-        return "project_page";
-        // return "redirect:/login_to_project/" + ((Participant) session.getAttribute("participant")).getId()+ "/" + projectTitle;
+        session.setAttribute("Exception","Project doesn't exist...");
+        return "redirect:/";
     }
 
     @PostMapping("/project_page_update-participant_pressed")
-    public String participantUpdatedByPressedButton(@RequestParam (name = "participant_ID") String userId,
+    public String participantUpdatedInProject(@RequestParam (name = "participant_ID") String userId,
                                                     @RequestParam (name = "participant_password") String password,
                                                     @RequestParam (name = "participant_name") String name,
                                                     @RequestParam (name = "position") String position,
@@ -174,12 +173,12 @@ public class ProjectController {
 
         if (userId.equals("")){
             session.setAttribute("participant" ,userEditor.updateParticipant(formerUserId, password, name,
-                    position, formerUserId, handler.isParticipantProjectManager(formerUserId)));
+                    position, depName,formerUserId, handler.isParticipantProjectManager(formerUserId)));
             userId = formerUserId;
         }
         else {
             session.setAttribute("participant", userEditor.updateParticipant(userId, password, name,
-                    position, formerUserId, handler.isParticipantProjectManager(formerUserId)));
+                    position, depName, formerUserId, handler.isParticipantProjectManager(formerUserId)));
         }
 
         Participant participant = (Participant) session.getAttribute("participant");
@@ -223,7 +222,7 @@ public class ProjectController {
     @GetMapping("/accept_delete_of_project")
     public String renderDeleteProject(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
-        model.addAttribute("Object_to_delete",((Project)session.getAttribute("Project")));
+        model.addAttribute("Object_to_delete",session.getAttribute("project"));
         model.addAttribute("current_delete", "project");
         model.addAttribute("Exception","");
         model.addAttribute("Message","");

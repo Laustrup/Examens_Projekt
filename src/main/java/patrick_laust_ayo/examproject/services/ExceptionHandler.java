@@ -242,14 +242,16 @@ public class ExceptionHandler {
         if (column.equals("participant_password") && input.length()>25) {
             return "Password is too long... Write less than 25 words!";
         }
+        if (column.equals("phase_title") && input.length()>50) {
+            return "Title is too long... Write less than 50 charactors";
+        }
 
         return "Input is allowed";
 
     }
     private int inputAsTitleIsTooLongByAmount(String input,String column) {
         try {
-            if (column.equals("phase_title") ||
-                    column.equals("username") ||
+            if (column.equals("username") ||
                     column.equals("participant_name") ||
                     column.equals("position") ||
                     column.equals("user_id")) {

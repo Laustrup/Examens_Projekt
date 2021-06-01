@@ -1,29 +1,27 @@
 <!DOCTYPE html>
 <html lang="da" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <link rel="stylesheet" type="text/css" href="../static/login_create.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/login_create.css}">
     <meta charset="UTF-8">
     <title>Project</title>
 </head>
 <body>
 
-<header>
-
-</header>
+<header th:replace="fragments/header.html"></header>
 
 <main>
-    <h1>Welcome to Projectmanager</h1>
+    <h1>Welcome to Lapayo</h1>
     <div class="flex-container">
         <div class="index_options">
             <h2><a href="/create_new_projectmanager"><button>Create Projectmanager</button></a></h2>
             <h2><a href="/projectmanager_login"><button>Login as Projectmanager</button></a></h2>
             <h2><a href="/participant_login_page"><button>Login as participant</button></a></h2>
         </div>
-
-        <h3 th:text="${fullyBooked}"></h3>
-
     </div>
-</main>
 
+    <h3 th:text="${Exception}"></h3>
+
+</main>
+<footer th:replace="fragments/footer.html"></footer>
 </body>
 </html>

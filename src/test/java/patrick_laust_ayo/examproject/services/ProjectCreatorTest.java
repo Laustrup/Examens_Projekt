@@ -44,278 +44,278 @@ class ProjectCreatorTest {
 
         //Projektets tasks værdier
         assertEquals(300.00,
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(0).getEstimatedWorkHours());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getEstimatedWorkHours());
         assertEquals("Innovate Concepts",
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(0).getTitle());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getTitle());
         assertEquals("2021-10-15 12:30:00",
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(0).getStart());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getStart());
         assertEquals("2021-10-28 23:59:59",
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(0).getEnd());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getEnd());
         assertEquals("lone9242",
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(0).getParticipants().get(0).getId());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getParticipants().get(0).getId());
         assertEquals("ande0137",
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(0).getParticipants().get(1).getId());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getParticipants().get(1).getId());
         assertEquals(false,
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(0).isCompleted());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).isCompleted());
         assertEquals(200.00,
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(1).getEstimatedWorkHours());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).getEstimatedWorkHours());
         assertEquals("Discuss Possible Clients",
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(1).getTitle());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).getTitle());
         assertEquals("2021-10-29 12:30:00",
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(1).getStart());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).getStart());
         assertEquals("2021-11-14 23:59:59",
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(1).getEnd());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).getEnd());
         assertEquals("lone9242",
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(1).getParticipants().get(0).getId());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).getParticipants().get(0).getId());
         assertEquals("ande0137",
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(1).getParticipants().get(1).getId());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).getParticipants().get(1).getId());
         assertEquals(false,
-                appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(1).isCompleted());
+                appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).isCompleted());
 
         assertEquals(100.00,
-                appdevProject.getPhases().get(1).getAssignments().get("Database").getTasks().get(0).getEstimatedWorkHours());
+                appdevProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).getEstimatedWorkHours());
         assertEquals("Repositories",
-                appdevProject.getPhases().get(1).getAssignments().get("Database").getTasks().get(0).getTitle());
+                appdevProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).getTitle());
         assertEquals("2021-11-15 12:30:00",
-                appdevProject.getPhases().get(1).getAssignments().get("Database").getTasks().get(0).getStart());
+                appdevProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).getStart());
         assertEquals("2021-12-05 23:59:59",
-                appdevProject.getPhases().get(1).getAssignments().get("Database").getTasks().get(0).getEnd());
+                appdevProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).getEnd());
         assertEquals("lone9242",
-                appdevProject.getPhases().get(1).getAssignments().get("Database").getTasks().get(0).getParticipants().get(0).getId());
+                appdevProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).getParticipants().get(0).getId());
         assertEquals("ande0137",
-                appdevProject.getPhases().get(1).getAssignments().get("Database").getTasks().get(0).getParticipants().get(1).getId());
+                appdevProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).getParticipants().get(1).getId());
         assertEquals(false,
-                appdevProject.getPhases().get(1).getAssignments().get("Database").getTasks().get(0).isCompleted());
+                appdevProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).isCompleted());
 
         assertEquals(100.00,
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(0).getEstimatedWorkHours());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(0).getEstimatedWorkHours());
         assertEquals("Services",
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(0).getTitle());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(0).getTitle());
         assertEquals("2021-12-06 12:30:00",
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(0).getStart());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(0).getStart());
         assertEquals("2021-12-20 23:59:59",
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(0).getEnd());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(0).getEnd());
         assertEquals("andy0432",
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(0).getParticipants().get(0).getId());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(0).getParticipants().get(0).getId());
         assertEquals("lone9242",
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(0).getParticipants().get(1).getId());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(0).getParticipants().get(1).getId());
         assertEquals(false,
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(0).isCompleted());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(0).isCompleted());
 
         assertEquals(100.00,
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(1).getEstimatedWorkHours());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(1).getEstimatedWorkHours());
         assertEquals("Models",
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(1).getTitle());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(1).getTitle());
         assertEquals("2021-12-06 12:30:00",
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(1).getStart());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(1).getStart());
         assertEquals("2021-12-20 23:59:59",
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(1).getEnd());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(1).getEnd());
         assertEquals("ande0137",
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(1).getParticipants().get(0).getId());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(1).getParticipants().get(0).getId());
         assertEquals(false,
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(1).isCompleted());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(1).isCompleted());
 
         assertEquals(100.00,
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(2).getEstimatedWorkHours());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(2).getEstimatedWorkHours());
         assertEquals("Controller",
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(2).getTitle());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(2).getTitle());
         assertEquals("2021-12-07 12:30:00",
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(2).getStart());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(2).getStart());
         assertEquals("2021-12-20 23:59:59",
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(2).getEnd());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(2).getEnd());
         assertEquals("ande0137",
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(2).getParticipants().get(0).getId());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(2).getParticipants().get(0).getId());
         assertEquals(false,
-                appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(2).isCompleted());
+                appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(2).isCompleted());
 
         assertEquals(100.00,
-                appdevProject.getPhases().get(1).getAssignments().get("View").getTasks().get(0).getEstimatedWorkHours());
+                appdevProject.getPhases().get(1).getAssignments().get(2).getTasks().get(0).getEstimatedWorkHours());
         assertEquals("HTMLs and CSSs",
-                appdevProject.getPhases().get(1).getAssignments().get("View").getTasks().get(0).getTitle());
+                appdevProject.getPhases().get(1).getAssignments().get(2).getTasks().get(0).getTitle());
         assertEquals("2021-12-07 12:30:00",
-                appdevProject.getPhases().get(1).getAssignments().get("View").getTasks().get(0).getStart());
+                appdevProject.getPhases().get(1).getAssignments().get(2).getTasks().get(0).getStart());
         assertEquals("2021-12-20 23:59:59",
-                appdevProject.getPhases().get(1).getAssignments().get("View").getTasks().get(0).getEnd());
+                appdevProject.getPhases().get(1).getAssignments().get(2).getTasks().get(0).getEnd());
         assertEquals("ande0137",
-                appdevProject.getPhases().get(1).getAssignments().get("View").getTasks().get(0).getParticipants().get(0).getId());
+                appdevProject.getPhases().get(1).getAssignments().get(2).getTasks().get(0).getParticipants().get(0).getId());
         assertEquals(false,
-                appdevProject.getPhases().get(1).getAssignments().get("View").getTasks().get(0).isCompleted());
+                appdevProject.getPhases().get(1).getAssignments().get(2).getTasks().get(0).isCompleted());
 
         assertEquals(20.15,
-                appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(0).getEstimatedWorkHours());
+                appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(0).getEstimatedWorkHours());
         assertEquals("Interviews",
-                appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(0).getTitle());
+                appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(0).getTitle());
         assertEquals("2021-12-21 12:30:00",
-                appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(0).getStart());
+                appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(0).getStart());
         assertEquals("2022-01-04 23:59:59",
-                appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(0).getEnd());
+                appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(0).getEnd());
         assertEquals("andy0432",
-                appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(0).getParticipants().get(0).getId());
+                appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(0).getParticipants().get(0).getId());
         assertEquals(false,
-                appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(0).isCompleted());
+                appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(0).isCompleted());
 
         assertEquals(150.00,
-                appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(1).getEstimatedWorkHours());
+                appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(1).getEstimatedWorkHours());
         assertEquals("Commercials",
-                appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(1).getTitle());
+                appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(1).getTitle());
         assertEquals("2021-12-21 12:30:00",
-                appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(1).getStart());
+                appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(1).getStart());
         assertEquals("2022-01-04 23:59:59",
-                appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(1).getEnd());
+                appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(1).getEnd());
         assertEquals("andy0432",
-                appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(1).getParticipants().get(0).getId());
+                appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(1).getParticipants().get(0).getId());
         assertEquals(false,
-                appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(1).isCompleted());
+                appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(1).isCompleted());
 
         assertEquals(150.00,
-                appdevProject.getPhases().get(2).getAssignments().get("Releasing").getTasks().get(0).getEstimatedWorkHours());
+                appdevProject.getPhases().get(2).getAssignments().get(1).getTasks().get(0).getEstimatedWorkHours());
         assertEquals("Finnish Product",
-                appdevProject.getPhases().get(2).getAssignments().get("Releasing").getTasks().get(0).getTitle());
+                appdevProject.getPhases().get(2).getAssignments().get(1).getTasks().get(0).getTitle());
         assertEquals("2021-12-21 12:30:00",
-                appdevProject.getPhases().get(2).getAssignments().get("Releasing").getTasks().get(0).getStart());
+                appdevProject.getPhases().get(2).getAssignments().get(1).getTasks().get(0).getStart());
         assertEquals("2022-01-04 23:59:59",
-                appdevProject.getPhases().get(2).getAssignments().get("Releasing").getTasks().get(0).getEnd());
+                appdevProject.getPhases().get(2).getAssignments().get(1).getTasks().get(0).getEnd());
         assertEquals("lone9242",
-                appdevProject.getPhases().get(2).getAssignments().get("Releasing").getTasks().get(0).getParticipants().get(0).getId());
+                appdevProject.getPhases().get(2).getAssignments().get(1).getTasks().get(0).getParticipants().get(0).getId());
         assertEquals("ande0137",
-                appdevProject.getPhases().get(2).getAssignments().get("Releasing").getTasks().get(0).getParticipants().get(1).getId());
+                appdevProject.getPhases().get(2).getAssignments().get(1).getTasks().get(0).getParticipants().get(1).getId());
         assertEquals(false,
-                appdevProject.getPhases().get(2).getAssignments().get("Releasing").getTasks().get(0).isCompleted());
+                appdevProject.getPhases().get(2).getAssignments().get(1).getTasks().get(0).isCompleted());
 
         assertEquals(150.00,
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(0).getEstimatedWorkHours());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getEstimatedWorkHours());
         assertEquals("Search CVs",
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(0).getTitle());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getTitle());
         assertEquals("2021-12-21 12:30:00",
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(0).getStart());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getStart());
         assertEquals("2022-12-21 12:30:00",
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(0).getEnd());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getEnd());
         assertEquals("cind2352",
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(0).getParticipants().get(0).getId());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getParticipants().get(0).getId());
         assertEquals(false,
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(0).isCompleted());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).isCompleted());
 
         assertEquals(150.00,
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(1).getEstimatedWorkHours());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).getEstimatedWorkHours());
         assertEquals("Setup interviews",
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(1).getTitle());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).getTitle());
         assertEquals("2021-12-21 12:30:00",
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(1).getStart());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).getStart());
         assertEquals("2022-12-21 12:30:00",
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(1).getEnd());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).getEnd());
         assertEquals("jame4235",
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(1).getParticipants().get(0).getId());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).getParticipants().get(0).getId());
         assertEquals(false,
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(1).isCompleted());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).isCompleted());
 
         assertEquals(150.00,
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Interact in Interviews").getTasks().get(0).getEstimatedWorkHours());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(1).getTasks().get(0).getEstimatedWorkHours());
         assertEquals("Do Interviews",
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Interact in Interviews").getTasks().get(0).getTitle());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(1).getTasks().get(0).getTitle());
         assertEquals("2021-12-21 12:30:00",
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Interact in Interviews").getTasks().get(0).getStart());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(1).getTasks().get(0).getStart());
         assertEquals("2022-12-21 12:30:00",
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Interact in Interviews").getTasks().get(0).getEnd());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(1).getTasks().get(0).getEnd());
         assertEquals("cind2352",
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(0).getParticipants().get(0).getId());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(1).getTasks().get(0).getParticipants().get(0).getId());
         assertEquals("jame4235",
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Interact in Interviews").getTasks().get(0).getParticipants().get(1).getId());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(1).getTasks().get(0).getParticipants().get(1).getId());
         assertEquals(false,
-                findNewEmployeesProject.getPhases().get(0).getAssignments().get("Interact in Interviews").getTasks().get(0).isCompleted());
+                findNewEmployeesProject.getPhases().get(0).getAssignments().get(1).getTasks().get(0).isCompleted());
 
         assertEquals(150.00,
-                AdvertisingProject.getPhases().get(0).getAssignments().get("Develop").getTasks().get(0).getEstimatedWorkHours());
+                AdvertisingProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getEstimatedWorkHours());
         assertEquals("Manufactor Commercials",
-                AdvertisingProject.getPhases().get(0).getAssignments().get("Develop").getTasks().get(0).getTitle());
+                AdvertisingProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getTitle());
         assertEquals("2021-12-21 12:30:00",
-                AdvertisingProject.getPhases().get(0).getAssignments().get("Develop").getTasks().get(0).getStart());
+                AdvertisingProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getStart());
         assertEquals("2022-12-21 12:30:00",
-                AdvertisingProject.getPhases().get(0).getAssignments().get("Develop").getTasks().get(0).getEnd());
+                AdvertisingProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getEnd());
         assertEquals("andy0432",
-                AdvertisingProject.getPhases().get(0).getAssignments().get("Develop").getTasks().get(0).getParticipants().get(0).getId());
+                AdvertisingProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getParticipants().get(0).getId());
         assertEquals("jame4235",
-                AdvertisingProject.getPhases().get(0).getAssignments().get("Develop").getTasks().get(0).getParticipants().get(1).getId());
+                AdvertisingProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getParticipants().get(1).getId());
         assertEquals(false,
-                AdvertisingProject.getPhases().get(0).getAssignments().get("Develop").getTasks().get(0).isCompleted());
+                AdvertisingProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).isCompleted());
 
         assertEquals(150.00,
-                AdvertisingProject.getPhases().get(1).getAssignments().get("Put Commercials in action").getTasks().get(0).getEstimatedWorkHours());
+                AdvertisingProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).getEstimatedWorkHours());
         assertEquals("Send Commercials",
-                AdvertisingProject.getPhases().get(1).getAssignments().get("Put Commercials in action").getTasks().get(0).getTitle());
+                AdvertisingProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).getTitle());
         assertEquals("2021-12-21 12:30:00",
-                AdvertisingProject.getPhases().get(1).getAssignments().get("Put Commercials in action").getTasks().get(0).getStart());
+                AdvertisingProject.getPhases().get(1).getAssignments().get(1).getTasks().get(0).getStart());
         assertEquals("2022-12-21 12:30:00",
-                AdvertisingProject.getPhases().get(1).getAssignments().get("Put Commercials in action").getTasks().get(0).getEnd());
+                AdvertisingProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).getEnd());
         assertEquals("cind2352",
-                AdvertisingProject.getPhases().get(1).getAssignments().get("Put Commercials in action").getTasks().get(0).getParticipants().get(0).getId());
+                AdvertisingProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).getParticipants().get(0).getId());
         assertEquals(false,
-                AdvertisingProject.getPhases().get(1).getAssignments().get("Put Commercials in action").getTasks().get(0).isCompleted());
+                AdvertisingProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).isCompleted());
 
         // Assignments
-        assertEquals("Brainstorming", appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTitle());
-        assertEquals("2021-10-15 12:30:00", appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getStart());
-        assertEquals("2021-11-14 23:59:59", appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getEnd());
-        assertEquals("Innovate Concepts", appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(0).getTitle());
-        assertEquals("Discuss Possible Clients", appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").getTasks().get(1).getTitle());
-        assertEquals(false, appdevProject.getPhases().get(0).getAssignments().get("Brainstorming").isCompleted());
+        assertEquals("Brainstorming", appdevProject.getPhases().get(0).getAssignments().get(0).getTitle());
+        assertEquals("2021-10-15 12:30:00", appdevProject.getPhases().get(0).getAssignments().get(0).getStart());
+        assertEquals("2021-11-14 23:59:59", appdevProject.getPhases().get(0).getAssignments().get(0).getEnd());
+        assertEquals("Innovate Concepts", appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getTitle());
+        assertEquals("Discuss Possible Clients", appdevProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).getTitle());
+        assertEquals(false, appdevProject.getPhases().get(0).getAssignments().get(0).isCompleted());
 
-        assertEquals("Database", appdevProject.getPhases().get(1).getAssignments().get("Database").getTitle());
-        assertEquals("2021-11-15 12:30:00", appdevProject.getPhases().get(1).getAssignments().get("Database").getStart());
-        assertEquals("2021-12-05 23:59:59", appdevProject.getPhases().get(1).getAssignments().get("Database").getEnd());
-        assertEquals("Repositories", appdevProject.getPhases().get(1).getAssignments().get("Database").getTasks().get(0).getTitle());
-        assertEquals(false, appdevProject.getPhases().get(1).getAssignments().get("Database").isCompleted());
+        assertEquals("Database", appdevProject.getPhases().get(1).getAssignments().get(0).getTitle());
+        assertEquals("2021-11-15 12:30:00", appdevProject.getPhases().get(1).getAssignments().get(0).getStart());
+        assertEquals("2021-12-05 23:59:59", appdevProject.getPhases().get(1).getAssignments().get(0).getEnd());
+        assertEquals("Repositories", appdevProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).getTitle());
+        assertEquals(false, appdevProject.getPhases().get(1).getAssignments().get(0).isCompleted());
 
-        assertEquals("Buiness Layer", appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTitle());
-        assertEquals("2021-12-06 12:30:00", appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getStart());
-        assertEquals("2021-12-20 23:59:59", appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getEnd());
-        assertEquals("Services", appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(0).getTitle());
-        assertEquals("Models", appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(1).getTitle());
-        assertEquals("Controller", appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").getTasks().get(2).getTitle());
-        assertEquals(false, appdevProject.getPhases().get(1).getAssignments().get("Buiness Layer").isCompleted());
+        assertEquals("Buiness Layer", appdevProject.getPhases().get(1).getAssignments().get(1).getTitle());
+        assertEquals("2021-12-06 12:30:00", appdevProject.getPhases().get(1).getAssignments().get(1).getStart());
+        assertEquals("2021-12-20 23:59:59", appdevProject.getPhases().get(1).getAssignments().get(1).getEnd());
+        assertEquals("Services", appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(0).getTitle());
+        assertEquals("Models", appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(1).getTitle());
+        assertEquals("Controller", appdevProject.getPhases().get(1).getAssignments().get(1).getTasks().get(2).getTitle());
+        assertEquals(false, appdevProject.getPhases().get(1).getAssignments().get(1).isCompleted());
 
-        assertEquals("View", appdevProject.getPhases().get(1).getAssignments().get("View").getTitle());
-        assertEquals("2021-12-07 12:30:00", appdevProject.getPhases().get(1).getAssignments().get("View").getStart());
-        assertEquals("2021-12-20 23:59:59", appdevProject.getPhases().get(1).getAssignments().get("View").getEnd());
-        assertEquals("HTMLs and CSSs", appdevProject.getPhases().get(1).getAssignments().get("View").getTasks().get(0).getTitle());
-        assertEquals(false, appdevProject.getPhases().get(1).getAssignments().get("View").isCompleted());
+        assertEquals("View", appdevProject.getPhases().get(1).getAssignments().get(2).getTitle());
+        assertEquals("2021-12-07 12:30:00", appdevProject.getPhases().get(1).getAssignments().get(2).getStart());
+        assertEquals("2021-12-20 23:59:59", appdevProject.getPhases().get(1).getAssignments().get(2).getEnd());
+        assertEquals("HTMLs and CSSs", appdevProject.getPhases().get(1).getAssignments().get(2).getTasks().get(0).getTitle());
+        assertEquals(false, appdevProject.getPhases().get(1).getAssignments().get(2).isCompleted());
 
-        assertEquals("Promote Product", appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTitle());
-        assertEquals("2021-12-21 12:30:00", appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getStart());
-        assertEquals("2022-01-04 23:59:59", appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getEnd());
-        assertEquals("Interviews", appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(0).getTitle());
-        assertEquals("Commercials", appdevProject.getPhases().get(2).getAssignments().get("Promote Product").getTasks().get(1).getTitle());
-        assertEquals(false, appdevProject.getPhases().get(2).getAssignments().get("Promote Product").isCompleted());
+        assertEquals("Promote Product", appdevProject.getPhases().get(2).getAssignments().get(0).getTitle());
+        assertEquals("2021-12-21 12:30:00", appdevProject.getPhases().get(2).getAssignments().get(0).getStart());
+        assertEquals("2022-01-04 23:59:59", appdevProject.getPhases().get(2).getAssignments().get(0).getEnd());
+        assertEquals("Interviews", appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(0).getTitle());
+        assertEquals("Commercials", appdevProject.getPhases().get(2).getAssignments().get(0).getTasks().get(1).getTitle());
+        assertEquals(false, appdevProject.getPhases().get(2).getAssignments().get(0).isCompleted());
 
-        assertEquals("Releasing", appdevProject.getPhases().get(2).getAssignments().get("Releasing").getTitle());
-        assertEquals("2021-12-21 12:30:00", appdevProject.getPhases().get(2).getAssignments().get("Releasing").getStart());
-        assertEquals("2022-01-04 23:59:59", appdevProject.getPhases().get(2).getAssignments().get("Releasing").getEnd());
-        assertEquals("Finnish Product", appdevProject.getPhases().get(2).getAssignments().get("Releasing").getTasks().get(0).getTitle());
-        assertEquals(false, appdevProject.getPhases().get(2).getAssignments().get("Releasing").isCompleted());
+        assertEquals("Releasing", appdevProject.getPhases().get(2).getAssignments().get(1).getTitle());
+        assertEquals("2021-12-21 12:30:00", appdevProject.getPhases().get(2).getAssignments().get(1).getStart());
+        assertEquals("2022-01-04 23:59:59", appdevProject.getPhases().get(2).getAssignments().get(1).getEnd());
+        assertEquals("Finnish Product", appdevProject.getPhases().get(2).getAssignments().get(1).getTasks().get(0).getTitle());
+        assertEquals(false, appdevProject.getPhases().get(2).getAssignments().get(1).isCompleted());
 
-        assertEquals("Arrange Interviews", findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTitle());
-        assertEquals("2021-12-21 12:30:00", findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getStart());
-        assertEquals("2022-12-21 12:30:00", findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getEnd());
-        assertEquals("Search CVs", findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(0).getTitle());
-        assertEquals("Setup interviews", findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").getTasks().get(1).getTitle());
-        assertEquals(false, findNewEmployeesProject.getPhases().get(0).getAssignments().get("Arrange Interviews").isCompleted());
+        assertEquals("Arrange Interviews", findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTitle());
+        assertEquals("2021-12-21 12:30:00", findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getStart());
+        assertEquals("2022-12-21 12:30:00", findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getEnd());
+        assertEquals("Search CVs", findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getTitle());
+        assertEquals("Setup interviews", findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).getTasks().get(1).getTitle());
+        assertEquals(false, findNewEmployeesProject.getPhases().get(0).getAssignments().get(0).isCompleted());
 
-        assertEquals("Interact in Interviews", findNewEmployeesProject.getPhases().get(0).getAssignments().get("Interact in Interviews").getTitle());
-        assertEquals("2021-12-21 12:30:00", findNewEmployeesProject.getPhases().get(0).getAssignments().get("Interact in Interviews").getStart());
-        assertEquals("2022-12-21 12:30:00", findNewEmployeesProject.getPhases().get(0).getAssignments().get("Interact in Interviews").getEnd());
-        assertEquals("Do Interviews", findNewEmployeesProject.getPhases().get(0).getAssignments().get("Interact in Interviews").getTasks().get(0).getTitle());
-        assertEquals(false, findNewEmployeesProject.getPhases().get(0).getAssignments().get("Interact in Interviews").isCompleted());
+        assertEquals("Interact in Interviews", findNewEmployeesProject.getPhases().get(0).getAssignments().get(1).getTitle());
+        assertEquals("2021-12-21 12:30:00", findNewEmployeesProject.getPhases().get(0).getAssignments().get(1).getStart());
+        assertEquals("2022-12-21 12:30:00", findNewEmployeesProject.getPhases().get(0).getAssignments().get(1).getEnd());
+        assertEquals("Do Interviews", findNewEmployeesProject.getPhases().get(0).getAssignments().get(1).getTasks().get(0).getTitle());
+        assertEquals(false, findNewEmployeesProject.getPhases().get(0).getAssignments().get(1).isCompleted());
 
-        assertEquals("Develop", AdvertisingProject.getPhases().get(0).getAssignments().get("Develop").getTitle());
-        assertEquals("2021-12-21 12:30:00", AdvertisingProject.getPhases().get(0).getAssignments().get("Develop").getStart());
-        assertEquals("2022-12-21 12:30:00", AdvertisingProject.getPhases().get(0).getAssignments().get("Develop").getEnd());
-        assertEquals("Manufactor Commercials", AdvertisingProject.getPhases().get(0).getAssignments().get("Develop").getTasks().get(0).getTitle());
-        assertEquals(false, AdvertisingProject.getPhases().get(0).getAssignments().get("Develop").isCompleted());
+        assertEquals("Develop", AdvertisingProject.getPhases().get(0).getAssignments().get(0).getTitle());
+        assertEquals("2021-12-21 12:30:00", AdvertisingProject.getPhases().get(0).getAssignments().get(0).getStart());
+        assertEquals("2022-12-21 12:30:00", AdvertisingProject.getPhases().get(0).getAssignments().get(0).getEnd());
+        assertEquals("Manufactor Commercials", AdvertisingProject.getPhases().get(0).getAssignments().get(0).getTasks().get(0).getTitle());
+        assertEquals(false, AdvertisingProject.getPhases().get(0).getAssignments().get(0).isCompleted());
 
-        assertEquals("Put Commercials in action", AdvertisingProject.getPhases().get(1).getAssignments().get("Put Commercials in action").getTitle());
-        assertEquals("2021-12-21 12:30:00", AdvertisingProject.getPhases().get(1).getAssignments().get("Put Commercials in action").getStart());
-        assertEquals("2022-12-21 12:30:00", AdvertisingProject.getPhases().get(1).getAssignments().get("Put Commercials in action").getEnd());
-        assertEquals("Send Commercials", AdvertisingProject.getPhases().get(1).getAssignments().get("Put Commercials in action").getTasks().get(0).getTitle());
-        assertEquals(false, AdvertisingProject.getPhases().get(1).getAssignments().get("Put Commercials in action").isCompleted());
+        assertEquals("Put Commercials in action", AdvertisingProject.getPhases().get(1).getAssignments().get(0).getTitle());
+        assertEquals("2021-12-21 12:30:00", AdvertisingProject.getPhases().get(1).getAssignments().get(0).getStart());
+        assertEquals("2022-12-21 12:30:00", AdvertisingProject.getPhases().get(1).getAssignments().get(0).getEnd());
+        assertEquals("Send Commercials", AdvertisingProject.getPhases().get(1).getAssignments().get(0).getTasks().get(0).getTitle());
+        assertEquals(false, AdvertisingProject.getPhases().get(1).getAssignments().get(0).isCompleted());
 
         //Projektets participants værdier
         assertEquals("Andy Boss", appdevProject.getParticipants().get("andy0432").getName());
@@ -447,13 +447,13 @@ class ProjectCreatorTest {
         Phase phase = projectCreator.getPhase("Interviews","Find New Employees");
 
         assertEquals("Interviews",phase.getTitle());
-        assertEquals("Arrange Interviews",phase.getAssignments().get("Arrange Interviews").getTitle());
-        assertEquals("2021-12-21 12:30:00",phase.getAssignments().get("Arrange Interviews").getStart());
-        assertEquals("2022-12-21 12:30:00",phase.getAssignments().get("Arrange Interviews").getEnd());
+        assertEquals("Arrange Interviews",phase.getAssignments().get(0).getTitle());
+        assertEquals("2021-12-21 12:30:00",phase.getAssignments().get(0).getStart());
+        assertEquals("2022-12-21 12:30:00",phase.getAssignments().get(0).getEnd());
 
-        assertEquals("Interact in Interviews",phase.getAssignments().get("Interact in Interviews").getTitle());
-        assertEquals("2021-12-21 12:30:00",phase.getAssignments().get("Interact in Interviews").getStart());
-        assertEquals("2022-12-21 12:30:00",phase.getAssignments().get("Interact in Interviews").getEnd());
+        assertEquals("Interact in Interviews",phase.getAssignments().get(1).getTitle());
+        assertEquals("2021-12-21 12:30:00",phase.getAssignments().get(1).getStart());
+        assertEquals("2022-12-21 12:30:00",phase.getAssignments().get(1).getEnd());
     }
 
     @ParameterizedTest

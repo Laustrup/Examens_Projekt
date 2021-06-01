@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="da" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <link rel="stylesheet" type="text/css" href="../static/project_page.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/project_page.css}">
     <meta charset="UTF-8">
     <title th:text="${session.projectTitle}">Project</title>
 </head>
@@ -136,8 +136,8 @@
             <header><h3>Phases</h3></header>
             <div class="phase_container">
                 <tr>
-                    <th>Estimated amount of work hours: <p th:text="${project.getTotalWorkhours()}"></p></th>
-                    <th>Estimated cost of project: <p th:text="${project.getTotalCost()}">$</p></th>
+                    <th>Estimated amount of work hours: <p th:text="${work_hours}"></p></th>
+                    <th>Estimated cost of project: <p th:text="${total_cost}"></p></th>
                 </tr>
 
                 <form action="/direct_to_phase" method="post">
