@@ -167,13 +167,15 @@
 
                 <form action="direct_to_assignment" method="post">
                     <label for="assignment_search">Type assignment title</label>
-                    <input type="text" id="assignment_search" name="assignment_title_search">
+                    <input type="text" id="assignment_search" name="assignment_title">
                     <button type="submit">Search</button>
                 </form>
 
-                <ul th:each="assignment_title : ${phase.getAssignmentTitles()}">
-                    <li><p th:text="${assignment_title}"></p></li>
-                </ul>
+                <form action="/direct_to_assignment" method="post">
+                    <ul th:each="assignment : ${phase.getAssignments()}">
+                        <li><button type="submit" th:value="${assignment.getTitle()}" name="assignment_title"><p th:text="${assignment.getTitle()}"></p></button></li>
+                    </ul>
+                </form>
 
                 <div class="add_assignment">
                     <form action="/add_assignment" method="post">
@@ -215,17 +217,17 @@
                 <tr>
                     <th>From: <p th:text="${assignment.getStart()}"></p></th>
                     <th>To: <p th:text="${assignment.getEnd()}"></p></th>
-                    <th>Estimated amount of work hours: <p th:text="${assignment.getTotalAssignmentWorkhours()}"></p></th></th>
-                    <th>Estimated cost of assignment: <p th:text="${assignment.getAssignmentTotalCost()}"></p></th>
+                    <th>Estimated amount of work hours: <p th:text="${assignment_work_hours}"></p></th></th>
+                    <th>Estimated cost of assignment: <p th:text="${assignment_total_cost}"></p></th>
                 </tr>
 
                 <form action="/direct_to_task" method="post">
-                    <div th:each="task : {assignment.getTasks()}">
+                    <ul th:each="task : ${assignment.getTasks()}">
                         <input th:value="${task.getStart()}" name="task_start">
                         <input th:value="${task.getEnd()}" name="task_end">
-                        <button type="submit" th:value="${task.getTitle()}" name="task_title"><p th:text="${task.getTitle()}"></p>
-                            </pt></button>
-                    </div>
+                        <li><button type="submit" th:value="${task.getTitle()}" name="task_title"><p th:text="${task.getTitle()}"></p>
+                            </pt></button></li>
+                    </ul>
                 </form>
 
                 <form action="/add_task">
