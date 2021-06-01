@@ -225,7 +225,7 @@ public class ProjectController {
     @GetMapping("/accept_delete_of_project")
     public String renderDeleteProject(Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
-        model.addAttribute("Object_to_delete",((Project)session.getAttribute("Project")));
+        model.addAttribute("Object_to_delete",session.getAttribute("project"));
         model.addAttribute("current_delete", "project");
         model.addAttribute("Exception","");
         model.addAttribute("Message","");

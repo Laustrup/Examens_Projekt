@@ -84,8 +84,9 @@ public class ParticipantController {
 
         model.addAttribute("projects", new ProjectCreator().getProjects(userId));
         model.addAttribute("participant", new UserCreator().getParticipant(userId));
+        model.addAttribute("current_user","participant");
 
-        return "participant_dashboard";
+        return "dashboard";
     }
 
     @PostMapping("/go_to_projectpage")
@@ -195,17 +196,26 @@ public class ParticipantController {
 
     }
 
-    // TODO Create html
     @GetMapping("/accept_delete_of_participant")
-    public String renderDeletePage() {
-        return "accept_delete_of_participant";
+    public String renderDeletePage(Model model,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        model.addAttribute("Object_to_delete",((Participant)session.getAttribute("participant")).getId());
+        model.addAttribute("current_delete", "participant");
+        model.addAttribute("Exception","");
+        model.addAttribute("Message","");
+        return "accept_delete";
     }
 
     // TODO Add password, need html
     @PostMapping("/delete_participant")
-    public String removeParticipant(@RequestParam(name = "user_id") String userId,Model model) {
+    public String removeParticipant(@RequestParam(name = "user_id") String userId,HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+
         userEditor.removeParticipant(userId);
-        model.addAttribute("Exception","User is removed");
+        if (session.getAttribute("projectManager")!=null) {
+            userEditor.removeProjcetManager(userId);
+        }
+        model.addAttribute("Message","User is removed");
         return "/";
     }
 

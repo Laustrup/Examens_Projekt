@@ -32,4 +32,9 @@ public class ProjectManagerRepository extends Repository {
                 "FROM projectmanager " +
                 "WHERE projectmanager.username = \"" + username + "\";");
     }
+
+    public void removeProjectManager(String username) {
+        executeSQLStatement("DELETE ROW FROM projectmanager WHERE username = " + username);
+
+    }
 }

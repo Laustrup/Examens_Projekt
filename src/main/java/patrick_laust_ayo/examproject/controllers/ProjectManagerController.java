@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.ProjectManager;
-import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
-import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
 import patrick_laust_ayo.examproject.services.UserCreator;
@@ -18,7 +16,6 @@ import patrick_laust_ayo.examproject.services.UserEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 
 @Controller
 public class  ProjectManagerController {
@@ -103,8 +100,9 @@ public class  ProjectManagerController {
         model.addAttribute("projectManager", userCreator.getProjectManager(userId));
         model.addAttribute("participant",userCreator.getParticipant(userId));
         model.addAttribute("projects", projectCreator.getProjects(userId));
+        model.addAttribute("current_user","projectManager");
 
-        return "projectmanager_dashboard";
+        return "dashboard";
     }
 
     @PostMapping("/add_participants")

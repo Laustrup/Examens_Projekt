@@ -48,26 +48,12 @@ public class UserEditor {
         return new UserCreator().getProjectManager(username);
     }
 
-    public Participant removeParticipant(String userId) {
-        ResultSet res = participantRepo.findParticipant(userId);
+    public void removeParticipant(String userId) {
+        participantRepo.removeParticipant(userId);
+    }
 
-        try {
-            res.next();
-
-            Department department = new Department(res.getInt("department_no"),
-                    res.getString("location"), res.getString("department_name"));
-            participant = new Participant(res.getString("user_id"), res.getString("participant_password"),
-                    res.getString("participant_name"), res.getString("position"),
-                    department);
-        } catch (Exception e) {
-            System.out.println("Couldn't create a participant from resultSet in removeParticipant...\n" + e.getMessage());
-            participant = null;
-            e.printStackTrace();
-        }
-
-        participantRepo.removeParticipant(participant.getId());
-
-        return participant;
+    public void removeProjcetManager(String userName) {
+        projectManagerRepo.removeProjectManager(userName);
     }
 
     public String joinParticipantToProject(Participant participant, Project project) {

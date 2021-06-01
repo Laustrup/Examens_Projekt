@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="da" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <link rel="stylesheet" type="text/css" th:href="@{/login_create.css}">
+    <link rel="stylesheet" type="text/css" th:href="${/login_create.css}">
     <meta charset="UTF-8">
     <title>Dashboard</title>
 </head>
@@ -56,9 +56,20 @@
             </form>
         </section>
     </section>
-        <p><a href="/index"><button>Go back</button></a></p>
 
+    <div th:if="${current_user eq 'participant'}">
+        <form action="/accept_delete_of_participant">
+            <button type="submit">Delete profile</button>
+        </form>
+    </div>
 
+    <form action="/accept_delete_of_participant" method="post">
+        <button type="submit">Delete profile</button>
+    </form>
+
+    <form action="/log_out" method="post">
+        <button type="submit">Log out</button>
+    </form>
 
 </main>
 </body>

@@ -10,18 +10,9 @@
     <header th:replace="fragments/header.html"></header>
 
     <main>
+        <h3>Are you sure to delete <p th:text="${Object_to_delete}"></p></h3>
 
-
-        <div th:if="${current_delete eq 'projectManager'} ">
-            <form action="/delete_projectManager" method="Post">
-                <label for="user_name">Type userId</label>
-                <input type="text" id="user_name" name="user_id">
-                <label for="project_manager_password">Type password</label>
-                <input type="password" id="project_manager_password" name="password">
-                <button type="submit">Delete</button>
-            </form>
-        </div>
-        <div th:if="${current_delete eq 'projectManager'} ">
+        <div th:if="${current_delete eq 'participant'} ">
             <form action="/delete_participant" method="Post">
                 <label for="user_id">Type userId</label>
                 <input type="text" id="user_id" name="user_id">
