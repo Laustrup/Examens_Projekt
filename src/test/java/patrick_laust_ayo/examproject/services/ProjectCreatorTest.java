@@ -436,7 +436,7 @@ class ProjectCreatorTest {
             System.out.println(e.getMessage());
         }
         //Assert
-        assertEquals(projectTitle + " - NEW PHASE " + newestPhaseNo, createdPhase.getTitle());
+        assertEquals(projectTitle + " - NEW PHASE " + newestPhaseNo, proRepo.);
         assertEquals(phaseTitleFromRepo, updatedPhase.getTitle());
     }
 
