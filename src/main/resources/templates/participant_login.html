@@ -37,9 +37,15 @@
             </div>
 
             <div th:if="${current_login eq 'with_invite'}">
-                <h4>If you already are a participant of the project, press here to sign in:</h4>
+                <h4>If you already are a participant of the project, please press here to sign in:</h4>
 
                 <form action="/participant_login_page" method="post">
+                    <button type="submit">Sign in</button>
+                </form>
+
+                <h4>If you already are the project manager of the project, please press here to sign in:</h4>
+
+                <form action="/projectmanager_login" method="post">
                     <button type="submit">Sign in</button>
                 </form>
 

@@ -325,7 +325,7 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN participant ON participant_project.participant_id = participant.participant_id " +
                 "SET participant_project.participant_id = " + participantId + " " +
                 "WHERE participant_project.participant_id = " + participantId + " AND participant_project.project_id = " + projectId + ";" +
-                "DELETE ROW FROM participant " +
+                "DELETE participant FROM participant " +
                 "INNER JOIN participant_project ON participant_project.participant_id = participant.participant_id " +
                 "INNER JOIN project ON project.project_id = participant_project.project_id " +
                 "WHERE project.user_id = null " +
