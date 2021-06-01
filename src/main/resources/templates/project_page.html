@@ -127,11 +127,10 @@
 </section>
 
 <!--RIGHT SIDE OF PAGE-->
-
 <section class="split right">
 
     <!--PHASES BOX -->
-    <div th:if="${current_project eq 'start'}">
+    <div th:if="${current eq 'phases'}">
         <section class="phase">
             <header><h3>Phases</h3></header>
             <div class="phase_container">
@@ -221,14 +220,15 @@
                     <th>Estimated cost of assignment: <p th:text="${assignment_total_cost}"></p></th>
                 </tr>
 
-                <form action="/direct_to_task" method="post">
                     <ul th:each="task : ${assignment.getTasks()}">
-                        <input th:value="${task.getStart()}" name="task_start">
-                        <input th:value="${task.getEnd()}" name="task_end">
+                        <form action="/direct_to_task" method="post">
+
+                        <input type="text" th:value="${task.getStart()}" name="task_start" hidden>
+                        <input type="text" th:value="${task.getEnd()}" name="task_end" hidden>
                         <li><button type="submit" th:value="${task.getTitle()}" name="task_title"><p th:text="${task.getTitle()}"></p>
                             </pt></button></li>
+                        </form>
                     </ul>
-                </form>
 
                 <form action="/add_task">
                     <button type="submit">Add new task</button>

@@ -58,12 +58,6 @@
             </section>
         </section>
 
-        <div th:if="${current_user eq 'participant'}">
-            <form action="/accept_delete_of_participant">
-                <button type="submit">Delete profile</button>
-            </form>
-        </div>
-
         <form action="/accept_delete_of_participant" method="post">
             <button type="submit">Delete profile</button>
         </form>

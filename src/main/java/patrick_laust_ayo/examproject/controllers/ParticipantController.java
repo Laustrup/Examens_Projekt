@@ -163,6 +163,7 @@ public class ParticipantController {
         else {
             session.setAttribute("participant",participant);
             session.setAttribute("current_project","start");
+            session.setAttribute("current","phases");
             return "redirect:/project_page-" + project.getTitle() + "/" + participant.getId();
         }
 

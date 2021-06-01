@@ -84,6 +84,7 @@ public class ProjectController {
         String participantId = ((Participant) session.getAttribute("participant")).getId();
 
         session.setAttribute("current_project","start");
+        session.setAttribute("current","phases");
         model.addAttribute("current_project", session.getAttribute("current_project"));
 
         return "redirect:/project_page-" + projectTitle + "/" + participantId;
@@ -612,28 +613,45 @@ public class ProjectController {
     }
 
     @PostMapping("/direct_to_task")
-    public String directToTask(@RequestParam(name="task_title") String taskTitle, HttpServletRequest request) {
+    public String directToTask(@RequestParam(name="task_title") String taskTitle,
+                               @RequestParam(name="task_start") String taskStart,
+                               @RequestParam(name="task_end") String taskEnd,
+                               HttpServletRequest request) {
         HttpSession session = request.getSession();
-        return "redirect:/project_page-" + ((Project)session.getAttribute("project")).getTitle() + "/" + taskTitle;
+
+        session.setAttribute("task",projectCreator.getTask(taskTitle,taskStart,taskEnd));
+        System.out.println("getTask in direct is from " + taskStart + taskEnd);
+
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String userId = ((Participant)session.getAttribute("participant")).getId();
+        String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
+        String assignmentTitle = ((Assignment)session.getAttribute("assignment")).getTitle();
+
+        return "redirect:/project_page-" + projectTitle + "/" + userId + "/" + phaseTitle + "/" + assignmentTitle +
+                "/" + taskTitle + "+" + taskStart + "+" + taskEnd;
     }
 
-    @GetMapping("/projectpage-{project.getTitle()}/{phase.getTitle()}/{assignment.getTitle()}/{task.getTitle()}+{task.getStart()}+{task.getEnd()}")
-    public String renderTask(@PathVariable(name = "project.getTitle()") String projectTitle,
-                                   @PathVariable(name = "phase.getTitle()") String phaseTitle,
-                                   @PathVariable(name = "assignment.getTitle()") String assignmentTitle,
-                                    @PathVariable(name = "task.getTitle()") String taskTitle,
-                                    @PathVariable(name = "task.getStart()") String taskStart,
-                                    @PathVariable(name = "task.getEnd()") String taskEnd,
+    @GetMapping("/project_page-{project_title}/{user_id}/{phase_title}/{assignment_title}/{task_title}+{task_start}+{task_end}")
+    public String renderTask(@PathVariable(name = "project_title") String projectTitle,
+                                   @PathVariable(name = "user_id") String userId,
+                                   @PathVariable(name = "phase_title") String phaseTitle,
+                                   @PathVariable(name = "assignment_title") String assignmentTitle,
+                                    @PathVariable(name = "task_title") String taskTitle,
+                                    @PathVariable(name = "task_start") String taskStart,
+                                    @PathVariable(name = "task_end") String taskEnd,
                                     Model model,HttpServletRequest request) {
+
+        System.out.println("task start and end is " + taskStart + taskEnd);
 
         HttpSession session = request.getSession();
 
         session.setAttribute("task",projectCreator.getTask(taskTitle,taskStart,taskEnd));
 
-        model.addAttribute("project",projectCreator.getProject(projectTitle));
-        model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
-        model.addAttribute("assignment",projectCreator.getAssignment(assignmentTitle, projectTitle));
-        model.addAttribute("task",projectCreator.getAssignment(assignmentTitle, projectTitle));
+        model.addAttribute("participant",session.getAttribute("participant"));
+        model.addAttribute("project",session.getAttribute("project"));
+        model.addAttribute("phase",session.getAttribute("phase"));
+        model.addAttribute("assignment",session.getAttribute("assignment"));
+        model.addAttribute("task",session.getAttribute("task"));
 
         return "assignment";
     }
