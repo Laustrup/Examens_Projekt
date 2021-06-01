@@ -423,7 +423,7 @@ class ProjectCreatorTest {
 
         String phaseTitleFromRepo = "";
 
-        Phase createdPhase = projectCreator.createPhase(projectTitle);
+        Phase createdPhase = projectCreator.createPhase(projectTitle,"Temp");
 
         Phase updatedPhase = new ProjectEditor().updatePhase(phaseTitle,
                 projectTitle + " NEW PHASE " +

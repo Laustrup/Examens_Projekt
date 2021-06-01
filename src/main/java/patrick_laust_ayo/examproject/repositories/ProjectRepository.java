@@ -12,9 +12,8 @@ public class ProjectRepository extends Repository{
     }
 
 
-    public void putPhaseInDatabase(String projectTitle, String number, int projectId) {
-        executeSQLStatement("INSERT INTO phase_table(phase_title, project_id) VALUES (\"" + projectTitle
-                + "\" " + "\" - NEW PHASE \"" + " \"" + number + "\", " + projectId + ");");
+    public void putPhaseInDatabase(String phaseTitle, int projectId) {
+        executeSQLStatement("INSERT INTO phase_table(phase_title, project_id) VALUES (\"" + phaseTitle + "\", " + projectId + ");");
     }
 
     public ResultSet findPhase(String phaseTitle,String projectTitle) {

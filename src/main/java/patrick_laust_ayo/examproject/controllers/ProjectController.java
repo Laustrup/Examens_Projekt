@@ -251,15 +251,19 @@ public class ProjectController {
     }
 
     @PostMapping("/add_phase")
-    public String addPhase(HttpServletRequest request) {
+    public String addPhase(@RequestParam(name = "phase_title") String phaseTitle, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
         String userId = ((Participant)session.getAttribute("participant")).getId();
 
-        session.setAttribute("phase", projectCreator.createPhase(projectTitle));
-        System.err.println(((Phase) session.getAttribute("phase")).getTitle());
+        if (handler.doesPhaseExist(phaseTitle,projectTitle)) {
+            session.setAttribute("Exception","Phase already exists in project");
+        }
+        else {
+            session.setAttribute("phase", projectCreator.createPhase(projectTitle,phaseTitle));
+        }
         return "redirect:/project_page-" + projectTitle + "/" + userId;
     }
 

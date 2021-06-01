@@ -4,6 +4,8 @@ import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
+import patrick_laust_ayo.examproject.repositories.ProjectRepository;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,11 +24,14 @@ public class ExceptionHandler {
         }
     }
     public boolean doesPhaseExist(String phaseTitle, String projectTitle) {
-        if (new ProjectCreator().getPhase(phaseTitle,projectTitle) == null) {
-            return false;
-        }
-        else {
+        ResultSet res = new ProjectRepository().findPhase(phaseTitle,projectTitle);
+        try {
+            res.next();
+            res.getString("phase_title");
             return true;
+        }
+        catch (Exception e) {
+            return false;
         }
     }
     public boolean doesAssignmentExist(String assignmentTitle, String phaseTitle) {

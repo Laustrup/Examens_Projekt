@@ -17,8 +17,6 @@ public class ProjectCreator {
     private Assignment assignment;
     private Task task;
 
-    private int currentPhaseNo = 0;
-
     private ProjectRepository projectRepo = new ProjectRepository();
     private ProjectManagerRepository projectManagerRepo = new ProjectManagerRepository();
 
@@ -299,13 +297,12 @@ public class ProjectCreator {
         return projects;
     }
 
-    public Phase createPhase(String projectTitle) {
+    public Phase createPhase(String projectTitle,String phaseTitle) {
 
-        phase = new Phase(projectTitle + " - NEW PHASE " + currentPhaseNo);
-        currentPhaseNo++;
+        phase = new Phase(phaseTitle);
 
         int id = projectRepo.findId("project","title",projectTitle, "project_id");
-        projectRepo.putPhaseInDatabase(projectTitle, String.valueOf(currentPhaseNo), id);
+        projectRepo.putPhaseInDatabase(phaseTitle, id);
 
         return phase;
     }
