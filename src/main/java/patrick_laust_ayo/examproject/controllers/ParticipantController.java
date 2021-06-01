@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.ProjectManager;
+import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
 import patrick_laust_ayo.examproject.services.UserCreator;
@@ -16,6 +17,7 @@ import patrick_laust_ayo.examproject.services.UserEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 
 @Controller
@@ -29,6 +31,12 @@ public class ParticipantController {
 
         HttpSession session = request.getSession();
         model.addAttribute("Exception", session.getAttribute("userIdOrPasswordException"));
+        if (session.getAttribute("current_login")==null || session.getAttribute("current_login").equals("without_invite")) {
+            model.addAttribute("current_login","without_invite");
+        }
+        else {
+            model.addAttribute("current_login","with_invite");
+        }
         return "participant_login";
     }
 
@@ -106,36 +114,55 @@ public class ParticipantController {
     }
 
     @PostMapping("/join-project")
-    public String joinProject(
-                              @RequestParam(name="participant_id") String id,
-                              @RequestParam(name="participant_password") String password, Model model,
+    public String joinProject(@RequestParam(name="participant_id") String id,
+                              @RequestParam(name="participant_password") String password,
                               HttpServletRequest request) {
 
         ExceptionHandler handler = new ExceptionHandler();
         HttpSession session = request.getSession();
-        ProjectCreator projectCreator = new ProjectCreator();
-
-        model.addAttribute("project",((Project) session.getAttribute("project")));
+        Project project = (Project) session.getAttribute("project");
 
         if (handler.allowLogin(id, password)) {
             Participant participant = userCreator.getParticipant(id);
             session.setAttribute("participant", participant);
-            Project project = projectCreator.getProject(((Project) session.getAttribute("project")).getTitle());
 
             if (new UserEditor().joinParticipantToProject(participant,project).equals("Project is fully booked, projectmanager needs to add more participants of your department...")) {
-                //model.addAttribute("Exception", "Project is fully booked, projectmanager needs to add more participants of your department...");
-                session.setAttribute("fullyBooked", "Project is fully booked. Contact your Projectmanager to gain access to it.");
-                //return "redirect:/";
-                return "redirect:/projectpage/" + ((Project) session.getAttribute("project")).getTitle() + "/" + participant.getId();
+                session.setAttribute("Exception", "Project is fully booked of participant of that department. " +
+                        "Contact your Projectmanager to gain access to it.");
+                return "redirect:/participant_login_page";
             }
             else {
-                return "redirect:/projectpage-" + "/project.getTitle()" + "/participant.getId()" + participant.getId();
+                return "redirect:/projectpage-" + project.getTitle() + "/" + participant.getId();
             }
         }
         else {
                 session.setAttribute("userIdOrPasswordException", "Wrong user-id or password!");
             return "redirect:/participant_login_page";
         }
+    }
+
+    @PostMapping("/join_project_as_new_participant")
+    public String newParticipantJoinProject(@RequestParam(name = "participant_ID") String userId,
+                                            @RequestParam(name = "participant_password") String password,
+                                            @RequestParam(name = "participant_name") String name,
+                                            @RequestParam(name = "position") String position,
+                                            @RequestParam(name = "department") String departmentName,
+                                            HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+
+        Participant participant = new Participant(userId,password,name,position,userCreator.getDepartment(departmentName));
+        Project project = (Project) session.getAttribute("project");
+
+        if (new UserEditor().joinParticipantToProject(participant,project).equals("Project is fully booked, projectmanager needs to add more participants of your department...")) {
+            session.setAttribute("Exception", "Project is fully booked of participant of that department. " +
+                                                    "Contact your Projectmanager to gain access to it.");
+            return "redirect:/participant_login_page";
+        }
+        else {
+            return "redirect:/projectpage-" + project.getTitle() + "/" + participant.getId();
+        }
+
     }
 
     @PostMapping("/update_participant")

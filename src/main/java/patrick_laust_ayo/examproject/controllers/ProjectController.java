@@ -98,8 +98,10 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
 
-        if (session.getAttribute("participant")==null) {
-
+        if (session.getAttribute("participant")==null && projectCreator.getProject(projectTitle) != null) {
+            session.setAttribute("project",projectCreator.getProject(projectTitle));
+            session.setAttribute("current_login","with_invite");
+            return "redirect:/participant_login_page";
         }
         else if (handler.isParticipantPartOfProject(userId, projectTitle)) {
 
