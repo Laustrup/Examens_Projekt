@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import patrick_laust_ayo.examproject.models.*;
-import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.*;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 
@@ -98,13 +97,10 @@ public class ProjectController {
                                     HttpServletRequest request,Model model) {
 
         HttpSession session = request.getSession();
-        // Aldrig logget ind
-        if (userId == null) {
-            // Needs create participant method in participant controller
-        }
-        //TODO projekt titlen skal være korrekt, fra en attribut/variabel
 
-        // Får direkte adgang da han er del af projectet
+        if (session.getAttribute("participant")==null) {
+
+        }
         else if (handler.isParticipantPartOfProject(userId, projectTitle)) {
 
             Project project = projectCreator.getProject(projectTitle);
