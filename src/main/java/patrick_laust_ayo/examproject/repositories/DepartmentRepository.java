@@ -4,37 +4,16 @@ import java.sql.ResultSet;
 
 public class DepartmentRepository extends Repository {
 
-    /*
-    public void putDepartmentInDatabase(Department departmentToInsert){
-        executeSQLStatement("INSERT INTO department VALUES(\"" + departmentToInsert.getDepartmentNo() +
-                "\", \"" + departmentToInsert.getLocation()
-                + "\"," + departmentToInsert.getDepName() + ");");
-    }
-
-     */
-
-    /*
-    public Department putDepartmentInDatabaseWithReturn(Department departmentToInsert){
-        executeSQLStatement("INSERT INTO department VALUES(\"" + departmentToInsert.getDepartmentNo() + "\", \"" +
-                departmentToInsert.getLocation() + "\"," + departmentToInsert.getDepName() + ");");
-        ResultSet res = executeQuery("SELECT * FROM department");
-        closeCurrentConnection();
-
-        try{
-            department = new Department(res.getInt("department_no"),
-                    res.getString("location") ,res.getString("department_name"));
-        }
-        catch(SQLException e){
-            System.out.println("Couldn't create Department " + e.getMessage());
-            department = null;
-        }
-
-        return department;
-    }
-
-     */
-
     public ResultSet findDepartment(String depName){
         return executeQuery("SELECT * FROM department WHERE department_name = '" + depName + "';");
+    }
+
+    public ResultSet findDepartmentOfEmptyParticipant(int department_no,String projectTitle) {
+        return executeQuery("SELECT * FROM department " +
+                "INNER JOIN participant ON participant.department_no = department.department_no " +
+                "INNER JOIN participant_project ON participant_project.participant_id = participant.participant_id " +
+                "INNER JOIN project ON participant_project.project_id = participant_project.project_id " +
+                "WHERE participant.user_id = \"Enter user-ID\" AND department.department_no = " + department_no +
+                " AND project.title = \"" + projectTitle + "\";");
     }
 }
