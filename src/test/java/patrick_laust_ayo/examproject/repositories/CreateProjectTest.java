@@ -19,7 +19,7 @@ class CreateProjectTest {
         //Act
         Project project = pCreator.createProject("Cleverbot v.2", "andy0432");
         int projectId = pRepo.findId("project", "title", project.getTitle(), "project_id");
-        pRepo.putPhaseInDatabase(phaseNo, projectId);
+        //pRepo.putPhaseInDatabase(phaseNo, projectId);
 
         //Assert
         try {

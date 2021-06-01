@@ -262,7 +262,7 @@ public class ProjectController {
             session.setAttribute("Exception","Phase already exists in project");
         }
         else {
-            session.setAttribute("phase", projectCreator.createPhase(projectTitle,phaseTitle));
+            session.setAttribute("phase", projectCreator.createPhase(projectTitle,phaseTitle,userId));
         }
         return "redirect:/project_page-" + projectTitle + "/" + userId;
     }
