@@ -7,13 +7,14 @@ import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 
 import java.sql.ResultSet;
 
+
 public class UserEditor {
 
     private ParticipantRepository participantRepo = new ParticipantRepository();
     private ProjectManagerRepository projectManagerRepo = new ProjectManagerRepository();
 
-    private ProjectManager projectManager;
     private Participant participant;
+
 
     public Participant updateParticipant(String id, String password, String name, String position,
                                          String departmentName, String formerUserId, boolean isProjectManager) {
@@ -22,6 +23,7 @@ public class UserEditor {
         }
 
         participantRepo.updateParticipant(id, name, password, position, departmentName, formerUserId);
+
 
         // Makes sure that it's the real participant from db that is being returned
         ResultSet res = participantRepo.findParticipant(id);
@@ -34,35 +36,42 @@ public class UserEditor {
             participant = new Participant(res.getString("user_id"), res.getString("participant_password"),
                     res.getString("participant_name"), res.getString("position"),
                     department);
-
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.out.println("Couldn't create a participant from resultSet in updateParticipant...\n" + e.getMessage());
             participant = null;
             e.printStackTrace();
         }
+
         return participant;
     }
 
     public ProjectManager updateProjectmanager(String username, String formerUsername) {
+
         projectManagerRepo.updateProjectManager(username, formerUsername);
         return new UserCreator().getProjectManager(username);
     }
 
     public void removeParticipant(String userId) {
+
         participantRepo.removeParticipant(userId);
     }
 
     public void removeProjcetManager(String userName) {
+
         projectManagerRepo.removeProjectManager(userName);
     }
 
     public String joinParticipantToProject(Participant participant, Project project) {
+
         ProjectRepository repo = new ProjectRepository();
         ExceptionHandler handler = new ExceptionHandler();
+
 
         if (!(handler.isProjectFullybooked(project,participant.getDepartment().getDepartmentNo()))) {
             new UserCreator().createParticipant(participant.getId(),participant.getPassword(),participant.getName(),participant.getPosition(),
                                                 project.getTitle(),participant.getDepartment().getDepName());
+
             repo.addParticipantToProject(participant,project);
             return (participant.getId() + " is added!");
         }
@@ -72,9 +81,11 @@ public class UserEditor {
     }
 
     public String joinParticipantToTask(String userId,Task task) {
+
         ResultSet participantRes = participantRepo.findParticipant(userId);
         ProjectRepository projectRepository = new ProjectRepository();
         ResultSet taskRes = projectRepository.findTask(task.getTitle(),task.getStart(),task.getEnd());
+
 
         try {
             participantRepo.addParticipantToTask(participantRes.getInt("participant_id"),
@@ -84,15 +95,19 @@ public class UserEditor {
             System.out.println("Couldn't add participant to task in joinParticipantToTask...\n" + e.getMessage());
             return "Couldn't add you to ";
         }
+
         participantRepo.closeCurrentConnection();
         projectRepository.closeCurrentConnection();
+
         return "You are now added to ";
     }
 
     public String removeParticipantFromTask(String userId, Task task) {
+
         ResultSet participantRes = participantRepo.findParticipant(userId);
         ProjectRepository projectRepository = new ProjectRepository();
         ResultSet taskRes = projectRepository.findTask(task.getTitle(),task.getStart(),task.getEnd());
+
 
         try {
             participantRepo.removeParticipantFromTask(participantRes.getInt("participant_id"),
@@ -105,7 +120,7 @@ public class UserEditor {
 
         participantRepo.closeCurrentConnection();
         projectRepository.closeCurrentConnection();
+
         return "You are now removed from ";
     }
-
 }

@@ -1,17 +1,16 @@
 package patrick_laust_ayo.examproject.repositories;
 
-import patrick_laust_ayo.examproject.models.Project;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 
 public abstract class Repository {
 
     private DatabaseConnection databaseConnection = new DatabaseConnection();
     private Connection connection = databaseConnection.getConnection();
 
-    // Methods made to perform try and catch and as well to be used multiple times
+    // Methods made to perform try and catch and as well to be used multiple times in repositories
     public ResultSet executeQuery(String sql) {
         connection = databaseConnection.getConnection();
         try {

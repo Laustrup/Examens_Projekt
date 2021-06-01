@@ -1,12 +1,11 @@
 package patrick_laust_ayo.examproject.models;
 
-import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 
 public class Participant {
 
     private String id;
-    private String password = new String();
-    private String hiddenPassword = new String();
+    private String password;
+    private String hiddenPassword;
     private String name;
     private String position;
     private Department department;
@@ -26,7 +25,7 @@ public class Participant {
         setHiddenPassword();
     }
 
-    // Constructor for updating
+    // Constructor for updating participant
     public Participant(String id, String password, String name, String position) {
         this.id = id;
         this.password = password;
@@ -34,6 +33,7 @@ public class Participant {
         this.position = position;
         setHiddenPassword();
     }
+
 
     public String getPassword(){
         return password;

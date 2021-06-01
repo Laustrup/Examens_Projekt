@@ -6,15 +6,18 @@
     <title>Participant Login</title>
 </head>
 <body>
+
 <header th:replace="fragments/header.html"></header>
 
-<div th:if="${current_login eq 'without_invite'}">
-        <h1>Login As Participant</h1>
-</div>
 
-<div th:if="${current_login eq 'with_invite'}">
-        <h1>Login to project</h1>
-</div>
+    <div th:if="${current_login eq 'without_invite'}">
+            <h1>Login As Participant</h1>
+    </div>
+
+    <div th:if="${current_login eq 'with_invite'}">
+            <h1>Login to project</h1>
+    </div>
+
 
     <main>
         <div class="flex-container">
@@ -37,6 +40,7 @@
                 </form>
             </div>
 
+
             <div th:if="${current_login eq 'with_invite'}">
                 <h4>If you already are a participant of the project, please press here to sign in:</h4>
 
@@ -47,11 +51,13 @@
                 <a href="/projectmanager_login">Sign in</a>
 
                 <h4>If you already have a participant-profile, but wants to join project, sign in here:</h4>
+
                 <form action ="/join_project" method="post">
                     <div class="participants_id">
                         <label for="participant_id">User ID</label>
                         <input type="text" id="participant_id" name="participant_id" placeholder="id" required>
                     </div>
+
                     <div class="participants_password">
                         <label for="participant_password">Password</label>
                         <input type="password" id="participant_password" name="participant_password" placeholder="Password" required>
@@ -59,6 +65,7 @@
 
                     <button type="submit">Join project</button>
                 </form>
+
 
                 <div>
                     <h4>New to LAPAYO? Join project as a new participant:</h4>
@@ -97,7 +104,6 @@
 
                         <button type="submit">Join project as new participant</button>
 
-
                     </form>
                 </div>
 
@@ -109,6 +115,8 @@
         </section>
         </div>
     </main>
+
 <footer th:replace="fragments/footer.html"></footer>
+
 </body>
 </html>

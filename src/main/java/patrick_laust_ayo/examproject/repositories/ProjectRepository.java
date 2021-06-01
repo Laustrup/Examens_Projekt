@@ -4,14 +4,13 @@ import patrick_laust_ayo.examproject.models.*;
 
 import java.sql.ResultSet;
 
+
 public class ProjectRepository extends Repository{
 
-    // puts in database with and without return, for the reason of an option for faster opportunity and testing as well
+
     public void putProjectInDatabase(Project projectToInsert, int projectmanagerId) {
         executeSQLStatement("INSERT INTO project(title, projectmanager_id) VALUES (\""  + projectToInsert.getTitle() + "\", " + projectmanagerId + "); ");
-
     }
-
 
     public void putPhaseInDatabase(String phaseTitle, int projectId, String projectManagerUsername) {
         int assignmentId = calcNextId("assignment");
@@ -75,6 +74,7 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN projectmanager ON projectmanager.projectmanager_id = project.projectmanager_id " +
                 "WHERE phase_title = \"" + phaseTitle + "\" AND title = \"" + projectTitle + "\";");
     }
+
     public void updatePhase(String phaseTitle,String projectTitle,String formerPhaseTitle) {
         if (phaseTitle == null) {
             executeSQLStatement("UPDATE phase_table " +
@@ -89,6 +89,7 @@ public class ProjectRepository extends Repository{
                 "WHERE phase_table.phase_title = \"" + formerPhaseTitle + "\" AND project.title = \"" + projectTitle + "\";");
         }
     }
+
     public void removePhase(String assignmentTitle,String projectTitle) {
         executeSQLStatement("DELETE ROW FROM phase " +
                 "INNER JOIN project ON project.project_id = phase.project_id" +
@@ -100,7 +101,7 @@ public class ProjectRepository extends Repository{
                             "VALUES (\"" + assignment.getTitle() + "\", \""  + assignment.getStart() +  "\", \"" + assignment.getEnd() + "\", " +
                             assignment.isCompleted() + ", " + phaseId + "); ");
     }
-    // TODO Change safeupdate
+
     public void updateAssignment(String title,String start,String end, String formerTitle,String phaseTitle) {
         executeSQLStatement("UPDATE assignment " +
                 "INNER JOIN phase ON phase.phase_id = assignment.phase_id " +
@@ -109,12 +110,14 @@ public class ProjectRepository extends Repository{
                 "SET assignment.assignment_end " + " = \"" + end + "\", " +
                 "WHERE assignment.assignment_title = \"" + formerTitle + "\" AND phase.title \"" + phaseTitle + "\";");
     }
+
     public void updateAssignmentIsCompleted(String isCompleted, String assignmentTitle, String phaseTitle) {
         executeSQLStatement("UPDATE assignment " +
                 "INNER JOIN phase ON phase.phase_id = assignment.phase_id " +
                 "SET assignment.assignment_is_completed " + " = " + isCompleted + ", " +
                 "WHERE assignment.assignment_title = \"" + assignmentTitle + "\" AND phase_table.title \"" + phaseTitle + "\";");
     }
+
     public ResultSet findAssignment(String assignmentTitle,String phaseTitle) {
         ResultSet res = executeQuery("SELECT * FROM assignment " +
                 "INNER JOIN phase_table ON phase_table.phase_id = assignment.phase_id " +
@@ -156,6 +159,7 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN phase_table ON phase_table.phase_id = assignment.phase_id " +
                 "WHERE assignment.assignment_title = \"" + assignmentTitle + "\" AND phase_table.phase_title = \"" + phaseTitle + "\";");
     }
+
     public void removeAssignment(String assignmentTitle,String taskTitle) {
         executeSQLStatement("DELETE ROW FROM assignment " +
                 "INNER JOIN phase ON phase.phase_id = assignment.phase_id" +
@@ -165,6 +169,7 @@ public class ProjectRepository extends Repository{
     public void putTaskInDatabase(int assignmentId) {
         executeSQLStatement("INSERT INTO task(assignment_id,estimated_work_hours) VALUES (" + assignmentId + ", null); ");
     }
+
     public ResultSet findTask(String taskTitle,String taskStart,String taskEnd) {
         ResultSet res = executeQuery("SELECT * FROM task " +
                 "INNER JOIN assignment ON assignment.assignment_id = task.assignment_id " +
@@ -192,6 +197,7 @@ public class ProjectRepository extends Repository{
                 "WHERE task.task_title = \"" + taskTitle + "\" AND task.task_start = \"" + taskStart + "\" " +
                 "AND task.task_end = \"" + taskEnd + "\";");
     }
+
     public void updateTask(String title,String start,String end, String workHours, String formerTitle,String assignmentTitle) {
         executeSQLStatement("UPDATE task " +
                 "INNER JOIN assignment ON assignment.assignment_id = task.assignment_id " +
@@ -201,6 +207,7 @@ public class ProjectRepository extends Repository{
                 "SET task.estimated_work_hours = " + workHours + " " +
                 "WHERE task.task_title = \"" + formerTitle + "\" AND assignment.title \"" + assignmentTitle + "\";");
     }
+
     public void updateTaskIsCompleted(String isCompleted, Task task) {
         executeSQLStatement("UPDATE task " +
                 "SET task.task_is_completed = " + isCompleted + ", " +
@@ -208,6 +215,7 @@ public class ProjectRepository extends Repository{
                 "AND task.task_start = \"" + task.getStart() + "\" " +
                 "AND task.task_end = \"" + task.getEnd() + "\";");
     }
+
     public void removeTask(String taskTitle,String assignmentTitle) {
         executeSQLStatement("DELETE ROW FROM project " +
                             "INNER JOIN assignment ON assignment.assignment_id = task.assignment_id" +
@@ -324,11 +332,13 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN participant ON participant.participant_id = participant_project.participant_id " +
                 "WHERE participant.user_id = \"" + userId + "\";");
     }
+
     public void updateProject(String currentTitle,String formerTitle) {
         executeSQLStatement("UPDATE project " +
                 "SET title = \"" + currentTitle + "\" " +
                 "WHERE title = \"" + formerTitle + "\";");
     }
+
     public void addParticipantToProject(Participant participant, Project project) {
         ResultSet res = executeQuery("SELECT * FROM participant " +
                 "INNER JOIN participant_project ON participant_project.participant_id = participant.participant_id " +
@@ -346,8 +356,10 @@ public class ProjectRepository extends Repository{
         catch (Exception e) {
             System.err.println("Couldn't get emptyParticipantId...\n");
         }
+
         int participantId = findId("participant","user_id", participant.getId(),"participant_id");
         int projectId = findId("project","title", project.getTitle(),"project_id");
+
 
         executeSQLStatement("UPDATE participant_project " +
                 "INNER JOIN project ON participant_project.project_id = project.project_id " +
@@ -358,6 +370,7 @@ public class ProjectRepository extends Repository{
                 "WHERE participant.user_id = \"Enter user-ID\" " +
                 "AND participant_id = " + emptyParticipantId + " ;");
     }
+
     public void removeProject(String projectTitle) {
         executeSQLStatement("DELETE participant_task " +
                 "FROM participant_task " +

@@ -23,6 +23,7 @@ public class ExceptionHandler {
             return true;
         }
     }
+
     public boolean doesPhaseExist(String phaseTitle, String projectTitle) {
         ResultSet res = new ProjectRepository().findPhase(phaseTitle,projectTitle);
         try {
@@ -34,6 +35,7 @@ public class ExceptionHandler {
             return false;
         }
     }
+
     public boolean doesAssignmentExist(String assignmentTitle, String phaseTitle) {
         if (new ProjectCreator().getAssignment(assignmentTitle, phaseTitle) == null) {
             return false;
@@ -42,6 +44,7 @@ public class ExceptionHandler {
             return true;
         }
     }
+
     public boolean doesTaskExist(String taskTitle, String taskStart, String taskEnd) {
        if (new ProjectCreator().getTask(taskTitle,taskStart,taskEnd) == null) {
             return false;
@@ -50,6 +53,7 @@ public class ExceptionHandler {
            return true;
         }
     }
+
     public boolean doesUserIdExist(String userId) {
         ParticipantRepository repo = new ParticipantRepository();
 
@@ -67,34 +71,16 @@ public class ExceptionHandler {
         }
         return false;
     }
+
     public boolean doesDepartmentExist(String depName) {
         return new UserCreator().getDepartment(depName) != null;
     }
 
-    /*
-    public boolean doesProjectManagerUsernameExist(String username) {
-        ProjectManagerRepository repo = new ProjectManagerRepository();
-
-        ResultSet res = repo.selectAll("projectmanager");
-
-        try {
-            while (res.next()) {
-                if (res.getString("username").equals(username)) {
-                    return true;
-                }
-            }
-        }
-        catch (Exception e) {
-            System.out.println("Trouble identifying ResultSet when searching username...\n" + e.getMessage());
-        }
-        return false;
-    }
-
-     */
     public boolean doesParticipantExist(String participant_ID){
         Map<String, Participant> userList = getParticipantMap();
         return userList.containsKey(participant_ID);
     }
+
     private Map<String, Participant> getParticipantMap() {
 
         ParticipantRepository participantRepository = new ParticipantRepository();
@@ -111,13 +97,15 @@ public class ExceptionHandler {
 
                 participantMap.put(participant_ID, tempParticipant);
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return participantMap;
     }
 
-    // Allows logins
+    // Allow logins
     public boolean allowLogin(String userId, String password) {
         Participant participant = new UserCreator().getParticipant(userId);
 
@@ -126,7 +114,9 @@ public class ExceptionHandler {
         }
         return false;
     }
+
     public boolean isProjectFullybooked(Project project, int departmentNo) {
+
         if (project.getParticipants().get("Enter user-ID") != null) {
             ResultSet res = new DepartmentRepository().findDepartmentOfEmptyParticipant(departmentNo, project.getTitle());
             try {
@@ -140,7 +130,9 @@ public class ExceptionHandler {
         }
         return false;
     }
+
     public boolean isDateTimeCorrectFormat(String dateTime) {
+
         if(dateTime.contains("-")&&dateTime.contains(":")&&dateTime.contains(" ")&&dateTime.length()<19) {
             String[] datesAndTime = dateTime.split(" ");
             String[] dates = datesAndTime[0].split("-");
@@ -171,6 +163,7 @@ public class ExceptionHandler {
                 System.out.println("Couldn't parse dates and times...\n" + e.getMessage());
                 return false;
             }
+
             if (year>10000||month>12||day>31||hours>23||minutes>59||seconds>59) {
                 return false;
             }
@@ -179,7 +172,6 @@ public class ExceptionHandler {
         return false;
     }
 
-    // TODO Perhaps unmake repository as abstract?
     // Accepts if the participant is part of the project
     public boolean isParticipantPartOfProject(String userId, String projectTitle) {
 
@@ -192,11 +184,14 @@ public class ExceptionHandler {
         }
         return false;
     }
+
     public boolean isParticipantProjectManager(String userId) {
+
         return new UserCreator().getProjectManager(userId) != null;
     }
 
-    // Checks if input is too long and writes a message as return, if input is allowed, it returns "Input is allowed"
+    // Checks if input is too long and writes a message as return,
+    // if input is allowed, it returns "Input is allowed"
     public String isLengthAllowedInDatabase(String input,String column)  {
 
         if (inputAsTitleIsTooLongByAmount(input,column) != -1) {
@@ -210,9 +205,10 @@ public class ExceptionHandler {
         }
 
         return "Input is allowed";
-
     }
+
     private int inputAsTitleIsTooLongByAmount(String input,String column) {
+
         try {
             if (column.equals("username") ||
                     column.equals("participant_name") ||
@@ -222,15 +218,18 @@ public class ExceptionHandler {
                     return 25;
                 }
             }
+
             if (column.equals("title") ||
                 column.equals("department_name")) {
                 if (input.length()>30) {
                     return 30;
                 }
             }
+
             if (column.equals("assignment_title") && input.length()>50) {
                 return 50;
             }
+
             if (column.equals("location") && input.length()>100) {
                 return 100;
             }
@@ -238,77 +237,7 @@ public class ExceptionHandler {
         catch (Exception e) {
             System.out.println("Input is too long...");
         }
+
         return -1;
     }
-
-    /*
-    // Two methods for insure ', " and \ doesn't create an error
-    public String secureInputToDb(String input) {
-
-        boolean stillAnIssue = input.contains("\"") && !input.contains("\\\"") ||
-                                input.contains("'") && !input.contains("\\'") ||
-                                input.contains("\\") && !input.contains("\\\\");
-
-        System.out.println(input);
-
-        while (stillAnIssue) {
-            if (input.contains("\"") && !input.contains("\\\"")) {
-                String[] partsOfInput = input.split("\"");
-                input = createNewInput(0,partsOfInput.length,input) + "\\" +
-                        createNewInput(partsOfInput.length,input.length(),input);
-
-                System.out.println(input);
-            }
-            else if (input.contains("'") && !input.contains("\\'")) {
-                String[] partsOfInput = input.split("'");
-                input = createNewInput(0,partsOfInput.length,input) + "\\" +
-                        createNewInput(partsOfInput.length,input.length(),input);
-
-                System.out.println(input);
-            }
-            else if (input.contains("\\") && !input.contains("\\\\")) {
-                input = createNewInput(0,input.indexOf("\\"),input) + "\\" +
-                        createNewInput(input.indexOf("\\"),input.length(),input);
-                System.out.println(input);
-            }
-            else {
-                stillAnIssue = false;
-            }
-            System.out.println(input);
-        }
-        return input;
-    }
-    public String insureInputFromDb(String input) {
-
-        if (input.contains("\\\"") || input.contains("\\'") || input.contains("\\\\")) {
-            String stringToEscape = new String();
-            if (input.contains("\\\"")) {
-                stringToEscape = "\\\"";
-            }
-            else if (input.contains("\\'")) {
-                stringToEscape = "\\'";
-            }
-            else if (input.contains("\\\\")) {
-                stringToEscape = "\\\\";
-            }
-            input = createNewInput(0,input.indexOf(stringToEscape)-1,input)
-                    + createNewInput(input.indexOf(stringToEscape),input.length(),input);
-        }
-
-        return input;
-    }
-    private String createNewInput(int startOfString, int endOfString, String input) {
-        char currentLetter = '.';
-        String newInput = new String();
-
-        for (int i = startOfString; i < endOfString; i++) {
-            currentLetter = input.charAt(i);
-            newInput += currentLetter;
-        }
-
-        return newInput;
-    }
-
-     */
-
 }
