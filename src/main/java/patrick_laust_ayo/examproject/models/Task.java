@@ -37,6 +37,7 @@ public class Task extends Assignment {
     }
 
     public double totalCost() {
+        System.out.println("Task cost = " + participants.size() * estimatedWorkHours * 37.5);
         return participants.size() * estimatedWorkHours * 37.5;
     }
 }

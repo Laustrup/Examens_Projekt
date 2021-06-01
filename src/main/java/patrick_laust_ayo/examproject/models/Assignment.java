@@ -64,6 +64,7 @@ public class Assignment {
         for (int i = 0; i < tasks.size();i++) {
             total += tasks.get(i).getEstimatedWorkHours();
         }
+        System.out.println("Total assignment hours " + total);
         return total;
     }
 
@@ -72,6 +73,7 @@ public class Assignment {
         for (int i = 0; i < tasks.size();i++) {
             total += tasks.get(i).totalCost();
         }
+        System.out.println("total assignment cost " + total);
         return total;
     }
 
