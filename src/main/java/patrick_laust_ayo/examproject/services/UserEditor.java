@@ -81,25 +81,14 @@ public class UserEditor {
     }
 
     public String joinParticipantToTask(String userId,Task task) {
-
-        ResultSet participantRes = participantRepo.findParticipant(userId);
         ProjectRepository projectRepository = new ProjectRepository();
-        ResultSet taskRes = projectRepository.findTask(task.getTitle(),task.getStart(),task.getEnd());
 
-
-        try {
-            participantRepo.addParticipantToTask(participantRes.getInt("participant_id"),
-                                                        taskRes.getInt("task_id"));
+        if (projectRepository.addParticipantToTask(userId,task)) {
+            return "You are now added to ";
         }
-        catch (Exception e) {
-            System.out.println("Couldn't add participant to task in joinParticipantToTask...\n" + e.getMessage());
+        else {
             return "Couldn't add you to ";
         }
-
-        participantRepo.closeCurrentConnection();
-        projectRepository.closeCurrentConnection();
-
-        return "You are now added to ";
     }
 
     public String removeParticipantFromTask(String userId, Task task) {
@@ -107,7 +96,6 @@ public class UserEditor {
         ResultSet participantRes = participantRepo.findParticipant(userId);
         ProjectRepository projectRepository = new ProjectRepository();
         ResultSet taskRes = projectRepository.findTask(task.getTitle(),task.getStart(),task.getEnd());
-
 
         try {
             participantRepo.removeParticipantFromTask(participantRes.getInt("participant_id"),

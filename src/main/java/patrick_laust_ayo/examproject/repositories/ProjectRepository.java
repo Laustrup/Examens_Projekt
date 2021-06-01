@@ -170,6 +170,20 @@ public class ProjectRepository extends Repository{
         executeSQLStatement("INSERT INTO task(assignment_id,estimated_work_hours) VALUES (" + assignmentId + ", null); ");
     }
 
+    public boolean addParticipantToTask(String userId, Task task) {
+        int participantId = findId("participant","user_id",userId,"participant_id");
+        ResultSet res = findTask(task.getTitle(), task.getStart(), task.getEnd());
+        try{
+            res.next();
+            executeSQLStatement("INSERT INTO participant_task(participant_id,task_id) " +
+                            "VALUES (" + participantId + ", " + res.getInt("task_id") + ");");
+            return true;
+        }
+        catch (Exception e) {
+            System.out.println("Couldn't insert participant into participant_task...\n" + e.getMessage());
+            return false;
+        }
+    }
     public ResultSet findTask(String taskTitle,String taskStart,String taskEnd) {
         ResultSet res = executeQuery("SELECT * FROM task " +
                 "INNER JOIN assignment ON assignment.assignment_id = task.assignment_id " +

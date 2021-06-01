@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import patrick_laust_ayo.examproject.models.Participant;
-import patrick_laust_ayo.examproject.models.Project;
-import patrick_laust_ayo.examproject.models.ProjectManager;
+import patrick_laust_ayo.examproject.models.*;
 import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
@@ -249,7 +247,6 @@ public class ParticipantController {
         return "/";
     }
 
-    // TODO Needs task html
     @PostMapping("/join-task")
     public String joinTask(@RequestParam(name = "task_title") String taskTitle,
                            @RequestParam(name = "task_start") String taskStart,
@@ -257,14 +254,16 @@ public class ParticipantController {
                            HttpServletRequest request) {
 
         HttpSession session = request.getSession();
-        Participant participant = (Participant) session.getAttribute("participant");
-        String exception = userEditor.joinParticipantToTask(participant.getId(),new ProjectCreator().getTask(taskTitle, taskStart, taskEnd));
-        session.setAttribute("Exception",exception+taskTitle+"!");
+        String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String userId = ((Participant)session.getAttribute("participant")).getId();
+        String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
+        String assignmentTitle = ((Assignment)session.getAttribute("assignment")).getTitle();
 
-        if (exception.equals("You are now added to the task!")) {
-            return "/projectpage-" + taskTitle + "/" + exception;
-        }
-        return "/task/" + taskTitle + "/" + exception;
+        Participant participant = (Participant) session.getAttribute("participant");
+        session.setAttribute("Exception",userEditor.joinParticipantToTask(participant.getId(),new ProjectCreator().getTask(taskTitle, taskStart, taskEnd))+taskTitle+"!");
+
+        return "redirect:/project_page-" + projectTitle + "/" + userId + "/" + phaseTitle + "/" + assignmentTitle +
+                "/" + taskTitle + "+" + taskStart + "+" + taskEnd;
     }
 
     @PostMapping("/disjoin-task")
