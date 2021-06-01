@@ -1,11 +1,9 @@
 package patrick_laust_ayo.examproject.services;
 
-import patrick_laust_ayo.examproject.models.Department;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
+import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
 import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
-import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
-import patrick_laust_ayo.examproject.repositories.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,50 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ExceptionHandler {
-
-    // Was meant to take numbervalues from id for the purpose of db id, but that purpose changed
-    /*
-    public int returnIdInt(String id) {
-        char[] chars = id.toCharArray();
-        StringBuilder sb = new StringBuilder();
-        for(char c : chars){
-            if(Character.isDigit(c)){
-                sb.append(c);
-            }
-        }
-        try {
-            return Integer.parseInt(String.valueOf(sb));
-        }
-        catch (Exception e) {
-            System.out.println("Couldn't parse id to int...\n" + e.getMessage());
-            return -1;
-        }
-    }
-    public boolean idAlreadyExistInDb(String id,String table, String column) {
-
-        if (table.equals("task")) {
-            table += "_table";
-        }
-
-        int idInput = returnIdInt(id);
-
-        Repository repo = new ParticipantRepository();
-        ResultSet res = repo.selectAll(table);
-        try {
-            while (res.next()) {
-                if (res.getInt(column) == idInput) {
-                    return true;
-                }
-            }
-        }
-        catch (Exception e) {
-            System.out.println("Couldn't figure if id already exist...\n" + e.getMessage());
-        }
-
-        return false;
-    }
-
-     */
 
     // Methods checks if objects or attributes exists
     public boolean doesProjectExist(String title){
@@ -167,15 +121,19 @@ public class ExceptionHandler {
         }
         return false;
     }
-    public boolean isProjectFullybooked(Project project, int departmentNo, String userId) {
-        for (int i = 1; i <= project.getParticipants().size(); i++) {
-            Participant participant = project.getParticipants().get(userId);
-            if ((participant.getId() == null || participant.getPassword() == null) &&
-                    participant.getDepartment().getDepartmentNo() == departmentNo) {
-                return false;
+    public boolean isProjectFullybooked(Project project, int departmentNo) {
+        if (project.getParticipants().get("Enter user-ID") != null) {
+            ResultSet res = new DepartmentRepository().findDepartmentOfEmptyParticipant(departmentNo, project.getTitle());
+            try {
+                res.next();
+                res.getString("department_name");
+            }
+            catch (Exception e) {
+                System.err.println("Project fully booked");
+                return true;
             }
         }
-        return true;
+        return false;
     }
     public boolean isDateTimeCorrectFormat(String dateTime) {
         if(dateTime.contains("-")&&dateTime.contains(":")&&dateTime.contains(" ")&&dateTime.length()<19) {

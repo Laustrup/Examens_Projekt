@@ -11,6 +11,13 @@ public class ParticipantRepository extends Repository {
         }
     }
 
+    public void putParticipantsInDatabase(String userId, String name, String password, String position, int departmentNo, int amount) {
+        for (int i = 0; i < amount; i++) {
+            executeSQLStatement(" INSERT INTO participant(user_id,participant_name, participant_password, position, department_no) " +
+                    "VALUES (\"" + userId + "\", \"" + name + "\", \"" + password + "\", \"" + position + "\", " + departmentNo + "); ");
+        }
+    }
+
     public void putParticipantsInParticipantProjectTable(String userId, String projectTitle, int amount){
         for (int i = 0; i < amount;i++) {
             executeSQLStatement(" INSERT INTO participant_project(participant_id, project_id) " +

@@ -60,7 +60,9 @@ public class UserEditor {
         ProjectRepository repo = new ProjectRepository();
         ExceptionHandler handler = new ExceptionHandler();
 
-        if (!(handler.isProjectFullybooked(project,participant.getDepartment().getDepartmentNo(), participant.getId()))) {
+        if (!(handler.isProjectFullybooked(project,participant.getDepartment().getDepartmentNo()))) {
+            new UserCreator().createParticipant(participant.getId(),participant.getPassword(),participant.getName(),participant.getPosition(),
+                                                project.getTitle(),participant.getDepartment().getDepName());
             repo.addParticipantToProject(participant,project);
             return (participant.getId() + " is added!");
         }

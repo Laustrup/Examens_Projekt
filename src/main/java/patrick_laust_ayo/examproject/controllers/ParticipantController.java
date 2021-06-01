@@ -161,7 +161,9 @@ public class ParticipantController {
             return "redirect:/participant_login_page";
         }
         else {
-            return "redirect:/projectpage-" + project.getTitle() + "/" + participant.getId();
+            session.setAttribute("participant",participant);
+            session.setAttribute("current_project","start");
+            return "redirect:/project_page-" + project.getTitle() + "/" + participant.getId();
         }
 
     }

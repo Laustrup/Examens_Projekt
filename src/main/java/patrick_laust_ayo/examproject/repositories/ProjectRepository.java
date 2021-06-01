@@ -327,13 +327,14 @@ public class ProjectRepository extends Repository{
                 "INNER JOIN participant_project ON participant_project.participant_id = participant.participant_id " +
                 "INNER JOIN project ON project.project_id = participant_project.project_id " +
                 "INNER JOIN department ON department.department_no = participant.department_no " +
-                "WHERE user_id = \"Enter user-ID\" AND project_title = \"" + project.getTitle() + "\" AND department_no = "
+                "WHERE user_id = \"Enter user-ID\" AND project.title = \"" + project.getTitle() + "\" AND department.department_no = "
                 + participant.getDepartment().getDepartmentNo() + ";");
 
         int emptyParticipantId = -1;
 
         try {
-        emptyParticipantId = res.getInt("participant_id");
+            res.next();
+            emptyParticipantId = res.getInt("participant_id");
         }
         catch (Exception e) {
             System.err.println("Couldn't get emptyParticipantId...\n");
@@ -348,7 +349,7 @@ public class ProjectRepository extends Repository{
                 "WHERE participant_project.participant_id = " + emptyParticipantId + " AND participant_project.project_id = " + projectId + ";");
         executeSQLStatement("DELETE participant FROM participant " +
                 "WHERE participant.user_id = \"Enter user-ID\" " +
-                "AND WHERE participant_id = " + emptyParticipantId + " ;");
+                "AND participant_id = " + emptyParticipantId + " ;");
     }
     public void removeProject(String projectTitle) {
         executeSQLStatement("DELETE participant_task " +
