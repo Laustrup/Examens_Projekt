@@ -37,6 +37,7 @@ public class ParticipantController {
         else {
             model.addAttribute("current_login","with_invite");
         }
+        session.setAttribute("current_login","without_invite");
         return "participant_login";
     }
 

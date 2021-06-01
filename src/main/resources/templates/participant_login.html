@@ -12,7 +12,7 @@
 </div>
 
 <div th:if="${current_login eq 'with_invite'}">
-    <header><h1>Login to join project</h1></header>
+    <header><h1>Login to project</h1></header>
 </div>
 
     <main>
@@ -37,6 +37,13 @@
             </div>
 
             <div th:if="${current_login eq 'with_invite'}">
+                <h4>If you already are a participant of the project, press here to sign in:</h4>
+
+                <form action="/participant_login_page" method="post">
+                    <button type="submit">Sign in</button>
+                </form>
+
+                <h4>If you already have a participant-profile, but wants to join project, sign in here:</h4>
                 <form action ="/join_project" method="post">
                     <div class="participants_id">
                         <label for="participant_id">User ID</label>
@@ -51,7 +58,7 @@
                 </form>
 
                 <div>
-                    <p>New to LAPAYO? Join project as a new participant:</p>
+                    <h4>New to LAPAYO? Join project as a new participant:</h4>
                     <form action="/join_project_as_new_participant" method="post">
 
                         <div class="ID_section">
