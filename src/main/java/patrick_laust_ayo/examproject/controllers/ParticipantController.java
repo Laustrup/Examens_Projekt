@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.ProjectManager;
+import patrick_laust_ayo.examproject.repositories.DepartmentRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
 import patrick_laust_ayo.examproject.services.UserCreator;
@@ -16,6 +17,7 @@ import patrick_laust_ayo.examproject.services.UserEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 
 @Controller
@@ -29,6 +31,13 @@ public class ParticipantController {
 
         HttpSession session = request.getSession();
         model.addAttribute("Exception", session.getAttribute("userIdOrPasswordException"));
+        if (session.getAttribute("current_login")==null || session.getAttribute("current_login").equals("without_invite")) {
+            model.addAttribute("current_login","without_invite");
+        }
+        else {
+            model.addAttribute("current_login","with_invite");
+        }
+        session.setAttribute("current_login","without_invite");
         return "participant_login";
     }
 
@@ -70,7 +79,7 @@ public class ParticipantController {
         userCreator.createProjectManagerAsParticipant(projectManager.getUsername(), depName, projectTitle);
 
         session.setAttribute("participant", userEditor.updateParticipant(projectManager.getUsername(),
-                projectManagerPassword, "null", "null",
+                projectManagerPassword, "null", "null", depName,
                 projectManager.getUsername(), true));
 
         session.setAttribute("current_project", "start");
@@ -79,35 +88,14 @@ public class ParticipantController {
         return "redirect:/project_page-" + projectTitle + "/" + projectManager.getUsername();
     }
 
-    /*
-    @PostMapping("/login_to_project")
-    public String checkLoginToProject(@RequestParam (name="participant_id") String userId,
-                             @RequestParam (name="participant_password") String password,
-                             HttpServletRequest request, Model model){
-
-        HttpSession session = request.getSession();
-        ExceptionHandler exceptionHandler = new ExceptionHandler();
-
-        if (exceptionHandler.allowLogin(userId, password)){
-            // TODO How to get projectTitle
-            session.setAttribute("participant", userCreator.getParticipant(userId));
-            return "redirect://join-project";
-        }
-
-        model.addAttribute("Exception","Wrong user-id or password!");
-        // TODO Create html
-        return "redirect:/participant_login_page";
-    }
-
-     */
-
-    @GetMapping("/participant_dashboard/{participant.getUserId()}")
-    public String renderDashboard(@PathVariable (name="participant.getUserId()") String userId, Model model){
+    @GetMapping("/participant_dashboard/{participant_user_id}")
+    public String renderDashboard(@PathVariable (name="participant_user_id") String userId, Model model){
 
         model.addAttribute("projects", new ProjectCreator().getProjects(userId));
         model.addAttribute("participant", new UserCreator().getParticipant(userId));
+        model.addAttribute("current_user","participant");
 
-        return "participant_dashboard";
+        return "dashboard";
     }
 
     @PostMapping("/go_to_projectpage")
@@ -127,30 +115,25 @@ public class ParticipantController {
     }
 
     @PostMapping("/join-project")
-    public String joinProject(
-                              @RequestParam(name="participant_id") String id,
-                              @RequestParam(name="participant_password") String password, Model model,
+    public String joinProject(@RequestParam(name="participant_id") String id,
+                              @RequestParam(name="participant_password") String password,
                               HttpServletRequest request) {
 
         ExceptionHandler handler = new ExceptionHandler();
         HttpSession session = request.getSession();
-        ProjectCreator projectCreator = new ProjectCreator();
-
-        model.addAttribute("project",((Project) session.getAttribute("project")));
+        Project project = (Project) session.getAttribute("project");
 
         if (handler.allowLogin(id, password)) {
             Participant participant = userCreator.getParticipant(id);
             session.setAttribute("participant", participant);
-            Project project = projectCreator.getProject(((Project) session.getAttribute("project")).getTitle());
 
             if (new UserEditor().joinParticipantToProject(participant,project).equals("Project is fully booked, projectmanager needs to add more participants of your department...")) {
-                //model.addAttribute("Exception", "Project is fully booked, projectmanager needs to add more participants of your department...");
-                session.setAttribute("fullyBooked", "Project is fully booked. Contact your Projectmanager to gain access to it.");
-                //return "redirect:/";
-                return "redirect:/projectpage/" + ((Project) session.getAttribute("project")).getTitle() + "/" + participant.getId();
+                session.setAttribute("Exception", "Project is fully booked of participant of that department. " +
+                        "Contact your Projectmanager to gain access to it.");
+                return "redirect:/participant_login_page";
             }
             else {
-                return "redirect:/projectpage-" + "/project.getTitle()" + "/participant.getId()" + participant.getId();
+                return "redirect:/projectpage-" + project.getTitle() + "/" + participant.getId();
             }
         }
         else {
@@ -159,11 +142,34 @@ public class ParticipantController {
         }
     }
 
-    // TODO participant in endpoint is not set yet
-    @PostMapping("/update_participant/{participant.getUserId}")
-    public String updateParticipant(@RequestParam(name="participant_ID") String id, @RequestParam(name="participant_password") String password,
+    @PostMapping("/join_project_as_new_participant")
+    public String newParticipantJoinProject(@RequestParam(name = "participant_ID") String userId,
+                                            @RequestParam(name = "participant_password") String password,
+                                            @RequestParam(name = "participant_name") String name,
+                                            @RequestParam(name = "position") String position,
+                                            @RequestParam(name = "department") String departmentName,
+                                            HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+
+        Participant participant = new Participant(userId,password,name,position,userCreator.getDepartment(departmentName));
+        Project project = (Project) session.getAttribute("project");
+
+        if (new UserEditor().joinParticipantToProject(participant,project).equals("Project is fully booked, projectmanager needs to add more participants of your department...")) {
+            session.setAttribute("Exception", "Project is fully booked of participant of that department. " +
+                                                    "Contact your Projectmanager to gain access to it.");
+            return "redirect:/participant_login_page";
+        }
+        else {
+            return "redirect:/projectpage-" + project.getTitle() + "/" + participant.getId();
+        }
+
+    }
+
+    @PostMapping("/update_participant")
+    public String updateParticipant(@RequestParam(name="participant_id") String id, @RequestParam(name="participant_password") String password,
                                     @RequestParam(name="name") String name, @RequestParam(name="position") String position,
-                                    @PathVariable("participant.getUserId") String formerUserId, HttpServletRequest request, Model model){
+                                    @RequestParam(name="department_name") String departmentName, HttpServletRequest request, Model model){
 
         ExceptionHandler handler = new ExceptionHandler();
 
@@ -204,24 +210,40 @@ public class ParticipantController {
             return "redirect:/project/" + project.getTitle() + "/" + inputException;
         }
 
-        // TODO Temp boolean value
-        session.setAttribute("current_participant", userEditor.updateParticipant(id, password, name, position, formerUserId,true));
+        if (session.getAttribute("projectManager")==null) {
+            session.setAttribute("participant", userEditor.updateParticipant(id, password, name, position, departmentName,
+                    ((Participant)session.getAttribute("participant")).getId(),false));
+        }
+        else {
+            session.setAttribute("participant", userEditor.updateParticipant(id, password, name, position, departmentName,
+                    ((Participant)session.getAttribute("participant")).getId(),true));
+            session.setAttribute("projectManager",userCreator.getProjectManager(id));
+        }
 
-        return "redirect:/project_page/" + project.getTitle() + "/" + ((Participant)session.getAttribute("current_participant")).getName();
+        return "redirect:/participant_dashboard/" + id;
 
     }
 
-    // TODO Create html
     @GetMapping("/accept_delete_of_participant")
-    public String renderDeletePage() {
-        return "accept_delete_of_participant";
+    public String renderDeletePage(Model model,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        model.addAttribute("Object_to_delete",((Participant)session.getAttribute("participant")).getId());
+        model.addAttribute("current_delete", "participant");
+        model.addAttribute("Exception","");
+        model.addAttribute("Message","");
+        return "accept_delete";
     }
 
     // TODO Add password, need html
     @PostMapping("/delete_participant")
-    public String removeParticipant(@RequestParam(name = "user_id") String userId,Model model) {
+    public String removeParticipant(@RequestParam(name = "user_id") String userId,HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+
         userEditor.removeParticipant(userId);
-        model.addAttribute("Exception","User is removed");
+        if (session.getAttribute("projectManager")!=null) {
+            userEditor.removeProjcetManager(userId);
+        }
+        model.addAttribute("Message","User is removed");
         return "/";
     }
 

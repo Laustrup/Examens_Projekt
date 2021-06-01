@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import patrick_laust_ayo.examproject.models.Participant;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.ProjectManager;
-import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
-import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 import patrick_laust_ayo.examproject.services.ProjectCreator;
 import patrick_laust_ayo.examproject.services.UserCreator;
@@ -18,7 +16,6 @@ import patrick_laust_ayo.examproject.services.UserEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 
 @Controller
 public class  ProjectManagerController {
@@ -88,8 +85,6 @@ public class  ProjectManagerController {
             session.setAttribute("projectManager",userCreator.getProjectManager(username));
             session.setAttribute("participant",userCreator.getParticipant(username));
 
-            model.addAttribute("projectManager",((ProjectManager) session.getAttribute("projectManager")));
-
             return "redirect:/manager_dashboard/" + username;
         }
         else {
@@ -99,22 +94,15 @@ public class  ProjectManagerController {
     }
 
     @GetMapping("/manager_dashboard/{manager-id}")
-    public String renderDashboard(@PathVariable("manager-id") String userId,
-                                  Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-
-        ProjectManager projectManager = userCreator.getProjectManager(userId);
+    public String renderDashboard(@PathVariable("manager-id") String userId, Model model) {
         ProjectCreator projectCreator = new ProjectCreator();
 
-        //ArrayList<Project> projects = projectCreator.getProjects(userId); //vi kalder det id i metoden
-
-        //session.setAttribute("projects",projects);
-
-        //model.addAttribute("projects",projects);
-        model.addAttribute("projectManager", projectManager);
+        model.addAttribute("projectManager", userCreator.getProjectManager(userId));
+        model.addAttribute("participant",userCreator.getParticipant(userId));
         model.addAttribute("projects", projectCreator.getProjects(userId));
+        model.addAttribute("current_user","projectManager");
 
-        return "projectmanager_dashboard";
+        return "dashboard";
     }
 
     @PostMapping("/add_participants")

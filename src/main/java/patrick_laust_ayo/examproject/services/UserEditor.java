@@ -15,12 +15,13 @@ public class UserEditor {
     private ProjectManager projectManager;
     private Participant participant;
 
-    public Participant updateParticipant(String id, String password, String name, String position, String formerUserId, boolean isProjectManager) {
+    public Participant updateParticipant(String id, String password, String name, String position,
+                                         String departmentName, String formerUserId, boolean isProjectManager) {
         if (isProjectManager) {
-            updateProjectmanager(id,password,formerUserId);
+            updateProjectmanager(id,formerUserId);
         }
 
-        participantRepo.updateParticipant(id, name, password, position, formerUserId);
+        participantRepo.updateParticipant(id, name, password, position, departmentName, formerUserId);
 
         // Makes sure that it's the real participant from db that is being returned
         ResultSet res = participantRepo.findParticipant(id);
@@ -42,31 +43,17 @@ public class UserEditor {
         return participant;
     }
 
-    public ProjectManager updateProjectmanager(String username, String password, String formerUsername) {
-        projectManagerRepo.updateProjectManager(username, password, formerUsername);
+    public ProjectManager updateProjectmanager(String username, String formerUsername) {
+        projectManagerRepo.updateProjectManager(username, formerUsername);
         return new UserCreator().getProjectManager(username);
     }
 
-    public Participant removeParticipant(String userId) {
-        ResultSet res = participantRepo.findParticipant(userId);
+    public void removeParticipant(String userId) {
+        participantRepo.removeParticipant(userId);
+    }
 
-        try {
-            res.next();
-
-            Department department = new Department(res.getInt("department_no"),
-                    res.getString("location"), res.getString("department_name"));
-            participant = new Participant(res.getString("user_id"), res.getString("participant_password"),
-                    res.getString("participant_name"), res.getString("position"),
-                    department);
-        } catch (Exception e) {
-            System.out.println("Couldn't create a participant from resultSet in removeParticipant...\n" + e.getMessage());
-            participant = null;
-            e.printStackTrace();
-        }
-
-        participantRepo.removeParticipant(participant.getId());
-
-        return participant;
+    public void removeProjcetManager(String userName) {
+        projectManagerRepo.removeProjectManager(userName);
     }
 
     public String joinParticipantToProject(Participant participant, Project project) {
