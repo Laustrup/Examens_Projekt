@@ -11,9 +11,13 @@ public class ProjectRepository extends Repository{
         executeSQLStatement("INSERT INTO project(title, projectmanager_id) VALUES (\""  + projectToInsert.getTitle() + "\", " + projectmanagerId + "); ");
     }
 
-    public void putPhaseInDatabase(int projectId) {
-        executeSQLStatement("INSERT INTO phase_table(phase_title, project_id) VALUES (\"NEW PHASE\", " + projectId + ");");
+
+    public void putPhaseInDatabase(String projectTitle, String number, int projectId) {
+        executeSQLStatement("INSERT INTO phase_table(phase_title, project_id) VALUES (\"" + projectTitle
+                + "\" " + "\" - NEW PHASE \"" + " \"" + number + "\", " + projectId + ");");
     }
+
+
     public ResultSet findPhase(String phaseTitle,String projectTitle) {
         ResultSet res = executeQuery("SELECT * FROM phase_table " +
                 "INNER JOIN project ON project.project_id = phase_table.project_id " +
@@ -57,6 +61,8 @@ public class ProjectRepository extends Repository{
         catch (Exception e) {
             System.out.println("No assignment in findPhase...\n");
         }
+        //TODO project creator har muligvis problemer med getPhase metoden, fordi den ikke kan finde
+        //TODO Department No ud fra dette resultset når man lige har lavet en fase, og laver en til.
         return executeQuery("SELECT * FROM phase_table " +
                 "INNER JOIN project ON project.project_id = phase_table.project_id " +
                 "INNER JOIN projectmanager ON projectmanager.projectmanager_id = project.projectmanager_id " +

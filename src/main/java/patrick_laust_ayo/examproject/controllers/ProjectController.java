@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import patrick_laust_ayo.examproject.models.*;
-import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 import patrick_laust_ayo.examproject.services.*;
 import patrick_laust_ayo.examproject.services.ExceptionHandler;
 
@@ -48,6 +47,7 @@ public class ProjectController {
         }
 
         session.setAttribute("project", projectCreator.createProject(title, ((ProjectManager)session.getAttribute("projectManager")).getUsername()));
+        projectCreator.currentPhaseNo = 0;
 
         return "redirect:/add_participant/projectmanager/" + title;
     }
@@ -261,7 +261,7 @@ public class ProjectController {
         String userId = ((Participant)session.getAttribute("participant")).getId();
 
         session.setAttribute("phase", projectCreator.createPhase(projectTitle));
-
+        System.err.println(((Phase) session.getAttribute("phase")).getTitle());
         return "redirect:/project_page-" + projectTitle + "/" + userId;
     }
 
@@ -327,13 +327,11 @@ public class ProjectController {
                               HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
-        session.setAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
+        //session.setAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
         System.out.println("GetPhaseTitle is " + projectCreator.getPhase(phaseTitle,projectTitle).getTitle());
-
         System.err.println(phaseTitle);
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
-        System.err.println("projekt titel  er? " + projectCreator.getProject(projectTitle).getTitle());
 
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
         model.addAttribute("participant",session.getAttribute("participant"));
@@ -466,7 +464,8 @@ public class ProjectController {
     }
 
     @PostMapping("/direct_to_assignment")
-    public String directToAssignment(@RequestParam(name="assignment_title") String assignmentTitle, HttpServletRequest request) {
+    public String directToAssignment(@RequestParam(name="assignment_title_search") String assignmentTitle,
+                                     HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,((Phase)session.getAttribute("phase")).getTitle()));
         session.setAttribute("Exception","");
@@ -483,13 +482,20 @@ public class ProjectController {
                                    HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
-        session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,phaseTitle));
+        //session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,phaseTitle));
 
         System.err.println("render assignment getproject title er " + projectCreator.getProject(projectTitle).getTitle());
+        System.err.println("project page med assignment, titlen er " + assignmentTitle);
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
+        System.err.println("project page med phase og assignment, projectTitle " + projectCreator.getProject(projectTitle).getTitle());
+
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
+        System.err.println("project page med phase og assignment, phaseTitle " + projectCreator.getPhase(phaseTitle, projectTitle).getTitle());
+
         model.addAttribute("assignment",projectCreator.getAssignment(assignmentTitle, projectTitle));
+        System.err.println("project page med phase og assignment, assignmentTitle " + projectCreator.getAssignment(assignmentTitle, projectTitle).getTitle());
+
         model.addAttribute("Exception",session.getAttribute("Exception"));
         model.addAttribute("Message",session.getAttribute("Message"));
         model.addAttribute("current","assignment");

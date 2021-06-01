@@ -15,11 +15,11 @@ class CreateProjectTest {
         //Arrange
         ProjectRepository pRepo = new ProjectRepository();
         ProjectCreator pCreator = new ProjectCreator();
-
+        String phaseNo = "25";
         //Act
         Project project = pCreator.createProject("Cleverbot v.2", "andy0432");
         int projectId = pRepo.findId("project", "title", project.getTitle(), "project_id");
-        pRepo.putPhaseInDatabase(projectId);
+        pRepo.putPhaseInDatabase(project.getTitle(), phaseNo, projectId);
 
         //Assert
         try {

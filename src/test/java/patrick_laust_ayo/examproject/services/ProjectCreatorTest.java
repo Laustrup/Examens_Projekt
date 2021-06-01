@@ -7,6 +7,7 @@ import patrick_laust_ayo.examproject.models.Assignment;
 import patrick_laust_ayo.examproject.models.Phase;
 import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.Task;
+import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 
 import java.util.ArrayList;
 
@@ -412,21 +413,34 @@ class ProjectCreatorTest {
         }
     }
 
-    /*
+
     // TODO Can update, put not fast enough to test
     @ParameterizedTest
-    @CsvSource(value = {"Appdev|Extra"}, delimiter = '|')
-    public void createPhaseTest(String projectTitle,String phaseTitle) {
+    @CsvSource(value = {"Appdev|Extra|1", "Appdev|Extra|2", "Advertising|SuperPhase|1"}, delimiter = '|')
+    public void createPhaseTest(String projectTitle,String phaseTitle, String newestPhaseNo) {
         //Act
-        Phase createdPhase = projectCreator.createPhase(projectTitle);
-        Phase updatedPhase = new ProjectEditor().updatePhase(phaseTitle,"NEW PHASE",projectTitle);
+        ProjectRepository proRepo = new ProjectRepository();
 
+        String phaseTitleFromRepo = "";
+
+        Phase createdPhase = projectCreator.createPhase(projectTitle);
+
+        Phase updatedPhase = new ProjectEditor().updatePhase(phaseTitle,
+                projectTitle + " NEW PHASE " +
+                        newestPhaseNo, projectTitle);
+
+        try {
+           phaseTitleFromRepo = proRepo.findPhase(phaseTitle, projectTitle).getString("title");
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
         //Assert
-        assertEquals("NEW PHASE", createdPhase.getTitle());
-        assertEquals(phaseTitle, updatedPhase.getTitle());
+        assertEquals(projectTitle + " - NEW PHASE " + newestPhaseNo, createdPhase.getTitle());
+        assertEquals(phaseTitleFromRepo, updatedPhase.getTitle());
     }
 
-     */
+
 
     @Test
     public void getPhaseTest() {
