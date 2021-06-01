@@ -236,20 +236,18 @@ public class ParticipantController {
         return "accept_delete";
     }
 
-    // TODO Add password, need html
     @PostMapping("/delete_participant")
     public String removeParticipant(@RequestParam(name = "user_id") String userId,HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
 
         userEditor.removeParticipant(userId);
         if (session.getAttribute("projectManager")!=null) {
-            userEditor.removeProjcetManager(userId);
+            userEditor.removeProjectManager(userId);
         }
         model.addAttribute("Message","User is removed");
         return "/";
     }
 
-    // TODO Needs task html
     @PostMapping("/join-task")
     public String joinTask(@RequestParam(name = "task_title") String taskTitle,
                            @RequestParam(name = "task_start") String taskStart,
