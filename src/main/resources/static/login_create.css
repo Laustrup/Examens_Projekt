@@ -12,7 +12,8 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: lightblue;
+    background-color: blue;
+    background-image: linear-gradient(powderblue,steelblue);
     margin: 100px 400px 300px 400px;
     box-shadow: 5px 10px;
 }
