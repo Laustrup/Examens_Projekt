@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class ProjectCreator {
 
     private Project project;
@@ -19,6 +20,7 @@ public class ProjectCreator {
 
     private ProjectRepository projectRepo = new ProjectRepository();
     private ProjectManagerRepository projectManagerRepo = new ProjectManagerRepository();
+
 
     private String[] updateStrings(String[] strings, ResultSet res) {
         try {
@@ -58,6 +60,7 @@ public class ProjectCreator {
         catch (Exception e) {
             System.out.println("Not updated project...\n");
         }
+
         try {
             strings[13] = res.getString("phase_title");
         }
@@ -72,7 +75,6 @@ public class ProjectCreator {
             System.out.println("Not updated projectManager...\n");
         }
 
-
         return strings;
     }
 
@@ -81,8 +83,8 @@ public class ProjectCreator {
         UserCreator userCreator = new UserCreator();
         project = new Project(title, new ArrayList<>(), new HashMap<>(), userCreator.getProjectManager(managerName));
         projectManagerRepo.closeCurrentConnection();
-        try {
 
+        try {
             projectRepo.putProjectInDatabase(project, projectManagerRepo.findId("projectmanager",
                     "username",managerName,"projectmanager_id"));
         }
@@ -90,9 +92,11 @@ public class ProjectCreator {
             System.out.println("Couldn't put project in database in createProject...\n" + e.getMessage());
             e.printStackTrace();
         }
+
         projectManagerRepo.closeCurrentConnection();
         return project;
     }
+
     public Project getProject(String projectTitle) {
 
         ResultSet res = projectRepo.findProject(projectTitle);
@@ -121,12 +125,13 @@ public class ProjectCreator {
 
         String[] strings = new String[16];
 
-        // Boolean and double
+        // Booleans and double
         boolean assignmentIsCompleted = false;
         boolean taskIsCompleted = false;
         boolean isProjectManagerCreated = false;
 
         double workHours = 0;
+
 
         ProjectManager projectManager = new ProjectManager(new String(),new String());
 
@@ -162,6 +167,7 @@ public class ProjectCreator {
                     }
                     currentParticipantId = res.getInt("participant_id");
 
+
                     // projectManager
                     if (!isProjectManagerCreated && (strings[15].equals(strings[2]))) {
                         projectManager = new ProjectManager(strings[15],strings[3], strings[2],strings[4],strings[5],
@@ -170,6 +176,8 @@ public class ProjectCreator {
                         listOfParticipants.add(projectManager);
                         isProjectManagerCreated = true;
                     }
+
+
                     // Participant
                     else if (currentTaskId > formerTaskId || currentParticipantId > formerParticipantId) {
                         Participant participant = new Participant(strings[2], strings[3], strings[4], strings[5],
@@ -178,11 +186,13 @@ public class ProjectCreator {
                         listOfParticipants.add(participant);
                     }
 
+
                     // Task
                     if (currentTaskId>formerTaskId){
                         listOfTasks.add(new Task(workHours,listOfParticipants,strings[6],strings[7], strings[8],taskIsCompleted));
                         listOfParticipants = new ArrayList<>();
                     }
+
 
                     // Assignment
                     if (currentAssignmentId>formerAssignmentId) {
@@ -190,6 +200,7 @@ public class ProjectCreator {
                         listOfTasks = new ArrayList<>();
                         listOfAssignments.add(assignment);
                     }
+
 
                     // Phase
                     if (currentPhaseId>formerPhaseId) {
@@ -199,22 +210,27 @@ public class ProjectCreator {
                     }
                 }
 
+
                 // Updates values of former row
                 if (columnCount == 35) {
                     formerTaskId = res.getInt("task_id");
                     taskIsCompleted = res.getBoolean("task_is_completed");
                     workHours = res.getDouble("estimated_work_hours");
                 }
+
                 if (columnCount >= 26) {
                     formerAssignmentId = res.getInt("assignment_id");
                     assignmentIsCompleted = res.getBoolean("is_completed");
                 }
+
                 if (columnCount >= 20) {
                     formerPhaseId = res.getInt("phase_id");
                 }
+
                 formerParticipantId = res.getInt("participant_id");
                 departmentId = res.getInt("department_no");
                 strings = updateStrings(strings,res);
+
 
                 if (res.isLast()) {
                     boolean allowAddTask = true;
@@ -225,28 +241,37 @@ public class ProjectCreator {
                             listOfTasks.add(new Task(workHours,listOfParticipants,strings[6],strings[7], strings[8],taskIsCompleted));
                             allowAddTask = false;
                         }
+
+
                         projectManager = new ProjectManager(strings[15],strings[3], strings[2],strings[4],strings[5],
                                 new Department(departmentId,strings[0],strings[1]));
                         if (!mapOfParticipants.containsKey(projectManager.getId())) {
                             mapOfParticipants.put(projectManager.getId(), projectManager);
                         }
+
+
                         if (columnCount == 35) {
                             listOfTasks.get(listOfTasks.size()-1).addParticipant(projectManager);
                         }
                     }
+
+
                     // If Participant isn't added
                     else if (isProjectManagerCreated) {
                         Participant participant = new Participant(strings[2], strings[3], strings[4], strings[5],
                                                     new Department(departmentId,strings[0],strings[1]));
+
                         if (listOfTasks.size() == 0 && columnCount == 35){
                             listOfTasks.add(new Task(workHours,listOfParticipants,strings[6],strings[7], strings[8],taskIsCompleted));
                             allowAddTask = false;
                         }
+
                         mapOfParticipants.put(participant.getId(), participant);
                         if (columnCount == 35) {
                             listOfTasks.get(listOfTasks.size()-1).addParticipant(participant);
                         }
                     }
+
 
                     // Task
                     if (allowAddTask && columnCount == 35) {
@@ -267,6 +292,7 @@ public class ProjectCreator {
                             listOfPhases.get(listOfPhases.size()-1).addToAssignments(assignment);
                         }
                     }
+
                     project = new Project(strings[12],listOfPhases, mapOfParticipants,projectManager);
                 }
             }
@@ -276,12 +302,13 @@ public class ProjectCreator {
             e.printStackTrace();
             project = null;
         }
+
         projectRepo.closeCurrentConnection();
         return project;
     }
 
-
     public ArrayList<Project> getProjects(String userId) {
+
         ResultSet res = projectRepo.findProjects(userId);
         ArrayList<Project> projects = new ArrayList<>();
 
@@ -294,6 +321,7 @@ public class ProjectCreator {
             System.out.println("Couldn't gather projects in getProjects...\n" + e.getMessage());
             e.printStackTrace();
         }
+
         return projects;
     }
 
@@ -308,6 +336,7 @@ public class ProjectCreator {
     }
 
     public Phase getPhase(String phaseTitle,String projectTitle) {
+
         ResultSet res = projectRepo.findPhase(phaseTitle,projectTitle);
 
         // Objects
@@ -333,6 +362,7 @@ public class ProjectCreator {
         boolean isTaskCompleted = false;
         boolean isAssignmentCompleted = false;
 
+
         try {
             ResultSetMetaData rsmd = res.getMetaData();
             int columnCount = rsmd.getColumnCount();
@@ -346,10 +376,13 @@ public class ProjectCreator {
                 if (columnCount == 33) {
                     currentTaskId = res.getInt("task_id");
                 }
+
                 if (columnCount >= 27) {
                     currentAssignmentId = res.getInt("assignment_id");
                 }
+
                 currentParticipantId = res.getInt("participant_id");
+
 
                 if (!res.isFirst()) {
 
@@ -372,20 +405,23 @@ public class ProjectCreator {
                     }
                 }
 
+
                 if (columnCount == 33) {
                     formerTaskId = res.getInt("task_id");
                 }
+
                 if (columnCount >= 27) {
                     formerAssignmentId = res.getInt("assignment_id");
                 }
+
                 formerParticipantId = res.getInt("participant_id");
                 departmentId = res.getInt("department_no");
                 workHours = res.getDouble("estimated_work_hours");
                 isTaskCompleted = res.getBoolean("task_is_completed");
                 isAssignmentCompleted = res.getBoolean("is_completed");
 
-                // TODO Perhaps without participant as well?
                 strings = updateStrings(strings,res);
+
 
                 if (res.isLast()) {
                     // Participant
@@ -396,6 +432,7 @@ public class ProjectCreator {
                     }
                     tasks.get(tasks.size()-1).addParticipant(new Participant(strings[2], strings[3], strings[4], strings[5],
                             new Department(departmentId, strings[0], strings[1])));
+
                     // Task
                     if (allowAddTask) {
                         tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
@@ -413,6 +450,7 @@ public class ProjectCreator {
             e.printStackTrace();
             phase = null;
         }
+
         return phase;
     }
 
@@ -425,6 +463,7 @@ public class ProjectCreator {
     }
 
     public Assignment getAssignment(String assignmentTitle,String phaseTitle) {
+
         ResultSet res = projectRepo.findAssignment(assignmentTitle,phaseTitle);
         ArrayList<Task> tasks = new ArrayList<>();
         ArrayList<Participant> participants = new ArrayList<>();
@@ -441,10 +480,12 @@ public class ProjectCreator {
         double workHours = 0;
         boolean isTaskCompleted = false;
 
+
         try {
             while (res.next()) {
                 ResultSetMetaData rsmd = res.getMetaData();
                 int columnCount = rsmd.getColumnCount();
+
                 // If there is only one row
                 if (res.isFirst() && res.isLast()) {
                     assignment = new Assignment(res.getString("assignment_start"), res.getString("assignment_end"),
@@ -456,6 +497,7 @@ public class ProjectCreator {
                     if (columnCount == 27) {
                         currentParticipantId = res.getInt("participant_id");
                     }
+
                     if (columnCount >= 16) {
                         currentTaskId = res.getInt("task_id");
                     }
@@ -464,24 +506,29 @@ public class ProjectCreator {
                         participants.add(new Participant(strings[2],strings[3], strings[4],strings[5],
                                             new Department(departmentNo,strings[0],strings[1])));
                     }
+
                     if (currentTaskId > formerTaskId) {
                         tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
                         System.out.println(tasks.get(tasks.size()-1).getTitle());
-
                     }
                 }
+
 
                 if (columnCount == 27) {
                     formerParticipantId = res.getInt("participant_id");
                     departmentNo = res.getInt("department_no");
                 }
+
                 if (columnCount >= 16) {
                     formerTaskId = res.getInt("task_id");
                 }
 
+
                 workHours = res.getDouble("estimated_work_hours");
                 isTaskCompleted = res.getBoolean("task_is_completed");
+
                 strings = updateStrings(strings,res);
+
 
                 if (res.isLast()) {
                     tasks.add(new Task(workHours, participants, strings[6], strings[7], strings[8], isTaskCompleted));
@@ -496,7 +543,6 @@ public class ProjectCreator {
         }
 
         return assignment;
-
     }
 
     public Task createTask(String assignmentTitle) {
@@ -507,7 +553,9 @@ public class ProjectCreator {
 
         return task;
     }
+
     public Task getTask(String taskTitle,String taskStart,String taskEnd) {
+
         ResultSet res = projectRepo.findTask(taskTitle,taskStart,taskEnd);
         ArrayList<Participant> participants = new ArrayList<>();
         Department department = new Department(0,new String(), new String());
@@ -515,14 +563,17 @@ public class ProjectCreator {
         int currentParticipantId = 0;
 
         int formerParticipantId = 0;
+
         int departmentId = 0;
 
         String[] strings = new String[16];
+
 
         try {
             while (res.next()) {
                 ResultSetMetaData rsmd = res.getMetaData();
                 int columnCount = rsmd.getColumnCount();
+
                 // If there is only one row
                 if (res.isFirst() && res.isLast()) {
                     task = new Task(res.getDouble("estimated_work_hours"), participants, res.getString("task_start"),
@@ -530,6 +581,7 @@ public class ProjectCreator {
                             res.getBoolean("task_is_completed"));
                     break;
                 }
+
 
                 if (!res.isFirst()) {
                     if (columnCount > 13) {
@@ -542,12 +594,15 @@ public class ProjectCreator {
                     }
                 }
 
+
                 if (columnCount > 13) {
                     formerParticipantId = res.getInt("participant_id");
                     departmentId = res.getInt("department_no");
                 }
 
+
                 strings = updateStrings(strings,res);
+
 
                 if (res.isLast()) {
                     department = new Department(departmentId,strings[0],strings[1]);
@@ -564,5 +619,4 @@ public class ProjectCreator {
 
         return task;
     }
-
 }

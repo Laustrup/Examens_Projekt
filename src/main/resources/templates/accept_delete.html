@@ -23,6 +23,7 @@
                 <button type="submit">Delete</button>
             </form>
         </div>
+
         <div th:if="${current_delete eq 'project'} ">
             <form action="/delete_project" method="Post">
                 <label for="user_id_project">Type userId</label>
@@ -32,6 +33,7 @@
                 <button type="submit">Delete</button>
             </form>
         </div>
+
         <div th:if="${current_delete eq 'phase'} ">
             <form action="/delete_phase" method="Post">
                 <label for="user_id_phase">Type userId</label>
@@ -41,6 +43,7 @@
                 <button type="submit">Delete</button>
             </form>
         </div>
+
         <div th:if="${current_delete eq 'assignment'} ">
             <form action="/delete_assignment" method="Post">
                 <label for="user_id_assignment">Type userId</label>
@@ -50,6 +53,7 @@
                 <button type="submit">Delete</button>
             </form>
         </div>
+
         <div th:if="${current_delete eq 'task'} ">
             <form action="/delete_task" method="Post">
                 <label for="user_id_task">Type userId</label>

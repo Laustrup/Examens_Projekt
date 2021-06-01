@@ -2,6 +2,7 @@ package patrick_laust_ayo.examproject.repositories;
 
 import java.sql.ResultSet;
 
+
 public class DepartmentRepository extends Repository {
 
     public ResultSet findDepartment(String depName){

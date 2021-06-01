@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Task extends Assignment {
 
+
     private double estimatedWorkHours;
     private ArrayList<Participant> participants;
 
@@ -20,16 +21,21 @@ public class Task extends Assignment {
         this.participants = participants;
     }
 
+
     public double getEstimatedWorkHours() {
         return estimatedWorkHours;
+    }
+
+    public void setEstimatedWorkHours(double estimatedWorkHours) {
+        this.estimatedWorkHours = estimatedWorkHours;
     }
 
     public ArrayList<Participant> getParticipants() {
         return participants;
     }
 
-    public void setEstimatedWorkHours(double estimatedWorkHours) {
-        this.estimatedWorkHours = estimatedWorkHours;
+    public void setParticipants(ArrayList<Participant> participants){
+        this.participants = participants;
     }
 
     public void addParticipant(Participant participant) {

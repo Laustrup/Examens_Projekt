@@ -1,17 +1,11 @@
 package patrick_laust_ayo.examproject.models;
 
-import patrick_laust_ayo.examproject.repositories.ProjectRepository;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Assignment {
 
-    private ProjectRepository repo;
-
     private String start;
     private String end;
-
     private String title;
 
     private boolean isCompleted;

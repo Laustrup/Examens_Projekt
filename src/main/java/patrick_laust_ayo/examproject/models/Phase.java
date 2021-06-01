@@ -2,12 +2,13 @@ package patrick_laust_ayo.examproject.models;
 
 import java.util.ArrayList;
 
+
 public class Phase {
 
     private ArrayList<Assignment> assignments;
 
     private String title;
-    private String[] assignmentTitles = new String[0];
+
 
     public Phase(String title) {
         this.title = title;
@@ -19,6 +20,7 @@ public class Phase {
         this.title = title;
         this.assignments = assignments;
     }
+
 
     public ArrayList<Assignment> getAssignments() {
         return assignments;
@@ -36,6 +38,7 @@ public class Phase {
 
         return total;
     }
+
     public double getTotalCost() {
         double total = 0;
         for (int i = 0; i < assignments.size();i++) {

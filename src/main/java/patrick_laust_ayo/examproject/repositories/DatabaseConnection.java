@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 
+
 public class DatabaseConnection {
 
     private Properties properties;
@@ -14,6 +15,7 @@ public class DatabaseConnection {
     private String dbConnection;
     private String username;
     private String password;
+
 
     public Connection getConnection() {
 
@@ -25,13 +27,12 @@ public class DatabaseConnection {
             username = properties.getProperty("username");
             password = properties.getProperty("password");
             connection = DriverManager.getConnection(dbConnection,username,password);
-           // System.out.println("Connection is " + dbConnection);
         }
         catch(Exception e){
             System.out.println("Problem with property file reading...\n" + e.getMessage());
+            e.printStackTrace();
             connection = null;
         }
-
         return connection;
     }
 }

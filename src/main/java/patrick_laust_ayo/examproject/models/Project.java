@@ -1,9 +1,8 @@
 package patrick_laust_ayo.examproject.models;
 
-import patrick_laust_ayo.examproject.repositories.ProjectRepository;
-
 import java.util.ArrayList;
 import java.util.Map;
+
 
 public class Project {
 
@@ -30,6 +29,7 @@ public class Project {
     public Project(String title) {
         this.title = title;
     }
+
 
     public String getTitle() {
         return title;

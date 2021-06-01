@@ -1,11 +1,9 @@
 package patrick_laust_ayo.examproject.models;
 
-import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
-
 public class ProjectManager extends Participant {
 
+
     private String username;
-    //int participantId = new ProjectManagerRepository().calcNextId("projectmanager");
 
 
     public ProjectManager(String username, String password) {
@@ -14,10 +12,9 @@ public class ProjectManager extends Participant {
         this.username = username;
     }
 
-    public ProjectManager(String username /*, int participantId*/) {
+    public ProjectManager(String username) {
 
         super(null, null, null, null, null);
-       // this.participantId = participantId;
         this.username = username;
     }
 

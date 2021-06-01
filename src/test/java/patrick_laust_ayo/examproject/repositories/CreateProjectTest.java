@@ -8,22 +8,26 @@ import java.sql.ResultSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class CreateProjectTest {
 
     @Test
     void createProject() {
+
         //Arrange
         ProjectRepository pRepo = new ProjectRepository();
         ProjectCreator pCreator = new ProjectCreator();
-        String phaseNo = "25";
+
         //Act
         Project project = pCreator.createProject("Cleverbot v.2", "andy0432");
-        int projectId = pRepo.findId("project", "title", project.getTitle(), "project_id");
-        //pRepo.putPhaseInDatabase(phaseNo, projectId);
+
+        String sql = "SELECT * FROM project WHERE title = \"" + project.getTitle() + "\"";
 
         //Assert
         try {
-            assertEquals("Cleverbot v.2", pCreator.getProject("Cleverbot v.2").getTitle());
+            ResultSet res = pRepo.executeQuery(sql);
+            res.next();
+            assertEquals("Cleverbot v.2", (res.getString("title")));
         }
         catch (Exception e){
             System.out.println("Find Project Test went wrong " + e.getMessage());

@@ -2,7 +2,9 @@ package patrick_laust_ayo.examproject.repositories;
 
 import java.sql.ResultSet;
 
+
 public class ParticipantRepository extends Repository {
+
 
     public void putParticipantsInDatabase(String userId, int departmentNo, int amount) {
         for (int i = 0; i < amount; i++) {

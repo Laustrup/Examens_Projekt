@@ -4,6 +4,7 @@ import patrick_laust_ayo.examproject.models.ProjectManager;
 
 import java.sql.ResultSet;
 
+
 public class ProjectManagerRepository extends Repository {
 
     private ParticipantRepository parRepo = new ParticipantRepository();

@@ -1,5 +1,5 @@
 
-/* HEADER */
+
 .header h2 {
     text-align: center;
     background-color:#59869d;
@@ -26,11 +26,11 @@ button {
 }
 .left {
     left: 0;
-    background-color: #D5D8DC;
+    background-image: url("img/bluecirc.jpg");
 }
 .right {
     right: 0;
-    background-color: #D5D8DC;
+    background-image: url("img/bluecirc.jpg");
 }
 
 /* LEFT SIDE */
@@ -41,7 +41,8 @@ button {
     text-align: center;
 }
 .participant_container {
-    background-color: #59869d;
+    background-color: blue;
+    background-image: linear-gradient(powderblue,steelblue);
     border: 3px solid;
     padding: 10px;
     margin: 20px;
@@ -60,7 +61,8 @@ button {
 /* PROJECT BOX */
 
 .project_form {
-    background-color: #59869d;
+    background-color: blue;
+    background-image: linear-gradient(powderblue,steelblue);
     border: 3px solid;
     padding: 10px;
     margin: 20px;
