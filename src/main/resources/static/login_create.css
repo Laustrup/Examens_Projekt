@@ -79,4 +79,18 @@ button {
     padding: 10px;
     margin: 0 7px 25px -20%;
 }
+#manager_is_participant_form {
+    text-align:center;
+    margin: 40px 0 40px 0;
+}
+.project_title {
+    padding: 10px;
+    margin: 0 7px 25px -20%;
+}
+.choose_department {
+    padding: 10px;
+}
+.create_btn {
+    padding: 20px;
+}
 
