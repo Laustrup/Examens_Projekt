@@ -86,10 +86,14 @@ public class ParticipantController {
     }
 
     @GetMapping("/participant_dashboard/{participant_user_id}")
-    public String renderDashboard(@PathVariable (name="participant_user_id") String userId, Model model){
+    public String renderDashboard(@PathVariable (name="participant_user_id") String userId,
+                                  HttpServletRequest request, Model model){
+
+        HttpSession session = request.getSession();
 
         model.addAttribute("projects", new ProjectCreator().getProjects(userId));
         model.addAttribute("participant", new UserCreator().getParticipant(userId));
+        model.addAttribute("Exception",session.getAttribute("Exception"));
         model.addAttribute("current_user","participant");
 
         return "dashboard";
@@ -169,45 +173,44 @@ public class ParticipantController {
     @PostMapping("/update_participant")
     public String updateParticipant(@RequestParam(name="participant_id") String id, @RequestParam(name="participant_password") String password,
                                     @RequestParam(name="name") String name, @RequestParam(name="position") String position,
-                                    @RequestParam(name="department_name") String departmentName, HttpServletRequest request, Model model){
+                                    @RequestParam(name="department") String departmentName, HttpServletRequest request, Model model){
 
         ExceptionHandler handler = new ExceptionHandler();
 
         HttpSession session = request.getSession();
-        Project project = (Project) session.getAttribute("project");
 
-        if (handler.doesUserIdExist(id)) {
-            model.addAttribute("User_id exists","User id already exists, please write another.");
+        if (handler.doesUserIdExist(id)&&!((Participant)session.getAttribute("participant")).getId().equals(id)) {
+            session.setAttribute("Exception","User-id already exists, please write another.");
 
-            return "redirect:/project/" + project.getTitle() + "/User id already exists, please write another.";
+            return "redirect:/participant_dashboard/" + id;
         }
 
         String inputException = handler.isLengthAllowedInDatabase(id,"user_id");
 
         if (!(inputException.equals("Input is allowed"))) {
-            model.addAttribute("Exception",inputException);
-            return "redirect:/project/" + project.getTitle() + "/" + inputException;
+            session.setAttribute("Exception",inputException);
+            return "redirect:/participant_dashboard/" + id;
         }
 
         inputException = handler.isLengthAllowedInDatabase(password,"participant_password");
 
         if (!(inputException.equals("Input is allowed"))) {
-            model.addAttribute("Exception",inputException);
-            return "redirect:/project/" + project.getTitle() + "/" + inputException;
+            session.setAttribute("Exception",inputException);
+            return "redirect:/participant_dashboard/" + id;
         }
 
         inputException = handler.isLengthAllowedInDatabase(name,"pariticipant_name");
 
         if (!(inputException.equals("Input is allowed"))) {
-            model.addAttribute("Exception",inputException);
-            return "redirect:/project/" + project.getTitle() + "/" + inputException;
+            session.setAttribute("Exception",inputException);
+            return "redirect:/participant_dashboard/" + id;
         }
 
         inputException = handler.isLengthAllowedInDatabase(position,"position");
 
         if (!(inputException.equals("Input is allowed"))) {
-            model.addAttribute("Exception",inputException);
-            return "redirect:/project/" + project.getTitle() + "/" + inputException;
+            session.setAttribute("Exception",inputException);
+            return "redirect:/participant_dashboard/" + id;
         }
 
         if (session.getAttribute("projectManager")==null) {
@@ -219,6 +222,8 @@ public class ParticipantController {
                     ((Participant)session.getAttribute("participant")).getId(),true));
             session.setAttribute("projectManager",userCreator.getProjectManager(id));
         }
+
+        session.setAttribute("Exception","Profile updated!");
 
         return "redirect:/participant_dashboard/" + id;
 
