@@ -83,6 +83,7 @@ button {
     text-align:center;
     margin: 40px 0 40px 0;
 }
+
 .project_title {
     padding: 10px;
     margin: 0 7px 25px -20%;
@@ -93,7 +94,7 @@ button {
 .create_btn {
     padding: 20px;
 }
-/*DELETE PARTICIPANTS*/
+/*DELETE PARTICIPANTS + DASHBOARD*/
 .special_container {
     text-align: center;
     background-color: blue;
@@ -102,5 +103,10 @@ button {
     box-shadow: 5px 10px;
     padding: 30px;
 }
-
+.participant_form {
+    margin: 5%;
+}
+.participant_form div{
+    padding: 5px;
+}
 
