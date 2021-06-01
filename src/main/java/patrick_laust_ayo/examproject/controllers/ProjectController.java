@@ -47,7 +47,6 @@ public class ProjectController {
         }
 
         session.setAttribute("project", projectCreator.createProject(title, ((ProjectManager)session.getAttribute("projectManager")).getUsername()));
-        projectCreator.currentPhaseNo = 0;
 
         return "redirect:/add_participant/projectmanager/" + title;
     }
