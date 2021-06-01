@@ -25,17 +25,17 @@
 
                 <div class="password_section">
                     <label for="participant_password">Password</label>
-                    <input type="password" id="participant_password" name="participant_password" th:placeholder="${participant.getHiddenPassword}" required>
+                    <input type="password" id="participant_password" name="participant_password" th:placeholder="${participant.getHiddenPassword}">
                 </div>
 
                 <div class="name_section">
                     <label for="participant_name">Name</label>
-                    <input type="text" id="participant_name" name="participant_name" th:placeholder="${participant.getName}" required>
+                    <input type="text" id="participant_name" name="participant_name" th:placeholder="${participant.getName}">
                 </div>
 
                 <div class="position_section">
                     <label for="position">Position</label>
-                    <input type="text" id="position" name="position" th:placeholder="${participant.getPosition}" required>
+                    <input type="text" id="position" name="position" th:placeholder="${participant.getPosition}">
                 </div>
 
                 <div class="department_section">
@@ -151,9 +151,9 @@
                 </form>
             </div>
         </section>
-
-
     </div>
+
+
     <div th:if="${current eq 'phase'}">
         <section class="phase_options"><header><h3 th:text="${phase.getTitle()}"></h3></header>
             <div class="phase_option_container">
@@ -165,13 +165,14 @@
 
                 <form action="direct_to_assignment" method="post">
                     <label for="assignment_search">Type assignment title</label>
-                    <input type="text" id="assignment_search" name="assignment_title">
+                    <input type="text" id="assignment_search" name="assignment_title_search">
                     <button type="submit">Search</button>
                 </form>
 
                 <ul th:each="assignment_title : ${phase.getAssignmentTitles()}">
                     <li><p th:text="${assignment_title}"></p></li>
                 </ul>
+
                 <div class="add_assignment">
                     <form action="/add_assignment" method="post">
                         <h4>Add new assignment</h4>

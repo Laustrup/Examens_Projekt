@@ -47,6 +47,7 @@ public class ProjectController {
         }
 
         session.setAttribute("project", projectCreator.createProject(title, ((ProjectManager)session.getAttribute("projectManager")).getUsername()));
+        projectCreator.currentPhaseNo = 0;
 
         return "redirect:/add_participant/projectmanager/" + title;
     }
@@ -98,7 +99,7 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
 
-        if (session.getAttribute("participant")==null && projectCreator.getProject(projectTitle) != null) {
+        if (session.getAttribute("participant")==null && handler.doesProjectExist(projectTitle)) {
             session.setAttribute("project",projectCreator.getProject(projectTitle));
             session.setAttribute("current_login","with_invite");
             return "redirect:/participant_login_page";
@@ -124,10 +125,8 @@ public class ProjectController {
             return "project_page";
         }
 
-        //TODO der skal være det rigtige redirect
-        model.addAttribute("Exception","You are not a participant of this project...");
-        return "project_page";
-        // return "redirect:/login_to_project/" + ((Participant) session.getAttribute("participant")).getId()+ "/" + projectTitle;
+        session.setAttribute("Exception","Project doesn't exist...");
+        return "redirect:/";
     }
 
     @PostMapping("/project_page_update-participant_pressed")
@@ -261,7 +260,7 @@ public class ProjectController {
         String userId = ((Participant)session.getAttribute("participant")).getId();
 
         session.setAttribute("phase", projectCreator.createPhase(projectTitle));
-
+        System.err.println(((Phase) session.getAttribute("phase")).getTitle());
         return "redirect:/project_page-" + projectTitle + "/" + userId;
     }
 
@@ -327,13 +326,11 @@ public class ProjectController {
                               HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
-        session.setAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
+        //session.setAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
         System.out.println("GetPhaseTitle is " + projectCreator.getPhase(phaseTitle,projectTitle).getTitle());
-
         System.err.println(phaseTitle);
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
-        System.err.println("projekt titel  er? " + projectCreator.getProject(projectTitle).getTitle());
 
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
         model.addAttribute("participant",session.getAttribute("participant"));
@@ -466,7 +463,8 @@ public class ProjectController {
     }
 
     @PostMapping("/direct_to_assignment")
-    public String directToAssignment(@RequestParam(name="assignment_title") String assignmentTitle, HttpServletRequest request) {
+    public String directToAssignment(@RequestParam(name="assignment_title_search") String assignmentTitle,
+                                     HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,((Phase)session.getAttribute("phase")).getTitle()));
         session.setAttribute("Exception","");
@@ -483,13 +481,20 @@ public class ProjectController {
                                    HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
-        session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,phaseTitle));
+        //session.setAttribute("assignment",projectCreator.getAssignment(assignmentTitle,phaseTitle));
 
         System.err.println("render assignment getproject title er " + projectCreator.getProject(projectTitle).getTitle());
+        System.err.println("project page med assignment, titlen er " + assignmentTitle);
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
+        System.err.println("project page med phase og assignment, projectTitle " + projectCreator.getProject(projectTitle).getTitle());
+
         model.addAttribute("phase",projectCreator.getPhase(phaseTitle,projectTitle));
+        System.err.println("project page med phase og assignment, phaseTitle " + projectCreator.getPhase(phaseTitle, projectTitle).getTitle());
+
         model.addAttribute("assignment",projectCreator.getAssignment(assignmentTitle, projectTitle));
+        System.err.println("project page med phase og assignment, assignmentTitle " + projectCreator.getAssignment(assignmentTitle, projectTitle).getTitle());
+
         model.addAttribute("Exception",session.getAttribute("Exception"));
         model.addAttribute("Message",session.getAttribute("Message"));
         model.addAttribute("current","assignment");
