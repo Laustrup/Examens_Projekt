@@ -6,13 +6,14 @@
     <title>Participant Login</title>
 </head>
 <body>
+<header th:replace="fragments/header.html"></header>
 
 <div th:if="${current_login eq 'without_invite'}">
-    <header><h1>Login As Participant</h1></header>
+        <h1>Login As Participant</h1>
 </div>
 
 <div th:if="${current_login eq 'with_invite'}">
-    <header><h1>Login to project</h1></header>
+        <h1>Login to project</h1>
 </div>
 
     <main>
@@ -112,6 +113,6 @@
         </section>
         </div>
     </main>
-
+<footer th:replace="fragments/footer.html"></footer>
 </body>
 </html>
