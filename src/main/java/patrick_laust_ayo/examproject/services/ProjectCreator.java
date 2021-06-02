@@ -454,11 +454,11 @@ public class ProjectCreator {
         return phase;
     }
 
-    public Assignment createAssignment(String phaseTitle, String assignmentTitle,String start, String end) {
+    public Assignment createAssignment(String phaseTitle, String assignmentTitle,String start, String end,Project project) {
 
         assignment = new Assignment(start,end,assignmentTitle,false, new ArrayList<Task>());
         projectRepo.putAssignmentInDatabase(assignment,projectRepo.findId("phase_table","phase_title",
-                                            phaseTitle,"phase_id"));
+                                            phaseTitle,"phase_id"),project.getProjectManager().getUsername());
         return assignment;
     }
 

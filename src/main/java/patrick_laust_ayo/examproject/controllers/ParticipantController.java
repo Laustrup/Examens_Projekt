@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-
 @Controller
 public class ParticipantController {
 
@@ -80,7 +79,7 @@ public class ParticipantController {
                 projectManager.getUsername(), true));
 
         session.setAttribute("current_project", "start");
-        model.addAttribute("current_project", session.getAttribute("current_project"));
+        session.setAttribute("current","phases");
 
         return "redirect:/project_page-" + projectTitle + "/" + projectManager.getUsername();
     }
@@ -94,7 +93,7 @@ public class ParticipantController {
         model.addAttribute("projects", new ProjectCreator().getProjects(userId));
         model.addAttribute("participant", new UserCreator().getParticipant(userId));
         model.addAttribute("Exception",session.getAttribute("Exception"));
-        model.addAttribute("current_user","participant");
+        model.addAttribute("is_project_manager","false");
 
         return "dashboard";
     }
@@ -284,20 +283,6 @@ public class ParticipantController {
             return "/projectpage-" + taskTitle + "/" + exception;
         }
         return "/task/" + taskTitle + "/" + exception;
-    }
-
-    // TODO Already exist in projectcontroller?
-    @GetMapping("/projectpage-{project.getTitle()}/{Exception}")
-    public String projectWithException(@PathVariable(name = "Exception") String exception,
-                                       HttpServletRequest request,Model model) {
-
-        HttpSession session = request.getSession();
-
-        model.addAttribute("Exception",exception);
-        model.addAttribute("project",(Project) session.getAttribute("project"));
-        model.addAttribute("participant",(Participant) session.getAttribute("participant"));
-
-        return "project_page";
     }
 
 }

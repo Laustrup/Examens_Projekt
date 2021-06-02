@@ -96,10 +96,17 @@ public class ProjectRepository extends Repository{
                 "WHERE task_title = \"" + assignmentTitle + "\" AND title = \"" + projectTitle + "\";");
     }
 
-    public void putAssignmentInDatabase(Assignment assignment, int phaseId) {
+    public void putAssignmentInDatabase(Assignment assignment, int phaseId, String projectManagerUsername) {
+        int taskId = calcNextId("task");
+        int participantId = findId("participant","user_id",projectManagerUsername,"participant_id");
         executeSQLStatement("INSERT INTO assignment(assignment_title, assignment_start, assignment_end, is_Completed, phase_id) " +
                             "VALUES (\"" + assignment.getTitle() + "\", \""  + assignment.getStart() +  "\", \"" + assignment.getEnd() + "\", " +
                             assignment.isCompleted() + ", " + phaseId + "); ");
+        executeSQLStatement("INSERT INTO task(assignment_id,estimated_work_hours,task_title,task_start,task_end,task_is_completed) " +
+                "VALUES (" + findId("assignment","assignment_title", assignment.getTitle(), "assignment_id") +
+                ", null, null,null,null,false); ");
+        executeSQLStatement("INSERT INTO participant_task(participant_id,task_id) " +
+                "VALUES (" + participantId + "," + taskId + "); ");
     }
 
     public void updateAssignment(String title,String start,String end, String formerTitle,String phaseTitle) {

@@ -17,16 +17,20 @@ public class ProjectController {
     private ProjectEditor projectEditor = new ProjectEditor();
     private ExceptionHandler handler = new ExceptionHandler();
 
+    @PostMapping("/direct_to_create_project")
+    public String directToCreateProject(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return "redirect:/create_project/" + ((ProjectManager)session.getAttribute("projectManager")).getUsername();
+    }
 
     @GetMapping("/create_project/{projectmanager_username}")
     public String renderCreateProject(@PathVariable(name = "projectmanager_username") String username,
                                       HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
-        session.setAttribute("current_project","start");
+        session.setAttribute("current","phases");
         model.addAttribute("current_project", session.getAttribute("current_project"));
         return "create_project";
     }
-
 
     @PostMapping("/create-project")
     public String createProject(@RequestParam(name = "title") String title,
@@ -118,7 +122,6 @@ public class ProjectController {
             model.addAttribute("current",session.getAttribute("current"));
             model.addAttribute("current_project",session.getAttribute("current_project"));
             model.addAttribute("Exception", session.getAttribute("Exception"));
-
 
             return "project_page";
         }
@@ -353,29 +356,30 @@ public class ProjectController {
         HttpSession session = request.getSession();
 
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String user_id = ((Participant)session.getAttribute("participant")).getId();
         String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
 
         String exception = handler.isLengthAllowedInDatabase(title,"assignment_title");
         if (!exception.equals("Input is allowed")) {
             session.setAttribute("Exception",exception);
-            return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle;
+            return "redirect:/project_page-" + projectTitle + "/" + user_id + "/" + phaseTitle;
         }
 
         if (handler.isDateTimeCorrectFormat(start)) {
             session.setAttribute("Exception","Start should have the format yyyy-mm-dd hh-mm-dd");
-            return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle;
+            return "redirect:/project_page-" + projectTitle + "/" + user_id + "/" + phaseTitle;
         }
 
         if (handler.isDateTimeCorrectFormat(end)) {
             session.setAttribute("Exception","End should have the format yyyy-mm-dd hh-mm-dd");
-            return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle;
+            return "redirect:/project_page-" + projectTitle + "/" + user_id + "/" + phaseTitle;
         }
 
-        Assignment assignment = projectCreator.createAssignment(phaseTitle,title,start,end);
+        Assignment assignment = projectCreator.createAssignment(phaseTitle,title,start,end,(Project)session.getAttribute("project"));
         session.setAttribute("Exception","");
         session.setAttribute("Message","");
 
-        return "redirect:/project_page-" + projectTitle + "/" + phaseTitle + "/" + assignment.getTitle();
+        return "redirect:/project_page-" + projectTitle + "/" + user_id + "/" + phaseTitle;
     }
 
     @PostMapping("/update_assignment")
@@ -420,7 +424,7 @@ public class ProjectController {
     }
 
     @PostMapping("/change_assignment_is_completed_status")
-    public String changeAssignmentIscompletedStatus(HttpServletRequest request) {
+    public String changeAssignmentIsCompletedStatus(HttpServletRequest request) {
 
         HttpSession session = request.getSession();
         String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();

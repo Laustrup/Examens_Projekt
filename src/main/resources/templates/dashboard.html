@@ -58,6 +58,12 @@
             </section>
         </section>
 
+        <div th:if="${is_project_manager eq 'true'}">
+            <form action="/direct_to_create_project" method="post">
+                <button type="submit">Create project</button>
+            </form>
+        </div>
+
         <form action="/accept_delete_of_participant" method="post">
             <button type="submit">Delete profile</button>
         </form>
