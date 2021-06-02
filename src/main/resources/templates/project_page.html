@@ -81,11 +81,11 @@
             <div class="delete_project">
                 <form action="/direct_to_accept_delete" method="post">
 
-                    <label for="password_delete_project"></label>
-                    <input type="text" name="password_delete_verify" id="password_delete_project" placeholder="password">
-
                     <label for="projectmanager_user_id"></label>
                     <input type="text" name="projectmanager_user_id" id="projectmanager_user_id" placeholder="user_id">
+
+                    <label for="password_delete_project"></label>
+                    <input type="password" name="password_delete_verify" id="password_delete_project" placeholder="password">
 
                     <button type="submit">Delete project</button>
                 </form>
@@ -230,7 +230,11 @@
                         </form>
                     </ul>
 
-                <form action="/add_task">
+                <h4>Type the following to add new task</h4>
+                <form action="/add_task" method="post">
+                    <input type="text" name="task_title" placeholder="Task title">
+                    <input type="text" name="task_start" placeholder="start yyyy-mm-dd hh:mm:ss">
+                    <input type="text" name="task_end" placeholder="end yyyy-mm-dd hh:mm:ss">
                     <button type="submit">Add new task</button>
                 </form>
 

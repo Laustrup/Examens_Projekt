@@ -99,7 +99,7 @@ public class  ProjectManagerController {
         model.addAttribute("projectManager", userCreator.getProjectManager(userId));
         model.addAttribute("participant",userCreator.getParticipant(userId));
         model.addAttribute("projects", projectCreator.getProjects(userId));
-        model.addAttribute("current_user","projectManager");
+        model.addAttribute("is_project_manager","true");
 
         return "dashboard";
     }

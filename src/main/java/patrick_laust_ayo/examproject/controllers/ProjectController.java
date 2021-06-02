@@ -9,6 +9,7 @@ import patrick_laust_ayo.examproject.services.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 @Controller
 public class ProjectController {
@@ -17,16 +18,20 @@ public class ProjectController {
     private ProjectEditor projectEditor = new ProjectEditor();
     private ExceptionHandler handler = new ExceptionHandler();
 
+    @PostMapping("/direct_to_create_project")
+    public String directToCreateProject(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return "redirect:/create_project/" + ((ProjectManager)session.getAttribute("projectManager")).getUsername();
+    }
 
     @GetMapping("/create_project/{projectmanager_username}")
     public String renderCreateProject(@PathVariable(name = "projectmanager_username") String username,
                                       HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
-        session.setAttribute("current_project","start");
+        session.setAttribute("current","phases");
         model.addAttribute("current_project", session.getAttribute("current_project"));
         return "create_project";
     }
-
 
     @PostMapping("/create-project")
     public String createProject(@RequestParam(name = "title") String title,
@@ -118,7 +123,6 @@ public class ProjectController {
             model.addAttribute("current",session.getAttribute("current"));
             model.addAttribute("current_project",session.getAttribute("current_project"));
             model.addAttribute("Exception", session.getAttribute("Exception"));
-
 
             return "project_page";
         }
@@ -309,7 +313,15 @@ public class ProjectController {
                               @PathVariable(name = "phase_title") String phaseTitle,
                               HttpServletRequest request, Model model) {
 
+
+
         HttpSession session = request.getSession();
+
+        if (session.getAttribute("participant")==null && handler.doesProjectExist(projectTitle)) {
+            session.setAttribute("project",projectCreator.getProject(projectTitle));
+            session.setAttribute("current_login","with_invite");
+            return "redirect:/participant_login_page";
+        }
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
 
@@ -353,29 +365,30 @@ public class ProjectController {
         HttpSession session = request.getSession();
 
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String user_id = ((Participant)session.getAttribute("participant")).getId();
         String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
 
         String exception = handler.isLengthAllowedInDatabase(title,"assignment_title");
         if (!exception.equals("Input is allowed")) {
             session.setAttribute("Exception",exception);
-            return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle;
+            return "redirect:/project_page-" + projectTitle + "/" + user_id + "/" + phaseTitle;
         }
 
         if (handler.isDateTimeCorrectFormat(start)) {
             session.setAttribute("Exception","Start should have the format yyyy-mm-dd hh-mm-dd");
-            return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle;
+            return "redirect:/project_page-" + projectTitle + "/" + user_id + "/" + phaseTitle;
         }
 
         if (handler.isDateTimeCorrectFormat(end)) {
             session.setAttribute("Exception","End should have the format yyyy-mm-dd hh-mm-dd");
-            return "redirect:/project_page-" + projectTitle  + "/" + phaseTitle;
+            return "redirect:/project_page-" + projectTitle + "/" + user_id + "/" + phaseTitle;
         }
 
-        Assignment assignment = projectCreator.createAssignment(phaseTitle,title,start,end);
+        Assignment assignment = projectCreator.createAssignment(phaseTitle,title,start,end,(Project)session.getAttribute("project"));
         session.setAttribute("Exception","");
         session.setAttribute("Message","");
 
-        return "redirect:/project_page-" + projectTitle + "/" + phaseTitle + "/" + assignment.getTitle();
+        return "redirect:/project_page-" + projectTitle + "/" + user_id + "/" + phaseTitle;
     }
 
     @PostMapping("/update_assignment")
@@ -420,7 +433,7 @@ public class ProjectController {
     }
 
     @PostMapping("/change_assignment_is_completed_status")
-    public String changeAssignmentIscompletedStatus(HttpServletRequest request) {
+    public String changeAssignmentIsCompletedStatus(HttpServletRequest request) {
 
         HttpSession session = request.getSession();
         String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
@@ -465,9 +478,15 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
 
+        if (session.getAttribute("participant")==null && handler.doesProjectExist(projectTitle)) {
+            session.setAttribute("project",projectCreator.getProject(projectTitle));
+            session.setAttribute("current_login","with_invite");
+            return "redirect:/participant_login_page";
+        }
+
         model.addAttribute("project",session.getAttribute("project"));
         model.addAttribute("phase",session.getAttribute("phase"));
-        model.addAttribute("assignment",session.getAttribute("assignment"));
+        model.addAttribute("assignment",projectCreator.getAssignment(assignmentTitle,phaseTitle));
         model.addAttribute("assignment_total_cost",((Assignment)session.getAttribute("assignment")).getTotalAssignmentCost());
         model.addAttribute("assignment_work_hours",((Assignment)session.getAttribute("assignment")).getTotalAssignmentWorkhours());
         model.addAttribute("participant",session.getAttribute("participant"));
@@ -498,17 +517,22 @@ public class ProjectController {
     }
 
     @PostMapping("/add_task")
-    public String addTask(HttpServletRequest request) {
+    public String addTask(@RequestParam(name = "task_title") String taskTitle,
+                          @RequestParam(name = "task_start") String taskStart,
+                          @RequestParam(name = "task_end") String taskEnd,HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
         String projectTitle = ((Project)session.getAttribute("project")).getTitle();
+        String userId = ((Participant)session.getAttribute("participant")).getId();
         String phaseTitle = ((Phase)session.getAttribute("phase")).getTitle();
         String assignmentTitle = ((Assignment)session.getAttribute("assignment")).getTitle();
 
-        Task task = projectCreator.createTask(assignmentTitle);
+        Task task = projectCreator.createTask(assignmentTitle,
+                new Task(0,new ArrayList<>(),taskStart,taskEnd,taskTitle,false),
+                ((Project)session.getAttribute("project")).getProjectManager().getUsername());
         session.setAttribute("task",task);
-        return "redirect:/project_page-" + projectTitle + "/" + phaseTitle + "/" + phaseTitle + "/" + task.getTitle();
+        return "redirect:/project_page-" + projectTitle + "/" + userId + "/" + phaseTitle + "/" + assignmentTitle;
     }
 
     @PostMapping("/update_task")
@@ -619,13 +643,19 @@ public class ProjectController {
 
         HttpSession session = request.getSession();
 
+        if (session.getAttribute("participant")==null && handler.doesProjectExist(projectTitle)) {
+            session.setAttribute("project",projectCreator.getProject(projectTitle));
+            session.setAttribute("current_login","with_invite");
+            return "redirect:/participant_login_page";
+        }
+
         session.setAttribute("task",projectCreator.getTask(taskTitle,taskStart,taskEnd));
 
         model.addAttribute("participant",session.getAttribute("participant"));
         model.addAttribute("project",session.getAttribute("project"));
         model.addAttribute("phase",session.getAttribute("phase"));
         model.addAttribute("assignment",session.getAttribute("assignment"));
-        model.addAttribute("task",session.getAttribute("task"));
+        model.addAttribute("task",projectCreator.getTask(taskTitle,taskStart,taskEnd));
         model.addAttribute("current","task");
         model.addAttribute("current_project","start");
         model.addAttribute("task_cost",((Task)session.getAttribute("task")).totalCost());

@@ -22,7 +22,7 @@
 
                     <div class="ID_section">
                         <label for="participant_ID">ID</label>
-                        <input type="text" id="participant_ID" name="participant_ID" th:placeholder="${participant.getId}">
+                        <input type="text" id="participant_ID" name="participant_id" th:placeholder="${participant.getId}">
                     </div>
 
                     <div class="password_section">
@@ -32,7 +32,7 @@
 
                     <div class="name_section">
                         <label for="participant_name">Name</label>
-                        <input type="text" id="participant_name" name="participant_name" th:placeholder="${participant.getName}" required>
+                        <input type="text" id="participant_name" name="name" th:placeholder="${participant.getName}" required>
                     </div>
 
                     <div class="position_section">
@@ -57,6 +57,12 @@
                 </form>
             </section>
         </section>
+
+        <div th:if="${is_project_manager eq 'true'}">
+            <form action="/direct_to_create_project" method="post">
+                <button type="submit">Create project</button>
+            </form>
+        </div>
 
         <form action="/accept_delete_of_participant" method="post">
             <button type="submit">Delete profile</button>

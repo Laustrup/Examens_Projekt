@@ -454,11 +454,11 @@ public class ProjectCreator {
         return phase;
     }
 
-    public Assignment createAssignment(String phaseTitle, String assignmentTitle,String start, String end) {
+    public Assignment createAssignment(String phaseTitle, String assignmentTitle,String start, String end,Project project) {
 
         assignment = new Assignment(start,end,assignmentTitle,false, new ArrayList<Task>());
         projectRepo.putAssignmentInDatabase(assignment,projectRepo.findId("phase_table","phase_title",
-                                            phaseTitle,"phase_id"));
+                                            phaseTitle,"phase_id"),project.getProjectManager().getUsername());
         return assignment;
     }
 
@@ -545,11 +545,10 @@ public class ProjectCreator {
         return assignment;
     }
 
-    public Task createTask(String assignmentTitle) {
+    public Task createTask(String assignmentTitle,Task task,String projectManagerUsername) {
 
-        task = new Task(0,new ArrayList<>());
-
-        projectRepo.putTaskInDatabase(projectRepo.findId("assignment","assignment_title",assignmentTitle,"assignment_id"));
+        projectRepo.putTaskInDatabase(projectRepo.findId("assignment","assignment_title",assignmentTitle, "assignment_id"),
+                projectManagerUsername,task);
 
         return task;
     }
