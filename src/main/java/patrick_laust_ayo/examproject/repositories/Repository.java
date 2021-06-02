@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-
+//Author Laust
 public abstract class Repository {
 
     private DatabaseConnection databaseConnection = new DatabaseConnection();

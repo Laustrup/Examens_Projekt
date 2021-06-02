@@ -2,8 +2,8 @@ package patrick_laust_ayo.examproject.models;
 
 import java.util.ArrayList;
 
+//Authors Ayo,Patrick and Laust
 public class Task extends Assignment {
-
 
     private double estimatedWorkHours;
     private ArrayList<Participant> participants;
@@ -20,7 +20,6 @@ public class Task extends Assignment {
         this.estimatedWorkHours = estimatedWorkHours;
         this.participants = participants;
     }
-
 
     public double getEstimatedWorkHours() {
         return estimatedWorkHours;

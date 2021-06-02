@@ -6,7 +6,7 @@ import patrick_laust_ayo.examproject.models.Project;
 import patrick_laust_ayo.examproject.models.Task;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 
-
+//Author Laust
 public class ProjectEditor {
 
     private ProjectRepository repo = new ProjectRepository();

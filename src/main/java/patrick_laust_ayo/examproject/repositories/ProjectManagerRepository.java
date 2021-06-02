@@ -4,11 +4,10 @@ import patrick_laust_ayo.examproject.models.ProjectManager;
 
 import java.sql.ResultSet;
 
-
+//Author Laust
 public class ProjectManagerRepository extends Repository {
 
     private ParticipantRepository parRepo = new ParticipantRepository();
-
 
     public void putProjectManagerInDatabase(ProjectManager projectManager){
         try {

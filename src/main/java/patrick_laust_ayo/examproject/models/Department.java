@@ -1,5 +1,6 @@
 package patrick_laust_ayo.examproject.models;
 
+//Authors Ayo,Patrick and Laust
 public class Department {
 
     private String location;

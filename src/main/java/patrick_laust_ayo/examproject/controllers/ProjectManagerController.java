@@ -16,6 +16,7 @@ import patrick_laust_ayo.examproject.services.UserCreator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+//Author Patrick
 @Controller
 public class  ProjectManagerController {
 

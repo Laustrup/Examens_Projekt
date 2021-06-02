@@ -9,25 +9,8 @@ import patrick_laust_ayo.examproject.models.ProjectManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//Author Patrick
 class UserEditorTest {
-//TODO !!!!!!!!!
-/*
-    @ParameterizedTest
-    @CsvSource(value={"loneT|qscqsc*21|Lone Therkilsen|Developer|OSLO|lone9242"}, delimiter = '|')
-    void updateParticipant(String newUserId, String password, String name, String position, String departmentName, String formerUserId) {
-
-        //Arrange
-        UserEditor userEditor = new UserEditor();
-
-        //Act
-        Participant participant = userEditor.updateParticipant(newUserId, password, name, position, departmentName,formerUserId,false);
-
-        //Assert
-        assertEquals(participant.getId(), newUserId);
-        assertEquals(participant.getPassword(), password);
-        assertEquals(participant.getName(), name);
-        assertEquals(participant.getPosition(), position);
-    } */
 
     @ParameterizedTest
     @CsvSource(value = {"Andy boss|andy0432","Andy Cool Guy|Andy boss", "andy0432|Andy Cool Guy"},

@@ -10,7 +10,7 @@ import patrick_laust_ayo.examproject.repositories.ProjectManagerRepository;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-
+//Author Laust
 public class UserCreator {
 
     private ProjectManager projectManager;

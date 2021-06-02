@@ -7,14 +7,13 @@ import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 
 import java.sql.ResultSet;
 
-
+//Author Laust
 public class UserEditor {
 
     private ParticipantRepository participantRepo = new ParticipantRepository();
     private ProjectManagerRepository projectManagerRepo = new ProjectManagerRepository();
 
     private Participant participant;
-
 
     public Participant updateParticipant(String id, String password, String name, String position,
                                          String departmentName, String formerUserId, boolean isProjectManager) {

@@ -2,7 +2,7 @@ package patrick_laust_ayo.examproject.repositories;
 
 import java.sql.ResultSet;
 
-
+//Author Patrick
 public class DepartmentRepository extends Repository {
 
     public ResultSet findDepartment(String depName){

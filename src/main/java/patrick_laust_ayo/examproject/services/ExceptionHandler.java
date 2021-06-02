@@ -7,11 +7,11 @@ import patrick_laust_ayo.examproject.repositories.ParticipantRepository;
 import patrick_laust_ayo.examproject.repositories.ProjectRepository;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+//Author Laust
 public class ExceptionHandler {
 
     // Methods checks if objects or attributes exists

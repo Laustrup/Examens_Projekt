@@ -1,10 +1,9 @@
 package patrick_laust_ayo.examproject.models;
 
+//Authors Ayo,Patrick and Laust
 public class ProjectManager extends Participant {
 
-
     private String username;
-
 
     public ProjectManager(String username, String password) {
 

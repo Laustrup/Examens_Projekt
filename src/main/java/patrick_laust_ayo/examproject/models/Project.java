@@ -3,7 +3,7 @@ package patrick_laust_ayo.examproject.models;
 import java.util.ArrayList;
 import java.util.Map;
 
-
+//Authors Ayo,Patrick and Laust
 public class Project {
 
     private String title;

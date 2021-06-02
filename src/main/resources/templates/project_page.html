@@ -1,3 +1,4 @@
+<!-- Authors Laust, Patrick and Ayo -->
 <!DOCTYPE html>
 <html lang="da" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
@@ -164,12 +165,6 @@
                     <th>Estimated cost of phase: <p th:text="${phase.getTotalCost()}"></p></th>
                 </tr>
 
-                <form action="direct_to_assignment" method="post">
-                    <label for="assignment_search">Type assignment title</label>
-                    <input type="text" id="assignment_search" name="assignment_title">
-                    <button type="submit">Search</button>
-                </form>
-
                 <form action="/direct_to_assignment" method="post">
                     <ul th:each="assignment : ${phase.getAssignments()}">
                         <li><button type="submit" th:value="${assignment.getTitle()}" name="assignment_title"><p th:text="${assignment.getTitle()}"></p></button></li>
@@ -180,11 +175,11 @@
                     <form action="/add_assignment" method="post">
                         <h4>Add new assignment</h4>
                         <label for="new_assignment_title">Type title: </label>
-                        <input type="text" id="new_assignment_title" name="title">
+                        <input type="text" id="new_assignment_title" name="title" placeholder="title">
                         <label for="new_assignment_start">Type start of assignment</label>
-                        <input type="text" id="new_assignment_start" name="start">
+                        <input type="text" id="new_assignment_start" name="start" placeholder="yyyy-mm-dd hh:mm:ss">
                         <label for="new_assignment_end">Type deadline of assignment</label>
-                        <input type="text" id="new_assignment_end" name="end">
+                        <input type="text" id="new_assignment_end" name="end" placeholder="yyyy-mm-dd hh:mm:ss">
                         <button type="submit">Add new assignment</button>
                     </form>
                     <p th:text="${Exception}"></p>
@@ -298,11 +293,11 @@
                 <form action="/update_task" method="post">
                     <div class="update_task">
                         <label for="task_new_title">Change title</label>
-                        <input type="text" id="task_new_title" name="new_title">
+                        <input type="text" id="task_new_title" name="new_title" placeholder="Title">
                         <label for="task_start">Change start of task</label>
-                        <input type="text" id="task_start" name="task_start">
+                        <input type="text" id="task_start" name="task_start" placeholder="yyyy-mm-dd hh:mm:ss">
                         <label for="task_end">Change end of task</label>
-                        <input type="text" id="task_end" name="task_end">
+                        <input type="text" id="task_end" name="task_end" placeholder="yyyy-mm-dd hh:mm:ss">
                         <label for="task_work_hours">Change amount of workhours</label>
                         <input type="text" id="task_work_hours" name="work_hours">
 

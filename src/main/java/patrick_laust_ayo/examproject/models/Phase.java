@@ -2,7 +2,7 @@ package patrick_laust_ayo.examproject.models;
 
 import java.util.ArrayList;
 
-
+//Authors Ayo,Patrick and Laust
 public class Phase {
 
     private ArrayList<Assignment> assignments;

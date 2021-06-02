@@ -4,7 +4,7 @@ import patrick_laust_ayo.examproject.models.*;
 
 import java.sql.ResultSet;
 
-
+//Authors Patrick and Laust
 public class ProjectRepository extends Repository{
 
 

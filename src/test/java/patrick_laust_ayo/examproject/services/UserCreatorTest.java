@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//Authors Ayo,Patrick and Laust
 class UserCreatorTest {
 
     private UserCreator userCreator = new UserCreator();

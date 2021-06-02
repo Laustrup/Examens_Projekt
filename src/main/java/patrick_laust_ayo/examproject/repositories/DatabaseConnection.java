@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 
-
+//Author Laust
 public class DatabaseConnection {
 
     private Properties properties;
