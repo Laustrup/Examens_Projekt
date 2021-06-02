@@ -243,9 +243,9 @@
                         <label for="new_title">Change title</label>
                         <input type="text" id="new_title" name="new_title">
                         <label for="assignment_start">Change start of assignment</label>
-                        <input type="text" id="assignment_start" name="assignment_start">
+                        <input type="text" id="assignment_start" name="start">
                         <label for="assignment_end">Change end of assignment</label>
-                        <input type="text" id="assignment_end" name="assignment_end">
+                        <input type="text" id="assignment_end" name="end">
 
                         <button type="submit" th:value="${assignment.getTitle()}" name="assignment_title">Update assignment</button>
                     </div>
@@ -304,7 +304,7 @@
                         <label for="task_end">Change end of task</label>
                         <input type="text" id="task_end" name="task_end">
                         <label for="task_work_hours">Change amount of workhours</label>
-                        <input type="text" id="task_work_hours" name="task_work_hours">
+                        <input type="text" id="task_work_hours" name="work_hours">
 
                         <button type="submit">Update task</button>
                     </div>
