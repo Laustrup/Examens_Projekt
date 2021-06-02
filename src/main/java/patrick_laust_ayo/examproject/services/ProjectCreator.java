@@ -545,11 +545,10 @@ public class ProjectCreator {
         return assignment;
     }
 
-    public Task createTask(String assignmentTitle) {
+    public Task createTask(String assignmentTitle,Task task,String projectManagerUsername) {
 
-        task = new Task(0,new ArrayList<>());
-
-        projectRepo.putTaskInDatabase(projectRepo.findId("assignment","assignment_title",assignmentTitle,"assignment_id"));
+        projectRepo.putTaskInDatabase(projectRepo.findId("assignment","assignment_title",assignmentTitle, "assignment_id"),
+                projectManagerUsername,task);
 
         return task;
     }

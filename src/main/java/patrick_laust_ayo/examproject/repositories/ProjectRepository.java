@@ -173,8 +173,15 @@ public class ProjectRepository extends Repository{
                 "WHERE task_title = \"" + assignmentTitle + "\" AND assignment_title = \"" + taskTitle + "\";");
     }
 
-    public void putTaskInDatabase(int assignmentId) {
-        executeSQLStatement("INSERT INTO task(assignment_id,estimated_work_hours) VALUES (" + assignmentId + ", null); ");
+    public void putTaskInDatabase(int assignmentId, String projectManagerUsername,Task task) {
+        int taskId = calcNextId("task");
+        int participantId = findId("participant","user_id",projectManagerUsername,"participant_id");
+
+        executeSQLStatement("INSERT INTO task(assignment_id,estimated_work_hours,task_title,task_start,task_end,task_is_completed) " +
+                "VALUES (" + assignmentId + ", " + task.getEstimatedWorkHours() + ", \"" + task.getTitle() +
+                "\", \"" + task.getStart() + "\", \"" + task.getEnd() + "\",false); ");
+        executeSQLStatement("INSERT INTO participant_task(participant_id,task_id) " +
+                "VALUES (" + participantId + "," + taskId + "); ");
     }
 
     public boolean addParticipantToTask(String userId, Task task) {

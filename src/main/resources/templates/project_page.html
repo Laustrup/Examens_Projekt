@@ -230,7 +230,11 @@
                         </form>
                     </ul>
 
-                <form action="/add_task">
+                <h4>Type the following to add new task</h4>
+                <form action="/add_task" method="post">
+                    <input type="text" name="task_title" placeholder="Task title">
+                    <input type="text" name="task_start" placeholder="start yyyy-mm-dd hh:mm:ss">
+                    <input type="text" name="task_end" placeholder="end yyyy-mm-dd hh:mm:ss">
                     <button type="submit">Add new task</button>
                 </form>
 
