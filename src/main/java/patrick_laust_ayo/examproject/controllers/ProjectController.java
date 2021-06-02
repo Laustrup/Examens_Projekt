@@ -313,7 +313,15 @@ public class ProjectController {
                               @PathVariable(name = "phase_title") String phaseTitle,
                               HttpServletRequest request, Model model) {
 
+
+
         HttpSession session = request.getSession();
+
+        if (session.getAttribute("participant")==null && handler.doesProjectExist(projectTitle)) {
+            session.setAttribute("project",projectCreator.getProject(projectTitle));
+            session.setAttribute("current_login","with_invite");
+            return "redirect:/participant_login_page";
+        }
 
         model.addAttribute("project",projectCreator.getProject(projectTitle));
 
@@ -469,6 +477,12 @@ public class ProjectController {
                                    HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
+
+        if (session.getAttribute("participant")==null && handler.doesProjectExist(projectTitle)) {
+            session.setAttribute("project",projectCreator.getProject(projectTitle));
+            session.setAttribute("current_login","with_invite");
+            return "redirect:/participant_login_page";
+        }
 
         model.addAttribute("project",session.getAttribute("project"));
         model.addAttribute("phase",session.getAttribute("phase"));
@@ -628,6 +642,12 @@ public class ProjectController {
                                     Model model,HttpServletRequest request) {
 
         HttpSession session = request.getSession();
+
+        if (session.getAttribute("participant")==null && handler.doesProjectExist(projectTitle)) {
+            session.setAttribute("project",projectCreator.getProject(projectTitle));
+            session.setAttribute("current_login","with_invite");
+            return "redirect:/participant_login_page";
+        }
 
         session.setAttribute("task",projectCreator.getTask(taskTitle,taskStart,taskEnd));
 
